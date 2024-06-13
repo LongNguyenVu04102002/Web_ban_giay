@@ -1,5 +1,6 @@
 package com.example.datn.service;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import org.springframework.http.ResponseEntity;
 
@@ -12,5 +13,5 @@ public interface KhachHangService {
 
     ResponseEntity<?> deleteKhachHang(Long id);
 
-    KhachHang saveKhachHang(KhachHang khachHang);
+
 }

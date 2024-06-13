@@ -1,6 +1,8 @@
 package com.example.datn.service.impl;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
+import com.example.datn.repository.DiaChiRepository;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import java.util.Optional;
 public class KhachHangimpl implements KhachHangService {
     @Autowired
     KhachHangRepository khachHangRepository;
+
+    @Autowired
+    DiaChiRepository diaChiRepository;
     @Override
     public ResponseEntity<?> getAllKhachHang() {
         List<KhachHang> khachHangList = khachHangRepository.findAll();
@@ -23,6 +28,7 @@ public class KhachHangimpl implements KhachHangService {
     @Override
     public ResponseEntity<?> addKhachHang(KhachHang khachHang) {
         KhachHang savedKhachHang = khachHangRepository.save(khachHang);
+
         return ResponseEntity.ok(savedKhachHang);
     }
 
@@ -32,6 +38,10 @@ public class KhachHangimpl implements KhachHangService {
         if (optionalKhachHang.isPresent()) {
             KhachHang existingKhachHang = optionalKhachHang.get();
             existingKhachHang.setHoTen(khachHang.getHoTen());
+            existingKhachHang.setGioiTinh(khachHang.isGioiTinh());
+            existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
+            existingKhachHang.setMatKhau(khachHang.getMatKhau());
+            existingKhachHang.setTrangThai(khachHang.isTrangThai());
             existingKhachHang.setDiaChiList(khachHang.getDiaChiList());
             existingKhachHang.setEmail(khachHang.getEmail());
             existingKhachHang.setSdt(khachHang.getSdt());
@@ -55,8 +65,8 @@ public class KhachHangimpl implements KhachHangService {
         }
     }
 
-    @Override
-    public KhachHang saveKhachHang(KhachHang khachHang) {
-        return null;
+
     }
-}
+
+
+

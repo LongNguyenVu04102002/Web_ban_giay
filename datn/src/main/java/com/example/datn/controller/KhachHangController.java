@@ -1,5 +1,6 @@
 package com.example.datn.controller;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,15 @@ public class KhachHangController {
         return khachHangService.addKhachHang(khachHang);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateKhachHang(@RequestBody KhachHang khachHang, @PathVariable Long id) {
         return khachHangService.updateKhachHang(khachHang, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteKhachHang(@PathVariable Long id) {
         return khachHangService.deleteKhachHang(id);
     }
 
-
+   
 }
