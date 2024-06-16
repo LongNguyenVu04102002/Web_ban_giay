@@ -7,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/khachhang")
+@RequestMapping("/khachhang")
 public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllKhachHang() {
         return khachHangService.getAllKhachHang();
     }
