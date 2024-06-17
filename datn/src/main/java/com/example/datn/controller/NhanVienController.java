@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/nhanvien")
+@RequestMapping("/nhanvien")
 public class NhanVienController {
     @Autowired
     NhanVienService nhanVienService;
 
-  @GetMapping
+  @GetMapping("/getAll")
   public ResponseEntity<?> getAllNhanVien(){
       return nhanVienService.getAllNhanVien();
   }
