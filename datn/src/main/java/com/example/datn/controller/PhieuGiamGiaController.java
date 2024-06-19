@@ -15,7 +15,7 @@ public class PhieuGiamGiaController {
     @Autowired
     PhieuGiamGiaService service;
 
-    @GetMapping()
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAllPhieu() {
 
         return service.getAllPhieuGiamGia();
