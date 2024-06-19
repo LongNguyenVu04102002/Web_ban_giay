@@ -21,6 +21,7 @@ public class KhachHangController {
     @GetMapping("/khachhang")
     public String listKhachHang(Model model) {
         model.addAttribute("khachHangs", khachHangService.getAllKhachHang());
+        model.addAttribute("khachHang", new KhachHang());
         return "khachhang"; // Trả về tên của view (khachhang.jsp)
     }
 
@@ -30,8 +31,14 @@ public class KhachHangController {
         return "khachhang/add";
     }
 
-    @PostMapping("/add")
-    public String addKhachHang(@ModelAttribute KhachHang khachHang) {
+    @GetMapping("/khachhang/{khachHangId}/toggle")
+    public String toggleTrangThai(@PathVariable Long khachHangId) {
+        khachHangService.toggleTrangThai(khachHangId);
+        return "redirect:/khachhang";
+    }
+
+    @PostMapping("/saveKhachHang")
+    public String saveKhachHang(@ModelAttribute("khachHang") KhachHang khachHang) {
         khachHangService.saveKhachHang(khachHang);
         return "redirect:/khachhang";
     }

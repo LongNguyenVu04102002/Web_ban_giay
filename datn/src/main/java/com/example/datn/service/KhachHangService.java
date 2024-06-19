@@ -17,6 +17,6 @@ public interface KhachHangService {
 //    ResponseEntity<?> updateKhachHang(KhachHang khachHang, Long id);
 
     void deleteKhachHang(Long id);
-
+    KhachHang toggleTrangThai(Long khachHangId);
 
 }

@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ include file="../layout/header.jsp" %>
 <%@ page pageEncoding="utf-8" %>
 <jsp:useBean id="pageTitle" scope="page" class="java.lang.String" />
@@ -8,7 +9,7 @@
 
 <div class="container">
     <div class="row">
-        <!-- Main Content (Left Side) -->
+
         <div class="col-md-9 mt-5">
             <main>
                 <h2>Danh sách Khách hàng</h2>
@@ -17,11 +18,12 @@
                         <tr>
                             <th>ID</th>
                             <th>Tên</th>
-                            <th>giới tính</th>
-                             <th>ngày sinh</th>
+                            <th>Giới Tính</th>
+                            <th>Ngày Sinh</th>
                             <th>Email</th>
-                            <th>Số điện thoại</th>
-                            <th>
+                            <th>Số Điện Thoại</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,10 +31,16 @@
                             <tr>
                                 <td>${khachHang.khachHangId}</td>
                                 <td>${khachHang.hoTen}</td>
-                                <td>${khachHang.gioiTinh ? 'nam' : 'nữ' }</td>
-                                 <td>${khachHang.ngaySinh}</td>
+                                <td>${khachHang.gioiTinh ? 'Nam' : 'Nữ'}</td>
+                                <td>${khachHang.ngaySinh}</td>
                                 <td>${khachHang.email}</td>
                                 <td>${khachHang.sdt}</td>
+                                <td>${khachHang.trangThai ? 'Hoạt Động' : 'Không Hoạt Động'}</td>
+                                <td>
+                                    <a href="/khachhang/${khachHang.khachHangId}/toggle" class="btn btn-warning">
+                                        ${khachHang.trangThai ? 'Đổi Sang Không Hoạt Động' : 'Đổi Sang Hoạt Động'}
+                                    </a>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -43,43 +51,40 @@
         <!-- Right Side (Form) -->
         <div class="col-md-3">
             <div class="right-content">
-                <form>
-
-
-                    <div class="mb-3 mt-5">
-                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-
-
+                <h2>Thêm Khách Hàng</h2>
+                <form:form method="post" action="/khachhang" modelAttribute="khachHang">
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <form:label path="hoTen">Họ Tên:</form:label>
+                        <form:input path="hoTen" class="form-control" />
                     </div>
                     <div class="mb-3">
-                                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1">
-                                        </div>
-                                        <div class="mb-3">
-                                                                <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                                <input type="password" class="form-control" id="exampleInputPassword1">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                                                    <input type="password" class="form-control" id="exampleInputPassword1">
-                                                                                </div>
-                                                                                <div class="mb-3">
-                                                                                                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                                                                        <input type="password" class="form-control" id="exampleInputPassword1">
-                                                                                                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                        <form:label path="gioiTinh">Giới Tính:</form:label><br>
+                        <form:radiobutton path="gioiTinh" value="true" class="form-check-input" />
+                        <form:label path="gioiTinh" class="form-check-label">Nam</form:label><br>
+                        <form:radiobutton path="gioiTinh" value="false" class="form-check-input" />
+                        <form:label path="gioiTinh" class="form-check-label">Nữ</form:label>
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="ngaySinh">Ngày Sinh:</form:label>
+                        <form:input path="ngaySinh" type="date" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="sdt">Số Điện Thoại:</form:label>
+                        <form:input path="sdt" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="email">Email:</form:label>
+                        <form:input path="email" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="matKhau">Mật Khẩu:</form:label>
+                        <form:password path="matKhau" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <form:label path="trangThai">Trạng Thái:</form:label>
+                        <form:checkbox path="trangThai" class="form-check-input" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm Khách Hàng</button>
+                </form:form>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<%@ include file="../layout/footer.jsp" %>
+        </

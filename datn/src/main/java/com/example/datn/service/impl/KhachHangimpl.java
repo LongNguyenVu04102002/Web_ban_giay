@@ -35,6 +35,17 @@ public class KhachHangimpl implements KhachHangService {
     public void deleteKhachHang(Long id) {
         khachHangRepository.deleteById(id);
     }
+
+    @Override
+    public KhachHang toggleTrangThai(Long khachHangId) {
+        Optional<KhachHang> optionalKhachHang = khachHangRepository.findById(khachHangId);
+        if (optionalKhachHang.isPresent()) {
+            KhachHang khachHang = optionalKhachHang.get();
+            khachHang.setTrangThai(!khachHang.isTrangThai());
+            return khachHangRepository.save(khachHang);
+        }
+        return null;
+    }
 }
 
 
