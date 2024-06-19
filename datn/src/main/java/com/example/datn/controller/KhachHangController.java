@@ -4,6 +4,7 @@ import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,17 @@ public class KhachHangController {
     private KhachHangService khachHangService;
 
     @GetMapping("/khachhang")
-    public String listKhachHang(Model model) {
-        model.addAttribute("khachHangs", khachHangService.getAllKhachHang());
-        model.addAttribute("khachHang", new KhachHang());
-        return "khachhang"; // Trả về tên của view (khachhang.jsp)
+    public String listKhachHang(Model model,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "3") int size) {
+        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
+        model.addAttribute("khachHangs", khachHangPage.getContent());
+        model.addAttribute("currentPage", khachHangPage.getNumber() + 1); // Vị trí trang hiện tại
+        model.addAttribute("totalPages", khachHangPage.getTotalPages()); // Tổng số trang
+        model.addAttribute("khachHang", new KhachHang()); // Thêm đối tượng khachHang vào model
+        return "left-menu"; // Trả về tên của view (khachhang.jsp)
     }
+
 
     @GetMapping("/add")
     public String addKhachHangForm(Model model) {

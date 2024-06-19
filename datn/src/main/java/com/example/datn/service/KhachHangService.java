@@ -2,6 +2,7 @@ package com.example.datn.service;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public interface KhachHangService {
 
     void deleteKhachHang(Long id);
     KhachHang toggleTrangThai(Long khachHangId);
-
+    Page<KhachHang> getAllKhachHangByPage(int pageNumber, int pageSize);
 }

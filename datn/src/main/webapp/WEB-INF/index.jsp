@@ -7,12 +7,11 @@
 
 <div class="container">
     <div class="left-menu">
-        <%@ include file="includes/left-menu.jsp" %>
+        <%@ include file="../layout/left-menu.jsp" %>
     </div>
     <div class="main-content">
         <main>
-            <h2>Home Page</h2>
-            <p>Welcome to the home page!</p>
+          <%@ include file="../views/khachhang.jsp" %>
         </main>
     </div>
 </div>
