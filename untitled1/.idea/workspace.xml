@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4cd7a398-c050-46c6-870c-f735276ea092" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../datn/src/main/webapp/WEB-INF/tiles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../datn/src/main/webapp/WEB-INF/views/hienthi.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sad/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sad/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sad/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sad/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../untitled/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../untitled/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../untitled/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../untitled/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../untitled/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/controller/KhachHangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/controller/KhachHangController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/service/KhachHangService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/service/KhachHangService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/service/impl/KhachHangimpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datn/src/main/java/com/example/datn/service/impl/KhachHangimpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datn/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../datn/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2i3niSMxqRIL87LQtgFs4foCyl5" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "KhachHang__Long",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4cd7a398-c050-46c6-870c-f735276ea092" name="Changes" comment="" />
+      <created>1718728255525</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718728255525</updated>
+    </task>
+    <servers />
+  </component>
+</project>
