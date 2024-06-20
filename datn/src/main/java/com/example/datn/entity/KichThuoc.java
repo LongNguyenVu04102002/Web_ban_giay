@@ -28,10 +28,9 @@ public class KichThuoc {
     @Column(name = "kichThuocId", nullable = false)
     private Long kichThuocId;
 
-    @Size(max = 100)
     @Nationalized
-    @Column(name = "ten", length = 100)
-    private int ten;
+    @Column(name = "ten")
+    private Integer ten;
 
     @Size(max = 300)
     @Nationalized
