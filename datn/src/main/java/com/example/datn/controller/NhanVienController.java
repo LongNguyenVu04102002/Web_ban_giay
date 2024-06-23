@@ -12,7 +12,7 @@ public class NhanVienController {
     @Autowired
     NhanVienService nhanVienService;
 
-  @GetMapping("/getAll")
+  @GetMapping("/hienthi")
   public ResponseEntity<?> getAllNhanVien(){
       return nhanVienService.getAllNhanVien();
   }

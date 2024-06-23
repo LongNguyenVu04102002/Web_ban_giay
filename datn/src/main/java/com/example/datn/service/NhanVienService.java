@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface NhanVienService {
     ResponseEntity<?> getAllNhanVien();
-    //dđ
 
     ResponseEntity<?> addNhanVien(NhanVien nhanVien);
 
