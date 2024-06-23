@@ -4,6 +4,9 @@ import com.example.datn.entity.DiaChi;
 import com.example.datn.repository.DiaChiRepository;
 import com.example.datn.service.DiaChiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,9 @@ public class DiaChiimpl implements DiaChiService {
     @Autowired
     DiaChiRepository diaChiRepository;
     @Override
-    public ResponseEntity<?> getAllDiaCHi() {
-        List<DiaChi> diaChiList = diaChiRepository.findAll();
-        return ResponseEntity.ok(diaChiList);
+    public List<DiaChi> getAllDiaCHi() {
+      return diaChiRepository.findAll();
+
     }
 
     @Override
@@ -60,5 +63,11 @@ public class DiaChiimpl implements DiaChiService {
             return ResponseEntity.notFound().build();
         }
 
+    }
+
+    @Override
+    public Page<DiaChi> getAllDiaChiByPage(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize); // PageRequest đếm từ 0
+        return diaChiRepository.findAll(pageable);
     }
 }
