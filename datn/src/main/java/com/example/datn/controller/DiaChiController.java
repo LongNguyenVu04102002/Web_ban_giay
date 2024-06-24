@@ -27,7 +27,7 @@ public class DiaChiController {
         model.addAttribute("currentPage", diaChiPage.getNumber() + 1); // Vị trí trang hiện tại
         model.addAttribute("totalPages", diaChiPage.getTotalPages()); // Tổng số trang
         model.addAttribute("diaChi", new KhachHang()); // Thêm đối tượng khachHang vào model
-        return "left-menu-dia-chi"; // Trả về tên của view (khachhang.jsp)
+        return "/views/left-menu-dia-chi"; // Trả về tên của view (khachhang.jsp)
     }
     @PostMapping("/save")
     public ResponseEntity<?> addDiaCHi(@RequestBody DiaChi diaChi){

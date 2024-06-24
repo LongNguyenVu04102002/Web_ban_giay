@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface KhachHangService {
     List<KhachHang> getAllKhachHang();
 
-    Optional<KhachHang> getKhachHangById(Long id);
+    KhachHang getKhachHangById(Long id);
 
     KhachHang saveKhachHang(KhachHang khachHang);
 
@@ -20,4 +20,7 @@ public interface KhachHangService {
     void deleteKhachHang(Long id);
     KhachHang toggleTrangThai(Long khachHangId);
     Page<KhachHang> getAllKhachHangByPage(int pageNumber, int pageSize);
+    KhachHang findById(Long khachHangId);
+
+    KhachHang updateKhachHang(KhachHang khachHang, Long id);
 }
