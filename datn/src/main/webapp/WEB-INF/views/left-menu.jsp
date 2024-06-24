@@ -106,7 +106,7 @@
   </nav>
 <section class="home">
     <div class="text">Dashboard Sidebar</div>
-    <jsp:include page="thanhPhan/khachhang.jsp" />
+    <jsp:include page="khachHang/khachhang.jsp" />
 </section>
 
 
