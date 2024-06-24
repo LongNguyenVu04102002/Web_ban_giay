@@ -106,6 +106,9 @@
                         <form:input path="ngaySinh" type="date" class="form-control" />
                     </div>
 
+
+
+
                    <form:label path="sdt">Số Điện Thoại:</form:label>
                     <form:input path="sdt" class="form-control" />
                         <form:errors path="sdt" cssClass="error" />
