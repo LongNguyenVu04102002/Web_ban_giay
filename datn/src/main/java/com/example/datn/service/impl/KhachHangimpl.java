@@ -43,8 +43,11 @@ public class KhachHangimpl implements KhachHangService {
     }
 
     public KhachHang saveKhachHang(KhachHang khachHang) {
+
         return khachHangRepository.save(khachHang);
     }
+
+
 
     public void deleteKhachHang(Long id) {
         khachHangRepository.deleteById(id);

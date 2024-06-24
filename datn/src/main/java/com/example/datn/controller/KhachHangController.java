@@ -48,6 +48,7 @@ public class KhachHangController {
     public String showKhachHangDetail(@PathVariable("id") Long id, Model model, @RequestParam(defaultValue = "1") int page,
                                       @RequestParam(defaultValue = "3") int size) {
         // Lấy thông tin khách hàng từ service
+        // Lấy thông tin khách hàng từ service
         KhachHang khachHang = khachHangService.getKhachHangById(id);
 
         // Đưa thông tin khách hàng vào model để hiển thị trên form
@@ -57,6 +58,11 @@ public class KhachHangController {
         Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
         List<KhachHang> khachHangs = khachHangPage.getContent(); // Lấy danh sách khách hàng từ Page
         model.addAttribute("khachHangs", khachHangs); // Đưa danh sách khách hàng vào model
+
+        // Thêm thông tin phân trang vào model để view JSP có thể sử dụng
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+        model.addAttribute("size", size);
 
         return "/left-menu"; // Trả về trang chứa form (left-menu.jsp)
     }
@@ -80,6 +86,7 @@ public class KhachHangController {
     @PostMapping("/saveKhachHang")
     public String saveKhachHang(@ModelAttribute("khachHang") @Valid KhachHang khachHang, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         int sdtLength = khachHang.getSdt().length();
+
         if (sdtLength < 10) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại phải có đủ 10 số");
         } else if (sdtLength > 10) {
