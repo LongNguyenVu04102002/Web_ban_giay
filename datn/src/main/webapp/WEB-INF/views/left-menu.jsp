@@ -45,7 +45,7 @@
           <li class="nav-link">
             <a href="/khachhang">
               <i class='bx bx-bar-chart-alt-2 icon'></i>
-              <span class="text nav-text">KhachHang</span>
+              <span class="text nav-text">Khách Hàng/span>
             </a>
           </li>
 

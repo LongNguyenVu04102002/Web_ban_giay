@@ -23,4 +23,5 @@ public interface KhachHangService {
     KhachHang findById(Long khachHangId);
 
     KhachHang updateKhachHang(KhachHang khachHang, Long id);
+    List<KhachHang> findBySdt(String sdt);
 }

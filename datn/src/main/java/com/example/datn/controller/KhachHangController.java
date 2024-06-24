@@ -93,8 +93,16 @@ public class KhachHangController {
         return "redirect:/khachhang";
     }
 
+    @PostMapping("/searchBySDT")
+    public String searchCustomersBySDT(@RequestParam("sdt") String sdt,
+                                       Model model, KhachHang khachHang) {
+        model.addAttribute("khachHang", khachHang);
+        // Implement logic to search customers by SDT
+       List<KhachHang> searchResults = khachHangService.findBySdt(sdt);
+        model.addAttribute("khachHangs", searchResults);
 
-
+        return "left-menu"; // Replace with your JSP page name
+    }
 
    
 }

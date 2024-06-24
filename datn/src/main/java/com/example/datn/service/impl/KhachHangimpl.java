@@ -90,6 +90,11 @@ public class KhachHangimpl implements KhachHangService {
         return null;
     }
 
+    @Override
+    public List<KhachHang> findBySdt(String sdt) {
+        // Implement logic to find customers by SDT (assuming you have a repository or DAO)
+        return khachHangRepository.findBySdt(sdt);
+    }
 
 }
 

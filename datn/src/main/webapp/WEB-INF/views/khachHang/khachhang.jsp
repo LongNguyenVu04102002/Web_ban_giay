@@ -11,6 +11,16 @@
     <div class="row">
 
         <div class="col-md-9 mt-5">
+            <h2>Tìm kiếm Khách Hàng</h2>
+
+                        <!-- Form Tìm kiếm -->
+                        <form action="${pageContext.request.contextPath}/searchBySDT" method="post">
+                            <div class="mb-3">
+                                <label for="sdt">Số Điện Thoại:</label>
+                                <input type="text" id="sdt" name="sdt" class="form-control" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                        </form>
             <main>
                 <h2>Danh sách Khách hàng</h2>
                 <table class="table">
@@ -115,8 +125,12 @@
                         <button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
                     </c:if>
                       <c:if test="${khachHang.khachHangId != null}">
-                                            <button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
-                                        </c:if>
+                       <button type="submit" class="btn btn-primary">Lưu Khách Hàng</button>
+                      </c:if>
+
+                     <div class="mb-3 mt-3">
+                         <a href="${pageContext.request.contextPath}/khachhang" class="btn btn-secondary">Quay lại trang gốc</a>
+                      </div>
                 </form:form>
 
                  <!-- Hiển thị thông báo lỗi nếu có -->
