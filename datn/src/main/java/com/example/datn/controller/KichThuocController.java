@@ -1,31 +1,21 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ChatLieu;
 import com.example.datn.entity.KichThuoc;
 import com.example.datn.service.IService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@CrossOrigin("*")
 public class KichThuocController {
 
     @Autowired
     private IService<KichThuoc> kichThuocService;
-
-//    @GetMapping("/kichthuoc/getAll")
-//    public ResponseEntity<List<KichThuoc>> getAll() {
-//        List<KichThuoc> lst = kichThuocService.getAll();
-//        return ResponseEntity.ok(lst);
-//    }
 
     @GetMapping("/kich-thuoc")
     public String show(@ModelAttribute("kichThuoc") KichThuoc kichThuoc, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {

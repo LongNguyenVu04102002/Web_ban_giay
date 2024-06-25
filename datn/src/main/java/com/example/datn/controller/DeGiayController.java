@@ -1,31 +1,22 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ChatLieu;
 import com.example.datn.entity.DeGiay;
 import com.example.datn.service.IService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@CrossOrigin("*")
 public class DeGiayController {
 
     @Autowired
     private IService<DeGiay> deGiayService;
 
-//    @GetMapping("/degiay/getAll")
-//    public ResponseEntity<List<DeGiay>> getAll() {
-//        List<DeGiay> lst = deGiayService.getAll();
-//        return ResponseEntity.ok(lst);
-//    }
     @GetMapping("/de-giay")
     public String show(@ModelAttribute("deGiay") DeGiay deGiay, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
         Page<DeGiay> page = deGiayService.pagination(p, 3);

@@ -78,11 +78,11 @@
 <!-- The sidebar -->
 <div class="sidebar">
     <%--    <a class="active" href="/trang-chu">Trang chủ</a>--%>
-    <a href="/chat-lieu">Chất liệu</a>
+    <a class="active" href="/chat-lieu">Chất liệu</a>
     <a href="/co-giay">Cổ giày</a>
     <a href="/day-giay">Dây giày</a>
     <a href="/de-giay">Đế giày</a>
-    <a href="/hinh-anh">Hình ảnh</a>
+    <%--    <a href="/hinh-anh">Hình ảnh</a>--%>
     <a href="/kich-thuoc">Kích thước</a>
     <a href="/lot-giay">Lót giày</a>
     <a href="/mau-sac">Màu sắc</a>
@@ -96,90 +96,63 @@
 <div class="content">
     <div class="container">
         <h1 style="text-align: center">Sản phẩm</h1>
-        <form:form action="/san-pham/add" method="post" modelAttribute="sanPham">
-            <form:input path="sanPhamId" cssStyle="display: none"></form:input>
+        <form:form action="/san-pham-chi-tiet/add" method="post" modelAttribute="spct">
+            <form:input path="sanPhamChiTietId" cssStyle="display: none"></form:input>
 
             <div class="mb-3">
-                <label class="form-label">Đế giày</label>
-                <form:select path="deGiay.deGiayId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstDeGiay}" var="x">
-                        <form:option value="${x.deGiayId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Thương hiệu</label>
-                <form:select path="thuongHieu.thuongHieuId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstThuongHieu}" var="x">
-                        <form:option value="${x.thuongHieuId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Cổ giày</label>
-                <form:select path="coGiay.coGiayId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstCoGiay}" var="x">
-                        <form:option value="${x.coGiayId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Lót giày</label>
-                <form:select path="lotGiay.lotGiayId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstLotGiay}" var="x">
-                        <form:option value="${x.lotGiayId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Mũi giày</label>
-                <form:select path="muiGiay.muiGiayId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstMuiGiay}" var="x">
-                        <form:option value="${x.muiGiayId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Chất liệu</label>
-                <form:select path="chatLieu.chatLieuId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstChatLieu}" var="x">
-                        <form:option value="${x.chatLieuId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Dây giày</label>
-                <form:select path="dayGiay.dayGiayId" cssClass="form-select" aria-label="Default select example">
-                    <c:forEach items="${lstDayGiay}" var="x">
-                        <form:option value="${x.dayGiayId}">${x.ten}</form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Tên</label>
-                <form:input path="ten" cssClass="form-control"></form:input>
-                <form:errors path="ten" cssClass="form-text" cssStyle="color: red"></form:errors>
+                <label class="form-label">Mã</label>
+                <form:input path="barCode" cssClass="form-control"></form:input>
+                <form:errors path="barCode" cssClass="form-text" cssStyle="color: red"></form:errors>
                 <p style="color: red">${error}</p>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Năm sản xuất</label>
-                <form:input path="namSX" cssClass="form-control"></form:input>
-                <form:errors path="namSX" cssClass="form-text" cssStyle="color: red"></form:errors>
+                <label class="form-label">Sản phẩm</label>
+                <form:select path="sanPham.sanPhamId" cssClass="form-select" aria-label="Default select example">
+                    <c:forEach items="${lstSanPham}" var="x">
+                        <form:option value="${x.sanPhamId}">${x.ten}</form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kích thước</label>
+                <form:select path="kichThuoc.kichThuocId" cssClass="form-select" aria-label="Default select example">
+                    <c:forEach items="${lstKichThuoc}" var="x">
+                        <form:option value="${x.kichThuocId}">${x.ten}</form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Màu sắc</label>
+                <form:select path="mauSac.mauSacId" cssClass="form-select" aria-label="Default select example">
+                    <c:forEach items="${lstMauSac}" var="x">
+                        <form:option value="${x.mauSacId}">${x.ten}</form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Đợt giảm giá</label>
+                <form:select path="dotGiamGia.dotGiamGiaId" cssClass="form-select" aria-label="Default select example">
+                    <c:forEach items="${lstDotGiamGia}" var="x">
+                        <form:option value="${x.dotGiamGiaId}">${x.ten}</form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Số lượng</label>
+                <form:input path="soLuong" cssClass="form-control"></form:input>
+                <form:errors path="soLuong" cssClass="form-text" cssStyle="color: red"></form:errors>
                 <p style="color: red">${error1}</p>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Mô tả</label>
-                <form:input path="moTa" cssClass="form-control"></form:input>
-                <form:errors path="moTa" cssClass="form-text" cssStyle="color: red"></form:errors>
+                <label class="form-label">Giá bán</label>
+                <form:input path="giaBan" cssClass="form-control"></form:input>
+                <form:errors path="giaBan" cssClass="form-text" cssStyle="color: red"></form:errors>
             </div>
 
             <div class="mb-3">
@@ -191,45 +164,39 @@
             </div>
 
             <form:button type="submit" class="btn btn-success">Thêm</form:button>
-            <button type="submit" formaction="/san-pham/update/${id}" class="btn btn-warning">Update</button>
+            <button type="submit" formaction="/san-pham-chi-tiet/update/${id}" class="btn btn-warning">Update</button>
 
         </form:form>
 
         <table class="table">
             <tr>
                 <td scope="col">#</td>
-                <td scope="col">Tên</td>
-                <td scope="col">Chất liệu</td>
-                <td scope="col">Đế giày</td>
-                <td scope="col">Cổ giày</td>
-                <td scope="col">Lót giày</td>
-                <td scope="col">Mũi giày</td>
-                <td scope="col">Dây giày</td>
-                <td scope="col">Thương hiệu</td>
-                <td scope="col">Năm sản xuất</td>
-                <td scope="col">Mô tả</td>
+                <td scope="col">Mã</td>
+                <td scope="col">Sản phẩm</td>
+                <td scope="col">Kích thước</td>
+                <td scope="col">Màu sắc</td>
+                <td scope="col">Đợt giảm</td>
+                <td scope="col">Số lượng</td>
+                <td scope="col">Giá bán</td>
                 <td scope="col">Trạng thái</td>
                 <td scope="col">Chức năng</td>
             </tr>
             <c:forEach items="${lst.content}" var="x" varStatus="vTri">
                 <tr>
                     <td scope="row">${vTri.index + 1}</td>
-                    <td>${x.ten}</td>
-                    <td>${x.chatLieu.ten}</td>
-                    <td>${x.deGiay.ten}</td>
-                    <td>${x.coGiay.ten}</td>
-                    <td>${x.lotGiay.ten}</td>
-                    <td>${x.muiGiay.ten}</td>
-                    <td>${x.dayGiay.ten}</td>
-                    <td>${x.thuongHieu.ten}</td>
-                    <td>${x.namSX}</td>
-                    <td>${x.moTa}</td>
+                    <td>${x.barCode}</td>
+                    <td>${x.sanPham.ten}</td>
+                    <td>${x.kichThuoc.ten}</td>
+                    <td>${x.mauSac.ten}</td>
+                    <td>${x.dotGiamGia.ten}</td>
+                    <td>${x.soLuong}</td>
+                    <td>${x.giaBan}</td>
                     <td>${x.trangThai == true ? "Đang sử dụng" : "Ngừng sử dụng"}</td>
                     <td>
-                        <button class="btn btn-info"><a href="/san-pham/detail/${x.sanPhamId}"
+                        <button class="btn btn-info"><a href="/san-pham-chi-tiet/detail/${x.sanPhamChiTietId}"
                                                         style="text-decoration: none; color: white">Chi tiết</a>
                         </button>
-                        <button class="btn btn-danger"><a href="/san-pham/remove/${x.sanPhamId}"
+                        <button class="btn btn-danger"><a href="/san-pham-chi-tiet/remove/${x.sanPhamChiTietId}"
                                                           style="text-decoration: none; color: white">Xóa</a>
                         </button>
                     </td>

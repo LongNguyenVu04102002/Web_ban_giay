@@ -5,26 +5,17 @@ import com.example.datn.service.IService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@CrossOrigin("*")
 public class CoGiayController {
 
     @Autowired
     private IService<CoGiay> coGiayService;
-
-//    @GetMapping("cogiay/getAll")
-//    public ResponseEntity<List<CoGiay>> getAll(){
-//        List<CoGiay> lst = coGiayService.getAll();
-//        return ResponseEntity.ok(lst);
-//    }
 
     @GetMapping("/co-giay")
     public String show(@ModelAttribute("coGiay") CoGiay coGiay, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
