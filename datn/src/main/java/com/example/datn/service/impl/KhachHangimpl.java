@@ -27,13 +27,27 @@ public class KhachHangimpl implements KhachHangService {
 
 
 
-    public Optional<KhachHang> getKhachHangById(Long id) {
-        return khachHangRepository.findById(id);
+    @Override
+    public KhachHang getKhachHangById(Long id) {
+        // Giả sử bạn có một repository để truy xuất dữ liệu từ cơ sở dữ liệu
+        // Ví dụ sử dụng JpaRepository
+        Optional<KhachHang> optionalKhachHang = khachHangRepository.findById(id);
+
+        // Kiểm tra khách hàng có tồn tại không
+        if (optionalKhachHang.isPresent()) {
+            return optionalKhachHang.get();
+        } else {
+            // Xử lý khi không tìm thấy khách hàng với id tương ứng
+            throw new RuntimeException("Không tìm thấy khách hàng với ID: " + id);
+        }
     }
 
     public KhachHang saveKhachHang(KhachHang khachHang) {
+
         return khachHangRepository.save(khachHang);
     }
+
+
 
     public void deleteKhachHang(Long id) {
         khachHangRepository.deleteById(id);
@@ -53,8 +67,38 @@ public class KhachHangimpl implements KhachHangService {
     @Override
     public Page<KhachHang> getAllKhachHangByPage(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize); // PageRequest đếm từ 0
-        return khachHangRepository.findAll(pageable);
+        return khachHangRepository.findKhachHangByTrangThaiTrue(pageable);
     }
+
+    @Override
+    public KhachHang findById(Long khachHangId) {
+        Optional<KhachHang> khachHangOptional = khachHangRepository.findById(khachHangId);
+        return khachHangOptional.orElse(null);
+    }
+
+    @Override
+    public KhachHang updateKhachHang(KhachHang khachHang, Long id) {
+        Optional<KhachHang> khachHangOptional = khachHangRepository.findById(id);
+        if(khachHangOptional.isPresent()){
+            KhachHang existingKhachHang = khachHangOptional.get();
+            existingKhachHang.setHoTen(khachHang.getHoTen());
+            existingKhachHang.setGioiTinh(khachHang.isGioiTinh());
+            existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
+            existingKhachHang.setSdt(khachHang.getSdt());
+            existingKhachHang.setEmail(khachHang.getEmail());
+            existingKhachHang.setDiaChiList(khachHang.getDiaChiList());
+            existingKhachHang.setTrangThai(khachHang.isTrangThai());
+            return khachHangRepository.save(existingKhachHang);
+        }
+        return null;
+    }
+
+    @Override
+    public List<KhachHang> findBySdt(String sdt) {
+        // Implement logic to find customers by SDT (assuming you have a repository or DAO)
+        return khachHangRepository.findBySdt(sdt);
+    }
+
 }
 
 

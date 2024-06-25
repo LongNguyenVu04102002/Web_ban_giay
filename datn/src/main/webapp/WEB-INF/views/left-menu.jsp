@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <!-- Coding by CodingLab | www.codinglabweb.com -->
 <html lang="en">
@@ -18,11 +19,9 @@
   <nav class="sidebar close">
     <header>
       <div class="image-text">
-        <span class="image">
-          <img src="logo.png" alt="">
-        </span>
 
-        <div class="text logo-text">
+
+        <div class="text">
           <span class="name">Codinglab</span>
           <span class="profession">Web developer</span>
         </div>
@@ -46,7 +45,7 @@
           <li class="nav-link">
             <a href="/khachhang">
               <i class='bx bx-bar-chart-alt-2 icon'></i>
-              <span class="text nav-text">KhachHang</span>
+              <span class="text nav-text">Khách Hàng/span>
             </a>
           </li>
 
@@ -105,12 +104,10 @@
     </div>
 
   </nav>
-
-  <section class="home">
+<section class="home">
     <div class="text">Dashboard Sidebar</div>
- <jsp:include page="khachhang.jsp"></jsp:include>
-
-  </section>
+    <jsp:include page="khachHang/khachhang.jsp" />
+</section>
 
 
   <script>

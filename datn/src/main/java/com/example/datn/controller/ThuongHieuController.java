@@ -1,31 +1,21 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ChatLieu;
 import com.example.datn.entity.ThuongHieu;
 import com.example.datn.service.IService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@CrossOrigin("*")
 public class ThuongHieuController {
 
     @Autowired
     private IService<ThuongHieu> thuongHieuService;
-
-//    @GetMapping("/thuonghieu/getAll")
-//    public ResponseEntity<List<ThuongHieu>> getAll() {
-//        List<ThuongHieu> lst = thuongHieuService.getAll();
-//        return ResponseEntity.ok(lst);
-//    }
 
     @GetMapping("/thuong-hieu")
     public String show(@ModelAttribute("thuongHieu") ThuongHieu thuongHieu, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {

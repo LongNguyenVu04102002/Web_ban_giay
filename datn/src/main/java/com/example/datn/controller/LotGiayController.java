@@ -1,12 +1,10 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ChatLieu;
 import com.example.datn.entity.LotGiay;
 import com.example.datn.service.IService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@CrossOrigin("*")
 public class LotGiayController {
 
     @Autowired
     private IService<LotGiay> lotGiayService;
-
-//    @GetMapping("/lotgiay/getAll")
-//    public ResponseEntity<List<LotGiay>> getAll() {
-//        List<LotGiay> lst = lotGiayService.getAll();
-//        return ResponseEntity.ok(lst);
-//    }
 
     @GetMapping("/lot-giay")
     public String show(@ModelAttribute("lotGiay") LotGiay lotGiay, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {

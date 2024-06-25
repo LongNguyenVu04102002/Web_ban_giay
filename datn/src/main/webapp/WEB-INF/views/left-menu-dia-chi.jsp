@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <!-- Coding by CodingLab | www.codinglabweb.com -->
 <html lang="en">
@@ -47,7 +48,7 @@
           <li class="nav-link">
             <a href="/khachhang">
               <i class='bx bx-bar-chart-alt-2 icon'></i>
-              <span class="text nav-text">Khachs Hàng</span>
+              <span class="text nav-text">Khách Hàng</span>
             </a>
           </li>
 

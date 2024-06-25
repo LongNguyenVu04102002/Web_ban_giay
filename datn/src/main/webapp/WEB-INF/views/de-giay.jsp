@@ -78,11 +78,11 @@
 <!-- The sidebar -->
 <div class="sidebar">
     <%--    <a class="active" href="/trang-chu">Trang chủ</a>--%>
-    <a href="/chat-lieu">Chất liệu</a>
+    <a class="active" href="/chat-lieu">Chất liệu</a>
     <a href="/co-giay">Cổ giày</a>
     <a href="/day-giay">Dây giày</a>
     <a href="/de-giay">Đế giày</a>
-    <a href="/hinh-anh">Hình ảnh</a>
+<%--    <a href="/hinh-anh">Hình ảnh</a>--%>
     <a href="/kich-thuoc">Kích thước</a>
     <a href="/lot-giay">Lót giày</a>
     <a href="/mau-sac">Màu sắc</a>

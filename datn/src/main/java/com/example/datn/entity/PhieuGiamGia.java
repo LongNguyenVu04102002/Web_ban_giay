@@ -30,11 +30,11 @@ public class PhieuGiamGia {
     @Column(name = "maGiamGia", nullable = false, length = 10)
     private String maGiamGia;
 
-    @Column(name = "phanTramGiam", nullable = false)
+    @Column(name = "phanTramGiam")
     private Integer phanTramGiam;
 
-    @Column(name = "tienGiam", nullable = false)
-    private Integer tienGiam;
+    @Column(name = "tienGiam")
+    private BigDecimal tienGiam;
 
     @Column(name = "loaiPhieu", nullable = false)
     private Integer loaiPhieu;
@@ -58,6 +58,16 @@ public class PhieuGiamGia {
     private LocalDate ngayTao;
 
     @Column(name = "trangThai")
-    private boolean trangThai;
+    private String trangThai;
 
+    public String getTrangThaiHienTai() {
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.isBefore(ngayBatDau)) {
+            return "Sắp diễn ra";
+        } else if (!currentDate.isBefore(ngayBatDau) && !currentDate.isAfter(ngayKetThuc)) {
+            return "Đang diễn ra";
+        } else {
+            return "Kết thúc";
+        }
+    }
 }
