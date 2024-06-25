@@ -4,6 +4,9 @@ import com.example.datn.entity.NhanVien;
 import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,47 +17,41 @@ public class NhanVienImpl implements NhanVienService {
     @Autowired
     NhanVienRepository nhanVienRepository;
     @Override
-    public ResponseEntity<?> getAllNhanVien() {
-        List<NhanVien> nhanVienList = nhanVienRepository.findAll();
-        return ResponseEntity.ok(nhanVienList);
+    public List<NhanVien> getAllNhanhVien() {
+        return nhanVienRepository.findAll();
     }
 
     @Override
-    public ResponseEntity<?> addNhanVien(NhanVien nhanVien) {
-        NhanVien saveNhanVien = nhanVienRepository.save(nhanVien);
-        return ResponseEntity.ok(saveNhanVien);
+    public Optional<NhanVien> getNhanVienById(Long id) {
+        return nhanVienRepository.findById(id);
     }
 
     @Override
-    public ResponseEntity<?> updateNhanVien(NhanVien nhanVien, Long id) {
-        Optional<NhanVien> optionalNhanVien = nhanVienRepository.findById(id);
-        if (optionalNhanVien.isPresent()){
-            NhanVien existingNhanVien = optionalNhanVien.get();
-            existingNhanVien.setHoTen(nhanVien.getHoTen());
-            existingNhanVien.setGioiTinh(nhanVien.isGioiTinh());
-            existingNhanVien.setNgaySinh(nhanVien.getNgaySinh());
-            existingNhanVien.setSdt(nhanVien.getSdt());
-            existingNhanVien.setEmail(nhanVien.getEmail());
-            existingNhanVien.setMatKhau(nhanVien.getMatKhau());
-            existingNhanVien.setTrangThai(nhanVien.isTrangThai());
-            existingNhanVien.setRole(nhanVien.getRole());
-            return  ResponseEntity.ok(updateNhanVien(nhanVien,id));
-
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
-
+    public NhanVien saveNhanVien(NhanVien nhanVien) {
+        return nhanVienRepository.save(nhanVien);
     }
 
     @Override
-    public ResponseEntity<?> deleteNhanVien(Long id) {
-        Optional<NhanVien> optionalNhanVien = nhanVienRepository.findById(id);
-        if (optionalNhanVien.isPresent()){
-            nhanVienRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+    public void deleteNhanVien(Long id) {
+nhanVienRepository.deleteById(id);
+    }
+
+    @Override
+    public NhanVien toggleTrangThai(Long nhanVienId) {
+      Optional<NhanVien> optionalNhanVien = nhanVienRepository.findById(nhanVienId);
+      if (optionalNhanVien.isPresent()){
+          NhanVien nhanVien = optionalNhanVien.get();
+          nhanVien.setTrangThai(!nhanVien.isTrangThai());
+          return  nhanVienRepository.save(nhanVien);
+      }
+
+        return null;
+    }
+
+    @Override
+    public Page<NhanVien> getAllNhanVienByPage(int pagenumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pagenumber -1 ,pageSize);
+
+        return nhanVienRepository.findAll(pageable);
     }
 }

@@ -1,13 +1,15 @@
 package com.example.datn.service;
 import com.example.datn.entity.NhanVien;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface NhanVienService {
-    ResponseEntity<?> getAllNhanVien();
-
-    ResponseEntity<?> addNhanVien(NhanVien nhanVien);
-
-    ResponseEntity<?> updateNhanVien(NhanVien nhanVien, Long id);
-
-    ResponseEntity<?> deleteNhanVien(Long id);
+   List<NhanVien> getAllNhanhVien();
+   Optional<NhanVien> getNhanVienById(Long id);
+   NhanVien saveNhanVien(NhanVien nhanVien);
+   void deleteNhanVien(Long id);
+   NhanVien toggleTrangThai(Long nhanVienId);
+   Page<NhanVien> getAllNhanVienByPage(int pagenumber,int pageSize);
 }
