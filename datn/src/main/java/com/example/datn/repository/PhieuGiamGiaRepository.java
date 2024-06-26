@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Long> {
-    Page<PhieuGiamGia> findByMaGiamGiaContaining(String search, Pageable pageable);
-    Page<PhieuGiamGia> findByMaGiamGiaContainingAndLoaiPhieu(String search, int loaiPhieu, Pageable pageable);
+    Page<PhieuGiamGia> findPhieuGiamGiaByLoaiPhieu(String search, Pageable pageable);
+    Page<PhieuGiamGia> findByLoaiPhieu(Integer loaiPhieu, Pageable pageable);
+
 }

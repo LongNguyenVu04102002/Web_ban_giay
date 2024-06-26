@@ -128,66 +128,42 @@
 <body>
 <div class="container">
     <div class="header-container">
-        <h1>Thêm phiếu Giảm Giá</h1>
+        <h1>Phiếu Giảm Giá</h1>
         <a href="/giamgia" style="color: white; font-weight: bold; text-decoration: none">
             <button class="add-button">Danh sách phiếu giảm giá</button>
         </a>
     </div>
 
-    <form:form method="post" action="/giamgia/update" modelAttribute="phieuGiamGia">
+    <form:form method="post" action="/giamgia/update/${phieuGiamGia.phieuGiamGiaId}" modelAttribute="phieuGiamGia">
         <div class="row">
             <!-- Cột thứ nhất -->
             <div class="col-md-6 form-column">
                 <div class="form-group">
                     <label class="label" for="maGiamGia">Mã giảm giá</label>
-                    <input
-                            type="text"
-                            class="input-field"
-                            id="maGiamGia"
-                            placeholder="Mã giảm giá..."
-                            value="${phieuGiamGia.maGiamGia}"
-                    />
+                    <form:input path="maGiamGia" id="maGiamGia" class="input-field" placeholder="Mã giảm giá..."/>
                 </div>
                 <div class="form-group">
                     <label class="label" for="loaiPhieu">Loại Phiếu</label>
-                    <select class="select-field" id="loaiPhieu" onchange="toggleFields()">
-                        <option value="1">Tiền mặt</option>
-                        <option value="2">Phần trăm</option>
-                    </select>
+                    <form:select path="loaiPhieu" id="loaiPhieu" class="select-field" onchange="toggleFields()">
+                        <form:option value="1">Tiền mặt</form:option>
+                        <form:option value="2">Phần trăm</form:option>
+                    </form:select>
                 </div>
                 <div class="form-group" id="phanTram">
                     <label class="label" for="phanTramGiam">Giá Trị Giảm</label>
                     <div class="input-with-unit" data-unit="%">
-                        <input
-                                type="text"
-                                class="input-field"
-                                id="phanTramGiam"
-                                placeholder="Phần trăm giảm giá..."
-                                value="${phieuGiamGia.phanTramGiam}"
-                        />
+                        <form:input path="phanTramGiam" id="phanTramGiam" class="input-field" placeholder="Phần trăm giảm giá..."/>
                     </div>
                 </div>
                 <div class="form-group" id="tienMat">
                     <label class="label" for="tienGiam">Giá Trị Giảm</label>
                     <div class="input-with-unit" data-unit="VND">
-                        <input
-                                type="text"
-                                class="input-field"
-                                id="tienGiam"
-                                placeholder="Số tiền giảm..."
-                                value="${phieuGiamGia.tienGiam}"
-                        />
+                        <form:input path="tienGiam" id="tienGiam" class="input-field" placeholder="Số tiền giảm..."/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="label" for="soLuongPhieu">Số lượng</label>
-                    <input
-                            type="text"
-                            class="input-field"
-                            id="soLuongPhieu"
-                            placeholder="Số lượng phiếu..."
-                            value="${phieuGiamGia.soLuongPhieu}"
-                    />
+                    <form:input path="soLuongPhieu" id="soLuongPhieu" class="input-field" placeholder="Số lượng phiếu..."/>
                 </div>
             </div>
 
@@ -196,38 +172,26 @@
                 <div class="form-group">
                     <label class="label" for="giaTriDonToiThieu">Giá trị đơn tối thiểu</label>
                     <div class="input-with-unit" data-unit="VND">
-                        <input
-                                type="text"
-                                class="input-field"
-                                id="giaTriDonToiThieu"
-                                placeholder="Giá trị đơn tối thiểu..."
-                                value="${phieuGiamGia.giaTriDonToiThieu}"
-                        />
+                        <form:input path="giaTriDonToiThieu" id="giaTriDonToiThieu" class="input-field" placeholder="Giá trị đơn tối thiểu..."/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="label" for="giaTriGiamToiDa">Giảm Tối Đa</label>
                     <div class="input-with-unit" data-unit="VND">
-                        <input
-                                type="text"
-                                class="input-field"
-                                id="giaTriGiamToiDa"
-                                placeholder="Giảm tối đa..."
-                                value="${phieuGiamGia.giaTriGiamToiDa}"
-                        />
+                        <form:input path="giaTriGiamToiDa" id="giaTriGiamToiDa" class="input-field" placeholder="Giảm tối đa..."/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="label" for="ngayBatDau">Ngày Bắt Đầu</label>
-                    <input type="date" class="input-field" id="ngayBatDau" value="${phieuGiamGia.ngayBatDau}"/>
+                    <form:input path="ngayBatDau" id="ngayBatDau" class="input-field" type="date"/>
                 </div>
                 <div class="form-group">
                     <label class="label" for="ngayKetThuc">Ngày Kết Thúc</label>
-                    <input type="date" class="input-field" id="ngayKetThuc" value="${phieuGiamGia.ngayKetThuc}"/>
+                    <form:input path="ngayKetThuc" id="ngayKetThuc" class="input-field" type="date"/>
                 </div>
             </div>
         </div>
-        <button type="submit" class="button">Lưu</button>
+        <button type="submit" class="button">Update</button>
     </form:form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

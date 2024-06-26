@@ -6,10 +6,13 @@ import com.example.datn.service.PhieuGiamGiaService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,37 +21,39 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
     @Autowired
     PhieuGiamGiaRepository repository;
 
-//    @Override
-//    public Page<PhieuGiamGia> getAllPhieu(Pageable pageable) {
-//
-//        Page<PhieuGiamGia> phieuGiamGias = repository.findAll(pageable);
-//
-//        for (PhieuGiamGia phieu : phieuGiamGias) {
-//            String newStatus = phieu.getTrangThaiHienTai();
-//            if (!newStatus.equals(phieu.getTrangThai())) {
-//                phieu.setTrangThai(newStatus);
-//                repository.save(phieu);
-//            }
-//        }
-//        return phieuGiamGias;
-//    }
+    @Override
+    public Page<PhieuGiamGia> getAllPhieu(Pageable pageable) {
+        Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+        Page<PhieuGiamGia> phieuGiamGias = repository.findAll(sortedByIdDesc);
+
+        for (PhieuGiamGia phieu : phieuGiamGias) {
+            String newStatus = phieu.getTrangThaiHienTai();
+            if (!newStatus.equals(phieu.getTrangThai())) {
+                phieu.setTrangThai(newStatus);
+                repository.save(phieu);
+            }
+        }
+        return phieuGiamGias;
+    }
 
     @Override
-    public Page<PhieuGiamGia> filterPhieuGiamGia(String search, String type, Pageable pageable) {
-        if (type.equals("Tất cả")) {
-            return repository.findByMaGiamGiaContaining(search, pageable);
-        } else if (type.equals("1")) {
-            return repository.findByMaGiamGiaContainingAndLoaiPhieu(search, 1, pageable);
-        } else if (type.equals("2")) {
-            return repository.findByMaGiamGiaContainingAndLoaiPhieu(search, 2, pageable);
+    public Page<PhieuGiamGia> filterPhieuGiamGia(Integer type, Pageable pageable) {
+        if ("0".equals(type)) {
+            return repository.findAll(pageable);
         } else {
-            return repository.findByMaGiamGiaContaining(search, pageable);
+            return repository.findByLoaiPhieu(type, pageable);
         }
     }
 
     @Override
-    public Optional<PhieuGiamGia> getPhieuById(Long id) {
-        return repository.findById(id);
+    public PhieuGiamGia getPhieuById(Long id) {
+        Optional<PhieuGiamGia> phieuGiamGiaOptional = repository.findById(id);
+        if(phieuGiamGiaOptional.isPresent()){
+            return phieuGiamGiaOptional.get();
+        }
+        else {
+           throw new RuntimeException();
+        }
     }
 
     @Override
@@ -69,24 +74,24 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
     public PhieuGiamGia update(PhieuGiamGia phieuGiamGia, Long id) {
         Optional<PhieuGiamGia> phieu = repository.findById(id);
         if (phieu.isPresent()){
+            PhieuGiamGia existingPhieu = phieu.get();
+            existingPhieu.setMaGiamGia(phieuGiamGia.getMaGiamGia());
+            existingPhieu.setLoaiPhieu(phieuGiamGia.getLoaiPhieu());
+            existingPhieu.setPhanTramGiam(phieuGiamGia.getPhanTramGiam());
+            existingPhieu.setTienGiam(phieuGiamGia.getTienGiam());
+            existingPhieu.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu());
+            existingPhieu.setNgayBatDau(phieuGiamGia.getNgayBatDau());
+            existingPhieu.setNgayKetThuc(phieuGiamGia.getNgayKetThuc());
+            existingPhieu.setGiaTriDonToiThieu(phieuGiamGia.getGiaTriDonToiThieu());
+            existingPhieu.setGiaTriGiamToiDa(phieuGiamGia.getGiaTriGiamToiDa());
+            existingPhieu.setNgayTao(LocalDate.now());
+            // existingPhieu.setTrangThai(phieuGiamGia.getTrangThai());
 
-            phieuGiamGia.setMaGiamGia(phieuGiamGia.getMaGiamGia());
-            phieuGiamGia.setLoaiPhieu(phieuGiamGia.getLoaiPhieu());
-            phieuGiamGia.setPhanTramGiam(phieuGiamGia.getPhanTramGiam());
-            phieuGiamGia.setTienGiam(phieuGiamGia.getTienGiam());
-            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu());
-            phieuGiamGia.setNgayBatDau(phieuGiamGia.getNgayBatDau());
-            phieuGiamGia.setNgayKetThuc(phieuGiamGia.getNgayKetThuc());
-            phieuGiamGia.setGiaTriDonToiThieu(phieuGiamGia.getGiaTriDonToiThieu());
-            phieuGiamGia.setGiaTriGiamToiDa(phieuGiamGia.getGiaTriGiamToiDa());
-            phieuGiamGia.setNgayTao(LocalDate.now());
-//            phieuGiamGia.setTrangThai(phieuGiamGia.getTrangThai());
-            return repository.save(phieuGiamGia);
-        }
-           else {
+            return repository.save(existingPhieu);
+        } else {
             throw new EntityNotFoundException("PhieuGiamGia with id " + id + " not found");
-
         }
+
     }
 
     @Override

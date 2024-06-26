@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,37 +25,22 @@ public class PhieuGiamGiaController {
     @Autowired
     PhieuGiamGiaRepository repository;
     @GetMapping
-    public String listPhieuGiamGia(Model model,
-                                   @RequestParam(defaultValue = "") String search,
-                                   @RequestParam(defaultValue = "all") String type,
-                                   @RequestParam(defaultValue = "1") int page) {
-        if (page < 1) page = 1;
-        Pageable pageable = PageRequest.of(page - 1, 5);
-
-        Page<PhieuGiamGia> phieuGiamGias = service.filterPhieuGiamGia(search, type, pageable);
-
-        // Cập nhật trạng thái trước khi hiển thị
-        for (PhieuGiamGia phieu : phieuGiamGias) {
-            String newStatus = phieu.getTrangThaiHienTai();
-            if (!newStatus.equals(phieu.getTrangThai())) {
-                phieu.setTrangThai(newStatus);
-                service.savePhieuGiamGia(phieu);
-            }
-        }
-
-        model.addAttribute("page", phieuGiamGias);
-        model.addAttribute("search", search);
-        model.addAttribute("type", type);
-        model.addAttribute("currentPage", page);
-        return "giamgia/left-menu-phieu";  // Tên của JSP
+    public String getAllPhieu(Model model,@RequestParam(defaultValue = "1") int page){
+        Page<PhieuGiamGia> phieuGiamGias ;
+        if(page<1) page=1;
+        Pageable pageable= PageRequest.of(page-1,10);
+        phieuGiamGias =service.getAllPhieu(pageable);
+        model.addAttribute("page",phieuGiamGias);
+        return "giamgia/left-menu-phieu";
     }
+
 
 
 
     @GetMapping("/add")
     public String viewAdd(Model model) {
         model.addAttribute("phieuGiamGia", new PhieuGiamGia());
-        return "giamgia/addPhieu";
+        return "giamgia/left-menu-addPhieu";
     }
 
     @PostMapping("/savePhieu")
@@ -80,18 +66,16 @@ public class PhieuGiamGiaController {
 
     @GetMapping("/detail/{phieuGiamGiaId}")
     public String getUpdatePhieuGiamGia(@PathVariable("phieuGiamGiaId") Long phieuGiamGiaId, Model model) {
-        Optional<PhieuGiamGia> phieuGiamGia = repository.findById(phieuGiamGiaId);
+        PhieuGiamGia phieuGiamGia = service.getPhieuById(phieuGiamGiaId);
         model.addAttribute("phieuGiamGia", phieuGiamGia);
-        return "/giamgia/updatePhieu";
+        return "/giamgia/left-menu-updatePhieu";
     }
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<?> updatePhieuGiamGia(@RequestBody PhieuGiamGia phieuGiamGia, @PathVariable Long id){
-//        return service.updatePhieuGiamGia(phieuGiamGia, id);
-//    }
-//
-//    @DeleteMapping("/delete/{id}")
-//    public  ResponseEntity<?> deletePhieuGiamGia(@PathVariable Long id){
-//        return service.deletePhieuGiamGia(id);
-//    }
+    @PostMapping ("/update/{id}")
+    public String updatePhieuGiamGia(@ModelAttribute("phieuGiamGia") PhieuGiamGia phieuGiamGia, @PathVariable Long id){
+        service.update(phieuGiamGia, id);
+        return "redirect:/giamgia";
+    }
+
+
 
 }

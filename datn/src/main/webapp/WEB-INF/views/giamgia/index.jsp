@@ -63,6 +63,20 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        /*table {*/
+        /*    width: 100%;*/
+        /*    border-collapse: collapse;*/
+        /*    margin-top: 20px;*/
+        /*}*/
+        /*th,*/
+        /*td {*/
+        /*    padding: 10px;*/
+        /*    border: 1px solid #ccc;*/
+        /*    text-align: left;*/
+        /*}*/
+        /*th {*/
+        /*    background-color: #f2f2f2;*/
+        /*}*/
         .status-button {
             padding: 5px 10px;
             background-color: #f5a742;
@@ -81,35 +95,43 @@
             cursor: pointer;
         }
         .trangThai-dangdienra {
+            /*background-color: #28a745; !* Màu xanh lá cây *!*/
             color:  #28a745; /* Màu chữ trắng */
         }
+
         .trangThai-sapdienra {
+            /*background-color: #007bff; !* Màu xanh nước biển *!*/
             color: #007bff; /* Màu chữ trắng */
         }
+
         .trangThai-ketthuc {
+            /*background-color: #ffc107; !* Màu vàng *!*/
             color: #ffc107; /* Màu chữ đen */
         }
+
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header-container">
-        <h1>Phiếu Giảm Giá</h1>
+<%--        <h1>Phiếu Giảm Giá</h1>--%>
+
         <a href="/giamgia/add" style="color: white; font-weight: bold; text-decoration: none">
             <button class="add-button">Thêm mới</button>
         </a>
+
     </div>
     <div class="filter-container">
         <div class="filter-group">
             <label for="search">Tìm kiếm:</label>
-            <input type="text" id="search" placeholder="Tìm kiếm..." oninput="filterResults()" value="${search}" />
+            <input type="text" id="search" placeholder="Tìm kiếm..." />
         </div>
         <div class="filter-group">
             <label for="type">Thể Loại:</label>
-            <select id="type" onchange="filterResults()">
-                <option value="all" ${type == 'all' ? 'selected' : ''}>Tất Cả</option>
-                <option value="1" ${type == '1' ? 'selected' : ''}>Tiền mặt</option>
-                <option value="2" ${type == '2' ? 'selected' : ''}>%</option>
+            <select id="type">
+                <option value="all">Tất Cả</option>
+                <option value="money">Tiền mặt</option>
+                <option value="voucher">%</option>
             </select>
         </div>
     </div>
@@ -167,22 +189,20 @@
     </table>
     <div class="text-center mt-3">
         <c:if test="${page.number > 0}">
-            <a href="?page=${page.number}&search=${search}&type=${type}" class="btn btn-primary btn-sm" style="font-weight: bold"><<</a>
+            <a href="?page=${page.number}" class="btn btn-primary btn-sm" style="font-weight: bold">
+                <<
+            </a>
         </c:if>
         <span class="btn btn-primary btn-sm">${page.number + 1} / ${page.totalPages}</span>
         <c:if test="${page.number + 1 < page.totalPages}">
-            <a href="?page=${page.number + 2}&search=${search}&type=${type}" class="btn btn-primary btn-sm" style="font-weight: bold">>></a>
+            <a href="?page=${page.number + 2}" class="btn btn-primary btn-sm" style="font-weight: bold">
+                >>
+            </a>
         </c:if>
     </div>
 </div>
-<script>
-    function filterResults() {
-        const search = document.getElementById('search').value;
-        const type = document.getElementById('type').value;
-        window.location.href = `/giamgia?search=${search}&type=${type}&page=1`;
-    }
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>

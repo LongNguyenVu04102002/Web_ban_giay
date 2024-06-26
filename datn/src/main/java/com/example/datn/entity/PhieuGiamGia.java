@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,9 +44,11 @@ public class PhieuGiamGia {
     private Integer soLuongPhieu;
 
     @Column(name = "ngayBatDau")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayBatDau;
 
     @Column(name = "ngayKetThuc")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayKetThuc;
 
     @Column(name = "giaTriDonToiThieu", precision = 18)

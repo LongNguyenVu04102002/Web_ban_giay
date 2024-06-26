@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface PhieuGiamGiaService {
 
-//    Page<PhieuGiamGia> getAllPhieu(Pageable pageable);
-    Page<PhieuGiamGia> filterPhieuGiamGia(String search, String type, Pageable pageable);
-    Optional<PhieuGiamGia> getPhieuById(Long id);
+    Page<PhieuGiamGia> getAllPhieu(Pageable pageable);
+    Page<PhieuGiamGia> filterPhieuGiamGia(Integer type, Pageable pageable);
+    PhieuGiamGia getPhieuById(Long id);
     PhieuGiamGia savePhieuGiamGia(PhieuGiamGia phieuGiamGia);
     Optional<PhieuGiamGia> endPhieu(Long id);
     PhieuGiamGia update(PhieuGiamGia phieuGiamGia, Long id);

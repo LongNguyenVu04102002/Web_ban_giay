@@ -123,7 +123,7 @@
         }
 
         window.onload = toggleFields;
-    </script>
+    </script>/
 </head>
 <body>
 <div class="container">
