@@ -17,7 +17,7 @@
                         <form action="${pageContext.request.contextPath}/searchBySDT" method="post">
                             <div class="mb-3">
                                 <label for="sdt">Số Điện Thoại:</label>
-                                <input type="text" id="sdt" name="sdt" class="form-control" />
+                                <input type="text" id="sdt" name="sdt" class="form-control" placeholder="Tìm theo số điện thoại."/>
                             </div>
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </form>
@@ -51,7 +51,7 @@
                                         ${khachHang.trangThai ? 'Đổi Sang Không Hoạt Động' : 'Đổi Sang Hoạt Động'}
                                     </a>
 
-                                    <a href="/detail/${khachHang.khachHangId}" class="btn btn-primary">Chi tiết</a>
+                                    <a href="/detail/${khachHang.khachHangId}" class="btn btn-primary" style="margin-top: 5px">Chi tiết</a>
 
                                 </td>
                             </tr>

@@ -84,7 +84,7 @@
   </nav>
 
   <section class="home">
-    <div class="text">Dashboard Sidebar</div>
+    <div class="text">Quản lý khách hàng </div>
     <jsp:include page="khachHang/khachhang.jsp" />
   </section>
 
