@@ -50,7 +50,7 @@
                                     <a href="/khachhang/${khachHang.khachHangId}/toggle" class="btn btn-warning">
                                         ${khachHang.trangThai ? 'Đổi Sang Không Hoạt Động' : 'Đổi Sang Hoạt Động'}
                                     </a>
-                                    <a href="/edit/${khachHang.khachHangId}" class="btn btn-primary">Chỉnh Sửa</a>
+
                                     <a href="/detail/${khachHang.khachHangId}" class="btn btn-primary">Chi tiết</a>
 
                                 </td>
@@ -83,7 +83,7 @@
         <!-- Right Side (Form) -->
         <div class="col-md-3">
             <div class="right-content">
-                <h2><c:if test="${khachHang.khachHangId == null }">Chi tiết Khách Hàng</c:if></h2>
+                <h2><c:if test="${khachHang.khachHangId == null }">Thêm khách hàng</c:if></h2>
 
                 <form:form action="${pageContext.request.contextPath}/saveKhachHang" method="post" modelAttribute="khachHang">
                     <!-- Mã khách hàng (ẩn) -->
@@ -107,15 +107,19 @@
                     </div>
 
 
-
-
                    <form:label path="sdt">Số Điện Thoại:</form:label>
                     <form:input path="sdt" class="form-control" />
                         <form:errors path="sdt" cssClass="error" />
+                         <spring:hasBindErrors name="khachHang">
+                                                <div style="color: red;">
+                                                    ${errorMessage}
+                                                </div>
+                                            </spring:hasBindErrors>
                     <div class="mb-3">
                         <form:label path="email">Email:</form:label>
                         <form:input path="email" class="form-control"  />
                     </div>
+
                     <div class="mb-3">
                         <form:label path="matKhau">Mật Khẩu:</form:label>
                         <form:password path="matKhau" class="form-control" />
@@ -137,11 +141,7 @@
                 </form:form>
 
                  <!-- Hiển thị thông báo lỗi nếu có -->
-                    <spring:hasBindErrors name="khachHang">
-                        <div style="color: red;">
-                            ${errorMessage}
-                        </div>
-                    </spring:hasBindErrors>
+
             </div>
         </div>
     </div>

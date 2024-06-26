@@ -48,7 +48,6 @@ public class KhachHangController {
     public String showKhachHangDetail(@PathVariable("id") Long id, Model model, @RequestParam(defaultValue = "1") int page,
                                       @RequestParam(defaultValue = "3") int size) {
         // Lấy thông tin khách hàng từ service
-        // Lấy thông tin khách hàng từ service
         KhachHang khachHang = khachHangService.getKhachHangById(id);
 
         // Đưa thông tin khách hàng vào model để hiển thị trên form
@@ -68,19 +67,19 @@ public class KhachHangController {
     }
 
 
-
-    @PostMapping("/update/{id}")
-    public String updateKhachHang(@PathVariable Long id,
-                                  @ModelAttribute("khachHang") KhachHang khachHang,
-                                  RedirectAttributes redirectAttributes) {
-        KhachHang updatedKhachHang = khachHangService.updateKhachHang(khachHang, id);
-        if (updatedKhachHang != null) {
-            redirectAttributes.addFlashAttribute("message", "Đã cập nhật thông tin khách hàng thành công.");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Cập nhật thông tin khách hàng thất bại.");
-        }
-        return "redirect:/khachhang";
-    }
+//
+//    @PostMapping("/update/{id}")
+//    public String updateKhachHang(@PathVariable Long id,
+//                                  @ModelAttribute("khachHang") KhachHang khachHang,
+//                                  RedirectAttributes redirectAttributes) {
+//        KhachHang updatedKhachHang = khachHangService.updateKhachHang(khachHang, id);
+//        if (updatedKhachHang != null) {
+//            redirectAttributes.addFlashAttribute("message", "Đã cập nhật thông tin khách hàng thành công.");
+//        } else {
+//            redirectAttributes.addFlashAttribute("error", "Cập nhật thông tin khách hàng thất bại.");
+//        }
+//        return "redirect:/khachhang";
+//    }
 
 
     @PostMapping("/saveKhachHang")
@@ -106,7 +105,7 @@ public class KhachHangController {
         model.addAttribute("khachHang", khachHang);
         // Implement logic to search customers by SDT
        List<KhachHang> searchResults = khachHangService.findBySdt(sdt);
-        model.addAttribute("khachHangs", searchResults);
+        model.addAttribute("khachHangsss", searchResults);
 
         return "left-menu"; // Replace with your JSP page name
     }

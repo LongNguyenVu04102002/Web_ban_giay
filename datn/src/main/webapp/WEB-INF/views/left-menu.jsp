@@ -1,12 +1,10 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <!-- Coding by CodingLab | www.codinglabweb.com -->
 <html lang="en">
 
-
 <head>
   <meta charset="UTF-8">
+  <%@ page pageEncoding="utf-8" %>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!----===== Boxicons CSS ===== -->
@@ -16,68 +14,50 @@
 </head>
 
 <body>
-  <nav class="sidebar close">
+  <nav class="sidebar"> <!-- Remove class 'close' -->
     <header>
       <div class="image-text">
-
-
         <div class="text">
           <span class="name">Codinglab</span>
           <span class="profession">Web developer</span>
         </div>
       </div>
-
-      <i class='bx bx-chevron-right toggle'></i>
+      <i class='bx bx-chevron-right toggle'></i> <!-- This can be removed if not needed -->
     </header>
 
     <div class="menu-bar">
       <div class="menu">
 
-
-
-       <li class="nav-link">
-         <a href="/diachi">
-           <i class='bx bx-user icon'></i>
-           <span class="text nav-text">ĐIạ chỉ</span>
-         </a>
-       </li>
-
-          <li class="nav-link">
-            <a href="/khachhang">
-              <i class='bx bx-bar-chart-alt-2 icon'></i>
-              <span class="text nav-text">Khách Hàng/span>
-            </a>
-          </li>
-
-          <li class="nav-link">
-            <a href="#">
-              <i class='bx bx-bell icon'></i>
-              <span class="text nav-text">Notifications</span>
-            </a>
-          </li>
-
-          <li class="nav-link">
-            <a href="#">
-              <i class='bx bx-pie-chart-alt icon'></i>
-              <span class="text nav-text">Analytics</span>
-            </a>
-          </li>
-
-          <li class="nav-link">
-            <a href="#">
-              <i class='bx bx-heart icon'></i>
-              <span class="text nav-text">Likes</span>
-            </a>
-          </li>
-
-          <li class="nav-link">
-            <a href="#">
-              <i class='bx bx-wallet icon'></i>
-              <span class="text nav-text">Wallets</span>
-            </a>
-          </li>
-
-        </ul>
+        <li class="nav-link">
+          <a href="/khachhang">
+            <i class='bx bx-user icon'></i>
+            <span class="text nav-text">Khách Hàng</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="/giamgia">
+            <i class='bx bx-bell icon'></i>
+            <span class="text nav-text">Phiếu giảm giá</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="#">
+            <i class='bx bx-pie-chart-alt icon'></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="#">
+            <i class='bx bx-heart icon'></i>
+            <span class="text nav-text">Likes</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="#">
+            <i class='bx bx-wallet icon'></i>
+            <span class="text nav-text">Wallets</span>
+          </a>
+        </li>
       </div>
 
       <div class="bottom-content">
@@ -99,17 +79,16 @@
             <span class="switch"></span>
           </div>
         </li>
-
       </div>
     </div>
-
   </nav>
-<section class="home">
+
+  <section class="home">
     <div class="text">Dashboard Sidebar</div>
     <jsp:include page="khachHang/khachhang.jsp" />
-</section>
+  </section>
 
-
+  <!-- Remove the following JavaScript if not needed -->
   <script>
     const body = document.querySelector('body'),
       sidebar = body.querySelector('nav'),
@@ -119,10 +98,10 @@
       modeText = body.querySelector(".mode-text");
     toggle.addEventListener("click", () => {
       sidebar.classList.toggle("close");
-    })
+    });
     searchBtn.addEventListener("click", () => {
       sidebar.classList.remove("close");
-    })
+    });
     modeSwitch.addEventListener("click", () => {
       body.classList.toggle("dark");
       if (body.classList.contains("dark")) {
@@ -132,12 +111,9 @@
       }
     });
   </script>
-
 </body>
 
 </html>
-
-
 <style>
 
 /* Google Font Import - Poppins */

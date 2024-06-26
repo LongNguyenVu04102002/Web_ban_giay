@@ -29,8 +29,8 @@ public class KhachHangimpl implements KhachHangService {
 
     @Override
     public KhachHang getKhachHangById(Long id) {
-        // Giả sử bạn có một repository để truy xuất dữ liệu từ cơ sở dữ liệu
-        // Ví dụ sử dụng JpaRepository
+
+
         Optional<KhachHang> optionalKhachHang = khachHangRepository.findById(id);
 
         // Kiểm tra khách hàng có tồn tại không
