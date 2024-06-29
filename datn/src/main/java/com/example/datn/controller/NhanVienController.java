@@ -19,7 +19,7 @@ public class NhanVienController {
 public  String listNhanVien(Model model,
                             NhanVien nhanVien,
                             @RequestParam(defaultValue = "1")int page,
-                            @RequestParam(defaultValue = "3")int size){
+                            @RequestParam(defaultValue = "5")int size){
 
     Page<NhanVien> nhanVienPage= nhanVienService.getAllNhanVienByPage(page,size);
     model.addAttribute("nhanviens",nhanVienPage.getContent());
