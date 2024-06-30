@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
@@ -37,8 +38,8 @@ public class SanPham {
     @Column(name = "ten")
     private String ten;
 
-    @Column(name = "namSX")
-    private Integer namSX;
+    @Column(name = "giaBan")
+    private BigDecimal giaBan;
 
     @Column(name = "trangThai")
     private boolean trangThai;
@@ -74,8 +75,8 @@ public class SanPham {
     @JoinColumn(name = "dayGiayId")
     private DayGiay dayGiay;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "sanPham", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "sanPhamChiTiet")
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<SanPhamChiTiet> sanPhamChiTietList;
 
 }

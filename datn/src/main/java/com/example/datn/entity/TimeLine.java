@@ -1,6 +1,6 @@
 package com.example.datn.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,8 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -50,12 +48,13 @@ public class TimeLine {
     @Column(name = "ngayHuy")
     private LocalDate ngayHuy;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taiKhoanId")
     private KhachHang khachHang;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "timeLine", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "timeLine-hoaDon")
-    private Set<HoaDon> hoaDonSet;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "hoaDonId")
+    @JsonBackReference
+    private HoaDon hoaDon;
 
 }

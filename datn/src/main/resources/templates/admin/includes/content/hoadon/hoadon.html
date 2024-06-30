@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white">
+            Hóa Đơn
+        </h2>
+    </div>
+    <div class="tabs bg-white">
+        <div role="tablist" class="tab-list tab-list-pill mx-4">
+            <button class="tab-nav tab-nav-pill active mt-3" data-bs-toggle="tab" data-bs-target="#tab-all" role="tab"
+                    aria-selected="true" tabindex="0">
+                TẤT CẢ
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-cancelled" role="tab"
+                    aria-selected="false" tabindex="0">
+                ĐÃ HỦY
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-pending-confirm"
+                    role="tab" aria-selected="false" tabindex="0">
+                CHỜ XÁC NHẬN
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-pending-delivery"
+                    role="tab" aria-selected="false" tabindex="0">
+                CHỜ GIAO HÀNG
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-shipping" role="tab"
+                    aria-selected="false" tabindex="0">
+                ĐANG VẬN CHUYỂN
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-delivered" role="tab"
+                    aria-selected="false" tabindex="0">
+                ĐÃ GIAO HÀNG
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-completed" role="tab"
+                    aria-selected="false" tabindex="0">
+                HOÀN THÀNH
+            </button>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
+                <div id="DataTable">
+                    <table id="data-table" class="table-default table-hover data-table">
+                        <thead>
+                        <tr >
+                            <th>#</th>
+                            <th>Mã Hóa Đơn</th>
+                            <th>Khách Hàng</th>
+                            <th>Nhân Viên</th>
+                            <th>SĐT</th>
+                            <th>Loại Hóa Đơn</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="hoaDon, rowStat : ${hoaDonList}">
+                            <td th:text="${rowStat.index + 1}"></td>
+                            <td th:text="${hoaDon.maVanDon}"></td>
+                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+<!--                            <td th:text="${hoaDon.nhanVien}"></td>-->
+                            <td>Nguyen Thanh Vinh</td>
+                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td>
+                                <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
+                                    <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
+                                </button>
+                            </td>
+                            <td th:text="${#numbers.formatDecimal(hoaDon.tongTien, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                            <td>
+                                <button th:class="${hoaDon.trangThai ? 'btn-custom bg-rose-50 text-rose-600 rounded-full' : 'btn-custom bg-sky-50 text-sky-800 rounded-full'}">
+                                    <span th:text="${hoaDon.trangThai ? 'Chưa thanh toán' : 'Đã thanh toán'}"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/hoadon/detail/{id}(id=${hoaDon.hoaDonId})}">
+                                    <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                         height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-width="2"
+                                              d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+                                        <path stroke="currentColor" stroke-width="2"
+                                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-cancelled" role="tabpanel" aria-labelledby="tab-cancelled" tabindex="0">
+                Đơn hàng này đã bị hủy bỏ.
+            </div>
+            <div class="tab-pane fade" id="tab-pending-confirm" role="tabpanel" aria-labelledby="tab-pending-confirm"
+                 tabindex="0">
+                Đang chờ xác nhận từ phía người dùng.
+            </div>
+            <div class="tab-pane fade" id="tab-pending-delivery" role="tabpanel" aria-labelledby="tab-pending-delivery"
+                 tabindex="0">
+                Đơn hàng đang chờ được giao đến khách hàng.
+            </div>
+            <div class="tab-pane fade" id="tab-shipping" role="tabpanel" aria-labelledby="tab-shipping" tabindex="0">
+                Đơn hàng đang được vận chuyển đến địa chỉ của khách hàng.
+            </div>
+            <div class="tab-pane fade" id="tab-delivered" role="tabpanel" aria-labelledby="tab-delivered" tabindex="0">
+                Đơn hàng đã được giao thành công đến khách hàng.
+            </div>
+            <div class="tab-pane fade" id="tab-completed" role="tabpanel" aria-labelledby="tab-completed" tabindex="0">
+                Đơn hàng đã hoàn thành và đã thanh toán.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,19 +1,23 @@
 package com.example.datn.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +27,7 @@ public class PhieuGiamGia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "phieuGiamGiaId", nullable = false)
+    @Column(name = "phieuGiamGiaId")
     private Long phieuGiamGiaId;
 
     @Size(max = 10)
@@ -31,11 +35,8 @@ public class PhieuGiamGia {
     @Column(name = "maGiamGia", nullable = false, length = 10)
     private String maGiamGia;
 
-    @Column(name = "phanTramGiam")
+    @Column(name = "phanTramGiam", nullable = false)
     private Integer phanTramGiam;
-
-    @Column(name = "tienGiam")
-    private BigDecimal tienGiam;
 
     @Column(name = "loaiPhieu", nullable = false)
     private Integer loaiPhieu;
@@ -44,11 +45,9 @@ public class PhieuGiamGia {
     private Integer soLuongPhieu;
 
     @Column(name = "ngayBatDau")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayBatDau;
 
     @Column(name = "ngayKetThuc")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayKetThuc;
 
     @Column(name = "giaTriDonToiThieu", precision = 18)
@@ -61,16 +60,10 @@ public class PhieuGiamGia {
     private LocalDate ngayTao;
 
     @Column(name = "trangThai")
-    private String trangThai;
+    private boolean trangThai;
 
-    public String getTrangThaiHienTai() {
-        LocalDate currentDate = LocalDate.now();
-        if (currentDate.isBefore(ngayBatDau)) {
-            return "Sắp diễn ra";
-        } else if (!currentDate.isBefore(ngayBatDau) && !currentDate.isAfter(ngayKetThuc)) {
-            return "Đang diễn ra";
-        } else {
-            return "Kết thúc";
-        }
-    }
+    @OneToMany(mappedBy = "phieuGiamGia", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<HoaDon> hoaDonList;
+
 }

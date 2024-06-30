@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -21,10 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,7 +40,6 @@ public class HoaDon {
     private Long hoaDonId;
 
     @Size(max = 100)
-    @Nationalized
     @Column(name = "maVanDon", length = 100)
     private String maVanDon;
 
@@ -51,6 +48,9 @@ public class HoaDon {
 
     @Column(name = "tienGiam")
     private BigDecimal tienGiam;
+
+    @Column(name = "tongTien")
+    private BigDecimal tongTien;
 
     @Column(name = "loaiHoaDon")
     private boolean loaiHoaDon;
@@ -62,8 +62,10 @@ public class HoaDon {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "trangThai")
+    private boolean trangThai;
+
     @Size(max = 100)
-    @Nationalized
     @Column(name = "tenNguoiNhan", length = 100)
     private String tenNguoiNhan;
 
@@ -71,7 +73,6 @@ public class HoaDon {
     private String sdtNhan;
 
     @Size(max = 100)
-    @Nationalized
     @Column(name = "diaChiNhan", length = 100)
     private String diaChiNhan;
 
@@ -85,21 +86,21 @@ public class HoaDon {
     @JsonBackReference(value = "nhanVien-hoaDon")
     private NhanVien nhanVien;
 
-    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "hoaDonChiTiet-hoaDon")
-    private Set<HoaDonChiTiet> hoaDonChiTietSet;
+    @OneToMany(mappedBy = "hoaDon",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "hoaDon")
+    private List<HoaDonChiTiet> hoaDonChiTietList;
 
     @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "hinhThucThanhToan-hoaDon")
-    private Set<HinhThucThanhToan> hinhThucThanhToanSet;
+    @JsonManagedReference(value = "hoaDon")
+    private List<HinhThucThanhToan> hinhThucThanhToanList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "timeLineId")
-    @JsonBackReference(value = "timeLine-hoaDon")
-    private TimeLine timeLine;
+    @OneToMany(mappedBy = "hoaDon",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<TimeLine> timeLineList;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "phieuGiamGiaId")
+    @JsonBackReference
     private PhieuGiamGia phieuGiamGia;
 
 }

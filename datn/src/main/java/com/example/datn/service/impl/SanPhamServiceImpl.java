@@ -1,46 +1,25 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
-import com.example.datn.entity.SanPham;
-import com.example.datn.repository.SanPhamRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.SanPhamRepository;
+import com.example.datn.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class SanPhamServiceImpl implements IService<SanPham> {
+public class SanPhamServiceImpl implements SanPhamService {
 
     @Autowired
-    private SanPhamRepo repo;
+    private SanPhamRepository sanPhamRepository;
 
     @Override
-    public List<SanPham> getAll() {
-        return repo.findAll();
+    public ResponseEntity<?> getAllSanPham() {
+        return ResponseEntity.ok(sanPhamRepository.findAll());
     }
 
     @Override
-    public Optional<SanPham> getOne(Long id) {
-        return repo.findById(id);
+    public ResponseEntity<?> getAllSanPhamById(Long id) {
+        return ResponseEntity.ok(sanPhamRepository.findById(id));
     }
 
-    @Override
-    public SanPham addOrUpdate(SanPham sanPham) {
-       return repo.save(sanPham);
-    }
-
-    @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public Page<SanPham> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

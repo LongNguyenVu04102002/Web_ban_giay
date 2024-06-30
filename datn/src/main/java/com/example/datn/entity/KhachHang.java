@@ -10,15 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,22 +34,18 @@ public class KhachHang {
     private Long khachHangId;
 
     @Column(name = "hoTen", length = 100)
-
     private String hoTen;
 
     @Column(name = "gioiTinh")
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
-
     private String sdt;
 
     @Column(name = "email", length = 50)
-
     private String email;
 
     @Column(name = "matKhau")

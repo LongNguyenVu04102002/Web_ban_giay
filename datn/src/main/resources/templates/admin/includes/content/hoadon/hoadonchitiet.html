@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mx-auto" th>
+        <div class="mb-6">
+            <div class="flex items-center mb-2">
+                <h3>
+                    <span>Hóa Đơn</span>
+                    <span class="ltr:ml-2 rtl:mr-2 ml-2" th:text="${hoaDon.maVanDon}"></span>
+                </h3>
+            </div>
+        </div>
+        <div class="xl:flex gap-4">
+            <div class="w-full">
+                <div class="card adaptable-card">
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table class="table-default table-hover">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="hdct, rowStat : ${hoaDon.hoaDonChiTietList}">
+                                    <td th:text="${rowStat.index + 1}"></td>
+                                    <td>
+                                        <div class="flex">
+                                                    <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
+                                                        <img class="avatar-img avatar-rounded"
+                                                             src="img/products/product-2.jpg" loading="lazy">
+                                                    </span>
+                                            <div class="ml-2">
+                                                <h6 class="mb-2" th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
+                                                <div class="mb-1"><span class="capitalize">Màu sắc: </span>
+                                                    <span class="font-semibold"
+                                                          th:text="${hdct.sanPhamChiTiet.mauSac.ten}">
+                                                        </span>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <span class="capitalize">Kích thước: </span>
+                                                    <span class="font-semibold"
+                                                          th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}">
+                                                        </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                    <td th:text="${hdct.soLuong}"></td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="!border-t-0" colspan="3"></td>
+                                    <td class="font-semibold !border-t-0">Tạm Tính</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.sanPham.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="3"></td>
+                                    <td class="font-semibold !border-t-0">Phí ship</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${hoaDon.phiShip != null ? #numbers.formatDecimal(hoaDon.phiShip, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="3"></td>
+                                    <td class="font-semibold !border-t-0">Tiền giảm</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${hoaDon.tienGiam != null ? #numbers.formatDecimal(hoaDon.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="3"></td>
+                                    <td class="font-semibold text-base">Tổng tiền</td>
+                                    <td class="font-semibold text-base !py-5">
+                                        <span th:text="${#numbers.formatDecimal(hoaDon.tongTien, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-layout-frame mt-2">
+                    <div class="card-body">
+                        <h5 class="mb-4">Trạng Thái Hóa Đơn</h5>
+                    </div>
+                    <div class="steps">
+                        <div class="step-item complete">
+                            <div class="step-item-wrapper">
+                                <div class="step-item-icon">
+                                    <span>1</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-item in-progress">
+                            <div class="step-item-wrapper">
+                                <div class="step-item-icon">
+                                    <span>2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-item-wrapper">
+                                <div class="step-item-icon">
+                                    <span>3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-item-wrapper">
+                                <div class="step-item-icon">
+                                    <span>4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="xl:max-w-[360px] w-full">
+                <div class="card card-layout-frame" role="presentation">
+                    <div class="card-body">
+                        <h5 class="mb-4">Thông Tin Khách Hàng</h5>
+                        <span class="flex items-center gap-2 mb-4 mt-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                          d="M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getHoTen() : 'null'}">
+                                </span>
+                        </span>
+                        <span class="flex items-center gap-2 mb-4 mt-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                          d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getEmail() : 'null'}">
+                                </span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getKhachHang() != null ? hoaDon.getKhachHang().getSdt() : 'null'}">
+                                </span>
+                        </span>
+                        <hr class="my-5">
+                        <h6 class="mb-4">Thông Tin Giao Hàng</h6>
+                        <span class="flex items-center gap-2 mb-4 mt-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                          d="M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getTenNguoiNhan()}">
+                                </span>
+                        </span>
+                        <span class="flex items-center gap-2 mb-4 mt-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                          d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getEmail()}">
+                                </span>
+                        </span>
+                        <span class="flex items-center gap-2 mt-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+                                </svg>
+                                <span class="font-semibold"
+                                      th:text="${hoaDon.getSdtNhan()}">
+                                </span>
+                        </span>
+                        <span class="flex items-center gap-2 mt-2">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                 viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
+                            </svg>
+                            <span class="font-semibold mt-2"
+                                  th:text="${hoaDon.getDiaChiNhan()}">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 
 @Builder
 @AllArgsConstructor
@@ -29,7 +28,6 @@ public class ThuongHieu {
     private Long thuongHieuId;
 
     @Size(max = 100)
-    @Nationalized
     @Column(name = "ten", length = 100)
     private String ten;
 
@@ -37,7 +35,6 @@ public class ThuongHieu {
     private boolean trangThai;
 
     @Size(max = 3000)
-    @Nationalized
     @Column(name = "moTa", length = 3000)
     private String moTa;
 
