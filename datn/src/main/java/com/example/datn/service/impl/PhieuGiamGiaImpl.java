@@ -12,8 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
@@ -21,6 +21,28 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
     @Autowired
     PhieuGiamGiaRepository repository;
 
+    //    @Override
+//    public Page<PhieuGiamGia> getAllPhieu(Pageable pageable) {
+//        Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+//        Page<PhieuGiamGia> phieuGiamGias = repository.findAll(sortedByIdDesc);
+//
+//        List<PhieuGiamGia> phieuCanCapNhat = new ArrayList<>();
+//
+//        for (PhieuGiamGia phieu : phieuGiamGias) {
+//            String newStatus = phieu.getTrangThaiHienTai();
+//            if (!newStatus.equals(phieu.getTrangThai())) {
+//                phieu.setTrangThai(newStatus);
+//                phieuCanCapNhat.add(phieu);
+//            }
+//        }
+//
+//        // Batch update
+//        if (!phieuCanCapNhat.isEmpty()) {
+//            repository.saveAll(phieuCanCapNhat);
+//        }
+//
+//        return phieuGiamGias;
+//    }
     @Override
     public Page<PhieuGiamGia> getAllPhieu(Pageable pageable) {
         Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
@@ -33,33 +55,48 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
                 repository.save(phieu);
             }
         }
+
         return phieuGiamGias;
     }
 
-    @Override
-    public Page<PhieuGiamGia> filterPhieuGiamGia(Integer type, Pageable pageable) {
-        if ("0".equals(type)) {
-            return repository.findAll(pageable);
-        } else {
-            return repository.findByLoaiPhieu(type, pageable);
-        }
-    }
 
     @Override
     public PhieuGiamGia getPhieuById(Long id) {
         Optional<PhieuGiamGia> phieuGiamGiaOptional = repository.findById(id);
-        if(phieuGiamGiaOptional.isPresent()){
+        if (phieuGiamGiaOptional.isPresent()) {
             return phieuGiamGiaOptional.get();
-        }
-        else {
-           throw new RuntimeException();
+        } else {
+            throw new RuntimeException();
         }
     }
 
     @Override
     public PhieuGiamGia savePhieuGiamGia(PhieuGiamGia phieuGiamGia) {
-        return repository.save(phieuGiamGia);
+        phieuGiamGia.setNgayTao(LocalDate.now());
+        if (phieuGiamGia.getMaGiamGia().isEmpty()) {
+            phieuGiamGia.setMaGiamGia(generateVoucherCode());
+            return repository.save(phieuGiamGia);
+        }
+        else {
+            return repository.save(phieuGiamGia);
+        }
     }
+
+
+    private String generateVoucherCode() {
+        String prefix = "XBOY";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        // Generate 5 random characters
+        for (int i = 0; i < 5; i++) {
+            sb.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return prefix + sb.toString();
+    }
+
 
     @Override
     public Optional<PhieuGiamGia> endPhieu(Long id) {
@@ -73,7 +110,7 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
     @Override
     public PhieuGiamGia update(PhieuGiamGia phieuGiamGia, Long id) {
         Optional<PhieuGiamGia> phieu = repository.findById(id);
-        if (phieu.isPresent()){
+        if (phieu.isPresent()) {
             PhieuGiamGia existingPhieu = phieu.get();
             existingPhieu.setMaGiamGia(phieuGiamGia.getMaGiamGia());
             existingPhieu.setLoaiPhieu(phieuGiamGia.getLoaiPhieu());
@@ -97,6 +134,21 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
     @Override
     public PhieuGiamGia delete(Long id) {
         return null;
+    }
+
+    @Override
+    public Page<PhieuGiamGia> searchLoaiPhieu(Long loaiPhieu, Pageable pageable) {
+        Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+        Page<PhieuGiamGia> phieuGiamGias = repository.findByLoaiPhieu(loaiPhieu, sortedByIdDesc);
+        return phieuGiamGias;
+    }
+
+
+    @Override
+    public Page<PhieuGiamGia> searchTrangThai(String trangThai, Pageable pageable) {
+        Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+        Page<PhieuGiamGia> phieuGiamGias = repository.findByTrangThai(trangThai, sortedByIdDesc);
+        return phieuGiamGias;
     }
 
 

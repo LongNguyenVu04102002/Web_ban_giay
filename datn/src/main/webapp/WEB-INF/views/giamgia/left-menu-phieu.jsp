@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!----===== Boxicons CSS ===== -->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!--<title>Dashboard Sidebar Menu</title>-->
 </head>
@@ -18,11 +18,11 @@
     <header>
         <div class="image-text">
             <div class="text">
-                <span class="name">Codinglab</span>
+                <span class="name">XBOY</span>
                 <span class="profession">Web developer</span>
             </div>
         </div>
-        <i class='bx bx-chevron-right toggle'></i> <!-- This can be removed if not needed -->
+        <%--        <i class='bx bx-chevron-right toggle'></i> <!-- This can be removed if not needed -->--%>
     </header>
 
     <div class="menu-bar">
@@ -31,31 +31,31 @@
             <li class="nav-link">
                 <a href="/khachhang">
                     <i class='bx bx-user icon'></i>
-                    <span class="text nav-text">Khách Hàng</span>
+                    <span class="text nav-text">Hóa đơn</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="/giamgia">
-                    <i class='bx bx-bell icon'></i>
-                    <span class="text nav-text">Phiếu giảm giá</span>
+                    <i class='bx bx-purchase-tag-alt icon'></i>
+                    <span class="text nav-text">Sản phẩm</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="#">
                     <i class='bx bx-pie-chart-alt icon'></i>
-                    <span class="text nav-text">Analytics</span>
+                    <span class="text nav-text">Nhân Viên</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="#">
                     <i class='bx bx-heart icon'></i>
-                    <span class="text nav-text">Likes</span>
+                    <span class="text nav-text">Khách hàng</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="#">
                     <i class='bx bx-wallet icon'></i>
-                    <span class="text nav-text">Wallets</span>
+                    <span class="text nav-text">Phiếu giảm giá</span>
                 </a>
             </li>
         </div>
@@ -67,49 +67,18 @@
                     <span class="text nav-text">Logout</span>
                 </a>
             </li>
-
-            <li class="mode">
-                <div class="sun-moon">
-                    <i class='bx bx-moon icon moon'></i>
-                    <i class='bx bx-sun icon sun'></i>
-                </div>
-                <span class="mode-text text">Dark mode</span>
-
-                <div class="toggle-switch">
-                    <span class="switch"></span>
-                </div>
-            </li>
         </div>
     </div>
 </nav>
 
-<section class="home">
-    <div class="text">Dashboard Sidebar</div>
-    <jsp:include page="index.jsp" />
-</section>
+<div class="home">
+    <div class="includee">
+        <jsp:include page="index.jsp" />
+    </div>
+</div>
 
 <!-- Remove the following JavaScript if not needed -->
 <script>
-    const body = document.querySelector('body'),
-        sidebar = body.querySelector('nav'),
-        toggle = body.querySelector(".toggle"),
-        searchBtn = body.querySelector(".search-box"),
-        modeSwitch = body.querySelector(".toggle-switch"),
-        modeText = body.querySelector(".mode-text");
-    toggle.addEventListener("click", () => {
-        sidebar.classList.toggle("close");
-    });
-    searchBtn.addEventListener("click", () => {
-        sidebar.classList.remove("close");
-    });
-    modeSwitch.addEventListener("click", () => {
-        body.classList.toggle("dark");
-        if (body.classList.contains("dark")) {
-            modeText.innerText = "Light mode";
-        } else {
-            modeText.innerText = "Dark mode";
-        }
-    });
 </script>
 </body>
 
@@ -127,7 +96,7 @@
 
     :root {
         /* ===== Colors ===== */
-        --body-color: #e4e9f7;
+        --body-color: #d3d3d3;
         --sidebar-color: #fff;
         --primary-color: #695cfe;
         --primary-color-light: #f6f5ff;
@@ -269,7 +238,7 @@
         justify-content: center;
         font-size: 22px;
         cursor: pointer;
-        transition: var(--tran-05);
+        /*transition: var(--tran-05);*/
     }
 
     body.dark .sidebar header .toggle {
@@ -288,7 +257,7 @@
         border-radius: 6px;
         background-color: var(--primary-color-light);
         cursor: pointer;
-        transition: var(--tran-05);
+        /*transition: var(--tran-05);*/
     }
 
     .sidebar li.search-box input {
@@ -301,7 +270,7 @@
         border-radius: 6px;
         font-size: 17px;
         font-weight: 500;
-        transition: var(--tran-05);
+        /*transition: var(--tran-05);*/
     }
     .sidebar li a {
         list-style: none;
@@ -322,10 +291,6 @@
     .sidebar li a:hover .icon,
     .sidebar li a:hover .text {
         color: var(--sidebar-color);
-    }
-    body.dark .sidebar li a:hover .icon,
-    body.dark .sidebar li a:hover .text {
-        color: var(--text-color);
     }
 
     .sidebar .menu-bar {
@@ -350,65 +315,14 @@
         width: 60px;
     }
 
-    .mode .sun-moon i {
-        position: absolute;
-    }
-    .mode .sun-moon i.sun {
-        opacity: 0;
-    }
-    body.dark .mode .sun-moon i.sun {
-        opacity: 1;
-    }
-    body.dark .mode .sun-moon i.moon {
-        opacity: 0;
-    }
-
-    .menu-bar .bottom-content .toggle-switch {
-        position: absolute;
-        right: 0;
-        height: 100%;
-        min-width: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-    .toggle-switch .switch {
-        position: relative;
-        height: 22px;
-        width: 40px;
-        border-radius: 25px;
-        background-color: var(--toggle-color);
-        transition: var(--tran-05);
-    }
-
-    .switch::before {
-        content: "";
-        position: absolute;
-        height: 15px;
-        width: 15px;
-        border-radius: 50%;
-        top: 50%;
-        left: 5px;
-        transform: translateY(-50%);
-        background-color: var(--sidebar-color);
-        transition: var(--tran-04);
-    }
-
-    body.dark .switch::before {
-        left: 20px;
-    }
-
     .home {
         position: absolute;
-        top: 0;
         top: 0;
         left: 250px;
         height: 100vh;
         width: calc(100% - 250px);
         background-color: var(--body-color);
-        transition: var(--tran-05);
+
     }
     .home .text {
         font-size: 30px;
@@ -426,4 +340,16 @@
         color: var(--text-color);
     }
 
+    .includee {
+        position: relative;
+        width: calc(97%);
+        height: 97vh;
+        border: 1px solid white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        background-color: white;
+        margin-left: 30px;
+        margin-top: 10px;
+        font-family: "Poppins", sans-serif;
+    }
 </style>
