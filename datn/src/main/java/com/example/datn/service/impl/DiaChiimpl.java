@@ -19,55 +19,37 @@ public class DiaChiimpl implements DiaChiService {
 
     @Autowired
     DiaChiRepository diaChiRepository;
-    @Override
-    public List<DiaChi> getAllDiaCHi() {
-      return diaChiRepository.findAll();
 
+    @Override
+    public List<DiaChi> getAllDiaChi() {
+        return diaChiRepository.findAll();
     }
 
     @Override
-    public ResponseEntity<?> addDiaChi(DiaChi diaChi) {
-        DiaChi diaChiAdd = diaChiRepository.save(diaChi);
-        return ResponseEntity.ok(diaChiAdd);
+    public DiaChi saveDiaChi(DiaChi diaChi) {
+        return diaChiRepository.save(diaChi);
     }
 
     @Override
-    public ResponseEntity<?> updateDiaChi(DiaChi diaChi, Long id) {
-        Optional<DiaChi> diaChiOptional = diaChiRepository.findById(id);
-        if(diaChiOptional.isPresent()) {
-            DiaChi existingDiaChi = diaChiOptional.get();
-            existingDiaChi.setDiaChiNhan(diaChi.getDiaChiNhan());
-            existingDiaChi.setNgayTao(diaChi.getNgayTao());
-            existingDiaChi.setSdt(diaChi.getSdt());
-            existingDiaChi.setHoTen(diaChi.getHoTen());
-            existingDiaChi.setTrangThai(diaChi.isTrangThai());
-            existingDiaChi.setXa(diaChi.getXa());
-            existingDiaChi.setHuyen(diaChi.getHuyen());
-            existingDiaChi.setThanhPho(diaChi.getThanhPho());
-            existingDiaChi.setKhachHang(diaChi.getKhachHang());
-            DiaChi updateDiaChi = diaChiRepository.save(existingDiaChi);
-            return ResponseEntity.ok(updateDiaChi);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-
+    public void deleteDiaChi(Long id) {
+        diaChiRepository.deleteById(id);
     }
 
     @Override
-    public ResponseEntity<?> deleteDiaChi(Long id) {
-        Optional<DiaChi> diaChiOptional = diaChiRepository.findById(id);
-        if (diaChiOptional.isPresent()){
-            diaChiRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-
+    public Optional<DiaChi> getDiaChiById(Long id) {
+        return diaChiRepository.findById(id);
     }
 
     @Override
-    public Page<DiaChi> getAllDiaChiByPage(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize); // PageRequest đếm từ 0
-        return diaChiRepository.findAll(pageable);
+    public DiaChi updateDiaChi(DiaChi updatedDiaChi) {
+        DiaChi existingDiaChi = diaChiRepository.findById(updatedDiaChi.getDiaChiId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ có ID: " + updatedDiaChi.getDiaChiId()));
+
+        existingDiaChi.setDiaChiNhan(updatedDiaChi.getDiaChiNhan());
+        existingDiaChi.setXa(updatedDiaChi.getXa());
+        existingDiaChi.setHuyen(updatedDiaChi.getHuyen());
+        existingDiaChi.setThanhPho(updatedDiaChi.getThanhPho());
+
+        return diaChiRepository.save(existingDiaChi);
     }
 }
