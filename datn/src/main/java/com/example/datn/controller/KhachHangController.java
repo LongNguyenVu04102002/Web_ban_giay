@@ -91,11 +91,11 @@ public class KhachHangController {
 //        return "redirect:/khachhang";
 //    }
 
-    @GetMapping("/add")
-    public String viewAdd(Model model) {
-        model.addAttribute("khachHang", new KhachHang());
-        return "khachHang/left-menu-addKhachHang";
-    }
+//    @GetMapping("/add")
+//    public String viewAdd(Model model) {
+//        model.addAttribute("khachHang", new KhachHang());
+//        return "khachHang/left-menu-addKhachHang";
+//    }
 
 
     @PostMapping("/saveKhachHang")

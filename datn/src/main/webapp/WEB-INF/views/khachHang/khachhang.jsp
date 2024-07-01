@@ -23,8 +23,6 @@
                       </a>
 
                <form action="${pageContext.request.contextPath}/searchBySDT" method="post" class="d-flex align-items-center justify-content-end mb-3">
-
-
            <!-- Ô tìm kiếm theo số điện thoại -->
            <input type="text" id="sdt" name="sdt" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Tìm theo số điện thoại"/>
            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -114,7 +112,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="sdt">Số Điện Thoại:</label>
-                                        <input type="text" id="sdt" name="sdt" class="form-control" required />
+                                        <input type="text" id="sdt" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="sdt" class="form-control" required />
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Thêm</button>
