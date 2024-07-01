@@ -73,7 +73,7 @@
 
 <div class="home">
     <div class="includee">
-        <jsp:include page="nhan-vien.jsp" />
+        <jsp:include page="addnv.jsp" />
     </div>
 </div>
 

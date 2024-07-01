@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,17 +40,44 @@ public class NhanVienController {
         return "/nhanvien/left-menu-nhan-vien";
 
     }
-    @GetMapping("/searchNhanVien")
-    public String searchNhanVien(@RequestParam(name = "search", required = false) String searchName, Model model) {
-        List<NhanVien> nhanViens;
-        if (searchName != null && !searchName.isEmpty()) {
-            nhanViens = nhanVienService.findByHoTen(searchName);
-        } else {
-            nhanViens = nhanVienService.getAllNhanhVien();
-        }
-        model.addAttribute("nhanviens", nhanViens);
-        return "nhanvien/left-menu-nhan-vien";
+//    @GetMapping("/searchNhanVien")
+//    public String searchNhanVien(@RequestParam(name = "search", required = false) String searchName, Model model) {
+//        List<NhanVien> nhanViens;
+//        if (searchName != null && !searchName.isEmpty()) {
+//            nhanViens = nhanVienService.findByHoTen(searchName);
+//        } else {
+//            return "redirect:/nhanvien";
+//        }
+//        model.addAttribute("nhanviens", nhanViens);
+//        return "nhanvien/left-menu-nhan-vien";
+//    }
+@GetMapping("/searchNhanVien")
+public String searchNhanVien(@RequestParam(name = "search", required = false) String search,
+                             @RequestParam(name = "gender", required = false) Boolean gender,
+                             Model model) {
+    List<NhanVien> nhanViens = new ArrayList<>();
+    if (search != null && !search.isEmpty() && gender != null) {
+        nhanViens = nhanVienService.findByHoTenContainingAndGioiTinh(search, gender);
+    } else if (search != null && !search.isEmpty()) {
+        nhanViens = nhanVienService.findByHoTen(search);
+    } else if (gender != null) {
+        // Lọc theo giới tính khi không có tên được nhập
+        // Điều này phụ thuộc vào yêu cầu cụ thể của bạn
+        // Ví dụ: nếu gender = true, lấy nhân viên là nam và ngược lại
+        // Thay đổi logic tại đây tùy theo yêu cầu của bạn
+    } else {
+        return "redirect:/nhanvien";
     }
+    model.addAttribute("nhanviens",nhanViens);
+    return "nhanvien/left-menu-nhan-vien";
+}
+
+
+@GetMapping("/addNhanVien")
+public  String viewadd(Model model){
+    model.addAttribute("nhanVien", new NhanVien());
+        return "/nhanvien/viewadd";
+}
 
 
     @PostMapping("/saveNhanVien") // add
@@ -57,7 +85,7 @@ public class NhanVienController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("nhanVien", nhanVien);
-            return "nhanvien/left-menu-nhan-vien";
+            return "nhanvien/viewadd";
         }
         nhanVien.setTrangThai(true);
         nhanVienService.saveNhanVien(nhanVien);

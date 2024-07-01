@@ -94,6 +94,8 @@
                     <form:checkbox path="trangThai" class="form-check-input" />
                 </div>
                 <button type="submit" class="btn btn-primary">Sửa Nhân Viên</button>
+                <a href="/nhanvien" class="btn btn-secondary">Trở về danh sách nhân viên</a>
+
             </form:form>
         </div>
     </div>
