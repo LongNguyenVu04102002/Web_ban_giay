@@ -6,12 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DiaChiService {
 
-    List<DiaChi> getAllDiaCHi();
-    ResponseEntity<?> addDiaChi(DiaChi diaChi);
-    ResponseEntity<?> updateDiaChi(DiaChi diaChi, Long id);
-    ResponseEntity<?> deleteDiaChi(Long id);
-    Page<DiaChi> getAllDiaChiByPage(int pageNumber, int pageSize);
+    List<DiaChi> getAllDiaChi();
+    DiaChi saveDiaChi(DiaChi diaChi);
+    void deleteDiaChi(Long id);
+    Optional<DiaChi> getDiaChiById(Long id);
+    DiaChi updateDiaChi(DiaChi updatedDiaChi);
 }

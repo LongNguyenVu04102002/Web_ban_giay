@@ -47,13 +47,13 @@
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
+                <a href="/khachhang">
                     <i class='bx bx-heart icon'></i>
                     <span class="text nav-text">Khách hàng</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
+                <a href="/giamgia">
                     <i class='bx bx-wallet icon'></i>
                     <span class="text nav-text">Phiếu giảm giá</span>
                 </a>
@@ -73,7 +73,7 @@
 
 <div class="home">
     <div class="includee">
-        <jsp:include page="khachHang/khachhang.jsp" />
+        <jsp:include page="khachhang.jsp" />
     </div>
 </div>
 

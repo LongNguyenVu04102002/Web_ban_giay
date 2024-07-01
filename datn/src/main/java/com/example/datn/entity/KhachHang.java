@@ -45,7 +45,7 @@ public class KhachHang {
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
