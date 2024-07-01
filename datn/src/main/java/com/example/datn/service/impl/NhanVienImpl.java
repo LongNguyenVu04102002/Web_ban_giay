@@ -54,4 +54,26 @@ nhanVienRepository.deleteById(id);
 
         return nhanVienRepository.findAll(pageable);
     }
+
+    @Override
+    public List<NhanVien> findByHoTen(String hoTen) {
+        return nhanVienRepository.findByHoTenContaining(hoTen);
+    }
+
+    @Override
+    public List<NhanVien> findByHoTenContainingAndGioiTinh(String hoTen, boolean gioiTinh) {
+        return nhanVienRepository.findByHoTenContainingAndGioiTinh(hoTen,gioiTinh);
+    }
+
+    @Override
+    public List<NhanVien> findByGioiTinh(boolean gioiTinh) {
+        return nhanVienRepository.findByGioiTinh(gioiTinh);
+    }
+
+    @Override
+    public NhanVien updateNhanVien(NhanVien nhanVien) {
+        return null;
+    }
+
+
 }

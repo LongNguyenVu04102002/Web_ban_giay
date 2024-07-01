@@ -212,25 +212,17 @@
         <div class="col-md-9 mt-5">
             <main>
                 <h2>Danh sách Nhân Viên</h2>
-
-                <!-- Search and Filter -->
-                <form method="get" action="">
+                <form method="get" action="/searchNhanVien">
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <input type="text" name="search" class="form-control" placeholder="Tìm kiếm theo tên" value="${param.search}">
                         </div>
-                        <div class="col-md-4">
-                            <select name="genderFilter" class="form-select">
-                                <option value="">-- Lọc theo giới tính --</option>
-                                <option value="true" ${param.genderFilter == 'true' ? 'selected' : ''}>Nam</option>
-                                <option value="false" ${param.genderFilter == 'false' ? 'selected' : ''}>Nữ</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </div>
                     </div>
                 </form>
+
 
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -248,7 +240,7 @@
                     <tbody>
                     <c:forEach var="nhanVien" items="${nhanviens}" varStatus="status">
                         <tr>
-                            <td>${status.count}</td>
+                            <td>${status.index+1}</td>
                             <td>${nhanVien.hoTen}</td>
                             <td>${nhanVien.gioiTinh ? 'Nam' : 'Nữ'}</td>
                             <td>${nhanVien.ngaySinh}</td>
@@ -291,11 +283,14 @@
         <!-- Right Side (Form) -->
         <div class="col-md-3">
             <div class="right-content">
-                <h2>Thêm Khách Hàng</h2>
-                <form:form method="post" action="/saveNhanVien" modelAttribute="nhanVien">
+                <h2>Thêm Nhân Viên</h2>
+                <form:form method="post" action="/saveNhanVien" modelAttribute="nhanVien"
+                           onsubmit="if(!confirm('thêm nhân viên?')){return false}">
+
                     <div class="mb-3">
                         <form:label path="hoTen">Họ Tên:</form:label>
                         <form:input path="hoTen" class="form-control" />
+                        <form:errors path="hoTen" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="gioiTinh">Giới Tính:</form:label><br>
@@ -303,33 +298,38 @@
                         <form:label path="gioiTinh" class="form-check-label">Nam</form:label><br>
                         <form:radiobutton path="gioiTinh" value="false" class="form-check-input" />
                         <form:label path="gioiTinh" class="form-check-label">Nữ</form:label>
+                        <form:errors path="gioiTinh" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="ngaySinh">Ngày Sinh:</form:label>
                         <form:input path="ngaySinh" type="date" class="form-control" />
+                        <form:errors path="ngaySinh" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="sdt">Số Điện Thoại:</form:label>
                         <form:input path="sdt" class="form-control" />
+                        <form:errors path="sdt" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="email">Email:</form:label>
                         <form:input path="email" class="form-control" />
+                        <form:errors path="email" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="matKhau">Mật Khẩu:</form:label>
                         <form:password path="matKhau" class="form-control" />
+                        <form:errors path="matKhau" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">
                         <form:label path="trangThai">Trạng Thái:</form:label>
                         <form:checkbox path="trangThai" class="form-check-input" />
+                        <form:errors path="trangThai" cssClass="text-danger" />
                     </div>
-                    <button type="submit" class="btn btn-primary">Thêm Khách Hàng</button>
+                    <button type="submit" class="btn btn-primary">Thêm Nhân Viên</button>
                 </form:form>
             </div>
         </div>
     </div>
-
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
