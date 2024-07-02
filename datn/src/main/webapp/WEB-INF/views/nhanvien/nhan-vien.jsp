@@ -108,6 +108,8 @@
                                     ${nhanVien.trangThai ? 'Kích hoạt' : 'Tắt'}
                             </a>
                         </td>
+
+
                         <td>
                             <a href="/editNhanVien/${nhanVien.nhanVienId}" class="btn btn-warning btn-sm">Sửa</a>
                             <a href="/deleteNhanVien/${nhanVien.nhanVienId}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
@@ -143,6 +145,23 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    function updateStatus(nhanVienId, trangThai) {
+        fetch(`/updateStatus?nhanVienId=${nhanVienId}&trangThai=${trangThai}`, {
+            method: 'GET'
+        }).then(response => {
+            if (response.ok) {
+                // Nếu phản hồi thành công, thông báo trạng thái đã được cập nhật
+                console.log('Trạng thái đã được cập nhật');
+            } else {
+                alert('Cập nhật trạng thái thất bại!');
+            }
+        }).catch(error => {
+            console.error('Lỗi:', error);
+            alert('Có lỗi xảy ra!');
+        });
+    }
+</script>
 
 </body>
 </html>
