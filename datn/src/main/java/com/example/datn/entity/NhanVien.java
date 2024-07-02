@@ -46,6 +46,7 @@ public class NhanVien {
 
     @Column(name = "ngaySinh")
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)

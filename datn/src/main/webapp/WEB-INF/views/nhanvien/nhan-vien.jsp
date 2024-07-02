@@ -99,9 +99,14 @@
                         <td>${nhanVien.ngaySinh}</td>
                         <td>${nhanVien.email}</td>
                         <td>${nhanVien.sdt}</td>
+<%--                        <td>--%>
+<%--                            <input type="checkbox" class="toggle-switch" id="switch${status.index}" data-id="${nhanVien.nhanVienId}" ${nhanVien.trangThai ? 'checked' : ''} />--%>
+<%--                            <label class="label_checkbox" for="switch${status.index}">Toggle</label>--%>
+<%--                        </td>--%>
                         <td>
-                            <input type="checkbox" class="toggle-switch" id="switch${status.index}" data-id="${nhanVien.nhanVienId}" ${nhanVien.trangThai ? 'checked' : ''} />
-                            <label class="label_checkbox" for="switch${status.index}">Toggle</label>
+                            <a href="/updateStatus?nhanVienId=${nhanVien.nhanVienId}&trangThai=${!nhanVien.trangThai}" class="btn ${nhanVien.trangThai ? 'btn-success' : 'btn-secondary'} btn-sm"  onclick="return confirm('Bạn có chắc chắn muốn đổi không?')">
+                                    ${nhanVien.trangThai ? 'Kích hoạt' : 'Tắt'}
+                            </a>
                         </td>
                         <td>
                             <a href="/editNhanVien/${nhanVien.nhanVienId}" class="btn btn-warning btn-sm">Sửa</a>
@@ -138,5 +143,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>

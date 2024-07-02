@@ -82,7 +82,7 @@
                     </div>
                     <div class="mb-3">
                         <form:label path="sdt">Số Điện Thoại:</form:label>
-                        <form:input path="sdt" class="form-control" />
+                        <form:input path="sdt" type="tel" pattern="[0-9]*" class="form-control" />
                         <form:errors path="sdt" cssClass="text-danger" />
                     </div>
                     <div class="mb-3">

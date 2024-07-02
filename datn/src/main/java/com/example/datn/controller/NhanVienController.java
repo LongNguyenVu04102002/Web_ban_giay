@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public  String viewadd(Model model){
 
         // Set ID to ensure the entity is updated instead of created as new
         nhanVien.setNhanVienId(id);
-        nhanVien.setTrangThai(true);
+
         nhanVienService.saveNhanVien(nhanVien);
         return "redirect:/nhanvien";
     }
@@ -130,6 +130,16 @@ public  String viewadd(Model model){
         nhanVienService.deleteNhanVien(id);
         return "redirect:/nhanvien";
     }
-
-
+    @GetMapping("/updateStatus")
+    public String updateStatus(@RequestParam("nhanVienId") Long nhanVienId, @RequestParam("trangThai") boolean trangThai, RedirectAttributes redirectAttributes) {
+        NhanVien nhanVien = nhanVienService.getNhanVienById(nhanVienId).orElse(null);
+        if (nhanVien != null) {
+            nhanVien.setTrangThai(trangThai);
+            nhanVienService.saveNhanVien(nhanVien);
+            redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái thành công!");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Không tìm thấy nhân viên!");
+        }
+        return "redirect:/nhanvien"; // Chuyển hướng về trang danh sách nhân viên
+    }
 }
