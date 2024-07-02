@@ -52,23 +52,22 @@ public class NhanVienController {
 //        return "nhanvien/left-menu-nhan-vien";
 //    }
 @GetMapping("/searchNhanVien")
-public String searchNhanVien(@RequestParam(name = "search", required = false) String search,
+public String searchNhanVien(@RequestParam(name = "sdt", required = false) String sdt,
                              @RequestParam(name = "gender", required = false) Boolean gender,
                              Model model) {
     List<NhanVien> nhanViens = new ArrayList<>();
-    if (search != null && !search.isEmpty() && gender != null) {
-        nhanViens = nhanVienService.findByHoTenContainingAndGioiTinh(search, gender);
-    } else if (search != null && !search.isEmpty()) {
-        nhanViens = nhanVienService.findByHoTen(search);
+
+    if ((sdt != null && !sdt.isEmpty()) && gender != null) {
+        nhanViens = nhanVienService.findBySdtContainingAndGioiTinh(sdt, gender);
+    } else if (sdt != null && !sdt.isEmpty()) {
+        nhanViens = nhanVienService.findBySdtContaining(sdt);
     } else if (gender != null) {
-        // Lọc theo giới tính khi không có tên được nhập
-        // Điều này phụ thuộc vào yêu cầu cụ thể của bạn
-        // Ví dụ: nếu gender = true, lấy nhân viên là nam và ngược lại
-        // Thay đổi logic tại đây tùy theo yêu cầu của bạn
+        nhanViens = nhanVienService.findByGioiTinh(gender);
     } else {
         return "redirect:/nhanvien";
     }
-    model.addAttribute("nhanviens",nhanViens);
+
+    model.addAttribute("nhanviens", nhanViens);
     return "nhanvien/left-menu-nhan-vien";
 }
 
@@ -142,4 +141,5 @@ public  String viewadd(Model model){
         }
         return "redirect:/nhanvien"; // Chuyển hướng về trang danh sách nhân viên
     }
+
 }

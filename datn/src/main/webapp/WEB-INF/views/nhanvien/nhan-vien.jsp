@@ -11,7 +11,8 @@
     <title>${pageTitle}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        input[type=checkbox] {
+
+    input[type=checkbox] {
             height: 0;
             width: 0;
             visibility: hidden;
@@ -62,7 +63,7 @@
             <form method="get" action="/searchNhanVien">
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <input type="text" name="search" class="form-control" placeholder="Tìm kiếm theo họ tên" value="${param.search}">
+                        <input type="text" name="sdt" class="form-control" placeholder="Tìm kiếm theo số điện thoại" value="${param.sdt}">
                     </div>
                     <div class="col-md-3">
                         <select name="gender" class="form-select">
@@ -76,6 +77,7 @@
                     </div>
                 </div>
             </form>
+
 
             <table class="table table-hover table-bordered">
                 <thead>
@@ -108,6 +110,7 @@
                                     ${nhanVien.trangThai ? 'Kích hoạt' : 'Tắt'}
                             </a>
                         </td>
+
 
 
                         <td>
@@ -162,6 +165,7 @@
         });
     }
 </script>
+
 
 </body>
 </html>

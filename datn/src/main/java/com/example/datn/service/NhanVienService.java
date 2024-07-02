@@ -12,9 +12,12 @@ public interface NhanVienService {
    void deleteNhanVien(Long id);
    NhanVien toggleTrangThai(Long nhanVienId);
    Page<NhanVien> getAllNhanVienByPage(int pagenumber,int pageSize);
-   List<NhanVien> findByHoTen(String hoTen);
-   List<NhanVien> findByHoTenContainingAndGioiTinh(String hoTen, boolean gioiTinh);
+
     List<NhanVien> findByGioiTinh(boolean gioiTinh) ;
 NhanVien updateNhanVien(NhanVien nhanVien);
+   List<NhanVien> findBySdtContainingAndGioiTinh(String sdt, Boolean gioiTinh);
+   List<NhanVien> findBySdtContaining(String sdt);
+   List<NhanVien> findByGioiTinh(Boolean gioiTinh);
+
 
 }

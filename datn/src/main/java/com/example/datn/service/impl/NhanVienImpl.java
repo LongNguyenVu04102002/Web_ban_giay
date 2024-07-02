@@ -28,6 +28,7 @@ public class NhanVienImpl implements NhanVienService {
 
     @Override
     public NhanVien saveNhanVien(NhanVien nhanVien) {
+
         return nhanVienRepository.save(nhanVien);
     }
 
@@ -55,15 +56,8 @@ nhanVienRepository.deleteById(id);
         return nhanVienRepository.findAll(pageable);
     }
 
-    @Override
-    public List<NhanVien> findByHoTen(String hoTen) {
-        return nhanVienRepository.findByHoTenContaining(hoTen);
-    }
 
-    @Override
-    public List<NhanVien> findByHoTenContainingAndGioiTinh(String hoTen, boolean gioiTinh) {
-        return nhanVienRepository.findByHoTenContainingAndGioiTinh(hoTen,gioiTinh);
-    }
+
 
     @Override
     public List<NhanVien> findByGioiTinh(boolean gioiTinh) {
@@ -75,5 +69,22 @@ nhanVienRepository.deleteById(id);
         return null;
     }
 
+    @Override
+    public List<NhanVien> findBySdtContainingAndGioiTinh(String sdt, Boolean gioiTinh) {
+        return nhanVienRepository.findBySdtContainingAndGioiTinh(sdt,gioiTinh);
+    }
+
+    @Override
+    public List<NhanVien> findBySdtContaining(String sdt) {
+        return nhanVienRepository.findBySdtContaining(sdt);
+    }
+
+    @Override
+    public List<NhanVien> findByGioiTinh(Boolean gioiTinh) {
+        return nhanVienRepository.findByGioiTinh(gioiTinh);
+    }
 
 }
+
+
+

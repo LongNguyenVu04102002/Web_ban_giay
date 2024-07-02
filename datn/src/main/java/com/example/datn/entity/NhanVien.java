@@ -46,7 +46,7 @@ public class NhanVien {
 
     @Column(name = "ngaySinh")
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-
+@NotNull(message = "khong dc de trong")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
@@ -57,6 +57,9 @@ public class NhanVien {
     @Column(name = "email", length = 50)
     @Size(max = 50, message = "Email không được vượt quá 50 ký tự")
     @Email(message = "Email không hợp lệ")
+    @NotNull(message = "khong dc de trong")
+@NotEmpty(message = " không được để trống")
+
     private String email;
 
     @Column(name = "matKhau")

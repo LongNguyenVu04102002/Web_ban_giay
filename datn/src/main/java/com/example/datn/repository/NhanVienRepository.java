@@ -9,7 +9,8 @@ import java.util.List;
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien,Long> {
     List<NhanVien> findByHoTenContaining(String hoTen);
-    List<NhanVien> findByHoTenContainingAndGioiTinh(String hoTen, boolean gioiTinh);
-     List<NhanVien> findByGioiTinh(boolean gioiTinh) ;
+    List<NhanVien> findBySdtContainingAndGioiTinh(String sdt, Boolean gioiTinh);
+    List<NhanVien> findBySdtContaining(String sdt);
+    List<NhanVien> findByGioiTinh(Boolean gioiTinh);
 
 }
