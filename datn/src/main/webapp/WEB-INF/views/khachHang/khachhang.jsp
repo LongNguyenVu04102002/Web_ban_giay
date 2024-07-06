@@ -4,40 +4,58 @@
 <%@ page pageEncoding="utf-8" %>
 <jsp:useBean id="pageTitle" scope="page" class="java.lang.String" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
 
 <%
     pageTitle = "Danh sách Khách hàng";
 %>
 
+<c:if test="${not empty successMessage}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ${successMessage}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</c:if>
+
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        ${errorMessage}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</c:if>
 
 
 <div>
     <div class="row">
-        <div class="col-md-12 mt-5">
-       <h1 style="margin-left: 30px;">
-                 Khách Hàng
-              </h1>
+        <div class="col-md-12 mt-3">
+   <h1 style="margin-left: 10px;">
+       <a href="/khachhang" style="text-decoration: none; color: black;">Khách Hàng</a>
+   </h1>
 
-               <a href="/khachhang" style="color: white; font-weight: bold; text-decoration: none">
-                          <button class="add-button"> <i class="bi bi-arrow-left"></i> Trở về</button>
-                      </a>
 
-               <form action="${pageContext.request.contextPath}/searchBySDT" method="post" class="d-flex align-items-center justify-content-end mb-3">
-           <!-- Ô tìm kiếm theo số điện thoại -->
-           <input type="text" id="sdt" name="sdt" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Tìm theo số điện thoại"/>
-           <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-       </form>
 
+<form action="${pageContext.request.contextPath}/searchBySDT" method="post" class="d-flex align-items-center justify-content-end mb-3">
+    <!-- Ô tìm kiếm theo số điện thoại -->
+    <input type="text" id="sdt" name="sdt" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Tìm theo số điện thoại"/>
+    <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
+</form>
+<hr>
+
+
+<h5 style="margin-left: 30px;">
+    <i class="fas fa-filter"></i> Bộ Lọc
+</h5>
 
 <div class="d-flex justify-content-center align-items-center mb-3">
     <!-- Form tìm kiếm theo ngày sinh -->
+    <h8>Tìm kiếm khoảng ngày sinh</h8>
     <form action="${pageContext.request.contextPath}/searchByNgaySinh" method="get" class="d-flex align-items-center mb-3 me-2">
         <div class="mb-3 me-2" style="max-width: 200px;">
-            <label for="fromDate">From Date:</label>
+            <label for="fromDate">Từ Ngày:</label>
             <input type="date" id="fromDate" name="fromDate" class="form-control" required />
         </div>
         <div class="mb-3 me-2" style="max-width: 200px;">
-            <label for="toDate">To Date:</label>
+            <label for="toDate">Đến Ngày:</label>
             <input type="date" id="toDate" name="toDate" class="form-control" required />
         </div>
         <button type="submit" class="btn btn-primary">Search</button>
@@ -60,14 +78,21 @@
         <div class="mb-3 me-2">
             <label for="status" class="form-label">Lọc theo Trạng Thái:</label>
             <select id="status" name="status" class="form-control" onchange="filterByStatus()">
+                            <option value="" ${selectedStatus == '' ? 'selected' : ''}>Tất cả</option>
                 <option value="true" ${selectedStatus == 'true' ? 'selected' : ''}>Hoạt động</option>
                 <option value="false" ${selectedStatus == 'false' ? 'selected' : ''}>Không hoạt động</option>
             </select>
         </div>
     </form>
+
+
 </div>
 
+<hr>
 
+ <a href="${pageContext.request.contextPath}/themMoi" class="btn btn-primary">
+            Thêm Khách Hàng
+        </a>
             <main>
                 <!-- Nút Thêm mới -->
                 <div class="d-flex justify-content-end">
@@ -76,53 +101,11 @@
                     </button>
                 </div>
 
-                <!-- Modal Thêm mới Khách hàng -->
-                <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="${pageContext.request.contextPath}/saveKhachHang" method="post">
-                                    <div class="mb-3">
-                                        <label for="hoTen">Họ Tên:</label>
-                                        <input type="text" id="hoTen" name="hoTen" class="form-control" required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Giới Tính:</label><br>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="nam" name="gioiTinh" value="true" required>
-                                            <label class="form-check-label" for="nam">Nam</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="nu" name="gioiTinh" value="false" required>
-                                            <label class="form-check-label" for="nu">Nữ</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="ngaySinh">Ngày Sinh:</label>
-                                        <input type="date" id="ngaySinh" name="ngaySinh" class="form-control" required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="email">Email:</label>
-                                        <input type="email" id="email" name="email" class="form-control" required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="sdt">Số Điện Thoại:</label>
-                                        <input type="text" id="sdt" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="sdt" class="form-control" required />
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary">Thêm</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
 
+ <h5>
+            <i class="bi bi-list"></i> Danh Sách Khách Hàng
+        </h5>
              <table class="table table-bordered table-hover">
                      <thead class="thead-light">
                          <tr>
@@ -157,9 +140,9 @@
                                      </form>
                                  </td>
                                  <td>
-                                     <a data-bs-toggle="modal" data-bs-target="#updateCustomerModal${khachHang.khachHangId}">
-                                         <i class="fas fa-edit text-primary"></i>
-                                     </a>
+                              <a href="${pageContext.request.contextPath}/editKhachHang/${khachHang.khachHangId}">
+                                  <i class="fas fa-edit text-primary"></i>
+                              </a>
                                      <a data-bs-toggle="modal" data-bs-target="#showAddressesModal${khachHang.khachHangId}">
                                          <i class="fas fa-map-marked-alt text-info"></i>
                                      </a>
@@ -201,40 +184,7 @@
                                                       </div>
 
 
-                                                         <!-- Modal Thêm Địa Chỉ -->
-                                                                  <div class="modal fade" id="addAddressModal${khachHang.khachHangId}" tabindex="-1" aria-labelledby="addAddressModalLabel${khachHang.khachHangId}" aria-hidden="true">
-                                                                      <div class="modal-dialog">
-                                                                          <div class="modal-content">
-                                                                              <div class="modal-header">
-                                                                                  <h5 class="modal-title" id="addAddressModalLabel${khachHang.khachHangId}">Thêm Địa Chỉ cho ${khachHang.hoTen}</h5>
-                                                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                              </div>
-                                                                              <div class="modal-body">
-                                                                                  <!-- Form thêm địa chỉ mới -->
-                                                                                  <form action="${pageContext.request.contextPath}/addAddress" method="post">
-                                                                                      <input type="hidden" name="khachHangId" value="${khachHang.khachHangId}" />
-                                                                                      <div class="mb-3">
-                                                                                          <label for="diaChiNhan">Địa Chỉ Nhận:</label>
-                                                                                          <input type="text" id="diaChiNhan" name="diaChiNhan" class="form-control" required />
-                                                                                      </div>
-                                                                                      <div class="mb-3">
-                                                                                          <label for="xa">Xã/Phường:</label>
-                                                                                          <input type="text" id="xa" name="xa" class="form-control" required />
-                                                                                      </div>
-                                                                                      <div class="mb-3">
-                                                                                          <label for="huyen">Quận/Huyện:</label>
-                                                                                          <input type="text" id="huyen" name="huyen" class="form-control" required />
-                                                                                      </div>
-                                                                                      <div class="mb-3">
-                                                                                          <label for="thanhPho">Thành Phố/Tỉnh:</label>
-                                                                                          <input type="text" id="thanhPho" name="thanhPho" class="form-control" required />
-                                                                                      </div>
-                                                                                      <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
-                                                                                  </form>
-                                                                              </div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
+
 
                                                                   <!-- Modal Cập Nhật Địa Chỉ -->
                                                                   <c:forEach var="diaChi" items="${khachHang.diaChiList}">
@@ -332,23 +282,27 @@
                 </table>
 
                 <!-- Phân trang -->
-           <nav aria-label="Page navigation">
-               <ul class="pagination">
-                   <c:if test="${currentPage > 1}">
-                       <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&page=1&size=${size}">First</a></li>
-                       <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&page=${currentPage - 1}&size=${size}">Previous</a></li>
-                   </c:if>
-                   <c:forEach begin="1" end="${totalPages}" varStatus="page">
-                       <li class="page-item ${currentPage == page.index + 1 ? 'active' : ''}">
-                           <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&page=${page.index + 1}&size=${size}">${page.index + 1}</a>
-                       </li>
-                   </c:forEach>
-                   <c:if test="${currentPage < totalPages}">
-                       <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&page=${currentPage + 1}&size=${size}">Next</a></li>
-                       <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&page=${totalPages}&size=${size}">Last</a></li>
-                   </c:if>
-               </ul>
-           </nav>
+
+
+   <nav aria-label="Page navigation">
+       <ul class="pagination">
+           <c:if test="${currentPage > 1}">
+               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=1&size=${size}">First</a></li>
+               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage - 1}&size=${size}">Previous</a></li>
+           </c:if>
+           <c:forEach begin="1" end="${totalPages}" varStatus="page">
+               <li class="page-item ${currentPage == page.index + 1 ? 'active' : ''}">
+                   <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${page.index + 1}&size=${size}">${page.index + 1}</a>
+               </li>
+           </c:forEach>
+           <c:if test="${currentPage < totalPages}">
+               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage + 1}&size=${size}">Next</a></li>
+               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${totalPages}&size=${size}">Last</a></li>
+           </c:if>
+       </ul>
+   </nav>
+
+
 
 
             </main>

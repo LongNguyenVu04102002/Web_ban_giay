@@ -2,17 +2,15 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
-import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.service.DiaChiService;
 import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.Date;
+
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 
@@ -37,13 +36,13 @@ public class KhachHangController {
     @GetMapping("/khachhang")
     public String listKhachHang(Model model,
                                 @RequestParam(defaultValue = "1") int page,
-                                @RequestParam(defaultValue = "8") int size) {
+                                @RequestParam(defaultValue = "6") int size) {
         Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
         model.addAttribute("khachHangs", khachHangPage.getContent());
-        model.addAttribute("currentPage", khachHangPage.getNumber()+1); // Vị trí trang hiện tại
-        model.addAttribute("totalPages", khachHangPage.getTotalPages()); // Tổng số trang
-        model.addAttribute("khachHang", new KhachHang()); // Thêm đối tượng khachHang vào model
-        return "khachHang/left-menu-khachhang"; // Trả về tên của view (khachhang.jsp)
+        model.addAttribute("currentPage", khachHangPage.getNumber()+1);
+        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+        model.addAttribute("khachHang", new KhachHang());
+        return "khachHang/left-menu-khachhang";
     }
 
 
@@ -54,27 +53,26 @@ public class KhachHangController {
     }
 
 
-    @GetMapping("/detail/{id}")
-    public String showKhachHangDetail(@PathVariable("id") Long id, Model model, @RequestParam(defaultValue = "1") int page,
-                                      @RequestParam(defaultValue = "3") int size) {
-        // Lấy thông tin khách hàng từ service
-        KhachHang khachHang = khachHangService.getKhachHangById(id);
-
-        // Đưa thông tin khách hàng vào model để hiển thị trên form
-        model.addAttribute("khachHang", khachHang);
-
-        // Lấy danh sách khách hàng từ trang hiện tại
-        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
-        List<KhachHang> khachHangs = khachHangPage.getContent(); // Lấy danh sách khách hàng từ Page
-        model.addAttribute("khachHangs", khachHangs); // Đưa danh sách khách hàng vào model
-
-        // Thêm thông tin phân trang vào model để view JSP có thể sử dụng
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", khachHangPage.getTotalPages());
-        model.addAttribute("size", size);
-
-        return "/left-menu"; // Trả về trang chứa form (left-menu.jsp)
-    }
+//    @GetMapping("/detail/{id}")
+//    public String showKhachHangDetail(@PathVariable("id") Long id, Model model, @RequestParam(defaultValue = "1") int page,
+//                                      @RequestParam(defaultValue = "3") int size) {
+//
+//        KhachHang khachHang = khachHangService.getKhachHangById(id);
+//
+//        model.addAttribute("khachHang", khachHang);
+//
+//
+//        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
+//        List<KhachHang> khachHangs = khachHangPage.getContent();
+//        model.addAttribute("khachHangs", khachHangs);
+//
+//        // Thêm thông tin phân trang vào model để view JSP có thể sử dụng
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+//        model.addAttribute("size", size);
+//
+//        return "/left-menu"; // Trả về trang chứa form (left-menu.jsp)
+//    }
 
 
 //
@@ -100,42 +98,75 @@ public class KhachHangController {
 
     @PostMapping("/saveKhachHang")
     public String saveKhachHang(@ModelAttribute("khachHang") @Valid KhachHang khachHang, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        int sdtLength = khachHang.getSdt().length();
+        String sdt = khachHang.getSdt();
+        int sdtLength = sdt.length();
 
+        // Lấy ID khách hàng hiện tại (nếu có)
+        Long khachHangId = khachHang.getKhachHangId();
+        boolean isUpdating = khachHangId != null;
+
+        // Kiểm tra độ dài số điện thoại
         if (sdtLength < 10) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại phải có đủ 10 số");
         } else if (sdtLength > 10) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại chỉ được phép có đúng 10 số");
         } else {
-            // Nếu không có lỗi, tiến hành lưu khách hàng
-            khachHangService.saveKhachHang(khachHang);
-            return "redirect:/khachhang";
+            // Kiểm tra xem số điện thoại đã tồn tại và không phải của khách hàng hiện tại
+            KhachHang existingKhachHang = khachHangService.findBySdt(sdt);
+            if (existingKhachHang != null && !existingKhachHang.getKhachHangId().equals(khachHangId)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại đã tồn tại");
+            } else {
+                // Cập nhật danh sách địa chỉ cho khách hàng
+                if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
+                    for (DiaChi diaChi : khachHang.getDiaChiList()) {
+                        diaChi.setKhachHang(khachHang);
+                    }
+                }
+                khachHangService.saveKhachHang(khachHang);
+
+                // Thiết lập thông báo dựa trên loại thao tác
+                if (isUpdating) {
+                    redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khách hàng thành công");
+                } else {
+                    redirectAttributes.addFlashAttribute("successMessage", "Thêm khách hàng thành công");
+                }
+
+                return "redirect:/khachhang";
+            }
         }
 
         return "redirect:/khachhang";
     }
 
-    @PostMapping("/searchBySDT")
-    public String searchCustomersBySDT(@RequestParam("sdt") String sdt,
-                                       Model model, KhachHang khachHang) {
-        model.addAttribute("khachHang", khachHang);
 
-        List<KhachHang> searchResults = khachHangService.findBySdt(sdt);
-        model.addAttribute("khachHangs", searchResults);
+
+
+    @PostMapping("/searchBySDT")
+    public String searchCustomersBySDT(@RequestParam("sdt") String sdt, Model model) {
+        KhachHang searchResult = khachHangService.findBySdt(sdt);
+
+        if (searchResult != null) {
+            model.addAttribute("khachHangs", List.of(searchResult));
+            model.addAttribute("successMessage", "Customer found successfully.");
+        } else {
+            model.addAttribute("khachHangs", Collections.emptyList());
+            model.addAttribute("errorMessage", "No customer found with the given phone number.");
+        }
 
         return "khachHang/left-menu-khachhang";
     }
 
 
+
     @GetMapping("/filterByGender")
     public String filterByGender(@RequestParam("gender") String gender,
                                  @RequestParam(defaultValue = "1") int page,
-                                 @RequestParam(defaultValue = "8") int size,
+                                 @RequestParam(defaultValue = "6") int size,
                                  Model model) {
 
         Page<KhachHang> khachHangs;
 
-        Pageable pageable = PageRequest.of(page - 1, size); // PageRequest.of sử dụng page 0-based
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         if ("true".equals(gender)) {
             khachHangs = khachHangService.findByGenderAndTrangThai(true, true, pageable);
@@ -145,20 +176,20 @@ public class KhachHangController {
             khachHangs = khachHangService.getAllKhachHangByTrangThai(true, pageable);
         }
 
-        model.addAttribute("khachHangs", khachHangs.getContent()); // Lấy danh sách khách hàng từ page hiện tại
-        model.addAttribute("currentPage", khachHangs.getNumber() + 1); // Vị trí trang hiện tại (1-based)
-        model.addAttribute("totalPages", khachHangs.getTotalPages()); // Tổng số trang
+        model.addAttribute("khachHangs", khachHangs.getContent());
+        model.addAttribute("currentPage", khachHangs.getNumber() + 1);
+        model.addAttribute("totalPages", khachHangs.getTotalPages());
         model.addAttribute("khachHang", new KhachHang());
         model.addAttribute("selectedGender", gender);
 
-        return "khachHang/left-menu-khachhang"; // Trả về trang JSP để hiển thị kết quả lọc
+        return "khachHang/left-menu-khachhang";
     }
 
 
     @GetMapping("/filterByStatus")
     public String filterByStatus(@RequestParam("status") String status,
                                  @RequestParam(defaultValue = "1") int page,
-                                 @RequestParam(defaultValue = "8") int size,
+                                 @RequestParam(defaultValue = "6") int size,
                                  Model model) {
         Page<KhachHang> khachHangs;
 
@@ -179,7 +210,7 @@ public class KhachHangController {
         model.addAttribute("selectedStatus", status); // Trạng thái đã chọn để hiển thị trên view
 
 
-        return "khachHang/left-menu-khachhang"; // Trả về trang JSP để hiển thị kết quả lọc
+        return "khachHang/left-menu-khachhang";
     }
 
     @PostMapping("/addAddress")
@@ -211,23 +242,56 @@ public class KhachHangController {
     @PostMapping("/updateAddress")
     public String updateAddress(@ModelAttribute DiaChi diaChi) {
         diaChiService.updateDiaChi(diaChi);
-        return "redirect:/khachhang"; // Chuyển hướng về trang danh sách khách hàng sau khi cập nhật địa chỉ
+        return "redirect:/khachhang";
     }
 
 
     @GetMapping("/searchByNgaySinh")
     public String searchByNgaySinh(@RequestParam("fromDate") LocalDate fromDate,
                                    @RequestParam("toDate") LocalDate toDate,
+                                   @RequestParam(name = "page", defaultValue = "1") int page,
+                                   @RequestParam(name = "size", defaultValue = "6") int size,
                                    Model model) {
-        // Implement your search logic here
-    List<KhachHang> khachHangs = khachHangService.findKhachHangByNgaySinhBetween(fromDate, toDate);
+        Page<KhachHang> khachHangPage = khachHangService.findKhachHangByNgaySinhBetween(fromDate, toDate, PageRequest.of(page - 1, size));
 
-        // Add the results to the model
+        List<KhachHang> khachHangs = khachHangPage.getContent();
+        int totalPages = khachHangPage.getTotalPages();
+        long totalItems = khachHangPage.getTotalElements();
+        int currentPage = khachHangPage.getNumber() + 1;
+
         model.addAttribute("khachHangs", khachHangs);
-        return "khachHang/left-menu-khachhang"; // Replace with your actual view name
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
+
+        return "khachHang/left-menu-khachhang"; // Thay thế với tên view thực tế của bạn
     }
 
 
-   
+    @GetMapping("/themMoi")
+    public String showAddCustomerForm(Model model) {
+        model.addAttribute("khachHang", new KhachHang());
+        return "/khachHang/left-menu-add";
+    }
+
+
+    @GetMapping("/editKhachHang/{id}")
+    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+        KhachHang khachHang = khachHangService.getKhachHangById(id);
+
+        if (khachHang == null) {
+            model.addAttribute("errorMessage", "Khách hàng không tồn tại");
+            return "redirect:/khachhang";
+        }
+
+        model.addAttribute("khachHang", khachHang);
+        return "/khachHang/left-menu-update"; // Tên của JSP file chứa form cập nhật
+    }
+
+
+
+
 
 }
