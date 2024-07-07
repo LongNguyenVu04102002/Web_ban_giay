@@ -53,92 +53,64 @@ public class KhachHangController {
     }
 
 
-//    @GetMapping("/detail/{id}")
-//    public String showKhachHangDetail(@PathVariable("id") Long id, Model model, @RequestParam(defaultValue = "1") int page,
-//                                      @RequestParam(defaultValue = "3") int size) {
-//
-//        KhachHang khachHang = khachHangService.getKhachHangById(id);
-//
-//        model.addAttribute("khachHang", khachHang);
-//
-//
-//        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
-//        List<KhachHang> khachHangs = khachHangPage.getContent();
-//        model.addAttribute("khachHangs", khachHangs);
-//
-//        // Thêm thông tin phân trang vào model để view JSP có thể sử dụng
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", khachHangPage.getTotalPages());
-//        model.addAttribute("size", size);
-//
-//        return "/left-menu"; // Trả về trang chứa form (left-menu.jsp)
-//    }
-
-
-//
-//    @PostMapping("/update/{id}")
-//    public String updateKhachHang(@PathVariable Long id,
-//                                  @ModelAttribute("khachHang") KhachHang khachHang,
-//                                  RedirectAttributes redirectAttributes) {
-//        KhachHang updatedKhachHang = khachHangService.updateKhachHang(khachHang, id);
-//        if (updatedKhachHang != null) {
-//            redirectAttributes.addFlashAttribute("message", "Đã cập nhật thông tin khách hàng thành công.");
-//        } else {
-//            redirectAttributes.addFlashAttribute("error", "Cập nhật thông tin khách hàng thất bại.");
-//        }
-//        return "redirect:/khachhang";
-//    }
-
-//    @GetMapping("/add")
-//    public String viewAdd(Model model) {
-//        model.addAttribute("khachHang", new KhachHang());
-//        return "khachHang/left-menu-addKhachHang";
-//    }
-
 
     @PostMapping("/saveKhachHang")
-    public String saveKhachHang(@ModelAttribute("khachHang") @Valid KhachHang khachHang, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        String sdt = khachHang.getSdt();
-        int sdtLength = sdt.length();
+    public String saveKhachHang(@ModelAttribute("khachHang") @Valid KhachHang khachHang, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        // Kiểm tra và thêm lỗi vào bindingResult
+        validatePhoneNumber(khachHang, bindingResult);
 
-        // Lấy ID khách hàng hiện tại (nếu có)
-        Long khachHangId = khachHang.getKhachHangId();
-        boolean isUpdating = khachHangId != null;
+        // Kiểm tra nếu đang cập nhật (khachHang có khachHangId)
+        boolean isUpdate = khachHang.getKhachHangId() != null;
 
-        // Kiểm tra độ dài số điện thoại
-        if (sdtLength < 10) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại phải có đủ 10 số");
-        } else if (sdtLength > 10) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại chỉ được phép có đúng 10 số");
-        } else {
-            // Kiểm tra xem số điện thoại đã tồn tại và không phải của khách hàng hiện tại
-            KhachHang existingKhachHang = khachHangService.findBySdt(sdt);
-            if (existingKhachHang != null && !existingKhachHang.getKhachHangId().equals(khachHangId)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại đã tồn tại");
+        if (bindingResult.hasErrors()) {
+            // Nếu là cập nhật, trả về form cập nhật
+            if (isUpdate) {
+                model.addAttribute("khachHang", khachHang);
+                return "/khachHang/left-menu-update"; // Thay thế bằng tên view cập nhật tương ứng
             } else {
-                // Cập nhật danh sách địa chỉ cho khách hàng
-                if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
-                    for (DiaChi diaChi : khachHang.getDiaChiList()) {
-                        diaChi.setKhachHang(khachHang);
-                    }
-                }
-                khachHangService.saveKhachHang(khachHang);
-
-                // Thiết lập thông báo dựa trên loại thao tác
-                if (isUpdating) {
-                    redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khách hàng thành công");
-                } else {
-                    redirectAttributes.addFlashAttribute("successMessage", "Thêm khách hàng thành công");
-                }
-
-                return "redirect:/khachhang";
+                // Nếu là thêm mới, trả về form thêm mới
+                model.addAttribute("khachHang", khachHang);
+                return "/khachHang/left-menu-add"; // Thay thế bằng tên view thêm mới tương ứng
             }
         }
+
+        // Cập nhật danh sách địa chỉ cho khách hàng
+        if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
+            for (DiaChi diaChi : khachHang.getDiaChiList()) {
+                diaChi.setKhachHang(khachHang); // Gắn địa chỉ với khách hàng
+            }
+        }
+
+        khachHangService.saveKhachHang(khachHang); // Lưu khách hàng và địa chỉ vào cơ sở dữ liệu
+
+        // Thêm thông báo thành công vào Model
+        redirectAttributes.addFlashAttribute("successMessage", "Khách hàng đã được lưu thành công!");
 
         return "redirect:/khachhang";
     }
 
 
+
+
+
+    private void validatePhoneNumber(KhachHang khachHang, BindingResult bindingResult) {
+        String sdt = khachHang.getSdt();
+        int sdtLength = sdt.length();
+        Long khachHangId = khachHang.getKhachHangId();
+
+        // Kiểm tra độ dài số điện thoại
+        if (sdtLength < 10) {
+            bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại phải có đủ 10 số");
+        } else if (sdtLength > 10) {
+            bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại chỉ được phép có đúng 10 số");
+        } else {
+            // Kiểm tra xem số điện thoại đã tồn tại và không phải của khách hàng hiện tại
+            KhachHang existingKhachHang = khachHangService.findBySdt(sdt);
+            if (existingKhachHang != null && !existingKhachHang.getKhachHangId().equals(khachHangId)) {
+                bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại");
+            }
+        }
+    }
 
 
     @PostMapping("/searchBySDT")
@@ -289,7 +261,6 @@ public class KhachHangController {
         model.addAttribute("khachHang", khachHang);
         return "/khachHang/left-menu-update"; // Tên của JSP file chứa form cập nhật
     }
-
 
 
 
