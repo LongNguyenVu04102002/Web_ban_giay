@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class CoGiay {
     @Column(name = "coGiayId", nullable = false)
     private Long coGiayId;
 
+    @NotEmpty(message = "Tên không được trống!")
     @Size(max = 100)
     @Nationalized
     @Column(name = "ten", length = 100)
