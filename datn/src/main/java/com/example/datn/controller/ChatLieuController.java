@@ -20,42 +20,57 @@ public class ChatLieuController {
 
     @GetMapping("/chat-lieu")
     public String show(@ModelAttribute("chatLieu") ChatLieu chatLieu, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        Page<ChatLieu> page = chatLieuService.pagination(p, 3);
+        Page<ChatLieu> page = chatLieuService.pagination(p, 10);
         model.addAttribute("lst", page);
         chatLieu.setTrangThai(true);
-        return "chat-lieu";
+        return "left-menu-chat-lieu";
     }
 
-    @PostMapping("/chatlieu/save")
+    @PostMapping("/chat-lieu/add")
     public String add(@Valid @ModelAttribute("chatLieu") ChatLieu chatLieu, BindingResult result, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
+        if (result.hasErrors()) {
+            Page<ChatLieu> page = chatLieuService.pagination(p, 10);
+            model.addAttribute("lst", page);
+            return "left-menu-chat-lieu";
+        }
         model.addAttribute("chatLieu", new ChatLieu());
-        chatLieuService.addOrUpdate(chatLieu);
-        Page<ChatLieu> page = chatLieuService.pagination(p, 3);
+        ChatLieu cl = ChatLieu.builder()
+                .ten(chatLieu.getTen())
+                .moTa(chatLieu.getMoTa())
+                .trangThai(chatLieu.isTrangThai())
+                .build();
+        chatLieuService.addOrUpdate(cl);
+        Page<ChatLieu> page = chatLieuService.pagination(p, 10);
         model.addAttribute("lst", page);
         return "redirect:/chat-lieu";
     }
 
-    @GetMapping("/chatlieu/detail/{id}")
+    @GetMapping("/chat-lieu/detail/{id}")
     public String detail(@ModelAttribute("chatLieu") Optional<ChatLieu> chatLieu, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
         model.addAttribute("chatLieu", chatLieuService.getOne(id));
-        Page<ChatLieu> page = chatLieuService.pagination(p, 3);
+        Page<ChatLieu> page = chatLieuService.pagination(p, 10);
         model.addAttribute("lst", page);
-        return "chat-lieu";
+        return "left-menu-chat-lieu";
     }
 
-    @PostMapping("/chatlieu/update/{id}")
+    @PostMapping("/chat-lieu/update/{id}")
     public String update(@Valid @ModelAttribute("chatLieu") ChatLieu chatLieu, BindingResult result, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
+        if (result.hasErrors()) {
+            Page<ChatLieu> page = chatLieuService.pagination(p, 10);
+            model.addAttribute("lst", page);
+            return "left-menu-chat-lieu";
+        }
         model.addAttribute("chatLieu", new ChatLieu());
         chatLieuService.addOrUpdate(chatLieu);
-        Page<ChatLieu> page = chatLieuService.pagination(p, 3);
+        Page<ChatLieu> page = chatLieuService.pagination(p, 10);
         model.addAttribute("lst", page);
         return "redirect:/chat-lieu";
     }
 
-    @GetMapping("/chatlieu/delete/{id}")
+    @GetMapping("/chat-lieu/remove/{id}")
     public String remove(@ModelAttribute("chatLieu") ChatLieu chatLieu, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
         chatLieuService.remove(id);
-        Page<ChatLieu> page = chatLieuService.pagination(p, 3);
+        Page<ChatLieu> page = chatLieuService.pagination(p, 10);
         model.addAttribute("lst", page);
         return "redirect:/chat-lieu";
     }

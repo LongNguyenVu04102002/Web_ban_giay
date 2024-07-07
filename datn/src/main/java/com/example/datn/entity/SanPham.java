@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sanPhamId;
 
+    @NotEmpty(message = "Tên không được trống!")
     @Column(name = "ten")
     private String ten;
 
