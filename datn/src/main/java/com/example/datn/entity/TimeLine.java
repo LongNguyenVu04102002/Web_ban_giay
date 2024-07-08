@@ -36,21 +36,14 @@ public class TimeLine {
     @Column(name = "ngayTao")
     private LocalDate ngayTao;
 
-    @Column(name = "ngayShip")
-    private LocalDate ngayShip;
+    @Column(name = "trangThai")
+    private int trangThai;
 
-    @Column(name = "ngayNhan")
-    private LocalDate ngayNhan;
+    @Column(name = "nguoiThucHien")
+    private String nguoiThucHien;
 
-    @Column(name = "ngayThanhToan")
-    private LocalDate ngayThanhToan;
-
-    @Column(name = "ngayHuy")
-    private LocalDate ngayHuy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taiKhoanId")
-    private KhachHang khachHang;
+    @Column(name = "moTa")
+    private String moTa;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "hoaDonId")

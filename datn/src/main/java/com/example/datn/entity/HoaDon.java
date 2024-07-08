@@ -63,7 +63,10 @@ public class HoaDon {
     private String email;
 
     @Column(name = "trangThai")
-    private boolean trangThai;
+    private int trangThai;
+
+    @Column(name = "thanhToan")
+    private boolean thanhToan;
 
     @Size(max = 100)
     @Column(name = "tenNguoiNhan", length = 100)
@@ -78,12 +81,12 @@ public class HoaDon {
 
     @ManyToOne
     @JoinColumn(name = "khachHangId")
-    @JsonBackReference(value = "khachHang")
+    @JsonBackReference(value = "hoaDon")
     private KhachHang khachHang;
 
     @ManyToOne
     @JoinColumn(name = "nhanVienId")
-    @JsonBackReference(value = "nhanVien-hoaDon")
+    @JsonBackReference(value = "hoaDon")
     private NhanVien nhanVien;
 
     @OneToMany(mappedBy = "hoaDon",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -94,7 +97,7 @@ public class HoaDon {
     @JsonManagedReference(value = "hoaDon")
     private List<HinhThucThanhToan> hinhThucThanhToanList;
 
-    @OneToMany(mappedBy = "hoaDon",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hoaDon",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     private List<TimeLine> timeLineList;
 

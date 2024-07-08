@@ -47,7 +47,42 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     public List<HoaDon> getAllHoaDon() {
-        return hoaDonRepository.findAll() ;
+        return hoaDonRepository.getAllHoaDon() ;
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonHuy() {
+        return hoaDonRepository.getHoaDonHuy();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonChoXacNhan() {
+        return hoaDonRepository.getHoaDonChoXacNhan();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonDaXacNhan() {
+        return hoaDonRepository.getHoaDonDaXacNhan();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonChoGiaoHang() {
+        return hoaDonRepository.getHoaDonChoGiaoHang();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonDangGiaoHang() {
+        return hoaDonRepository.getHoaDonDangGiaoHang();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonDaGiaoHang() {
+        return hoaDonRepository.getHoaDonDaGiaoHang();
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonHoanThanh() {
+        return hoaDonRepository.getHoaDonHoanThanh();
     }
 
     @Override
@@ -70,7 +105,8 @@ public class HoaDonServiceImpl implements HoaDonService {
             hoaDon.setSdtNhan(thanhToanResponse.getSdt());
             hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi());
             hoaDon.setLoaiHoaDon(false);
-            hoaDon.setTrangThai(false);
+            hoaDon.setThanhToan(false);
+            hoaDon.setTrangThai(1);
             hoaDon.setPhiShip(thanhToanResponse.getTienShip());
             hoaDon.setMaVanDon(thanhToanResponse.getMaVanDon());
             hoaDon.setTongTien(thanhToanResponse.getTongTien());
@@ -117,12 +153,18 @@ public class HoaDonServiceImpl implements HoaDonService {
             TimeLine timeLine = new TimeLine();
             timeLine.setNgayTao(LocalDate.now());
             timeLine.setHoaDon(hoaDon);
+            timeLine.setTrangThai(1);
             timeLineRepository.save(timeLine);
 
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(hoaDonRepository.getAllHoaDon());
     }
 
 }

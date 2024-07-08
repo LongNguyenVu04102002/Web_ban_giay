@@ -33,6 +33,9 @@ public class NhanVien {
     @Column(name = "nhanVienId", nullable = false)
     private Long nhanVienId;
 
+    @Column(name = "maNhanVien", length = 100)
+    private String maNhanVien;
+
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 
@@ -58,7 +61,7 @@ public class NhanVien {
     private String role;
 
     @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "nhanVien-hoaDon")
+    @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
 
 }

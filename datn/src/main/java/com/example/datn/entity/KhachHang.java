@@ -55,15 +55,15 @@ public class KhachHang {
     private boolean trangThai;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
+    @JsonManagedReference
     private List<DiaChi> diaChiList;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
+    @JsonManagedReference
     private List<DanhGia> danhGiaList;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
+    @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
 
 }

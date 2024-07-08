@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -75,8 +75,8 @@ public class SanPham {
     @JoinColumn(name = "dayGiayId")
     private DayGiay dayGiay;
 
-    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private Set<SanPhamChiTiet> sanPhamChiTietList;
+    private List<SanPhamChiTiet> sanPhamChiTietList;
 
 }

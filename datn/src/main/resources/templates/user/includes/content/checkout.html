@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div layout:fragment="usercontent">
+        <section class="relative table w-full py-20 lg:py-24 bg-gray-50 dark:bg-slate-800">
+            <div class="container relative">
+                <div class="grid grid-cols-1 mt-14">
+                    <h3 class="text-3xl leading-normal font-semibold">Checkout</h3>
+                </div>
+                <div class="relative mt-3">
+                    <ul class="tracking-[0.5px] mb-0 inline-block">
+                        <li
+                                class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out hover:text-orange-500">
+                            <a href="#">XBoy</a>
+                        </li>
+                        <li
+                                class="inline-block text-base text-slate-950 dark:text-white mx-0.5 ltr:rotate-0 rtl:rotate-180">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </li>
+                        <li class="inline-block uppercase text-[13px] font-bold text-orange-500" aria-current="page">
+                            Thanh Toán</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section class="relative md:py-24 py-16">
+            <div class="container relative">
+                <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="lg:col-span-8">
+                        <div class="p-6 rounded-md shadow dark:shadow-gray-800">
+                            <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
+                            <form @submit.prevent="submitOrder">
+                                <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                                    <div class="lg:col-span-6">
+                                        <label class="form-label font-semibold">Tên Khách Hàng : </label>
+                                        <input type="text"
+                                               class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                               placeholder="Tên khách hàng" v-model="thanhToan.hoTen">
+                                    </div>
+                                    <div class="lg:col-span-6">
+                                        <label class="form-label font-semibold">Số Điện Thoại</label>
+                                        <input type="text"
+                                               class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                               placeholder="Số điện thoại" v-model="thanhToan.sdt">
+                                    </div>
+                                    <div class="lg:col-span-12">
+                                        <label class="form-label font-semibold">Email : </label>
+                                        <input type="email"
+                                               class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                               placeholder="Email" v-model="thanhToan.email">
+                                    </div>
+                                    <div class="lg:col-span-4">
+                                        <label class="font-semibold">Thành Phố:</label>
+                                        <select v-model="selectedProvince" @change="fetchDistricts"
+                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                            <option v-for="province in provinces" :key="province.ProvinceID"
+                                                    :value="province.ProvinceID">
+                                                {{ province.ProvinceName }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="lg:col-span-4">
+                                        <label class="font-semibold">Huyện:</label>
+                                        <select v-model="selectedDistrict" @change="fetchWards"
+                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                            <option v-for="district in districts" :key="district.DistrictID"
+                                                    :value="district.DistrictID">
+                                                {{ district.DistrictName }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="lg:col-span-4">
+                                        <label class="form-label font-semibold">Xã : </label>
+                                        <select v-model="selectedWard" @change="fetchShippingCost"
+                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                            <option v-for="ward in wards" :key="ward.WardCode" :value="ward.WardCode">
+                                                {{ ward.WardName }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="lg:col-span-12">
+                                        <label class="form-label font-semibold">Địa Chỉ : </label>
+                                        <input type="text"
+                                               class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                               placeholder="Địa chỉ" v-model="thanhToan.diaChi">
+                                    </div>
+                                    <div class="lg:col-span-12">
+                                        <h3 class="text-xl leading-normal font-semibold mt-2">Phương Thức Thanh Toán</h3>
+                                        <div class="block mt-2">
+                                            <label class="inline-flex items-center">
+                                                <input type="radio"
+                                                       class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2"
+                                                       name="paymentMethod" value="true" v-model="thanhToan.hinhThuc" checked>
+                                                <span class="text-slate-400">Thanh toán khi nhận hàng</span>
+                                            </label>
+                                        </div>
+                                        <div class="block">
+                                            <label class="inline-flex items-center">
+                                                <input type="radio"
+                                                       class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2"
+                                                       name="paymentMethod" value="false" v-model="thanhToan.hinhThuc">
+                                                <span class="text-slate-400">Thanh toán qua VNPAY</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-10">
+                                    <button type="submit"
+                                            class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
+                                        Continue to checkout
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <div class="p-6 rounded-md shadow dark:shadow-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-lg font-semibold">Giỏ hàng</h5>
+                            </div>
+                            <div class="mt-4 rounded-md shadow dark:shadow-gray-800">
+                                <div v-for="item in cart" :key="item.sanPhamChiTietId"
+                                     class="p-3 flex justify-between items-center">
+                                    <div>
+                                        <h5 class="font-semibold">{{ item.ten }} x {{ item.soLuong }}</h5>
+                                        <p class="text-sm text-slate-400">Kích Thước: {{ item.kichThuoc }} || Màu Sắc: {{
+                                            item.mauSac }}</p>
+                                    </div>
+                                    <p class="text-slate-400 font-semibold">{{ (item.gia * item.soLuong).toLocaleString() }}
+                                        VND</p>
+                                </div>
+                                <div
+                                        class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
+                                    <h5 class="font-semibold">Tiền Giảm</h5>
+                                    <p class="text-slate-400 font-semibold">{{ pgg?.tienGiam ?
+                                        `${pgg.tienGiam.toLocaleString()} VND` : '0 VND' }}</p>
+                                </div>
+                                <div
+                                        class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
+                                    <h5 class="font-semibold">Tiền Ship</h5>
+                                    <p class="text-slate-400 font-semibold">{{ thanhToan.tienShip ?
+                                        `${thanhToan.tienShip.toLocaleString()} VND` : '0 VND' }}</p>
+                                </div>
+                                <div
+                                        class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800">
+                                    <h5 class="font-semibold">Tổng</h5>
+                                    <p class="font-semibold">{{ tongTien.toLocaleString() }} VND</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
