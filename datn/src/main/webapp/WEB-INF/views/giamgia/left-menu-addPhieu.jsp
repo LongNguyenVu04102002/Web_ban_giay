@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!----===== Boxicons CSS ===== -->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!--<title>Dashboard Sidebar Menu</title>-->
 </head>
@@ -29,33 +29,33 @@
         <div class="menu">
 
             <li class="nav-link">
-                <a href="/khachhang">
+                <a href="/hoadon">
                     <i class='bx bx-user icon'></i>
-                    <span class="text nav-text">Khách Hàng</span>
+                    <span class="text nav-text">Hóa đơn</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="/giamgia">
-                    <i class='bx bx-bell icon'></i>
-                    <span class="text nav-text">Phiếu giảm giá</span>
+                    <i class='bx bx-purchase-tag-alt icon'></i>
+                    <span class="text nav-text">Sản phẩm</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
+                <a href="/nhanvien">
                     <i class='bx bx-pie-chart-alt icon'></i>
-                    <span class="text nav-text">Analytics</span>
+                    <span class="text nav-text">Nhân Viên</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
-                    <i class='bx bx-heart icon'></i>
-                    <span class="text nav-text">Likes</span>
+                <a href="/khachhang">
+                    <i class='bx bxs-group icon'></i>
+                    <span class="text nav-text">Khách hàng</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
-                    <i class='bx bx-wallet icon'></i>
-                    <span class="text nav-text">Wallets</span>
+                <a href="/giamgia">
+                    <i class='bx bx-purchase-tag-alt icon'></i>
+                    <span class="text nav-text">Phiếu giảm giá</span>
                 </a>
             </li>
         </div>
@@ -73,32 +73,12 @@
 
 <div class="home">
     <div class="includee">
-        <jsp:include page="addPhieu.jsp"/>
+        <jsp:include page="addPhieu.jsp" />
     </div>
 </div>
 
 <!-- Remove the following JavaScript if not needed -->
 <script>
-    // const body = document.querySelector('body'),
-    //     sidebar = body.querySelector('nav'),
-    //     toggle = body.querySelector(".toggle"),
-    //     searchBtn = body.querySelector(".search-box"),
-    //     modeSwitch = body.querySelector(".toggle-switch"),
-    //     modeText = body.querySelector(".mode-text");
-    // toggle.addEventListener("click", () => {
-    //     sidebar.classList.toggle("close");
-    // });
-    // searchBtn.addEventListener("click", () => {
-    //     sidebar.classList.remove("close");
-    // });
-    // modeSwitch.addEventListener("click", () => {
-    //     body.classList.toggle("dark");
-    //     if (body.classList.contains("dark")) {
-    //         modeText.innerText = "Light mode";
-    //     } else {
-    //         modeText.innerText = "Dark mode";
-    //     }
-    // });
 </script>
 </body>
 
@@ -366,9 +346,10 @@
         height: 97vh;
         border: 1px solid white;
         border-radius: 10px;
-        z-index: 11;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
         background-color: white;
         margin-left: 30px;
-        margin-top: 20px;
+        margin-top: 10px;
+        font-family: "Poppins", sans-serif;
     }
 </style>

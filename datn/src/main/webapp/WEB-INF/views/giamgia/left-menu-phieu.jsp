@@ -29,7 +29,7 @@
         <div class="menu">
 
             <li class="nav-link">
-                <a href="/khachhang">
+                <a href="/hoadon">
                     <i class='bx bx-user icon'></i>
                     <span class="text nav-text">Hóa đơn</span>
                 </a>
@@ -41,20 +41,20 @@
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
+                <a href="/nhanvien">
                     <i class='bx bx-pie-chart-alt icon'></i>
                     <span class="text nav-text">Nhân Viên</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
-                    <i class='bx bx-heart icon'></i>
+                <a href="/khachhang">
+                    <i class='bx bxs-group icon'></i>
                     <span class="text nav-text">Khách hàng</span>
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
-                    <i class='bx bx-wallet icon'></i>
+                <a href="/giamgia">
+                    <i class='bx bx-purchase-tag-alt icon'></i>
                     <span class="text nav-text">Phiếu giảm giá</span>
                 </a>
             </li>

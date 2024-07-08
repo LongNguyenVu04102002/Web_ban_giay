@@ -31,6 +31,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
         }
 
         .header-container h1 {
@@ -56,7 +58,9 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .text-danger{
+            font-size: small;
             font-weight: lighter;
         }
 
@@ -135,15 +139,15 @@
     </script>
 </head>
 <body>
+<div class="header-container">
+    <h1>Detail phiếu giảm giá</h1>
+    <a href="/giamgia" style="color: white; font-weight: bold; text-decoration: none">
+        <button class="add-button"><i class="bi bi-arrow-left"></i> Trở về</button>
+    </a>
+</div>
 <div class="container">
-    <div class="header-container">
-        <h1>Thêm phiếu Giảm Giá</h1>
-        <a href="/giamgia" style="color: white; font-weight: bold; text-decoration: none">
-            <button class="add-button"> <i class="bi bi-arrow-left"></i> Trở về</button>
-        </a>
-    </div>
-
-    <form:form method="post" action="/giamgia/update/${phieuGiamGia.phieuGiamGiaId}" modelAttribute="phieuGiamGia" onsubmit="return confirmUpdate()">
+    <form:form method="post" action="/giamgia/update/${phieuGiamGia.phieuGiamGiaId}" modelAttribute="phieuGiamGia"
+               onsubmit="return confirmUpdate()">
         <div class="row">
             <!-- Cột thứ nhất -->
             <div class="col-md-6 form-column">
@@ -165,7 +169,9 @@
                         Giá Trị Giảm: <form:errors path="phanTramGiam" cssClass="text-danger"/>
                     </label>
                     <div class="input-with-unit" data-unit="%">
-                        <form:input path="phanTramGiam" id="phanTramGiam" class="input-field" placeholder="Phần trăm giảm giá..." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        <form:input path="phanTramGiam" id="phanTramGiam" class="input-field"
+                                    placeholder="Phần trăm giảm giá..."
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
                     </div>
 
                 </div>
@@ -174,13 +180,17 @@
                         Giá Trị Giảm: <form:errors path="tienGiam" cssClass="text-danger"/>
                     </label>
                     <div class="input-with-unit" data-unit="VND">
-                        <form:input path="tienGiam" id="tienGiam" class="input-field" placeholder="Số tiền giảm..." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        <form:input path="tienGiam" id="tienGiam" class="input-field" placeholder="Số tiền giảm..."
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
                     </div>
 
                 </div>
                 <div class="form-group">
-                    <label class="label" for="soLuongPhieu">Số lượng: <form:errors path="soLuongPhieu" cssClass="text-danger"/></label>
-                    <form:input path="soLuongPhieu" id="soLuongPhieu" class="input-field" placeholder="Số lượng phiếu..." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                    <label class="label" for="soLuongPhieu">Số lượng: <form:errors path="soLuongPhieu"
+                                                                                   cssClass="text-danger"/></label>
+                    <form:input path="soLuongPhieu" id="soLuongPhieu" class="input-field"
+                                placeholder="Số lượng phiếu..."
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
 
                 </div>
             </div>
@@ -192,7 +202,9 @@
                         Giá trị đơn tối thiểu: <form:errors path="giaTriDonToiThieu" cssClass="text-danger"/>
                     </label>
                     <div class="input-with-unit" data-unit="VND">
-                        <form:input path="giaTriDonToiThieu" id="giaTriDonToiThieu" class="input-field" placeholder="Giá trị đơn tối thiểu..." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        <form:input path="giaTriDonToiThieu" id="giaTriDonToiThieu" class="input-field"
+                                    placeholder="Giá trị đơn tối thiểu..."
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
                     </div>
 
                 </div>
@@ -201,7 +213,9 @@
                         Giảm Tối Đa: <form:errors path="giaTriGiamToiDa" cssClass="text-danger"/>
                     </label>
                     <div class="input-with-unit" data-unit="VND">
-                        <form:input path="giaTriGiamToiDa" id="giaTriGiamToiDa" class="input-field" placeholder="Giảm tối đa..." oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        <form:input path="giaTriGiamToiDa" id="giaTriGiamToiDa" class="input-field"
+                                    placeholder="Giảm tối đa..."
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
                     </div>
 
                 </div>
