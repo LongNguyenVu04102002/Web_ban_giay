@@ -62,21 +62,15 @@
             <h2>Danh sách Nhân Viên</h2>
             <form method="get" action="/searchNhanVien">
                 <div class="row mb-3">
-                    <div class="col-md-4">
-                        <input type="text" name="sdt" class="form-control" placeholder="Tìm kiếm theo số điện thoại" value="${param.sdt}">
-                    </div>
-                    <div class="col-md-3">
-                        <select name="gender" class="form-select">
-                            <option value="">Chọn giới tính</option>
-                            <option value="true" ${param.gender == 'true' ? 'selected' : ''}>Nam</option>
-                            <option value="false" ${param.gender == 'false' ? 'selected' : ''}>Nữ</option>
-                        </select>
+                    <div class="col-md-9">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm" value="${param.keyword}">
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
                 </div>
             </form>
+
 
 
             <table class="table table-hover table-bordered">
@@ -101,21 +95,21 @@
                         <td>${nhanVien.ngaySinh}</td>
                         <td>${nhanVien.email}</td>
                         <td>${nhanVien.sdt}</td>
-<%--                        <td>--%>
-<%--                            <input type="checkbox" class="toggle-switch" id="switch${status.index}" data-id="${nhanVien.nhanVienId}" ${nhanVien.trangThai ? 'checked' : ''} />--%>
-<%--                            <label class="label_checkbox" for="switch${status.index}">Toggle</label>--%>
-<%--                        </td>--%>
                         <td>
-                            <a href="/updateStatus?nhanVienId=${nhanVien.nhanVienId}&trangThai=${!nhanVien.trangThai}" class="btn ${nhanVien.trangThai ? 'btn-success' : 'btn-secondary'} btn-sm"  onclick="return confirm('Bạn có chắc chắn muốn đổi không?')">
-                                    ${nhanVien.trangThai ? 'Kích hoạt' : 'Tắt'}
-                            </a>
+                            <input type="checkbox" class="toggle-switch" id="switch${status.index}" data-id="${nhanVien.nhanVienId}" ${nhanVien.trangThai ? 'checked' : ''} />
+                            <label class="label_checkbox" for="switch${status.index}">Toggle</label>
                         </td>
+<%--                        <td>--%>
+<%--                            <a href="/updateStatus?nhanVienId=${nhanVien.nhanVienId}&trangThai=${!nhanVien.trangThai}" class="btn ${nhanVien.trangThai ? 'btn-success' : 'btn-secondary'} btn-sm"  onclick="return confirm('Bạn có chắc chắn muốn đổi không?')">--%>
+<%--                                    ${nhanVien.trangThai ? 'Kích hoạt' : 'Tắt'}--%>
+<%--                            </a>--%>
+<%--                        </td>--%>
 
 
 
                         <td>
                             <a href="/editNhanVien/${nhanVien.nhanVienId}" class="btn btn-warning btn-sm">Sửa</a>
-                            <a href="/deleteNhanVien/${nhanVien.nhanVienId}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+<%--                            <a href="/deleteNhanVien/${nhanVien.nhanVienId}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>--%>
                         </td>
                     </tr>
                 </c:forEach>

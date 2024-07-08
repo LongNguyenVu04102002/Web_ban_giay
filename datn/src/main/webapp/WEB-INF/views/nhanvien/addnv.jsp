@@ -95,11 +95,7 @@
                         <form:password path="matKhau" class="form-control" />
                         <form:errors path="matKhau" cssClass="text-danger" />
                     </div>
-                    <div class="mb-3">
-                        <form:label path="trangThai">Trạng Thái:</form:label>
-                        <form:checkbox path="trangThai" class="form-check-input" />
-                        <form:errors path="trangThai" cssClass="text-danger" />
-                    </div>
+
                     <button type="submit" class="btn btn-primary">Thêm Nhân Viên</button>
                     <a href="/nhanvien" class="btn btn-secondary">Trở về danh sách nhân viên</a>
 

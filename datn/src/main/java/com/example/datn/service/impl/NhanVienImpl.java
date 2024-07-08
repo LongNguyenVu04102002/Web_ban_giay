@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -83,6 +83,12 @@ nhanVienRepository.deleteById(id);
     public List<NhanVien> findByGioiTinh(Boolean gioiTinh) {
         return nhanVienRepository.findByGioiTinh(gioiTinh);
     }
+
+    @Override
+    public List<NhanVien> searchNhanViensByKeyword(String keyword) {
+        return nhanVienRepository.searchNhanViensByKeyword(keyword);
+    }
+
 
 }
 

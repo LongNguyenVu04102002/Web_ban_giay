@@ -1,7 +1,9 @@
 package com.example.datn.service;
 import com.example.datn.entity.NhanVien;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,8 @@ NhanVien updateNhanVien(NhanVien nhanVien);
    List<NhanVien> findBySdtContainingAndGioiTinh(String sdt, Boolean gioiTinh);
    List<NhanVien> findBySdtContaining(String sdt);
    List<NhanVien> findByGioiTinh(Boolean gioiTinh);
+   List<NhanVien> searchNhanViensByKeyword(@Param("keyword") String keyword);
+
 
 
 }

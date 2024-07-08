@@ -5,12 +5,14 @@ import com.example.datn.service.NhanVienService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,24 +54,39 @@ public class NhanVienController {
 //        return "nhanvien/left-menu-nhan-vien";
 //    }
 @GetMapping("/searchNhanVien")
-public String searchNhanVien(@RequestParam(name = "sdt", required = false) String sdt,
-                             @RequestParam(name = "gender", required = false) Boolean gender,
-                             Model model) {
-    List<NhanVien> nhanViens = new ArrayList<>();
+//public String searchNhanVien(
+//        @RequestParam(name = "hoTen", required = false) String hoTen,
+//        @RequestParam(name = "gioiTinh", required = false) Boolean gioiTinh,
+//        @RequestParam(name = "ngaySinh", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngaySinh,
+//        @RequestParam(name = "sdt", required = false) String sdt,
+//        @RequestParam(name = "email", required = false) String email,
+//        @RequestParam(name = "role", required = false) String role,
+//        Model model) {
+//
+//    List<NhanVien> nhanViens = nhanVienService.searchNhanViens(hoTen, gioiTinh, ngaySinh, sdt, email, role);
+//
+//    if (nhanViens.isEmpty()) {
+//        return "redirect:/nhanvien";
+//    }
+//
+//    model.addAttribute("nhanviens", nhanViens);
+//    return "nhanvien/left-menu-nhan-vien";
+//}
+public String searchNhanVien(
+        @RequestParam(name = "keyword", required = false) String keyword,
+        Model model) {
 
-    if ((sdt != null && !sdt.isEmpty()) && gender != null) {
-        nhanViens = nhanVienService.findBySdtContainingAndGioiTinh(sdt, gender);
-    } else if (sdt != null && !sdt.isEmpty()) {
-        nhanViens = nhanVienService.findBySdtContaining(sdt);
-    } else if (gender != null) {
-        nhanViens = nhanVienService.findByGioiTinh(gender);
-    } else {
+    List<NhanVien> nhanViens = nhanVienService.searchNhanViensByKeyword(keyword);
+
+    if (nhanViens.isEmpty()) {
         return "redirect:/nhanvien";
     }
 
     model.addAttribute("nhanviens", nhanViens);
     return "nhanvien/left-menu-nhan-vien";
 }
+
+
 
 
 @GetMapping("/addNhanVien")
