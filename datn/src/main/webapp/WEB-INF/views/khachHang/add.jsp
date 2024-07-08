@@ -9,6 +9,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+        <h5>Thêm Khách Hàng</h5>
             <form:form action="${pageContext.request.contextPath}/saveKhachHang" modelAttribute="khachHang" method="post">
                 <div class="row">
                     <!-- Customer Details Column -->

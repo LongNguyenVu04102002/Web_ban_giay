@@ -33,19 +33,16 @@
        <a href="/khachhang" style="text-decoration: none; color: black;">Khách Hàng</a>
    </h1>
 
-
-
-<form action="${pageContext.request.contextPath}/searchBySDT" method="post" class="d-flex align-items-center justify-content-end mb-3">
-    <!-- Ô tìm kiếm theo số điện thoại -->
-    <input type="text" id="sdt" name="sdt" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Tìm theo số điện thoại"/>
-    <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
-</form>
 <hr>
-
 
 <h5 style="margin-left: 30px;">
     <i class="fas fa-filter"></i> Bộ Lọc
 </h5>
+
+<form action="${pageContext.request.contextPath}/searchKhachHang" method="get" class="d-flex align-items-center justify-content-end mb-3">
+    <input type="text" name="keyword" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Nhập tên, số điện thoại hoặc email" required>
+    <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
+</form>
 
 <div class="d-flex justify-content-center align-items-center mb-3">
     <!-- Form tìm kiếm theo ngày sinh -->
@@ -63,16 +60,16 @@
     </form>
 
     <!-- Form lọc theo giới tính -->
-    <form id="filterFormGender" class="d-flex align-items-center mb-3 me-2" action="${pageContext.request.contextPath}/filterByGender" method="get">
-        <div class="mb-3 me-2">
-            <label for="gender" class="form-label">Lọc theo Giới Tính:</label>
-            <select id="gender" name="gender" class="form-control" onchange="filterKhachHang()">
-                <option value="" ${selectedGender == '' ? 'selected' : ''}>Tất cả</option>
-                <option value="true" ${selectedGender == 'true' ? 'selected' : ''}>Nam</option>
-                <option value="false" ${selectedGender == 'false' ? 'selected' : ''}>Nữ</option>
-            </select>
-        </div>
-    </form>
+ <form id="filterFormGender" class="d-flex align-items-center mb-3 me-2" action="${pageContext.request.contextPath}/filterByGender" method="get">
+     <div class="mb-3 me-2">
+         <label for="gender" class="form-label">Lọc theo Giới Tính:</label>
+         <select id="gender" name="gender" class="form-control" onchange="filterKhachHang()">
+             <option value="" ${selectedGender == '' ? 'selected' : ''}>Tất cả</option>
+             <option value="true" ${selectedGender == 'true' ? 'selected' : ''}>Nam</option>
+             <option value="false" ${selectedGender == 'false' ? 'selected' : ''}>Nữ</option>
+         </select>
+     </div>
+ </form>
 
     <!-- Form lọc theo trạng thái -->
     <form id="filterFormStatus" class="d-flex align-items-center mb-3" action="${pageContext.request.contextPath}/filterByStatus" method="get">
@@ -124,9 +121,10 @@
                          <tr class="table-secondary">
                              <td colspan="8"></td>
                          </tr>
-                         <c:forEach var="khachHang" items="${khachHangs}" varStatus="loop">
+
+                        <c:forEach var="khachHang" items="${khachHangs}" varStatus="loop">
                              <tr>
-                                 <td>${loop.index + 1}</td> <!-- Số thứ tự bắt đầu từ 1 -->
+                               <td>${(currentPage - 1) * pageSize + loop.index + 1}</td><!-- Số thứ tự bắt đầu từ 1 -->
                                  <td>${khachHang.hoTen}</td>
                                  <td>${khachHang.gioiTinh ? 'Nam' : 'Nữ'}</td>
                                  <td>${khachHang.ngaySinh}</td>
@@ -141,9 +139,8 @@
                                      </form>
                                  </td>
                                  <td>
-                              <a href="${pageContext.request.contextPath}/editKhachHang/${khachHang.khachHangId}">
-                                  <i class="fas fa-edit text-primary"></i>
-                              </a>
+                                      <a href="${pageContext.request.contextPath}/editKhachHang/${khachHang.khachHangId}?page=${currentPage}&size=${pageSize}"><i class="fas fa-edit text-primary"></i></a>
+
                                      <a data-bs-toggle="modal" data-bs-target="#showAddressesModal${khachHang.khachHangId}">
                                          <i class="fas fa-map-marked-alt text-info"></i>
                                      </a>
@@ -185,97 +182,45 @@
                                                       </div>
 
 
-
-
                                                                   <!-- Modal Cập Nhật Địa Chỉ -->
-                                                                  <c:forEach var="diaChi" items="${khachHang.diaChiList}">
-                                                                      <div class="modal fade" id="updateAddressModal${diaChi.diaChiId}" tabindex="-1" aria-labelledby="updateAddressModalLabel${diaChi.diaChiId}" aria-hidden="true">
-                                                                          <div class="modal-dialog">
-                                                                              <div class="modal-content">
-                                                                                  <div class="modal-header">
-                                                                                      <h5 class="modal-title" id="updateAddressModalLabel${diaChi.diaChiId}">Cập Nhật Địa Chỉ</h5>
-                                                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                  </div>
-                                                                                  <div class="modal-body">
-                                                                                      <form action="${pageContext.request.contextPath}/updateAddress" method="post">
-                                                                                          <input type="hidden" name="diaChiId" value="${diaChi.diaChiId}" />
-                                                                                          <div class="mb-3">
-                                                                                              <label for="diaChiNhan${diaChi.diaChiId}">Địa Chỉ Nhận:</label>
-                                                                                              <input type="text" id="diaChiNhan${diaChi.diaChiId}" name="diaChiNhan" class="form-control" value="${diaChi.diaChiNhan}" required />
-                                                                                          </div>
-                                                                                          <div class="mb-3">
-                                                                                              <label for="xa${diaChi.diaChiId}">Xã/Phường:</label>
-                                                                                              <input type="text" id="xa${diaChi.diaChiId}" name="xa" class="form-control" value="${diaChi.xa}" required />
-                                                                                          </div>
-                                                                                          <div class="mb-3">
-                                                                                              <label for="huyen${diaChi.diaChiId}">Quận/Huyện:</label>
-                                                                                              <input type="text" id="huyen${diaChi.diaChiId}" name="huyen" class="form-control" value="${diaChi.huyen}" required />
-                                                                                          </div>
-                                                                                          <div class="mb-3">
-                                                                                              <label for="thanhPho${diaChi.diaChiId}">Thành Phố/Tỉnh:</label>
-                                                                                              <input type="text" id="thanhPho${diaChi.diaChiId}" name="thanhPho" class="form-control" value="${diaChi.thanhPho}" required />
-                                                                                          </div>
-                                                                                          <button type="submit" class="btn btn-primary">Cập Nhật</button>
-                                                                                      </form>
-                                                                                  </div>
-                                                                              </div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </c:forEach>
+                                                                 <c:forEach var="diaChi" items="${khachHang.diaChiList}">
+                                                                     <div class="modal fade" id="updateAddressModal${diaChi.diaChiId}" tabindex="-1" aria-labelledby="updateAddressModalLabel${diaChi.diaChiId}" aria-hidden="true">
+                                                                         <div class="modal-dialog">
+                                                                             <div class="modal-content">
+                                                                                 <div class="modal-header">
+                                                                                     <h5 class="modal-title" id="updateAddressModalLabel${diaChi.diaChiId}">Cập Nhật Địa Chỉ</h5>
+                                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                 </div>
+                                                                                 <div class="modal-body">
+                                                                                     <form action="${pageContext.request.contextPath}/updateAddress" method="post">
+                                                                                         <input type="hidden" name="diaChiId" value="${diaChi.diaChiId}" />
+                                                                                         <input type="hidden" name="currentPage" value="${currentPage}" />
+                                                                                         <input type="hidden" name="pageSize" value="${pageSize}" />
+                                                                                         <div class="mb-3">
+                                                                                             <label for="diaChiNhan${diaChi.diaChiId}">Địa Chỉ Nhận:</label>
+                                                                                             <input type="text" id="diaChiNhan${diaChi.diaChiId}" name="diaChiNhan" class="form-control" value="${diaChi.diaChiNhan}" required />
+                                                                                         </div>
+                                                                                         <div class="mb-3">
+                                                                                             <label for="xa${diaChi.diaChiId}">Xã/Phường:</label>
+                                                                                             <input type="text" id="xa${diaChi.diaChiId}" name="xa" class="form-control" value="${diaChi.xa}" required />
+                                                                                         </div>
+                                                                                         <div class="mb-3">
+                                                                                             <label for="huyen${diaChi.diaChiId}">Quận/Huyện:</label>
+                                                                                             <input type="text" id="huyen${diaChi.diaChiId}" name="huyen" class="form-control" value="${diaChi.huyen}" required />
+                                                                                         </div>
+                                                                                         <div class="mb-3">
+                                                                                             <label for="thanhPho${diaChi.diaChiId}">Thành Phố/Tỉnh:</label>
+                                                                                             <input type="text" id="thanhPho${diaChi.diaChiId}" name="thanhPho" class="form-control" value="${diaChi.thanhPho}" required />
+                                                                                         </div>
+                                                                                         <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                                                                     </form>
+                                                                                 </div>
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 </c:forEach>
 
 
-
-
-
-
-
-                    <!-- Modal Cập nhật Khách hàng -->
-                                    <div class="modal fade" id="updateCustomerModal${khachHang.khachHangId}" tabindex="-1" aria-labelledby="updateCustomerModalLabel${khachHang.khachHangId}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="updateCustomerModalLabel${khachHang.khachHangId}">Cập Nhật Khách Hàng</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="${pageContext.request.contextPath}/saveKhachHang" method="post">
-                                                        <input type="hidden" name="khachHangId" value="${khachHang.khachHangId}" />
-                                                        <div class="mb-3">
-                                                            <label for="hoTen${khachHang.khachHangId}">Họ Tên:</label>
-                                                            <input type="text" id="hoTen${khachHang.khachHangId}" name="hoTen" class="form-control" value="${khachHang.hoTen}" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="gioiTinh${khachHang.khachHangId}">Giới Tính:</label>
-                                                            <select id="gioiTinh${khachHang.khachHangId}" name="gioiTinh" class="form-control" required>
-                                                                <option value="true" ${khachHang.gioiTinh ? 'selected' : ''}>Nam</option>
-                                                                <option value="false" ${khachHang.gioiTinh ? '' : 'selected'}>Nữ</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="ngaySinh${khachHang.khachHangId}">Ngày Sinh:</label>
-                                                            <input type="date" id="ngaySinh${khachHang.khachHangId}" name="ngaySinh" class="form-control" value="${khachHang.ngaySinh}" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="email${khachHang.khachHangId}">Email:</label>
-                                                            <input type="email" id="email${khachHang.khachHangId}" name="email" class="form-control" value="${khachHang.email}" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="sdt${khachHang.khachHangId}">Số Điện Thoại:</label>
-                                                            <input type="text" id="sdt${khachHang.khachHangId}" name="sdt" class="form-control" value="${khachHang.sdt}" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="trangThai${khachHang.khachHangId}">Trạng Thái:</label>
-                                                            <select id="trangThai${khachHang.khachHangId}" name="trangThai" class="form-control" required>
-                                                                <option value="true" ${khachHang.trangThai ? 'selected' : ''}>Hoạt Động</option>
-                                                                <option value="false" ${khachHang.trangThai ? '' : 'selected'}>Không Hoạt Động</option>
-                                                            </select>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -285,23 +230,32 @@
                 <!-- Phân trang -->
 
 
-   <nav aria-label="Page navigation">
-       <ul class="pagination">
-           <c:if test="${currentPage > 1}">
-               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=1&size=${size}">First</a></li>
-               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage - 1}&size=${size}">Previous</a></li>
-           </c:if>
-           <c:forEach begin="1" end="${totalPages}" varStatus="page">
-               <li class="page-item ${currentPage == page.index + 1 ? 'active' : ''}">
-                   <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${page.index + 1}&size=${size}">${page.index + 1}</a>
-               </li>
-           </c:forEach>
-           <c:if test="${currentPage < totalPages}">
-               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage + 1}&size=${size}">Next</a></li>
-               <li class="page-item"><a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${totalPages}&size=${size}">Last</a></li>
-           </c:if>
-       </ul>
-   </nav>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <c:if test="${currentPage > 1}">
+            <li class="page-item">
+                <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=1&size=${size}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage - 1}&size=${size}">Previous</a>
+            </li>
+        </c:if>
+        <c:forEach begin="1" end="${totalPages}" varStatus="page">
+            <li class="page-item ${currentPage == page.index ? 'active' : ''}">
+                <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${page.index}&size=${size}">${page.index}</a>
+            </li>
+        </c:forEach>
+        <c:if test="${currentPage < totalPages}">
+            <li class="page-item">
+                <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${currentPage + 1}&size=${size}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?status=${selectedStatus}&gender=${selectedGender}&fromDate=${fromDate}&toDate=${toDate}&page=${totalPages}&size=${size}">Last</a>
+            </li>
+        </c:if>
+    </ul>
+</nav>
+
 
 
 

@@ -25,6 +25,6 @@ public interface KhachHangService {
     Page<KhachHang> getAllKhachHangByTrangThai(boolean trangThai, Pageable pageable);
     Page<KhachHang> findKhachHangByNgaySinhBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable);
     boolean isSdtExists(String sdt);
-
+    List<KhachHang> searchKhachHang(String keyword);
 
 }

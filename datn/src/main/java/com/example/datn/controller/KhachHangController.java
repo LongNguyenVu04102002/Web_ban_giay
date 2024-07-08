@@ -39,7 +39,8 @@ public class KhachHangController {
                                 @RequestParam(defaultValue = "6") int size) {
         Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
         model.addAttribute("khachHangs", khachHangPage.getContent());
-        model.addAttribute("currentPage", khachHangPage.getNumber()+1);
+        model.addAttribute("currentPage", khachHangPage.getNumber() + 1);
+        model.addAttribute("pageSize", size);
         model.addAttribute("totalPages", khachHangPage.getTotalPages());
         model.addAttribute("khachHang", new KhachHang());
         return "khachHang/left-menu-khachhang";
@@ -113,21 +114,13 @@ public class KhachHangController {
     }
 
 
-    @PostMapping("/searchBySDT")
-    public String searchCustomersBySDT(@RequestParam("sdt") String sdt, Model model) {
-        KhachHang searchResult = khachHangService.findBySdt(sdt);
-
-        if (searchResult != null) {
-            model.addAttribute("khachHangs", List.of(searchResult));
-            model.addAttribute("successMessage", "Customer found successfully.");
-        } else {
-            model.addAttribute("khachHangs", Collections.emptyList());
-            model.addAttribute("errorMessage", "No customer found with the given phone number.");
-        }
-
-        return "khachHang/left-menu-khachhang";
+    
+    @GetMapping("/searchKhachHang")
+    public String searchKhachHang(@RequestParam("keyword") String keyword, Model model) {
+        List<KhachHang> khachHangs = khachHangService.searchKhachHang(keyword);
+        model.addAttribute("khachHangs", khachHangs);
+        return "khachHang/left-menu-khachhang"; // JSP file to display results
     }
-
 
 
     @GetMapping("/filterByGender")
@@ -135,27 +128,27 @@ public class KhachHangController {
                                  @RequestParam(defaultValue = "1") int page,
                                  @RequestParam(defaultValue = "6") int size,
                                  Model model) {
-
-        Page<KhachHang> khachHangs;
+        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
         if ("true".equals(gender)) {
-            khachHangs = khachHangService.findByGenderAndTrangThai(true, true, pageable);
+            khachHangPage = khachHangService.findByGenderAndTrangThai(true, true, pageable);
         } else if ("false".equals(gender)) {
-            khachHangs = khachHangService.findByGenderAndTrangThai(false, true, pageable);
+            khachHangPage = khachHangService.findByGenderAndTrangThai(false, true, pageable);
         } else {
-            khachHangs = khachHangService.getAllKhachHangByTrangThai(true, pageable);
+            khachHangPage = khachHangService.getAllKhachHangByTrangThai(true, pageable);
         }
 
-        model.addAttribute("khachHangs", khachHangs.getContent());
-        model.addAttribute("currentPage", khachHangs.getNumber() + 1);
-        model.addAttribute("totalPages", khachHangs.getTotalPages());
+        model.addAttribute("khachHangs", khachHangPage.getContent());
+        model.addAttribute("currentPage", khachHangPage.getNumber() + 1);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", khachHangPage.getTotalPages());
         model.addAttribute("khachHang", new KhachHang());
-        model.addAttribute("selectedGender", gender);
 
         return "khachHang/left-menu-khachhang";
     }
+
 
 
     @GetMapping("/filterByStatus")
@@ -163,23 +156,23 @@ public class KhachHangController {
                                  @RequestParam(defaultValue = "1") int page,
                                  @RequestParam(defaultValue = "6") int size,
                                  Model model) {
-        Page<KhachHang> khachHangs;
+        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
         if ("true".equals(status)) {
-            khachHangs = khachHangService.getAllKhachHangByTrangThai(true, pageable);
+            khachHangPage = khachHangService.getAllKhachHangByTrangThai(true, pageable);
         } else if ("false".equals(status)) {
-            khachHangs = khachHangService.getAllKhachHangByTrangThai(false, pageable);
+            khachHangPage = khachHangService.getAllKhachHangByTrangThai(false, pageable);
         } else {
-            khachHangs = khachHangService.getAllKhachHangByPage(page, size);
+            khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
         }
 
-        model.addAttribute("khachHangs", khachHangs.getContent());
-        model.addAttribute("currentPage", khachHangs.getNumber() + 1); // Vị trí trang hiện tại (đánh số từ 1)
-        model.addAttribute("totalPages", khachHangs.getTotalPages()); // Tổng số trang
-        model.addAttribute("status", new KhachHang()); // Đối tượng mới để dùng cho form
-        model.addAttribute("selectedStatus", status); // Trạng thái đã chọn để hiển thị trên view
+        model.addAttribute("khachHangs", khachHangPage.getContent());
+        model.addAttribute("currentPage", khachHangPage.getNumber() + 1);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+        model.addAttribute("khachHang", new KhachHang()); // Trạng thái đã chọn để hiển thị trên view
 
 
         return "khachHang/left-menu-khachhang";
@@ -212,10 +205,13 @@ public class KhachHangController {
 
 
     @PostMapping("/updateAddress")
-    public String updateAddress(@ModelAttribute DiaChi diaChi) {
+    public String updateAddress(@ModelAttribute DiaChi diaChi,
+                                @RequestParam int currentPage,
+                                @RequestParam int pageSize) {
         diaChiService.updateDiaChi(diaChi);
-        return "redirect:/khachhang";
+        return "redirect:/khachhang?page=" + currentPage + "&size=" + pageSize;
     }
+
 
 
     @GetMapping("/searchByNgaySinh")
@@ -250,8 +246,12 @@ public class KhachHangController {
 
 
     @GetMapping("/editKhachHang/{id}")
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Long id, Model model,   @RequestParam int page,
+                                 @RequestParam int size) {
         KhachHang khachHang = khachHangService.getKhachHangById(id);
+        model.addAttribute("khachHang", khachHang);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
 
         if (khachHang == null) {
             model.addAttribute("errorMessage", "Khách hàng không tồn tại");
@@ -263,6 +263,14 @@ public class KhachHangController {
     }
 
 
+    @PostMapping("/updateKhachHang/{id}")
+    public String updateKhachHang(@ModelAttribute KhachHang khachHang,
+                                  @PathVariable Long id,
+                                  @RequestParam int currentPage,
+                                  @RequestParam int pageSize) {
+        khachHangService.updateKhachHang(khachHang, id);
+        return "redirect:/khachhang?page=" + currentPage + "&size=" + pageSize;
+    }
 
 
 }

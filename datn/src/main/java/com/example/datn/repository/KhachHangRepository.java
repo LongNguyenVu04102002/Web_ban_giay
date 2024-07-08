@@ -25,6 +25,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
     List<KhachHang> findBySdtContaining(String sdt);
     Page<KhachHang> findByGioiTinhAndTrangThai(boolean gioiTinh, boolean trangThai, Pageable pageable);
     boolean existsBySdt(String sdt);
-
+    @Query("SELECT k FROM KhachHang k WHERE k.hoTen LIKE %:keyword% OR k.sdt LIKE %:keyword% OR k.email LIKE %:keyword%")
+    List<KhachHang> findByKeyword(@Param("keyword") String keyword);
 
 }

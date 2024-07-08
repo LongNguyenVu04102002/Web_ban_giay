@@ -41,7 +41,7 @@
                 </a>
             </li>
             <li class="nav-link">
-                <a href="#">
+                <a href="/nhanvien">
                     <i class='bx bx-pie-chart-alt icon'></i>
                     <span class="text nav-text">Nhân Viên</span>
                 </a>

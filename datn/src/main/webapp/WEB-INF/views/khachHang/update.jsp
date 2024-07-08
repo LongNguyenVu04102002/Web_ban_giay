@@ -31,9 +31,11 @@
                   <div class="col-md-8">
                       <div class="form-container">
                           <h5 class="mb-4">Cập Nhật Khách Hàng</h5>
-                          <form action="${pageContext.request.contextPath}/saveKhachHang" method="post">
+                          <form action="${pageContext.request.contextPath}/updateKhachHang/${khachHang.khachHangId}" method="post">
                               <input type="hidden" name="khachHangId" value="${khachHang.khachHangId}" />
 
+    <input type="hidden" name="currentPage" value="${currentPage}" />
+    <input type="hidden" name="pageSize" value="${pageSize}" />
                               <!-- Các trường thông tin khách hàng -->
                               <div class="mb-3">
                                   <label for="hoTen">Họ Tên:</label>

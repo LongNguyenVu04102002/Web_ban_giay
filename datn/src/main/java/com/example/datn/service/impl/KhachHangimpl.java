@@ -124,6 +124,11 @@ public class KhachHangimpl implements KhachHangService {
     public boolean isSdtExists(String sdt) {
         return khachHangRepository.existsBySdt(sdt);
     }
+
+    @Override
+    public List<KhachHang> searchKhachHang(String keyword) {
+        return khachHangRepository.findByKeyword(keyword);
+    }
 }
 
 
