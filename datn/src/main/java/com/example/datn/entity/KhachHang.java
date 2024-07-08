@@ -61,7 +61,7 @@ public class KhachHang {
     private String email;
 
 
-    @NotEmpty(message = " không được để trống")
+   
     @Column(name = "matKhau")
     private String matKhau;
 

@@ -45,7 +45,7 @@
 </form>
 
 
-hello
+
 <div class="d-flex justify-content-center align-items-center mb-3">
     <!-- Form tìm kiếm theo ngày sinh -->
     <h8>Tìm kiếm khoảng ngày sinh</h8>
