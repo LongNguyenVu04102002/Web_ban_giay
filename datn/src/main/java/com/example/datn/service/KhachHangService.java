@@ -19,13 +19,12 @@ public interface KhachHangService {
     KhachHang toggleTrangThai(Long khachHangId);
     Page<KhachHang> getAllKhachHangByPage(int pageNumber, int pageSize);
     KhachHang updateKhachHang(KhachHang khachHang, Long id);
-    List<KhachHang> findBySdt(String sdt);
+    KhachHang findBySdt(String sdt);
     Page<KhachHang> findByGender(boolean gioiTinh, Pageable pageable);
     Page<KhachHang> findByGenderAndTrangThai(boolean gioiTinh, boolean trangThai, Pageable pageable);
     Page<KhachHang> getAllKhachHangByTrangThai(boolean trangThai, Pageable pageable);
-
-    List<KhachHang> findKhachHangByNgaySinhBetween(LocalDate fromDate, LocalDate toDate);
-
-
+    Page<KhachHang> findKhachHangByNgaySinhBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable);
+    boolean isSdtExists(String sdt);
+    List<KhachHang> searchKhachHang(String keyword);
 
 }

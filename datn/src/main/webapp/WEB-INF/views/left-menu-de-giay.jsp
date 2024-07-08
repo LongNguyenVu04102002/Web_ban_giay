@@ -111,8 +111,8 @@
 </nav>
 
 <section class="home">
-    <div class="text">Chất liệu</div>
-    <jsp:include page="chat-lieu.jsp"></jsp:include>
+    <div class="text">Đế giày</div>
+    <jsp:include page="de-giay.jsp"></jsp:include>
 </section>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

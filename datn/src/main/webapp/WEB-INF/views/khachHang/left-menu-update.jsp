@@ -73,7 +73,7 @@
 
 <div class="home">
     <div class="includee">
-        <jsp:include page="khachhang.jsp" />
+        <jsp:include page="update.jsp" />
     </div>
 </div>
 

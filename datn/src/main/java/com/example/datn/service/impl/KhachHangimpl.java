@@ -95,7 +95,7 @@ public class KhachHangimpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHang> findBySdt(String sdt) {
+    public KhachHang findBySdt(String sdt) {
         return khachHangRepository.findBySdt(sdt);
     }
 
@@ -115,9 +115,19 @@ public class KhachHangimpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHang> findKhachHangByNgaySinhBetween(LocalDate fromDate, LocalDate toDate) {
+    public Page<KhachHang> findKhachHangByNgaySinhBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable) {
+        return khachHangRepository.findByNgaySinhBetween(fromDate, toDate, pageable);
+    }
 
-        return khachHangRepository.findByNgaySinhBetween(fromDate, toDate);
+
+    @Override
+    public boolean isSdtExists(String sdt) {
+        return khachHangRepository.existsBySdt(sdt);
+    }
+
+    @Override
+    public List<KhachHang> searchKhachHang(String keyword) {
+        return khachHangRepository.findByKeyword(keyword);
     }
 }
 
