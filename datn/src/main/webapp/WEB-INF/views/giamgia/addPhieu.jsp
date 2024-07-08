@@ -23,7 +23,7 @@
             background-color: #fff;
             padding: 30px;
             border-radius: 5px;
-            /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
         }
 
         .header-container {
@@ -31,6 +31,9 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0 , 0.2);
+            padding: 20px;
+            font-family: sans-serif;
         }
 
         .header-container h1 {
@@ -57,6 +60,7 @@
             font-weight: bold;
         }
         .text-danger{
+            font-size: small;
             font-weight: lighter;
         }
 
@@ -127,24 +131,28 @@
         }
 
         window.onload = toggleFields;
+
+        function confirmSave() {
+            return confirm("Bạn có chắc chắn muốn cập nhật thông tin phiếu giảm giá này?");
+        }
     </script>
 </head>
 <body>
-<div class="container">
+
     <div class="header-container">
-        <h1>Thêm phiếu Giảm Giá</h1>
+        <h1>Thêm phiếu giảm giá</h1>
         <a href="/giamgia" style="color: white; font-weight: bold; text-decoration: none">
             <button class="add-button"> <i class="bi bi-arrow-left"></i> Trở về</button>
         </a>
     </div>
-
-    <form:form method="post" action="${pageContext.request.contextPath}/giamgia/savePhieu" modelAttribute="phieuGiamGia">
+    <div class="container">
+    <form:form method="post" action="${pageContext.request.contextPath}/giamgia/savePhieu" modelAttribute="phieuGiamGia" onsubmit="return confirmSave()">
         <div class="row">
             <!-- Cột thứ nhất -->
             <div class="col-md-6 form-column">
                 <div class="form-group">
                     <label class="label" for="maGiamGia">Mã giảm giá</label>
-                    <form:input path="maGiamGia" id="maGiamGia" class="input-field" placeholder="Mã giảm giá..."/>
+                    <form:input path="maGiamGia" id="maGiamGia" class="input-field" placeholder="Có thể nhập hoặc không"/>
                     <form:errors path="maGiamGia" cssClass="text-danger"/>
                 </div>
                 <div class="form-group">

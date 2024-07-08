@@ -3,12 +3,12 @@ package com.example.datn.controller;
 import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.repository.PhieuGiamGiaRepository;
 import com.example.datn.service.PhieuGiamGiaService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/giamgia")
@@ -108,7 +109,8 @@ public class PhieuGiamGiaController {
         } else {
             // Update the PhieuGiamGia
             service.update(phieuGiamGia, id);
-            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật phiếu giảm giá thành công!");
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật " +
+                    "phiếu giảm giá thành công!");
             return "redirect:/giamgia";
         }
     }
@@ -152,6 +154,56 @@ public class PhieuGiamGiaController {
         model.addAttribute("status", status);
 
         return "giamgia/left-menu-phieu"; // Tên của view JSP của bạn
+    }
+
+    @GetMapping("/searchGiaTriDonToiThieu")
+    public String searchDonToiThieu(@RequestParam(value = "toiThieu", required = false, defaultValue = "all") String toiThieu,
+                                    @RequestParam(defaultValue = "1") int page, Model model) {
+        Page<PhieuGiamGia> phieuGiamGias = null;
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        BigDecimal donToiThieuMin;
+        BigDecimal donToiThieuMax;
+
+        if("all".equals(toiThieu)){
+            phieuGiamGias = service.getAllPhieu(pageable);
+        } else if ("0-500000".equals(toiThieu)){
+            donToiThieuMin = new BigDecimal("0");
+            donToiThieuMax = new BigDecimal("500000");
+            phieuGiamGias = service.searchDonToiThieu(donToiThieuMin, donToiThieuMax, pageable);
+        } else if ("500000-10000000".equals(toiThieu)){
+            donToiThieuMin = new BigDecimal("500000");
+            donToiThieuMax = new BigDecimal("10000000");
+            phieuGiamGias = service.searchDonToiThieu(donToiThieuMin, donToiThieuMax, pageable);
+        }else if (">10000000".equals(toiThieu)){
+            donToiThieuMin = new BigDecimal("10000000");
+            donToiThieuMax = new BigDecimal("999999999999999");
+            phieuGiamGias = service.searchDonToiThieu(donToiThieuMin, donToiThieuMax, pageable);
+        }
+        if (phieuGiamGias != null) {
+            model.addAttribute("listPhieu", phieuGiamGias.getContent());
+            model.addAttribute("page", phieuGiamGias);
+            model.addAttribute("toiThieu", toiThieu);
+        }
+
+        return "giamgia/left-menu-phieu";
+    }
+
+    @GetMapping("/searchByDateRange")
+    public String searchByDateRange(@RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+                                    @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+                                    @RequestParam(defaultValue = "1") int page, Model model) {
+        Page<PhieuGiamGia> phieuGiamGias = null;
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        if (from != null && to != null) {
+            phieuGiamGias = service.searchDateRange(from, to, pageable);
+        }
+        if(phieuGiamGias != null) {
+            model.addAttribute("listPhieu", phieuGiamGias.getContent());
+            model.addAttribute("page", phieuGiamGias);
+            model.addAttribute("from", from);
+            model.addAttribute("to", to);
+        }
+        return "giamgia/left-menu-phieu";
     }
 
 
@@ -206,11 +258,13 @@ public class PhieuGiamGiaController {
             bindingResult.rejectValue("ngayKetThuc", "After.phieuGiamGia.ngayKetThuc", "Ngày kết thúc phải sau ngày bắt đầu.");
         }
 
-        if (phieuGiamGia.getGiaTriGiamToiDa().compareTo(phieuGiamGia.getTienGiam()) > 0) {
+        if (phieuGiamGia.getGiaTriGiamToiDa() != null && phieuGiamGia.getTienGiam() != null && phieuGiamGia.getGiaTriGiamToiDa().compareTo(phieuGiamGia.getTienGiam()) > 0) {
             bindingResult.rejectValue("giaTriGiamToiDa", "Compare.phieuGiamGia.giaTriGiamToiDa", "Giá trị giảm tối đa không được lớn hơn tiền giảm.");
         }
 
-
+        if (phieuGiamGia.getNgayBatDau() != null && phieuGiamGia.getNgayBatDau().isBefore(LocalDate.now())) {
+            bindingResult.rejectValue("ngayBatDau", "Invalid.phieuGiamGia.ngayBatDau", "Ngày bắt đầu không được chọn trước ngày hôm nay.");
+        }
     }
 
 

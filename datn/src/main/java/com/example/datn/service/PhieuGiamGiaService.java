@@ -4,6 +4,8 @@ import com.example.datn.entity.PhieuGiamGia;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface PhieuGiamGiaService {
@@ -23,4 +25,9 @@ public interface PhieuGiamGiaService {
     Page<PhieuGiamGia> searchLoaiPhieu(Long loaiPhieu, Pageable pageable);
 
     Page<PhieuGiamGia> searchTrangThai(String trangThai, Pageable pageable);
+
+    Page<PhieuGiamGia> searchDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+
+    Page<PhieuGiamGia> searchDonToiThieu(BigDecimal donToiThieuMin, BigDecimal donToiThieuMax, Pageable pageable);
 }

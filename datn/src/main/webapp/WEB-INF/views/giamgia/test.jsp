@@ -51,9 +51,7 @@
         }
 
         .filter-container {
-            height: 90px;
-            width: 98%;
-            margin-left: 15px;
+            height: 70px;
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
@@ -86,7 +84,6 @@
             position: relative;
         }
 
-
         .form-outline label {
             position: absolute;
             top: -10px;
@@ -104,18 +101,17 @@
             text-align: center;
         }
 
-        .trangThai-dangdienra {
+        .status-dang-dien-ra {
             color: #FF5733; /* Màu cho trạng thái Đang diễn ra */
         }
 
-        .trangThai-sapdienra {
+        .status-sap-dien-ra {
             color: #FFC300; /* Màu cho trạng thái Sắp diễn ra */
         }
 
-        .trangThai-ketthuc {
+        .status-ket-thuc {
             color: #27AE60; /* Màu cho trạng thái Kết thúc */
         }
-
 
         .alert {
             padding: 15px;
@@ -138,8 +134,6 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
-
-
     </style>
     <script>
         function submitForm() {
@@ -168,8 +162,8 @@
                 error: function () {
                     alert("Đã xảy ra lỗi trong quá trình cập nhật trạng thái.");
                 }
-            })
-        };
+            });
+        }
 
         function showSuccessMessage(message) {
             var successAlert = document.createElement("div");
@@ -218,34 +212,27 @@
                 document.getElementById("filterNgay").submit();
             }
         }
-
-
     </script>
 </head>
 <body>
 <div>
-
     <div class="header-container">
         <c:if test="${not empty successMessage}">
             <div id="success-alert" class="alert alert-success alert-fixed">
                     ${successMessage}
             </div>
         </c:if>
-        <h1><a href="/giamgia" style="color: black; text-decoration: none">
-            Phiếu Giảm Giá
-        </a>
+        <h1>
+            <a href="/giamgia" style="color: black; text-decoration: none">
+                Phiếu Giảm Giá
+            </a>
         </h1>
-
         <a href="/giamgia/add">
             <button class="add-button"><i class="bi bi-plus-lg"></i> Thêm mới</button>
         </a>
     </div>
     <div class="filter-container">
         <div class="filter-group" style="margin-left: 30px">
-            <label for="search">Tìm kiếm:</label>
-            <input type="text" id="search" placeholder="Tìm kiếm..."/>
-        </div>
-        <div class="filter-group">
             <form id="filterNgay" action="/giamgia/searchByDateRange" method="get"
                   style="display: flex; align-items: center; gap: 10px">
                 <div class="form-outline datetimepicker">
@@ -290,129 +277,104 @@
                         <label
                                 for="to"
                                 class="text-dark"
-                                style="
-                        font-size: 17px;
-                        border-radius: 5px 5px 0px 0px;">Đến ngày</label>
+                                style="font-size: 17px; border-radius: 5px 5px 0px 0px;">Đến
+                            ngày</label>
                     </div>
-                    <!-- Thêm liên kết reset ngay sau ô input "Đến ngày" -->
-                    <a href="/giamgia" style="align-self: center; color: black; font-size: 20px">
-                        <i class="bi bi-arrow-repeat"></i>
-                    </a>
                 </div>
             </form>
         </div>
-
-
         <div class="filter-group">
-            <form id="filter-Form" action="/giamgia/searchTrangThai" method="get">
-                <label for="status">Trạng Thái:</label>
-                <select id="status" name="status" onchange="submitfrom()">
-                    <option value="all" ${status == 'all' ? 'selected' : ''}>Tất Cả</option>
-                    <option value="Đang diễn ra" ${status == 'Đang diễn ra' ? 'selected' : ''}>Đang diễn ra</option>
-                    <option value="Sắp diễn ra" ${status == 'Sắp diễn ra' ? 'selected' : ''}>Sắp diễn ra</option>
-                    <option value="Kết thúc" ${status == 'Kết thúcKết thúc' ? 'selected' : ''}>Kết thúc</option>
+            <form id="filterForm" action="/giamgia/search" method="get"
+                  style="display: flex; align-items: center; gap: 10px; margin-left: 5px">
+                <label for="keyword">Tìm kiếm:</label>
+                <input type="text" id="keyword" name="keyword" value="${param.keyword}"
+                       placeholder="Nhập từ khóa tìm kiếm"/>
+                <button type="submit" class="btn btn-primary" style="height: 40px" onclick="submitForm()">Tìm</button>
+            </form>
+        </div>
+        <div class="filter-group">
+            <form id="filter-Form" action="/giamgia/searchByStatus" method="get"
+                  style="display: flex; align-items: center; gap: 10px;">
+                <label for="trangThai">Trạng thái:</label>
+                <select id="trangThai" name="trangThai" onchange="submitfrom()" style="height: 40px">
+                    <option value="">Tất cả</option>
+                    <option value="Đang diễn ra" <c:if test="${param.trangThai == 'Đang diễn ra'}">selected</c:if>>Đang diễn ra</option>
+                    <option value="Sắp diễn ra" <c:if test="${param.trangThai == 'Sắp diễn ra'}">selected</c:if>>Sắp diễn ra</option>
+                    <option value="Kết thúc" <c:if test="${param.trangThai == 'Kết thúc'}">selected</c:if>>Kết thúc</option>
                 </select>
             </form>
         </div>
-        <div class="filter-group" style="margin-right: 30px">
-            <form id="filterForm" action="/giamgia/searchLoaiPhieu" method="get">
-                <label for="type">Loại phiếu:</label>
-                <select id="type" name="type" onchange="submitForm()">
-                    <option value="0" ${type == '0' ? 'selected' : ''}>Tất Cả</option>
-                    <option value="1" ${type == '1' ? 'selected' : ''}>Tiền mặt</option>
-                    <option value="2" ${type == '2' ? 'selected' : ''}>%</option>
-                </select>
+        <div class="filter-group">
+            <form id="filterToiThieu" action="/giamgia/searchByToiThieu" method="get"
+                  style="display: flex; align-items: center; gap: 10px;">
+                <label for="toiThieu">Số lượng tối thiểu:</label>
+                <input type="number" id="toiThieu" name="toiThieu" value="${param.toiThieu}" min="0" max="100"
+                       placeholder="Nhập số lượng" style="height: 40px; width: 100px">
+                <button type="submit" class="btn btn-primary" style="height: 40px" onclick="submitformToiThieu()">Lọc
+                </button>
             </form>
         </div>
     </div>
-    <table class="table table-hover" style="margin-top: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); width: 98%; margin-left: 15px;">
-        <thead class="table-light" style="text-align: center">
-        <tr>
-            <th>#</th>
-            <th>Mã giảm giá</th>
-            <th>Loại phiếu</th>
-            <th>Giá trị giảm</th>
-            <th>Số lượng</th>
-            <th>Giá trị đơn tối thiểu</th>
-            <th>Giá trị giảm tối đa</th>
-            <th>Ngày bắt đầu</th>
-            <th>Ngày kết thúc</th>
-            <th>Trạng thái</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="listPhieu" items="${page.content}" varStatus="loop">
-                <td>${loop.index + 1}</td>
-                <td>${listPhieu.maGiamGia}</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${listPhieu.loaiPhieu == 1}">Tiền mặt</c:when>
-                        <c:when test="${listPhieu.loaiPhieu == 2}">%</c:when>
-                    </c:choose>
-                </td>
-                <td>
-                    <c:choose>
-                        <c:when test="${listPhieu.loaiPhieu == 1}">
-                            <fmt:formatNumber value="${listPhieu.tienGiam}" type="currency"/>
-                        </c:when>
-                        <c:when test="${listPhieu.loaiPhieu == 2}">
-                            ${listPhieu.phanTramGiam}%
-                        </c:when>
-                    </c:choose>
-                </td>
-                <td>${listPhieu.soLuongPhieu}</td>
-                <td><fmt:formatNumber value="${listPhieu.giaTriDonToiThieu}" type="currency"/></td>
-                <td><fmt:formatNumber value="${listPhieu.giaTriGiamToiDa}" type="currency"/></td>
-                <td>${listPhieu.ngayBatDau}</td>
-                <td>${listPhieu.ngayKetThuc}</td>
-            <td class="
-                    <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">trangThai-dangdienra</c:if>
-                    <c:if test="${listPhieu.trangThai == 'Sắp diễn ra'}">trangThai-sapdienra</c:if>
-                    <c:if test="${listPhieu.trangThai == 'Kết thúc'}">trangThai-ketthuc</c:if>">${listPhieu.trangThai}</td>
-            <td>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="/giamgia/detail/${listPhieu.phieuGiamGiaId}">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                   id="flexSwitchCheckDefault${listPhieu.phieuGiamGiaId}"
-                                   onchange="updateTrangThai(${listPhieu.phieuGiamGiaId}, this.checked)"
-                                   <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">checked</c:if>
-                            >
-                        </div>
-                        </c:if>
-                    </div>
-                </td>
 
-
+    <div class="container">
+        <table class="table table-bordered table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã giảm giá</th>
+                <th>Loại mã</th>
+                <th>Số lượng</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th>Ngày bắt đầu</th>
+                <th>Ngày kết thúc</th>
+                <th>Giá trị</th>
+                <th>Hành động</th>
             </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-    <div class="text-left mt-3" style="text-align: left; margin-left: 15px ">
-        <!-- Sử dụng class 'text-left' thay vì 'text-center' -->
-        <c:if test="${page.number > 0}">
-            <a href="?page=${page.number}&type=${type}&status=${status}&toiThieu=${toiThieu}&from=${from}&to=${to}"
-               class="btn btn-primary btn-sm" style="font-weight: bold"><<</a>
-        </c:if>
-        <span class="btn btn-primary btn-sm">${page.number + 1} / ${page.totalPages}</span>
-        <c:if test="${page.number + 1 < page.totalPages}">
-            <a href="?page=${page.number + 2}&type=${type}&status=${status}&toiThieu=${toiThieu}&from=${from}&to=${to}"
-               class="btn btn-primary btn-sm" style="font-weight: bold">>></a>
-        </c:if>
+            </thead>
+            <tbody>
+            <c:forEach var="voucher" items="${vouchers}" varStatus="status">
+                <tr>
+                    <td>${status.index + 1}</td>
+                    <td>${voucher.maGiamGia}</td>
+                    <td>${voucher.loaiMa}</td>
+                    <td>${voucher.soLuong}</td>
+                    <td class="${getStatusClass(voucher.trangThai)}">${voucher.trangThai}</td>
+                    <td>
+                        <fmt:formatDate value="${voucher.ngayTao}" pattern="dd/MM/yyyy"/>
+                    </td>
+                    <td>
+                        <fmt:formatDate value="${voucher.ngayBatDau}" pattern="dd/MM/yyyy"/>
+                    </td>
+                    <td>
+                        <fmt:formatDate value="${voucher.ngayKetThuc}" pattern="dd/MM/yyyy"/>
+                    </td>
+                    <td>${voucher.giaTri}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <div class="form-check form-switch">
+                                <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="trangThaiSwitch-${voucher.id}"
+                                    ${voucher.trangThai == 'Đang diễn ra' ? 'checked' : ''}
+                                        onchange="updateTrangThai(${voucher.id}, this.checked)"
+                                />
+                            </div>
+                            <a href="/giamgia/edit/${voucher.id}" class="text-decoration-none">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </div>
-
-
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP8xCET5kylHkdDdX+vtIKUlv68tMX9CkG1ann0qUWs=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        integrity="sha384-aK4m9v2VzGUS4/NOKGCtjvSZ5WJ4pw1TQAg3YYZ6Op3K3OOZgq5RS9M6n43WJgQF" crossorigin="anonymous"></script>
 </body>
 </html>
