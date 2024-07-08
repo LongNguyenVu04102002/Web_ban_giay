@@ -10,9 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +36,8 @@ public class KhachHang {
     private Long khachHangId;
 
     @Column(name = "hoTen", length = 100)
-
+    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+    @NotEmpty(message = "Họ tên không được để trống")
     private String hoTen;
 
     @Column(name = "gioiTinh")
@@ -46,6 +45,8 @@ public class KhachHang {
 
     @Column(name = "ngaySinh")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+    @NotNull(message = "khong dc de trong")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
@@ -53,8 +54,13 @@ public class KhachHang {
     private String sdt;
 
     @Column(name = "email", length = 50)
-
+    @Size(max = 50, message = "Email không được vượt quá 50 ký tự")
+    @Email(message = "Email không hợp lệ")
+    @NotNull(message = "khong dc de trong")
+    @NotEmpty(message = " không được để trống")
     private String email;
+
+
 
     @Column(name = "matKhau")
     private String matKhau;

@@ -24,6 +24,14 @@
 </style>
 
 <div class="container">
+
+<div class="d-flex justify-content-end" style="margin-right: 10px;">
+    <a href="/khachhang" class="btn btn-outline-success">
+        <i class="bi bi-arrow-left"></i> Quay Lại
+    </a>
+</div>
+
+
     <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="container">
@@ -33,21 +41,25 @@
                           <h5 class="mb-4">Cập Nhật Khách Hàng</h5>
                           <form action="${pageContext.request.contextPath}/updateKhachHang/${khachHang.khachHangId}" method="post">
                               <input type="hidden" name="khachHangId" value="${khachHang.khachHangId}" />
-
-    <input type="hidden" name="currentPage" value="${currentPage}" />
-    <input type="hidden" name="pageSize" value="${pageSize}" />
+                              <input type="hidden" name="currentPage" value="${currentPage}" />
+                              <input type="hidden" name="pageSize" value="${pageSize}" />
                               <!-- Các trường thông tin khách hàng -->
                               <div class="mb-3">
                                   <label for="hoTen">Họ Tên:</label>
                                   <input type="text" id="hoTen" name="hoTen" class="form-control" value="${khachHang.hoTen}" required />
                               </div>
-                              <div class="mb-3">
-                                  <label for="gioiTinh">Giới Tính:</label>
-                                  <select id="gioiTinh" name="gioiTinh" class="form-control" required>
-                                      <option value="true" ${khachHang.gioiTinh ? 'selected' : ''}>Nam</option>
-                                      <option value="false" ${khachHang.gioiTinh ? '' : 'selected'}>Nữ</option>
-                                  </select>
-                              </div>
+                           <div class="mb-3">
+                               <label for="gioiTinh">Giới Tính:</label><br>
+                               <div class="form-check form-check-inline">
+                                   <input class="form-check-input" type="radio" id="nam" name="gioiTinh" value="true" ${khachHang.gioiTinh ? 'checked' : ''}>
+                                   <label class="form-check-label" for="nam">Nam</label>
+                               </div>
+                               <div class="form-check form-check-inline">
+                                   <input class="form-check-input" type="radio" id="nu" name="gioiTinh" value="false" ${!khachHang.gioiTinh ? 'checked' : ''}>
+                                   <label class="form-check-label" for="nu">Nữ</label>
+                               </div>
+                           </div>
+
                               <div class="mb-3">
                                   <label for="ngaySinh">Ngày Sinh:</label>
                                   <input type="date" id="ngaySinh" name="ngaySinh" class="form-control" value="${khachHang.ngaySinh}" required />

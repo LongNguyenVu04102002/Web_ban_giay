@@ -7,16 +7,22 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
 
 <div class="container">
+<div class="d-flex justify-content-end" style="margin-right: 10px;">
+    <a href="/khachhang" class="btn btn-outline-success">
+        <i class="bi bi-arrow-left"></i> Quay Lại
+    </a>
+</div>
+
     <div class="row justify-content-center">
         <div class="col-md-8">
         <h5>Thêm Khách Hàng</h5>
-            <form:form action="${pageContext.request.contextPath}/saveKhachHang" modelAttribute="khachHang" method="post">
+            <form:form action="${pageContext.request.contextPath}/saveKhachHang" modelAttribute="khachHang"    onsubmit="if(!confirm('Bạn có muốn thêm khách hàng ?')){return false}" method="post">
                 <div class="row">
                     <!-- Customer Details Column -->
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="hoTen">Họ Tên:</label>
-                            <form:input path="hoTen" id="hoTen" class="form-control" required="true" />
+                            <form:input path="hoTen" id="hoTen" class="form-control" />
                             <form:errors path="hoTen" cssClass="text-danger" />
                         </div>
                         <div class="mb-3">
@@ -33,17 +39,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="ngaySinh">Ngày Sinh:</label>
-                            <form:input path="ngaySinh" type="date" id="ngaySinh" class="form-control" required="true" />
+                            <form:input path="ngaySinh" type="date" id="ngaySinh" class="form-control" />
                             <form:errors path="ngaySinh" cssClass="text-danger" />
+
                         </div>
                         <div class="mb-3">
                             <label for="email">Email:</label>
-                            <form:input path="email" type="email" id="email" class="form-control" required="true" />
+                            <form:input path="email" type="email" id="email" class="form-control"/>
                             <form:errors path="email" cssClass="text-danger" />
                         </div>
                         <div class="mb-3">
                             <label for="sdt">Số Điện Thoại:</label>
-                            <form:input path="sdt" id="sdt" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" required="true" />
+                            <form:input path="sdt" id="sdt" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control"/>
                             <form:errors path="sdt" cssClass="text-danger" />
                         </div>
                     </div>

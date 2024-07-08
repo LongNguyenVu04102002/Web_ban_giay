@@ -116,9 +116,16 @@ public class KhachHangController {
 
     
     @GetMapping("/searchKhachHang")
-    public String searchKhachHang(@RequestParam("keyword") String keyword, Model model) {
+    public String searchKhachHang(@RequestParam("keyword") String keyword, Model model,
+                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "6") int size) {
+        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
         List<KhachHang> khachHangs = khachHangService.searchKhachHang(keyword);
         model.addAttribute("khachHangs", khachHangs);
+        model.addAttribute("currentPage", khachHangPage.getNumber() + 1);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+        model.addAttribute("khachHang", new KhachHang());
         return "khachHang/left-menu-khachhang"; // JSP file to display results
     }
 
@@ -178,6 +185,30 @@ public class KhachHangController {
         return "khachHang/left-menu-khachhang";
     }
 
+
+    @GetMapping("/searchByNgaySinh")
+    public String searchByNgaySinh(@RequestParam("fromDate") LocalDate fromDate,
+                                   @RequestParam("toDate") LocalDate toDate,
+                                   @RequestParam(name = "page", defaultValue = "1") int page,
+                                   @RequestParam(name = "size", defaultValue = "6") int size,
+                                   Model model) {
+        Page<KhachHang> khachHangPage = khachHangService.findKhachHangByNgaySinhBetween(fromDate, toDate, PageRequest.of(page - 1, size));
+
+        List<KhachHang> khachHangs = khachHangPage.getContent();
+        int totalPages = khachHangPage.getTotalPages();
+        long totalItems = khachHangPage.getTotalElements();
+        int currentPage = khachHangPage.getNumber() + 1;
+
+        model.addAttribute("khachHangs", khachHangs);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
+
+        return "khachHang/left-menu-khachhang"; // Thay thế với tên view thực tế của bạn
+    }
+
     @PostMapping("/addAddress")
     public String addAddress(@RequestParam Long khachHangId,
                              @RequestParam String diaChiNhan,
@@ -214,28 +245,7 @@ public class KhachHangController {
 
 
 
-    @GetMapping("/searchByNgaySinh")
-    public String searchByNgaySinh(@RequestParam("fromDate") LocalDate fromDate,
-                                   @RequestParam("toDate") LocalDate toDate,
-                                   @RequestParam(name = "page", defaultValue = "1") int page,
-                                   @RequestParam(name = "size", defaultValue = "6") int size,
-                                   Model model) {
-        Page<KhachHang> khachHangPage = khachHangService.findKhachHangByNgaySinhBetween(fromDate, toDate, PageRequest.of(page - 1, size));
 
-        List<KhachHang> khachHangs = khachHangPage.getContent();
-        int totalPages = khachHangPage.getTotalPages();
-        long totalItems = khachHangPage.getTotalElements();
-        int currentPage = khachHangPage.getNumber() + 1;
-
-        model.addAttribute("khachHangs", khachHangs);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("fromDate", fromDate);
-        model.addAttribute("toDate", toDate);
-
-        return "khachHang/left-menu-khachhang"; // Thay thế với tên view thực tế của bạn
-    }
 
 
     @GetMapping("/themMoi")
@@ -267,7 +277,8 @@ public class KhachHangController {
     public String updateKhachHang(@ModelAttribute KhachHang khachHang,
                                   @PathVariable Long id,
                                   @RequestParam int currentPage,
-                                  @RequestParam int pageSize) {
+                                  @RequestParam int pageSize,
+                                  BindingResult bindingResult) {
         khachHangService.updateKhachHang(khachHang, id);
         return "redirect:/khachhang?page=" + currentPage + "&size=" + pageSize;
     }

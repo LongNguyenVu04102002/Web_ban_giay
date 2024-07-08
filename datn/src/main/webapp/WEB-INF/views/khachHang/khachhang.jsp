@@ -40,7 +40,7 @@
 </h5>
 
 <form action="${pageContext.request.contextPath}/searchKhachHang" method="get" class="d-flex align-items-center justify-content-end mb-3">
-    <input type="text" name="keyword" class="form-control form-control-sm me-2" style="max-width: 200px;" placeholder="Nhập tên, số điện thoại hoặc email" required>
+    <input type="text" name="keyword" class="form-control form-control-sm me-2" style="max-width: 300px;" placeholder="Nhập tên, số điện thoại hoặc email" required>
     <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
 </form>
 
@@ -99,6 +99,53 @@
                     </button>
                 </div>
 
+                <!-- Modal Thêm mới Khách hàng -->
+                <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCustomerModalLabel">Thêm Khách Hàng Mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="${pageContext.request.contextPath}/saveKhachHang" method="post">
+                                    <div class="mb-3">
+                                        <label for="hoTen">Họ Tên:</label>
+                                        <input type="text" id="hoTen" name="hoTen" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gioiTinh">Giới Tính:</label>
+                                        <select id="gioiTinh" name="gioiTinh" class="form-control" required>
+                                            <option value="true">Nam</option>
+                                            <option value="false">Nữ</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ngaySinh">Ngày Sinh:</label>
+                                        <input type="date" id="ngaySinh" name="ngaySinh" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email">Email:</label>
+                                        <input type="email" id="email" name="email" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="sdt">Số Điện Thoại:</label>
+                                        <input type="text" id="sdt" name="sdt" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="trangThai">Trạng Thái:</label>
+                                        <select id="trangThai" name="trangThai" class="form-control" required>
+                                            <option value="true">Hoạt Động</option>
+                                            <option value="false">Không Hoạt Động</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Thêm</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
  <h5>
