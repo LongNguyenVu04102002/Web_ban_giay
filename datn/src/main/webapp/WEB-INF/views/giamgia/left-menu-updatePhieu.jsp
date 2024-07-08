@@ -1,20 +1,17 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page pageEncoding="utf-8" %>
 <!DOCTYPE html>
-<!-- Coding by CodingLab | www.codinglabweb.com -->
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <%@ page pageEncoding="utf-8" %>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!----===== Boxicons CSS ===== -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!--<title>Dashboard Sidebar Menu</title>-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
-<nav class="sidebar"> <!-- Remove class 'close' -->
+<nav class="sidebar">
     <header>
         <div class="image-text">
             <div class="text">
@@ -22,23 +19,35 @@
                 <span class="profession">Web developer</span>
             </div>
         </div>
-        <%--        <i class='bx bx-chevron-right toggle'></i> <!-- This can be removed if not needed -->--%>
     </header>
 
     <div class="menu-bar">
         <div class="menu">
 
             <li class="nav-link">
-                <a href="/hoadon">
+                <a href="/khachhang">
                     <i class='bx bx-user icon'></i>
                     <span class="text nav-text">Hóa đơn</span>
                 </a>
             </li>
-            <li class="nav-link">
-                <a href="/giamgia">
-                    <i class='bx bx-purchase-tag-alt icon'></i>
-                    <span class="text nav-text">Sản phẩm</span>
+            <li class="nav-link dropdown">
+                <a href="#" class="dropdown-toggle">
+                    <i class='bx bx-heart icon'></i>
+                    <span class="text nav-text">Quản lý sản phẩm</span>
                 </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/san-pham-chi-tiet">Sản phẩm chi tiết</a>
+                    <a class="dropdown-item" href="/san-pham">Sản phẩm</a>
+                    <a class="dropdown-item" href="/chat-lieu">Chất liệu</a>
+                    <a class="dropdown-item" href="/co-giay">Cổ giày</a>
+                    <a class="dropdown-item" href="/day-giay">Dây giày</a>
+                    <a class="dropdown-item" href="/de-giay">Đế giày</a>
+                    <a class="dropdown-item" href="/lot-giay">Lót giày</a>
+                    <a class="dropdown-item" href="/mui-giay">Mũi giày</a>
+                    <a class="dropdown-item" href="/kich-thuoc">Kích thước</a>
+                    <a class="dropdown-item" href="/mau-sac">Màu sắc</a>
+                    <a class="dropdown-item" href="/thuong-hieu">Thương hiệu</a>
+                </div>
             </li>
             <li class="nav-link">
                 <a href="/nhanvien">
@@ -48,45 +57,56 @@
             </li>
             <li class="nav-link">
                 <a href="/khachhang">
-                    <i class='bx bxs-group icon'></i>
+                    <i class='bx bx-heart icon'></i>
                     <span class="text nav-text">Khách hàng</span>
                 </a>
             </li>
             <li class="nav-link">
                 <a href="/giamgia">
-                    <i class='bx bx-purchase-tag-alt icon'></i>
+                    <i class='bx bx-wallet icon'></i>
                     <span class="text nav-text">Phiếu giảm giá</span>
                 </a>
             </li>
         </div>
 
-        <div class="bottom-content">
-            <li class="">
-                <a href="#">
-                    <i class='bx bx-log-out icon'></i>
-                    <span class="text nav-text">Logout</span>
-                </a>
-            </li>
-        </div>
+        </ul>
+    </div>
+
+    <div class="bottom-content">
+        <li class="">
+            <a href="#">
+                <i class='bx bx-log-out icon'></i>
+                <span class="text nav-text">Logout</span>
+            </a>
+        </li>
+    </div>
     </div>
 </nav>
 
 <div class="home">
     <div class="includee">
-        <jsp:include page="updatePhieu.jsp" />
+        <jsp:include page="updatePhieu.jsp"></jsp:include>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Remove the following JavaScript if not needed -->
 <script>
+    document.querySelectorAll('.dropdown-toggle').forEach(item => {
+        item.addEventListener('click', event => {
+            event.preventDefault();
+            const dropdown = item.nextElementSibling;
+            dropdown.classList.toggle('show');
+        });
+    });
 </script>
-</body>
 
+</body>
 </html>
 <style>
-
-    /* Google Font Import - Poppins */
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
     * {
         margin: 0;
         padding: 0;
@@ -142,6 +162,7 @@
         transition: var(--tran-05);
         z-index: 100;
     }
+
     .sidebar.close {
         width: 88px;
     }
@@ -183,9 +204,11 @@
         white-space: nowrap;
         opacity: 1;
     }
+
     .sidebar.close .text {
         opacity: 0;
     }
+
     /* =========================== */
 
     .sidebar header {
@@ -196,10 +219,12 @@
         display: flex;
         align-items: center;
     }
+
     .sidebar header .logo-text {
         display: flex;
         flex-direction: column;
     }
+
     header .image-text .name {
         margin-top: 2px;
         font-size: 18px;
@@ -272,6 +297,7 @@
         font-weight: 500;
         /*transition: var(--tran-05);*/
     }
+
     .sidebar li a {
         list-style: none;
         height: 100%;
@@ -288,6 +314,7 @@
     .sidebar li a:hover {
         background-color: var(--primary-color);
     }
+
     .sidebar li a:hover .icon,
     .sidebar li a:hover .text {
         color: var(--sidebar-color);
@@ -300,9 +327,11 @@
         justify-content: space-between;
         overflow-y: scroll;
     }
+
     .menu-bar::-webkit-scrollbar {
         display: none;
     }
+
     .sidebar .menu-bar .mode {
         border-radius: 6px;
         background-color: var(--primary-color-light);
@@ -324,6 +353,7 @@
         background-color: var(--body-color);
 
     }
+
     .home .text {
         font-size: 30px;
         font-weight: 500;
@@ -336,6 +366,7 @@
         height: 100vh;
         width: calc(100% - 78px);
     }
+
     body.dark .home .text {
         color: var(--text-color);
     }
