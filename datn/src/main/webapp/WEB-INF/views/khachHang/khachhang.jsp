@@ -44,6 +44,8 @@
     <button type="submit" class="btn btn-primary btn-sm">Tìm kiếm</button>
 </form>
 
+
+hello
 <div class="d-flex justify-content-center align-items-center mb-3">
     <!-- Form tìm kiếm theo ngày sinh -->
     <h8>Tìm kiếm khoảng ngày sinh</h8>
@@ -228,6 +230,41 @@
                                                           </div>
                                                       </div>
 
+
+                                                         <!-- Modal Thêm Địa Chỉ -->
+                                                                  <div class="modal fade" id="addAddressModal${khachHang.khachHangId}" tabindex="-1" aria-labelledby="addAddressModalLabel${khachHang.khachHangId}" aria-hidden="true">
+                                                                      <div class="modal-dialog">
+                                                                          <div class="modal-content">
+                                                                              <div class="modal-header">
+                                                                                  <h5 class="modal-title" id="addAddressModalLabel${khachHang.khachHangId}">Thêm Địa Chỉ cho ${khachHang.hoTen}</h5>
+                                                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                              </div>
+                                                                              <div class="modal-body">
+                                                                                  <!-- Form thêm địa chỉ mới -->
+                                                                                  <form action="${pageContext.request.contextPath}/addAddress" method="post">
+                                                                                      <input type="hidden" name="khachHangId" value="${khachHang.khachHangId}" />
+                                                                                      <div class="mb-3">
+                                                                                          <label for="diaChiNhan">Địa Chỉ Nhận:</label>
+                                                                                          <input type="text" id="diaChiNhan" name="diaChiNhan" class="form-control" required />
+                                                                                      </div>
+                                                                                      <div class="mb-3">
+                                                                                          <label for="xa">Xã/Phường:</label>
+                                                                                          <input type="text" id="xa" name="xa" class="form-control" required />
+                                                                                      </div>
+                                                                                      <div class="mb-3">
+                                                                                          <label for="huyen">Quận/Huyện:</label>
+                                                                                          <input type="text" id="huyen" name="huyen" class="form-control" required />
+                                                                                      </div>
+                                                                                      <div class="mb-3">
+                                                                                          <label for="thanhPho">Thành Phố/Tỉnh:</label>
+                                                                                          <input type="text" id="thanhPho" name="thanhPho" class="form-control" required />
+                                                                                      </div>
+                                                                                      <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+                                                                                  </form>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
 
                                                                   <!-- Modal Cập Nhật Địa Chỉ -->
                                                                  <c:forEach var="diaChi" items="${khachHang.diaChiList}">
