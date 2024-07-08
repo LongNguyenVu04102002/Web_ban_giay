@@ -33,7 +33,7 @@
 <div class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -107,7 +107,7 @@
                     </ul>
                 </nav>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-card">
                     <form:form action="/san-pham/add" method="post" modelAttribute="sanPham">
                         <form:input path="sanPhamId" cssStyle="display: none"></form:input>
