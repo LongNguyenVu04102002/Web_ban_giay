@@ -50,7 +50,7 @@ public class KhachHang {
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
-
+    @NotNull(message = "Số điện thoại không được để trống")
     private String sdt;
 
     @Column(name = "email", length = 50)

@@ -6,6 +6,7 @@ import com.example.datn.service.DiaChiService;
 import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -273,15 +275,23 @@ public class KhachHangController {
     }
 
 
+
+
     @PostMapping("/updateKhachHang/{id}")
-    public String updateKhachHang(@ModelAttribute KhachHang khachHang,
+    public String updateKhachHang(@Valid @ModelAttribute KhachHang khachHang,
+                                  BindingResult bindingResult,
                                   @PathVariable Long id,
-                                  @RequestParam int currentPage,
-                                  @RequestParam int pageSize,
-                                  BindingResult bindingResult) {
+                                  @RequestParam(defaultValue = "1") int currentPage,
+                                  @RequestParam(defaultValue = "6") int pageSize,
+                                  Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("khachHang", khachHang);
+            return "khachHang/left-menu-update";  // Tên trang JSP của bạn
+        }
         khachHangService.updateKhachHang(khachHang, id);
         return "redirect:/khachhang?page=" + currentPage + "&size=" + pageSize;
     }
+
 
 
 }
