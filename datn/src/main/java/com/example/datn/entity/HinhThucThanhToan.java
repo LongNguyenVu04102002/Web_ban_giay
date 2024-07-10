@@ -40,12 +40,11 @@ public class HinhThucThanhToan {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hoaDonId")
-    @JsonBackReference(value = "hinhThucThanhToan-hoaDon")
+    @JsonBackReference(value = "hoaDon")
     private HoaDon hoaDon;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "phuongThucThanhToanId")
-    @JsonBackReference
     private PhuongThucThanhToan phuongThucThanhToan;
 
 }

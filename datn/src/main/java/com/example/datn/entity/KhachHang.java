@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,32 +35,23 @@ public class KhachHang {
     private Long khachHangId;
 
     @Column(name = "hoTen", length = 100)
-    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
-    @NotEmpty(message = "Họ tên không được để trống")
     private String hoTen;
 
     @Column(name = "gioiTinh")
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+//    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-    @NotNull(message = "Ngày sinh không được để trống")
+    @NotNull(message = "khong dc de trong")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
-
     private String sdt;
 
-    @Column(name = "email", length = 50)
-    @Size(max = 50, message = "Email không được vượt quá 50 ký tự")
-    @Email(message = "Email không hợp lệ")
-    @NotNull(message = "Email không được để trống")
-    @NotEmpty(message = " không được để trống")
+    @Column(name = "email")
     private String email;
 
-
-    @NotEmpty(message = " không được để trống")
     @Column(name = "matKhau")
     private String matKhau;
 
@@ -69,15 +59,11 @@ public class KhachHang {
     private boolean trangThai;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
+    @JsonManagedReference
     private List<DiaChi> diaChiList;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
-    private List<DanhGia> danhGiaList;
-
-    @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "khachHang")
+    @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
 
 }

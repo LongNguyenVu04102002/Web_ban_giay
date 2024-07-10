@@ -1,162 +1,47 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.NhanVien;
-import com.example.datn.service.NhanVienService;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.NhanVienServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/admin/taikhoan")
 public class NhanVienController {
+
     @Autowired
-    NhanVienService nhanVienService;
+    NhanVienServiceImpl nhanVienService;
 
     @GetMapping("/nhanvien")
-    public String listNhanVien(Model model,
-                               NhanVien nhanVien,
-                               @RequestParam(defaultValue = "1") int page,
-                               @RequestParam(defaultValue = "5") int size
-                              ) {
-
-        Page<NhanVien> nhanVienPage = nhanVienService.getAllNhanVienByPage(page, size);
-
-        model.addAttribute("nhanviens", nhanVienPage.getContent());
-        model.addAttribute("currentPage", nhanVienPage.getNumber() + 1); // Vị trí trang hiện tại
-        model.addAttribute("totalPages", nhanVienPage.getTotalPages()); // Tổng số trang
-        model.addAttribute("nhanVien", new NhanVien()); // Thêm đối tượng khachHang vào model
-
-        nhanVien.setTrangThai(true);
-
-        return "/nhanvien/left-menu-nhan-vien";
+    public String show(Model model) {
+        List<NhanVien> nhanVienList = nhanVienService.getAllNhanVien();
+        model.addAttribute("nhanVienList", nhanVienList);
+        return "admin/includes/content/nhanvien/home";
 
     }
-//    @GetMapping("/searchNhanVien")
-//    public String searchNhanVien(@RequestParam(name = "search", required = false) String searchName, Model model) {
-//        List<NhanVien> nhanViens;
-//        if (searchName != null && !searchName.isEmpty()) {
-//            nhanViens = nhanVienService.findByHoTen(searchName);
-//        } else {
-//            return "redirect:/nhanvien";
-//        }
-//        model.addAttribute("nhanviens", nhanViens);
-//        return "nhanvien/left-menu-nhan-vien";
-//    }
-@GetMapping("/searchNhanVien")
-//public String searchNhanVien(
-//        @RequestParam(name = "hoTen", required = false) String hoTen,
-//        @RequestParam(name = "gioiTinh", required = false) Boolean gioiTinh,
-//        @RequestParam(name = "ngaySinh", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate ngaySinh,
-//        @RequestParam(name = "sdt", required = false) String sdt,
-//        @RequestParam(name = "email", required = false) String email,
-//        @RequestParam(name = "role", required = false) String role,
-//        Model model) {
-//
-//    List<NhanVien> nhanViens = nhanVienService.searchNhanViens(hoTen, gioiTinh, ngaySinh, sdt, email, role);
-//
-//    if (nhanViens.isEmpty()) {
-//        return "redirect:/nhanvien";
-//    }
-//
-//    model.addAttribute("nhanviens", nhanViens);
-//    return "nhanvien/left-menu-nhan-vien";
-//}
-public String searchNhanVien(
-        @RequestParam(name = "keyword", required = false) String keyword,
-        Model model) {
 
-    List<NhanVien> nhanViens = nhanVienService.searchNhanViensByKeyword(keyword);
-
-    if (nhanViens.isEmpty()) {
-        return "redirect:/nhanvien";
+    @GetMapping("/nhanvien/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        NhanVien nhanVien = nhanVienService.getById(id);
+        model.addAttribute("nhanVien", nhanVien);
+        return "admin/includes/content/nhanvien/form";
     }
 
-    model.addAttribute("nhanviens", nhanViens);
-    return "nhanvien/left-menu-nhan-vien";
-}
-
-
-
-
-@GetMapping("/addNhanVien")
-public  String viewadd(Model model){
-    model.addAttribute("nhanVien", new NhanVien());
-        return "/nhanvien/viewadd";
-}
-
-
-    @PostMapping("/saveNhanVien") // add
-    public String addNhanVien(@Valid @ModelAttribute("nhanVien") NhanVien nhanVien, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "nhanvien/viewadd";
-        }
-        nhanVien.setTrangThai(true);
-        nhanVienService.saveNhanVien(nhanVien);
-
-        return "redirect:/nhanvien";
+    @GetMapping("/nhanvien/form")
+    public String viewAdd(Model model) {
+        model.addAttribute("nhanVien", new NhanVien());
+        return "admin/includes/content/nhanvien/form";
     }
 
-    @GetMapping("/nhanvien/{nhanVienId}/toggle")
-    public String toggleTrangThai(@PathVariable Long nhanVienId) {
-        nhanVienService.toggleTrangThai(nhanVienId);
-        return "redirect:/nhanvien";
+    @PostMapping("/nhanvien/save")
+    public String save(NhanVien nhanVien) {
+        nhanVienService.save(nhanVien);
+        return "redirect:/admin/taikhoan/nhanvien";
     }
 
-    @GetMapping("/editNhanVien/{id}")
-    public String edit(@PathVariable Long id, Model model) {
-        Optional<NhanVien> nhanVien = nhanVienService.getNhanVienById(id);
-        if (nhanVien.isPresent()) {
-            model.addAttribute("nhanVien", nhanVien.get());
-            return "/nhanvien/updatenv";
-        } else {
-            return "redirect:/nhanvien";
-        }
-    }
-
-    @PostMapping("/editNhanVien/{id}")
-    public String updateNhanVien(@PathVariable("id") long id, @Valid @ModelAttribute("nhanVien") NhanVien nhanVien, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            nhanVien.setNhanVienId(id);
-            return "nhanvien/updatenv";
-        }
-
-        // Set ID to ensure the entity is updated instead of created as new
-        nhanVien.setNhanVienId(id);
-
-        nhanVienService.saveNhanVien(nhanVien);
-        return "redirect:/nhanvien";
-    }
-
-
-    @GetMapping("/deleteNhanVien/{id}")
-    public String deleteNhanVien(@PathVariable Long id) {
-        nhanVienService.deleteNhanVien(id);
-        return "redirect:/nhanvien";
-    }
-    @GetMapping("/updateStatus")
-    public String updateStatus(@RequestParam("nhanVienId") Long nhanVienId, @RequestParam("trangThai") boolean trangThai, RedirectAttributes redirectAttributes) {
-        NhanVien nhanVien = nhanVienService.getNhanVienById(nhanVienId).orElse(null);
-        if (nhanVien != null) {
-            nhanVien.setTrangThai(trangThai);
-            nhanVienService.saveNhanVien(nhanVien);
-            redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái thành công!");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Không tìm thấy nhân viên!");
-        }
-        return "redirect:/nhanvien"; // Chuyển hướng về trang danh sách nhân viên
-    }
 
 }

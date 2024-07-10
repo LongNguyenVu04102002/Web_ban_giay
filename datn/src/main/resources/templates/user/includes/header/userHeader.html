@@ -1,0 +1,125 @@
+<div class="tagline bg-slate-900">
+    <div class="container relative">
+        <div class="grid grid-cols-1">
+            <div class="text-center">
+                <h6 class="text-white font-medium">Refer a friend & get $50 in credits each 🎉</h6>
+            </div>
+        </div>
+    </div>
+</div>
+<nav id="topnav" class="defaultscroll is-sticky tagline-height">
+    <div class="container relative flex justify-center text-center">
+        <a class="logo" href="#">
+            <div>
+                <img src="/images/logo-dark.png" class="h-[22px] inline-block dark:hidden" alt="">
+                <img src="/images/logo-white.png" class="h-[22px] hidden dark:inline-block" alt="">
+            </div>
+        </a>
+        <div id="navigation">
+            <ul class="navigation-menu px-1">
+                <li>
+                    <a th:href="@{/home}" class="sub-menu-item">Home</a>
+                </li>
+                <li>
+                    <a th:href="@{/shop}" class="sub-menu-item">Shop</a>
+                </li>
+                <li>
+                    <a th:href="@{/blog}" class="sub-menu-item">Blog</a>
+                </li>
+                <li><a th:href="@{/about}" class="sub-menu-item">About Us</a></li>
+
+                <li><a th:href="@{/contact}" class="sub-menu-item">Contact</a></li>
+            </ul>
+        </div>
+        <ul class="buy-button list-none mb-0">
+            <li class="dropdown inline-block relative ps-0.5">
+                <button data-dropdown-toggle="dropdown"
+                        class="dropdown-toggle size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 border border-orange-500 text-white"
+                        type="button">
+                    <i data-feather="shopping-cart" class="h-4 w-4"></i>
+                </button>
+                <div class="dropdown-menu absolute -left-4 mt-4 z-10 w-100 rounded-md bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 hidden"
+                     onclick="event.stopPropagation();">
+                    <ul class="py-3 text-start" aria-labelledby="dropdownDefault">
+                        <li v-for="item in cartStore.cart" :key="item.sanPhamId"
+                            class="flex items-center justify-between py-1.5 px-4">
+                                <span class="flex items-center">
+                                    <img src="/images/shop/mens-jecket-3.jpg" class="w-9 h-9 rounded shadow"
+                                         :alt="item.ten">
+                                    <span class="ml-3">
+                                        <span class="block font-semibold">{{ item.ten }}</span>
+                                        <span class="block text-sm text-slate-400">{{ item.gia }} X {{ item.soLuong
+                                            }}</span>
+                                        <span class="block text-sm text-slate-400">Kích Thước: {{ item.kichThuoc }} ||
+                                            Màu Sắc: {{ item.mauSac }}</span>
+                                    </span>
+                                </span>
+                            <span class="font-semibold">{{ item.gia * item.soLuong }}</span>
+                        </li>
+                        <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
+                        <li class="flex items-center justify-between py-1.5 px-4">
+                            <h6 class="font-semibold mb-0">Total($):</h6>
+                            <h6 class="font-semibold mb-0">{{ subtotal }}</h6>
+                        </li>
+                        <li class="py-1.5 px-4">
+                            <span class="text-center block">
+                                <a href="javascript:void(0)"
+                                   class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">View Cart</a>
+                                <a href="javascript:void(0)"
+                                   class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">Checkout</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="inline-block ps-0.5">
+                <a href="javascript:void(0)"
+                   class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 text-white">
+                    <i data-feather="heart" class="h-4 w-4"></i>
+                </a>
+            </li>
+
+            <li class="dropdown inline-block relative ps-0.5">
+                <button data-dropdown-toggle="dropdown" class="dropdown-toggle items-center" type="button">
+                    <span class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full border border-orange-500 bg-orange-500 text-white"><img
+                            src="/images/client/16.jpg" class="rounded-full" alt=""></span>
+                </button>
+                <div class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden"
+                     onclick="event.stopPropagation();">
+                    <ul class="py-2 text-start">
+                        <li>
+                            <p class="text-slate-400 pt-2 px-4">Welcome Jesus!</p>
+                        </li>
+                        <li>
+                            <p class="flex items-center font-medium py-2 px-4"><i data-feather="dollar-sign"
+                                                                                  class="h-4 w-4 me-2"></i> Balance:
+                                <span class="text-orange-500 ms-2">$ 245.10</span></p>
+                        </li>
+                        <li>
+                            <a href="user-account.html"
+                               class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"><i
+                                    data-feather="user" class="h-4 w-4 me-2"></i>Account</a>
+                        </li>
+                        <li>
+                            <a href="helpcenter.html"
+                               class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"><i
+                                    data-feather="help-circle" class="h-4 w-4 me-2"></i>Helpcenter</a>
+                        </li>
+                        <li>
+                            <a href="user-setting.html"
+                               class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"><i
+                                    data-feather="settings" class="h-4 w-4 me-2"></i>Settings</a>
+                        </li>
+                        <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
+                        <li>
+                            <a href="login.html"
+                               class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"><i
+                                    data-feather="log-out" class="h-4 w-4 me-2"></i>Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

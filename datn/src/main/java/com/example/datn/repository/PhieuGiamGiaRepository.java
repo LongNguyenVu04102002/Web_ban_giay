@@ -1,20 +1,11 @@
 package com.example.datn.repository;
 
 import com.example.datn.entity.PhieuGiamGia;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-
-@Repository
 public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Long> {
 
+<<<<<<< HEAD
     Page<PhieuGiamGia> findByLoaiPhieu(Long loaiPhieu, Pageable pageable);
     Page<PhieuGiamGia> findByTrangThai(String trangThai, Pageable pageable);
     Page<PhieuGiamGia> findByGiaTriDonToiThieuBetween(BigDecimal giaTriDonToiThieuMin, BigDecimal giaTriDonToiThieuMax, Pageable pageable);
@@ -31,5 +22,8 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Long
             "p.ngayKetThuc LIKE %:query% OR " +
             "p.trangThai LIKE %:query%")
     Page<PhieuGiamGia> searchAllFields(@Param("query") String query, Pageable pageable);
+=======
+    PhieuGiamGia findByMaGiamGia(String maGiamGia);
+>>>>>>> master
 
 }

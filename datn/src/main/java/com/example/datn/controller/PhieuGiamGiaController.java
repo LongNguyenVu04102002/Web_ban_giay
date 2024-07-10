@@ -1,97 +1,47 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.PhieuGiamGia;
-import com.example.datn.repository.PhieuGiamGiaRepository;
-import com.example.datn.service.PhieuGiamGiaService;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.List;
 
 @Controller
-@RequestMapping("/giamgia")
+@RequestMapping("/admin")
 public class PhieuGiamGiaController {
-    @Autowired
-    PhieuGiamGiaService service;
 
     @Autowired
-    PhieuGiamGiaRepository repository;
+    private PhieuGiamGiaServiceImpl phieuGiamGiaService;
 
-    @GetMapping
-    public String getAllPhieu(Model model, @RequestParam(defaultValue = "1") int page) {
-    Page<PhieuGiamGia> phieuGiamGias;
-    if (page < 1) page = 1;
-    Pageable pageable = PageRequest.of(page - 1, 5);
-    phieuGiamGias = service.getAllPhieu(pageable);
-    model.addAttribute("page", phieuGiamGias);
-    return "giamgia/left-menu-phieu";
-}
+    @GetMapping("/giamgia")
+    public String getAll(Model model) {
+        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaService.getAll();
+        model.addAttribute("phieuGiamGiaList", phieuGiamGiaList);
+        return "admin/includes/content/giamgia/home";
+    }
 
-
-    @GetMapping("/add")
-    public String viewAdd(Model model) {
+    @GetMapping("/giamgia/form")
+    public String viewForm(Model model) {
         model.addAttribute("phieuGiamGia", new PhieuGiamGia());
-        return "giamgia/left-menu-addPhieu";
+        return "admin/includes/content/giamgia/form";
     }
 
-    @PostMapping("/savePhieu")
-    public String savePhieuGiamGia(@Valid @ModelAttribute("phieuGiamGia") PhieuGiamGia phieuGiamGia,
-                                   BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes) {
-        validatePhieu(phieuGiamGia, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "giamgia/left-menu-addPhieu";
-        } else {
-            service.savePhieuGiamGia(phieuGiamGia);
-            redirectAttributes.addFlashAttribute("successMessage", "Thêm phiếu giảm giá thành công!");
-            return "redirect:/giamgia";
-        }
+    @PostMapping("/giamgia/save")
+    public String savePhieuGiamGia(PhieuGiamGia phieuGiamGia) {
+        phieuGiamGiaService.save(phieuGiamGia);
+        return "redirect:/admin/giamgia";
     }
 
-
-    //
-    @PostMapping("/updateTrangThai/{phieuGiamGiaId}")
-    @ResponseBody
-    public ResponseEntity<String> updateTrangThai(@PathVariable Long phieuGiamGiaId, @RequestParam boolean checked) {
-        try {
-            PhieuGiamGia phieuGiamGia = service.getPhieuById(phieuGiamGiaId);
-            if (phieuGiamGia == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            // Update status if the current status is "Đang diễn ra"
-            if (phieuGiamGia.getTrangThai().equals("Đang diễn ra")) {
-                phieuGiamGia.setTrangThai("Kết thúc");
-                service.savePhieuGiamGia(phieuGiamGia);
-            }
-
-            return ResponseEntity.ok("Trạng thái đã được cập nhật.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi trong quá trình cập nhật trạng thái.");
-        }
-    }
-
-
-    @GetMapping("/detail/{phieuGiamGiaId}")
-    public String getUpdatePhieuGiamGia(@PathVariable("phieuGiamGiaId") Long phieuGiamGiaId, Model model) {
-        PhieuGiamGia phieuGiamGia = service.getPhieuById(phieuGiamGiaId);
+    @GetMapping("/giamgia/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaService.getById(id);
         model.addAttribute("phieuGiamGia", phieuGiamGia);
-        return "/giamgia/left-menu-updatePhieu";
+        return "admin/includes/content/giamgia/form";
     }
+<<<<<<< HEAD
     @PostMapping("/update/{id}")
     public String updatePhieuGiamGia(@Valid @ModelAttribute("phieuGiamGia") PhieuGiamGia phieuGiamGia,
                                      @PathVariable Long id,
@@ -294,5 +244,7 @@ public class PhieuGiamGiaController {
 //    }
 
 
+=======
+>>>>>>> master
 
 }

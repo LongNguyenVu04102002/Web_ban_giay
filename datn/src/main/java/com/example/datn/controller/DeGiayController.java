@@ -1,78 +1,48 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ChatLieu;
 import com.example.datn.entity.DeGiay;
-import com.example.datn.service.IService;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.DeGiayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @Controller
+@RequestMapping("/admin/sanpham")
 public class DeGiayController {
 
     @Autowired
-    private IService<DeGiay> deGiayService;
+    private DeGiayServiceImpl deGiayService;
 
-    @GetMapping("/de-giay")
-    public String show(@ModelAttribute("deGiay") DeGiay deGiay, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        Page<DeGiay> page = deGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        deGiay.setTrangThai(true);
-        return "left-menu-de-giay";
-    }
-
-    @PostMapping("/de-giay/add")
-    public String add(@Valid @ModelAttribute("deGiay") DeGiay deGiay, BindingResult result, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<DeGiay> page = deGiayService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-de-giay";
-        }
+    @GetMapping("/degiay")
+    public String show(Model model) {
+        List<DeGiay> deGiayList = deGiayService.getAllDeGiay();
+        model.addAttribute("deGiayList", deGiayList);
         model.addAttribute("deGiay", new DeGiay());
-        DeGiay dg = DeGiay.builder()
-                .ten(deGiay.getTen())
-                .moTa(deGiay.getMoTa())
-                .trangThai(deGiay.isTrangThai())
-                .build();
-        deGiayService.addOrUpdate(dg);
-        Page<DeGiay> page = deGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/de-giay";
+        return "admin/includes/content/sanpham/degiay/home";
     }
 
-    @GetMapping("/de-giay/detail/{id}")
-    public String detail(@ModelAttribute("deGiay") Optional<DeGiay> deGiay, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        model.addAttribute("deGiay", deGiayService.getOne(id));
-        Page<DeGiay> page = deGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "left-menu-de-giay";
+    @PostMapping("/degiay/save")
+    public String save(DeGiay deGiay) {
+        deGiayService.saveDeGiay(deGiay);
+        return "redirect:/admin/sanpham/degiay";
     }
 
-    @PostMapping("/de-giay/update/{id}")
-    public String update(@Valid @ModelAttribute("deGiay") DeGiay deGiay, BindingResult result, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<DeGiay> page = deGiayService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-de-giay";
-        }
-        model.addAttribute("deGiay", new DeGiay());
-        deGiayService.addOrUpdate(deGiay);
-        Page<DeGiay> page = deGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/de-giay";
+    @GetMapping("/degiay/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        List<DeGiay> deGiayList = deGiayService.getAllDeGiay();
+        model.addAttribute("deGiayList", deGiayList);
+        DeGiay deGiay = deGiayService.getById(id);
+        model.addAttribute("deGiay", deGiay);
+        return "admin/includes/content/sanpham/degiay/home";
     }
 
-    @GetMapping("/de-giay/remove/{id}")
-    public String remove(@ModelAttribute("deGiay") DeGiay deGiay, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        deGiayService.remove(id);
-        Page<DeGiay> page = deGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/de-giay";
+    @GetMapping("/degiay/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        deGiayService.deleteDeGiay(id);
+        return "redirect:/admin/sanpham/degiay";
     }
+
 }
