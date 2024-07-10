@@ -47,10 +47,6 @@ public class KhachHang {
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
-<<<<<<< HEAD
-    @NotNull(message = "Số điện thoại không được để trống")
-=======
->>>>>>> KhachHang_Long
     private String sdt;
 
     @Column(name = "email")
