@@ -97,10 +97,13 @@
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <label class="switcher">
-                            <input type="checkbox">
-                            <span class="switcher-toggle"></span>
-                        </label>
+                        <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get">
+                            <label class="switcher">
+                                <input type="checkbox" id="trangThai${kh.khachHangId}" name="trangThai"
+                                       th:checked="${!kh.trangThai}" onchange="this.form.submit()">
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
                         <a th:href="@{/admin/taikhoan/khachhang/detail/{id}(id=${kh.khachHangId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
