@@ -4,10 +4,12 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.service.DiaChiService;
 import com.example.datn.service.KhachHangService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +47,10 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/save")
-    public String save(KhachHang khachHang) {
+    public String save(@Valid KhachHang khachHang, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "admin/includes/content/khachhang/form";
+        }
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";
     }
