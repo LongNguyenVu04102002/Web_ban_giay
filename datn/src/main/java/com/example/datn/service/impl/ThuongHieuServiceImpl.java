@@ -1,46 +1,37 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.ThuongHieu;
-import com.example.datn.repository.ThuongHieuRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.ThuongHieuRepository;
+import com.example.datn.service.ThuongHieuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ThuongHieuServiceImpl implements IService<ThuongHieu> {
+public class ThuongHieuServiceImpl implements ThuongHieuService {
 
     @Autowired
-    private ThuongHieuRepo repo;
+    private ThuongHieuRepository thuongHieuRepository;
 
     @Override
     public List<ThuongHieu> getAll() {
-        return repo.findAll();
+        return thuongHieuRepository.findAll();
     }
 
     @Override
-    public Optional<ThuongHieu> getOne(Long id) {
-        return repo.findById(id);
+    public ThuongHieu getById(Long id) {
+        return thuongHieuRepository.findById(id).orElse(null);
     }
 
     @Override
-    public ThuongHieu addOrUpdate(ThuongHieu thuongHieu) {
-        return repo.save(thuongHieu);
+    public void save(ThuongHieu thuongHieu) {
+        thuongHieuRepository.save(thuongHieu);
     }
 
     @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
+    public void delete(Long id) {
+       thuongHieuRepository.deleteById(id);
     }
 
-    @Override
-    public Page<ThuongHieu> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

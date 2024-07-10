@@ -1,46 +1,37 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.MuiGiay;
-import com.example.datn.repository.MuiGiayRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.MuiGiayRepository;
+import com.example.datn.service.MuiGiayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class MuiGiayServiceImpl implements IService<MuiGiay> {
+public class MuiGiayServiceImpl implements MuiGiayService {
 
     @Autowired
-    private MuiGiayRepo repo;
+    private MuiGiayRepository muiGiayRepository;
 
     @Override
-    public List<MuiGiay> getAll() {
-        return repo.findAll();
+    public List<MuiGiay> getAllMuiGiay() {
+        return muiGiayRepository.findAll();
     }
 
     @Override
-    public Optional<MuiGiay> getOne(Long id) {
-        return repo.findById(id);
+    public MuiGiay getById(Long id) {
+        return muiGiayRepository.findById(id).orElse(null);
     }
 
     @Override
-    public MuiGiay addOrUpdate(MuiGiay muiGiay) {
-        return repo.save(muiGiay);
+    public void saveMuiGiay(MuiGiay muiGiay) {
+        muiGiayRepository.save(muiGiay);
     }
 
     @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
+    public void deleteMuiGiay(Long id) {
+        muiGiayRepository.deleteById(id);
     }
 
-    @Override
-    public Page<MuiGiay> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

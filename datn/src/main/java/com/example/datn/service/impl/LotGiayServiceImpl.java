@@ -1,46 +1,37 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.LotGiay;
-import com.example.datn.repository.LotGiayRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.LotGiayRepository;
+import com.example.datn.service.LotGiayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class LotGiayServiceImpl implements IService<LotGiay> {
+public class LotGiayServiceImpl implements LotGiayService {
 
     @Autowired
-    private LotGiayRepo repo;
+    private LotGiayRepository lotGiayRepository;
 
     @Override
-    public List<LotGiay> getAll() {
-        return repo.findAll();
+    public List<LotGiay> getAllLotGiay() {
+        return lotGiayRepository.findAll();
     }
 
     @Override
-    public Optional<LotGiay> getOne(Long id) {
-        return repo.findById(id);
+    public LotGiay getById(Long id) {
+        return lotGiayRepository.findById(id).orElse(null);
     }
 
     @Override
-    public LotGiay addOrUpdate(LotGiay lotGiay) {
-        return repo.save(lotGiay);
+    public void saveLotGiay(LotGiay lotGiay) {
+        lotGiayRepository.save(lotGiay);
     }
 
     @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
+    public void deleteLotGiay(Long id) {
+        lotGiayRepository.deleteById(id);
     }
 
-    @Override
-    public Page<LotGiay> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

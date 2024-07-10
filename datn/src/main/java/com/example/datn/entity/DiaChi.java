@@ -16,8 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Setter
 @Getter
 @AllArgsConstructor
@@ -32,18 +30,8 @@ public class DiaChi {
     @Column(name = "diaChiId", nullable = false)
     private Long diaChiId;
 
-    @Lob
-    @Column(name = "diaChiNhan")
-    private String diaChiNhan;
-
-    @Column(name = "ngayTao")
-    private LocalDate ngayTao;
-
-    @Column(name = "sdt", length = 20)
-    private String sdt;
-
-    @Column(name = "hoTen", length = 100)
-    private String hoTen;
+    @Column(name = "diaChi")
+    private String diaChi;
 
     @Column(name = "trangThai")
     private boolean trangThai;

@@ -1,46 +1,58 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.SanPham;
-import com.example.datn.repository.SanPhamRepo;
-import com.example.datn.service.IService;
+import com.example.datn.entity.SanPhamChiTiet;
+import com.example.datn.repository.SanPhamRepository;
+import com.example.datn.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class SanPhamServiceImpl implements IService<SanPham> {
+public class SanPhamServiceImpl implements SanPhamService {
 
     @Autowired
-    private SanPhamRepo repo;
+    private SanPhamRepository sanPhamRepository;
 
     @Override
     public List<SanPham> getAll() {
-        return repo.findAll();
+        return sanPhamRepository.findAll();
     }
 
     @Override
-    public Optional<SanPham> getOne(Long id) {
-        return repo.findById(id);
+    public SanPham getSanPhamById(Long id) {
+        return sanPhamRepository.findById(id).orElse(null);
+    }
+
+    public List<SanPhamChiTiet> uniqueSizes(List<SanPhamChiTiet> sanPhamChiTietList) {
+        Set<String> sizes = new HashSet<>();
+        return sanPhamChiTietList.stream()
+                .sorted(Comparator.comparing(chiTiet -> chiTiet.getKichThuoc().getTen()))
+                .filter(chiTiet -> sizes.add(chiTiet.getKichThuoc().getTen()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SanPhamChiTiet> uniqueColor(List<SanPhamChiTiet> sanPhamChiTietList) {
+        Set<String> color = new HashSet<>();
+        return sanPhamChiTietList.stream()
+                .sorted(Comparator.comparing(chiTiet -> chiTiet.getMauSac().getTen()))
+                .filter(chiTiet -> color.add(chiTiet.getMauSac().getTen()))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public ResponseEntity<?> getAllSanPham() {
+        return ResponseEntity.ok(sanPhamRepository.findAll());
     }
 
     @Override
-    public SanPham addOrUpdate(SanPham sanPham) {
-       return repo.save(sanPham);
+    public ResponseEntity<?> getAllSanPhamById(Long id) {
+        return ResponseEntity.ok(sanPhamRepository.findById(id));
     }
 
-    @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public Page<SanPham> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

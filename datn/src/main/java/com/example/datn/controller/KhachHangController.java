@@ -1,11 +1,11 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
+import com.example.datn.entity.NhanVien;
 import com.example.datn.service.DiaChiService;
 import com.example.datn.service.KhachHangService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,105 +18,54 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+=======
 
-import java.time.LocalDate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+>>>>>>> KhachHang_Long
 
-import java.util.Collections;
 import java.util.List;
 
 
 @Controller
-
+@RequestMapping("/admin/taikhoan")
 public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
 
-    @Autowired
-    private DiaChiService diaChiService;
-
     @GetMapping("/khachhang")
-    public String listKhachHang(Model model,
-                                @RequestParam(defaultValue = "1") int page,
-                                @RequestParam(defaultValue = "6") int size) {
-        Page<KhachHang> khachHangPage = khachHangService.getAllKhachHangByPage(page, size);
-        model.addAttribute("khachHangs", khachHangPage.getContent());
-        model.addAttribute("currentPage", khachHangPage.getNumber() + 1);
-        model.addAttribute("pageSize", size);
-        model.addAttribute("totalPages", khachHangPage.getTotalPages());
+    public String show(Model model) {
+        List<KhachHang> khachHangList = khachHangService.getAll();
+        model.addAttribute("khachHangList", khachHangList);
+        return "admin/includes/content/khachhang/home";
+
+    }
+
+    @GetMapping("/khachhang/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        KhachHang khachHang = khachHangService.getById(id);
+        model.addAttribute("khachHang", khachHang);
+        return "admin/includes/content/khachhang/form";
+    }
+
+    @GetMapping("/khachhang/form")
+    public String viewAdd(Model model) {
         model.addAttribute("khachHang", new KhachHang());
-        return "khachHang/left-menu-khachhang";
+        return "admin/includes/content/khachhang/form";
     }
 
-
-    @GetMapping("/khachhang/{khachHangId}/toggle")
-    public String toggleTrangThai(@PathVariable Long khachHangId) {
-        khachHangService.toggleTrangThai(khachHangId);
-        return "redirect:/khachhang";
+    @PostMapping("/khachhang/save")
+    public String save(KhachHang khachHang) {
+        khachHangService.save(khachHang);
+        return "redirect:/admin/taikhoan/khachhang";
     }
-
-
-
-    @PostMapping("/saveKhachHang")
-    public String saveKhachHang(@ModelAttribute("khachHang") @Valid KhachHang khachHang, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-        // Kiểm tra và thêm lỗi vào bindingResult
-        validatePhoneNumber(khachHang, bindingResult);
-
-        // Kiểm tra nếu đang cập nhật (khachHang có khachHangId)
-        boolean isUpdate = khachHang.getKhachHangId() != null;
-
-        if (bindingResult.hasErrors()) {
-            // Nếu là cập nhật, trả về form cập nhật
-            if (isUpdate) {
-                model.addAttribute("khachHang", khachHang);
-                return "/khachHang/left-menu-update"; // Thay thế bằng tên view cập nhật tương ứng
-            } else {
-                // Nếu là thêm mới, trả về form thêm mới
-                model.addAttribute("khachHang", khachHang);
-                return "/khachHang/left-menu-add"; // Thay thế bằng tên view thêm mới tương ứng
-            }
-        }
-
-        // Cập nhật danh sách địa chỉ cho khách hàng
-        if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
-            for (DiaChi diaChi : khachHang.getDiaChiList()) {
-                diaChi.setKhachHang(khachHang); // Gắn địa chỉ với khách hàng
-            }
-        }
-
-        khachHangService.saveKhachHang(khachHang); // Lưu khách hàng và địa chỉ vào cơ sở dữ liệu
-
-        // Thêm thông báo thành công vào Model
-        redirectAttributes.addFlashAttribute("successMessage", "Khách hàng đã được lưu thành công!");
-
-        return "redirect:/khachhang";
-    }
-
-
-
-
-
-    private void validatePhoneNumber(KhachHang khachHang, BindingResult bindingResult) {
-        String sdt = khachHang.getSdt();
-        int sdtLength = sdt.length();
-        Long khachHangId = khachHang.getKhachHangId();
-
-        // Kiểm tra độ dài số điện thoại
-        if (sdtLength < 10) {
-            bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại phải có đủ 10 số");
-        } else if (sdtLength > 10) {
-            bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại chỉ được phép có đúng 10 số");
-        } else {
-            // Kiểm tra xem số điện thoại đã tồn tại và không phải của khách hàng hiện tại
-            KhachHang existingKhachHang = khachHangService.findBySdt(sdt);
-            if (existingKhachHang != null && !existingKhachHang.getKhachHangId().equals(khachHangId)) {
-                bindingResult.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại");
-            }
-        }
-    }
-
-
     
+<<<<<<< HEAD
     @GetMapping("/searchKhachHang")
     public String searchKhachHang(@RequestParam("keyword") String keyword, Model model,
                                   @RequestParam(defaultValue = "1") int page,
@@ -292,6 +241,8 @@ public class KhachHangController {
         return "redirect:/khachhang?page=" + currentPage + "&size=" + pageSize;
     }
 
+=======
+>>>>>>> KhachHang_Long
 
 
 }

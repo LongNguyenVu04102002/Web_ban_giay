@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 
 @Builder
 @AllArgsConstructor
@@ -31,7 +30,6 @@ public class DayGiay {
 
     @NotEmpty(message = "Tên không được trống!")
     @Size(max = 100)
-    @Nationalized
     @Column(name = "ten", length = 100)
     private String ten;
 

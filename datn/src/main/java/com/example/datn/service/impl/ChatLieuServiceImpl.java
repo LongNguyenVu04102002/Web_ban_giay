@@ -1,46 +1,37 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.ChatLieu;
-import com.example.datn.repository.ChatLieuRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.ChatLieuRepository;
+import com.example.datn.service.ChatLieuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ChatLieuServiceImpl implements IService<ChatLieu> {
+public class ChatLieuServiceImpl implements ChatLieuService {
 
     @Autowired
-    private ChatLieuRepo repo;
+    private ChatLieuRepository chatLieuRepository;
 
     @Override
-    public List<ChatLieu> getAll() {
-        return repo.findAll();
+    public List<ChatLieu> getAllChatLieu() {
+        return chatLieuRepository.findAll();
     }
 
     @Override
-    public Optional<ChatLieu> getOne(Long id) {
-        return repo.findById(id);
+    public ChatLieu getById(Long id) {
+        return chatLieuRepository.findById(id).orElse(null);
     }
 
     @Override
-    public ChatLieu addOrUpdate(ChatLieu chatLieu) {
-        return repo.save(chatLieu);
+    public void saveChatLieu(ChatLieu chatLieu) {
+        chatLieuRepository.save(chatLieu);
     }
 
     @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
+    public void deleteChatLieu(Long id) {
+        chatLieuRepository.deleteById(id);
     }
 
-    @Override
-    public Page<ChatLieu> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
-    }
 }

@@ -1,33 +1,19 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.PhieuGiamGia;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.datn.entity.ThuongHieu;
+import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 public interface PhieuGiamGiaService {
 
-    Page<PhieuGiamGia> getAllPhieu(Pageable pageable);
+    ResponseEntity<?> getPhieuGiamGiaByMa(String ma);
 
-    PhieuGiamGia getPhieuById(Long id);
+    List<PhieuGiamGia> getAll();
 
-    PhieuGiamGia savePhieuGiamGia(PhieuGiamGia phieuGiamGia);
+    PhieuGiamGia getById(Long id);
 
-    Optional<PhieuGiamGia> endPhieu(Long id);
+    void save(PhieuGiamGia phieuGiamGia);
 
-    PhieuGiamGia update(PhieuGiamGia phieuGiamGia, Long id);
-
-    PhieuGiamGia delete(Long id);
-
-    Page<PhieuGiamGia> searchLoaiPhieu(Long loaiPhieu, Pageable pageable);
-
-    Page<PhieuGiamGia> searchTrangThai(String trangThai, Pageable pageable);
-
-    Page<PhieuGiamGia> searchDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable);
-
-
-    Page<PhieuGiamGia> searchDonToiThieu(BigDecimal donToiThieuMin, BigDecimal donToiThieuMax, Pageable pageable);
 }

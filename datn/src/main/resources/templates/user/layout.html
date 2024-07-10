@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="/vendors/tiny-slider/tiny-slider.css" rel="stylesheet">
+    <link href="/vendors/%40mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendors/tobii/css/tobii.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/tailwind.min.css" rel="stylesheet" type="text/css">
+
+</head>
+<body class="dark:bg-slate-900">
+    <div th:replace="user/includes/header/userHeader"></div>
+    <div layout:fragment="usercontent"></div>
+    <div th:replace="user/includes/footer/userFooter"></div>
+
+    <script src="/vendors/tiny-slider/min/tiny-slider.js"></script>
+<script src="/vendors/tobii/js/tobii.min.js"></script>
+<script src="/vendors/feather-icons/feather.min.js"></script>
+<script src="/js/user/plugins.init.js"></script>
+<script src="/js/user/app.js"></script>
+</body>
+</html>

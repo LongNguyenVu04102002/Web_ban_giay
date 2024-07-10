@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "hoaDonChiTiet")
 public class HoaDonChiTiet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hoaDonChiTietId", nullable = false)
@@ -46,7 +47,7 @@ public class HoaDonChiTiet {
 
     @ManyToOne
     @JoinColumn(name = "hoaDonId")
-    @JsonBackReference(value = "hoaDonChiTiet-hoaDon")
+    @JsonBackReference(value = "hoaDon")
     private HoaDon hoaDon;
 
     @ManyToOne

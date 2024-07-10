@@ -1,73 +1,48 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.MauSac;
 import com.example.datn.entity.ThuongHieu;
-import com.example.datn.service.IService;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @Controller
+@RequestMapping("/admin/sanpham")
 public class ThuongHieuController {
 
     @Autowired
-    private IService<ThuongHieu> thuongHieuService;
+    private ThuongHieuServiceImpl thuongHieuService;
 
-    @GetMapping("/thuong-hieu")
-    public String show(@ModelAttribute("thuongHieu") ThuongHieu thuongHieu, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        thuongHieu.setTrangThai(true);
-        return "left-menu-thuong-hieu";
-    }
-
-    @PostMapping("/thuong-hieu/add")
-    public String add(@Valid @ModelAttribute("thuongHieu") ThuongHieu thuongHieu, BindingResult result, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-thuong-hieu";
-        }
+    @GetMapping("/thuonghieu")
+    public String show(Model model) {
+        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
+        model.addAttribute("thuongHieuList", thuongHieuList);
         model.addAttribute("thuongHieu", new ThuongHieu());
-        thuongHieuService.addOrUpdate(thuongHieu);
-        Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/thuong-hieu";
+        return "admin/includes/content/sanpham/thuonghieu/home";
     }
 
-    @GetMapping("/thuong-hieu/detail/{id}")
-    public String detail(@ModelAttribute("thuongHieu") Optional<ThuongHieu> thuongHieu, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        model.addAttribute("thuongHieu", thuongHieuService.getOne(id));
-        Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "left-menu-thuong-hieu";
+    @PostMapping("/thuonghieu/save")
+    public String save(ThuongHieu thuongHieu) {
+        thuongHieuService.save(thuongHieu);
+        return "redirect:/admin/sanpham/thuonghieu";
     }
 
-    @PostMapping("/thuong-hieu/update/{id}")
-    public String update(@Valid @ModelAttribute("thuongHieu") ThuongHieu thuongHieu, BindingResult result, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-thuong-hieu";
-        }
-        model.addAttribute("thuongHieu", new ThuongHieu());
-        thuongHieuService.addOrUpdate(thuongHieu);
-        Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/thuong-hieu";
+    @GetMapping("/thuonghieu/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
+        model.addAttribute("thuongHieuList", thuongHieuList);
+        ThuongHieu thuongHieu = thuongHieuService.getById(id);
+        model.addAttribute("thuongHieu", thuongHieu);
+        return "admin/includes/content/sanpham/thuonghieu/home";
     }
 
-    @GetMapping("/thuong-hieu/remove/{id}")
-    public String remove(@ModelAttribute("thuongHieu") ThuongHieu thuongHieu, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        thuongHieuService.remove(id);
-        Page<ThuongHieu> page = thuongHieuService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/thuong-hieu";
+    @GetMapping("/thuonghieu/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        thuongHieuService.delete(id);
+        return "redirect:/admin/sanpham/thuonghieu";
     }
+    
 }
