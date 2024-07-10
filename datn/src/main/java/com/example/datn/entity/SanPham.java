@@ -19,7 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,9 +39,6 @@ public class SanPham {
     @NotEmpty(message = "Tên không được trống!")
     @Column(name = "ten")
     private String ten;
-
-    @Column(name = "namSX")
-    private Integer namSX;
 
     @Column(name = "trangThai")
     private boolean trangThai;
@@ -76,8 +74,8 @@ public class SanPham {
     @JoinColumn(name = "dayGiayId")
     private DayGiay dayGiay;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "sanPham", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "sanPhamChiTiet")
-    private Set<SanPhamChiTiet> sanPhamChiTietList;
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<SanPhamChiTiet> sanPhamChiTietList;
 
 }

@@ -1,46 +1,36 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.KichThuoc;
-import com.example.datn.repository.KichThuocRepo;
-import com.example.datn.service.IService;
+import com.example.datn.repository.KichThuocRepository;
+import com.example.datn.service.KichThuocService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class KichThuocServiceImpl implements IService<KichThuoc> {
+public class KichThuocServiceImpl implements KichThuocService {
 
     @Autowired
-    private KichThuocRepo repo;
+    private KichThuocRepository kichThuocRepository;
 
     @Override
     public List<KichThuoc> getAll() {
-        return repo.findAll();
+        return kichThuocRepository.findAll();
     }
 
     @Override
-    public Optional<KichThuoc> getOne(Long id) {
-        return repo.findById(id);
+    public KichThuoc getById(Long id) {
+        return kichThuocRepository.findById(id).orElse(null);
     }
 
     @Override
-    public KichThuoc addOrUpdate(KichThuoc kichThuoc) {
-        return repo.save(kichThuoc);
+    public void save(KichThuoc kichThuoc) {
+        kichThuocRepository.save(kichThuoc);
     }
 
     @Override
-    public void remove(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public Page<KichThuoc> pagination(Integer pageNo, Integer size) {
-        Pageable pageable = PageRequest.of(pageNo, size);
-        return repo.findAll(pageable);
+    public void delete(Long id) {
+        kichThuocRepository.deleteById(id);
     }
 }

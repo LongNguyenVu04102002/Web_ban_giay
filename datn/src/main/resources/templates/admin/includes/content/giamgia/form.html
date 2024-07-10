@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="admincontent">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white"
+            th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Phiếu Giảm Giá' : 'Cập Nhập Phiếu Giảm Giá'">
+        </h2>
+    </div>
+    <section class="relative md:py-10 bg-white px-25">
+        <div class="grid lg:grid-cols-12 gap-6 w-full">
+            <div class="lg:col-span-8">
+                <div class="p-6 rounded-md">
+                    <form th:action="@{/admin/giamgia/save}" th:object="${phieuGiamGia}" method="post">
+                        <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                            <input type="hidden" th:field="*{phieuGiamGiaId}"/>
+                            <div class="lg:col-span-4">
+                                <label class="font-semibold">Loại Phiếu:</label>
+                                <select th:field="*{loaiPhieu}" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                    <option value="0">Tiền mặt</option>
+                                    <option value="1">Phần trăm</option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-4">
+                                <label class="font-semibold">Ngày Bắt Đầu:</label>
+                                <span class="input-wrapper">
+                                    <input type="date" th:field="*{ngayBatDau}"
+                                           class="mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="dd-MM-yyyy"
+                                           th:value="${#dates.format(ngayBatDau, 'dd-MM-yyyy')}">
+                                </span>
+                            </div>
+                            <div class="lg:col-span-4">
+                                <label class="font-semibold">Ngày Kết Thúc:</label>
+                                <span class="input-wrapper">
+                                    <input type="date" th:field="*{ngayKetThuc}"
+                                           class="mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="dd-MM-yyyy"
+                                           th:value="${#dates.format(ngayKetThuc, 'dd-MM-yyyy')}">
+                                </span>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Giá Trị Đơn Tối Thiểu: </label>
+                                <input type="number" th:field="*{giaTriDonToiThieu}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Giá Trị Đơn Tối Thiểu">
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Giá Trị Giảm Tối Đa:</label>
+                                <input type="number" th:field="*{giaTriGiamToiDa}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Giá Trị Giảm Tối Đa">
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Giá Trị Giảm: </label>
+                                <input type="number" th:field="*{giaTriGiam}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Giá Trị Giảm">
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Số Lượng: </label>
+                                <input type="number" th:field="*{soLuongPhieu}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Số Lượng">
+                            </div>
+
+                        </div>
+                        <div class="mt-10 mb-10 flex justify-center space-x-4">
+                            <a th:href="@{/admin/giamgia}"
+                               class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                Quay lại
+                            </a>
+                            <button type="submit"
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
+                                <span th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
+                            </button>
+                            <a th:href="@{/admin/giamgia/form}"
+                               class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">
+                                Xóa
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

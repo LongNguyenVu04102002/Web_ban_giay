@@ -1,78 +1,47 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.MauSac;
 import com.example.datn.entity.MuiGiay;
-import com.example.datn.service.IService;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.MuiGiayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @Controller
+@RequestMapping("/admin/sanpham")
 public class MuiGiayController {
-
     @Autowired
-    private IService<MuiGiay> muiGiayService;
+    private MuiGiayServiceImpl muiGiayService;
 
-    @GetMapping("/mui-giay")
-    public String show(@ModelAttribute("muiGiay") MuiGiay muiGiay, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        muiGiay.setTrangThai(true);
-        return "left-menu-mui-giay";
-    }
-
-    @PostMapping("/mui-giay/add")
-    public String add(@Valid @ModelAttribute("muiGiay") MuiGiay muiGiay, BindingResult result, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-mui-giay";
-        }
+    @GetMapping("/muigiay")
+    public String show(Model model) {
+        List<MuiGiay> muiGiayList = muiGiayService.getAllMuiGiay();
+        model.addAttribute("muiGiayList", muiGiayList);
         model.addAttribute("muiGiay", new MuiGiay());
-        MuiGiay mg = MuiGiay.builder()
-                .ten(muiGiay.getTen())
-                .moTa(muiGiay.getMoTa())
-                .trangThai(muiGiay.isTrangThai())
-                .build();
-        muiGiayService.addOrUpdate(mg);
-        Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/mui-giay";
+        return "admin/includes/content/sanpham/muigiay/home";
     }
 
-    @GetMapping("/mui-giay/detail/{id}")
-    public String detail(@ModelAttribute("muiGiay") Optional<MuiGiay> muiGiay, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        model.addAttribute("muiGiay", muiGiayService.getOne(id));
-        Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "left-menu-mui-giay";
+    @PostMapping("/muigiay/save")
+    public String save(MuiGiay muiGiay) {
+        muiGiayService.saveMuiGiay(muiGiay);
+        return "redirect:/admin/sanpham/muigiay";
     }
 
-    @PostMapping("/mui-giay/update/{id}")
-    public String update(@Valid @ModelAttribute("muiGiay") MuiGiay muiGiay, BindingResult result, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        if (result.hasErrors()) {
-            Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-            model.addAttribute("lst", page);
-            return "left-menu-mui-giay";
-        }
-        model.addAttribute("muiGiay", new MuiGiay());
-        muiGiayService.addOrUpdate(muiGiay);
-        Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/mui-giay";
+    @GetMapping("/muigiay/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        List<MuiGiay> muiGiayList = muiGiayService.getAllMuiGiay();
+        model.addAttribute("muiGiayList", muiGiayList);
+        MuiGiay muiGiay = muiGiayService.getById(id);
+        model.addAttribute("muiGiay", muiGiay);
+        return "admin/includes/content/sanpham/muigiay/home";
     }
 
-    @GetMapping("/mui-giay/remove/{id}")
-    public String remove(@ModelAttribute("muiGiay") MuiGiay muiGiay, @PathVariable("id") Long id, Model model, @RequestParam(name = "p", defaultValue = "0") Integer p) {
-        muiGiayService.remove(id);
-        Page<MuiGiay> page = muiGiayService.pagination(p, 10);
-        model.addAttribute("lst", page);
-        return "redirect:/mui-giay";
+    @GetMapping("/muigiay/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        muiGiayService.deleteMuiGiay(id);
+        return "redirect:/admin/sanpham/muigiay";
     }
+
 }

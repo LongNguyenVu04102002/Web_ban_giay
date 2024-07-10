@@ -55,26 +55,22 @@ public class SanPhamChiTiet {
     @Column(name = "trangThai")
     private boolean trangThai;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "kichThuocId")
     private KichThuoc kichThuoc;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "mauSacId")
     private MauSac mauSac;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sanPhamId")
-    @JsonBackReference(value = "sanPhamChiTiet")
+    @JsonBackReference
     private SanPham sanPham;
 
     @OneToMany(mappedBy = "sanPhamChiTiet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "sanPhamChiTiet")
     private List<HinhAnh> lstAnh;
-
-    @OneToMany(mappedBy = "sanPhamChiTiet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "sanPhamChiTiet")
-    private List<DanhGia> danhGiaList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dotGiamGiaId")
