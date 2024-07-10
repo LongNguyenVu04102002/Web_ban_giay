@@ -6582,9 +6582,9 @@ hr{
 .container{
     width: 100%;
 }
-@media (min-width: 576){
+@media (min-width: 576px){
     .container{
-        max-width: 576;
+        max-width: 576px;
     }
 }
 @media (min-width: 640px){
@@ -6657,10 +6657,10 @@ hr{
 .prose :where(ol[type="a"]):not(:where([class~="not-prose"] *)){
     list-style-type: lower-alpha;
 }
-.prose :where(ol[type="A" s]):not(:where([class~="not-prose"] *)){
+.prose :where(ol[type="A"]):not(:where([class~="not-prose"] *)){
     list-style-type: upper-alpha;
 }
-.prose :where(ol[type="a" s]):not(:where([class~="not-prose"] *)){
+.prose :where(ol[type="a"]):not(:where([class~="not-prose"] *)){
     list-style-type: lower-alpha;
 }
 .prose :where(ol[type="I"]):not(:where([class~="not-prose"] *)){
@@ -6669,10 +6669,10 @@ hr{
 .prose :where(ol[type="i"]):not(:where([class~="not-prose"] *)){
     list-style-type: lower-roman;
 }
-.prose :where(ol[type="I" s]):not(:where([class~="not-prose"] *)){
+.prose :where(ol[type="I"]):not(:where([class~="not-prose"] *)){
     list-style-type: upper-roman;
 }
-.prose :where(ol[type="i" s]):not(:where([class~="not-prose"] *)){
+.prose :where(ol[type="i"]):not(:where([class~="not-prose"] *)){
     list-style-type: lower-roman;
 }
 .prose :where(ol[type="1"]):not(:where([class~="not-prose"] *)){
@@ -8288,10 +8288,7 @@ hr{
     padding-left: 0px;
     padding-right: 0px;
 }
-.px-16{
-    padding-left: 4rem;
-    padding-right: 4rem;
-}
+
 .px-2{
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -8319,6 +8316,13 @@ hr{
 .px-7\.5{
     padding-left: 1.875rem;
     padding-right: 1.875rem;
+}
+.px-16{
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+.px-25{
+    padding-left: 25rem;
 }
 .py-1{
     padding-top: 0.25rem;
@@ -9957,6 +9961,14 @@ hr{
         padding-left: 2rem;
         padding-right: 2rem;
     }
+    .md\:py-20 {
+        padding-top: 5rem !important;
+        padding-bottom: 5rem !important;
+    }
+    .md\:py-24 {
+        padding-top: 6rem !important;
+        padding-bottom: 6rem !important;
+    }
     :is([dir="ltr"] .ltr\:md\:mr-3){
         margin-right: 0.75rem;
     }
@@ -9991,6 +10003,18 @@ hr{
     .lg\:col-span-3{
         grid-column: span 3 / span 3;
     }
+    .lg\:col-span-4{
+        grid-column: span 4 / span 4;
+    }
+    .lg\:col-span-6 {
+        grid-column: span 6 / span 6 !important;
+    }
+    .lg\:col-span-8 {
+        grid-column: span 8 / span 8 !important;
+    }
+    .lg\:col-span-12 {
+        grid-column: span 12 / span 12 !important;
+    }
     .lg\:mb-0{
         margin-bottom: 0px;
     }
@@ -10020,6 +10044,9 @@ hr{
     }
     .lg\:grid-cols-5{
         grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
     }
     .lg\:flex-row{
         flex-direction: row;

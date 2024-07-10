@@ -4,19 +4,15 @@ import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
-import com.example.datn.service.Impl.NhanVienServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
-import com.example.datn.service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,8 +24,8 @@ public class HoaDonController {
     @Autowired
     private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
-    @Autowired
-    NhanVienServiceImpl nhanVienService;
+//    @Autowired
+//    NhanVienServiceImpl nhanVienService;
 
     @GetMapping("/hoadon")
     public String hoaDon(Model model) {
@@ -41,7 +37,7 @@ public class HoaDonController {
         List<HoaDon> hoaDonDaGiaoHang = hoaDonService.getHoaDonDaGiaoHang();
         List<HoaDon> hoaDonHoanThanh = hoaDonService.getHoaDonHoanThanh();
         List<HoaDon> hoaDonHuy = hoaDonService.getHoaDonHuy();
-        List<NhanVien> nhanViens = nhanVienService.getAllNhanVien();
+//        List<NhanVien> nhanViens = nhanVienService.getAllNhanVien();
         model.addAttribute("hoaDonList", hoaDonList);
         model.addAttribute("hoaDonChoXacNhan", hoaDonChoXacNhan);
         model.addAttribute("hoaDonDaXacNhan", hoaDonDaXacNhan);
@@ -50,7 +46,7 @@ public class HoaDonController {
         model.addAttribute("hoaDonDaGiaoHang", hoaDonDaGiaoHang);
         model.addAttribute("hoaDonHoanThanh", hoaDonHoanThanh);
         model.addAttribute("hoaDonHuy",hoaDonHuy);
-        model.addAttribute("nhanVien", nhanViens);
+//        model.addAttribute("nhanVien", nhanViens);
         return "admin/includes/content/hoadon/hoadon";
     }
 

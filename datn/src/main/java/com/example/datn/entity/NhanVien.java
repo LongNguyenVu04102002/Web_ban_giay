@@ -10,11 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +46,7 @@ public class NhanVien {
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
@@ -56,6 +60,18 @@ public class NhanVien {
 
     @Column(name = "trangThai")
     private boolean trangThai;
+
+    @Column(name = "diaChi")
+    private String diaChi;
+
+    @Column(name = "xa", length = 20)
+    private String xa;
+
+    @Column(name = "huyen", length = 20)
+    private String huyen;
+
+    @Column(name = "thanhPho", length = 20)
+    private String thanhPho;
 
     @Column(name = "role")
     private String role;

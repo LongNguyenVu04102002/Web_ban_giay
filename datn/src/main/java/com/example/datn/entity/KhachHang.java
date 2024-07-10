@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,12 +41,15 @@ public class KhachHang {
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
+//    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+    @NotNull(message = "khong dc de trong")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
     private String sdt;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "matKhau")
@@ -57,10 +61,6 @@ public class KhachHang {
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<DiaChi> diaChiList;
-
-    @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<DanhGia> danhGiaList;
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hoaDon")

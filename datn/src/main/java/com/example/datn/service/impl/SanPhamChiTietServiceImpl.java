@@ -2,7 +2,6 @@ package com.example.datn.service.Impl;
 
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.repository.SanPhamChiTietRepository;
-import com.example.datn.service.SanPhamChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

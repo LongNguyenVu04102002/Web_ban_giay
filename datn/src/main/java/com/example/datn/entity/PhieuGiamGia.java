@@ -10,10 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,23 +31,24 @@ public class PhieuGiamGia {
     private Long phieuGiamGiaId;
 
     @Size(max = 10)
-    @NotNull
-    @Column(name = "maGiamGia", nullable = false, length = 10)
+    @Column(name = "maGiamGia")
     private String maGiamGia;
 
-    @Column(name = "phanTramGiam", nullable = false)
-    private Integer phanTramGiam;
+    @Column(name = "giaTriGiam")
+    private Integer giaTriGiam;
 
-    @Column(name = "loaiPhieu", nullable = false)
-    private Integer loaiPhieu;
+    @Column(name = "loaiPhieu")
+    private boolean loaiPhieu;
 
     @Column(name = "soLuongPhieu")
     private Integer soLuongPhieu;
 
     @Column(name = "ngayBatDau")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayBatDau;
 
     @Column(name = "ngayKetThuc")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayKetThuc;
 
     @Column(name = "giaTriDonToiThieu", precision = 18)
@@ -56,11 +57,8 @@ public class PhieuGiamGia {
     @Column(name = "giaTriGiamToiDa", precision = 18)
     private BigDecimal giaTriGiamToiDa;
 
-    @Column(name = "ngayTao")
-    private LocalDate ngayTao;
-
     @Column(name = "trangThai")
-    private boolean trangThai;
+    private int trangThai;
 
     @OneToMany(mappedBy = "phieuGiamGia", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
