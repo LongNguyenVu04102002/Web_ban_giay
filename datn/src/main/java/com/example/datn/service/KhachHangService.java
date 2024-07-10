@@ -11,5 +11,5 @@ public interface KhachHangService {
     KhachHang getById(Long Id);
 
     void save(KhachHang khachHang);
-
+    KhachHang toggleTrangThai(Long khachHangId);
 }

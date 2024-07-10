@@ -19,7 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/taikhoan")
 public class KhachHangController {
-
     @Autowired
     private KhachHangService khachHangService;
 
@@ -49,6 +48,12 @@ public class KhachHangController {
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";
     }
-    
+
+    @GetMapping("/khachhang/{khachHangId}/toggle")
+    public String toggleTrangThai(@PathVariable Long khachHangId) {
+        khachHangService.toggleTrangThai(khachHangId);
+        return "redirect:/admin/taikhoan/khachhang";
+    }
+
 
 }
