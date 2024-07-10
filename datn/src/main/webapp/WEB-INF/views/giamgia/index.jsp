@@ -219,6 +219,14 @@
             }
         }
 
+        function searchAllFields() {
+            var searchQuery = document.getElementById("search").value;
+            var form = document.getElementById("searchForm");
+
+            // Gửi yêu cầu tìm kiếm mỗi khi người dùng nhập liệu
+            form.submit();
+        }
+
 
     </script>
 </head>
@@ -242,9 +250,12 @@
     </div>
     <div class="filter-container">
         <div class="filter-group" style="margin-left: 30px">
-            <label for="search">Tìm kiếm:</label>
-            <input type="text" id="search" placeholder="Tìm kiếm..."/>
+            <form id="searchForm" action="/giamgia/search" method="get">
+                <label for="search">Tìm kiếm:</label>
+                <input type="text" id="search" name="query" placeholder="Tìm kiếm..." onkeyup="searchAllFields()"/>
+            </form>
         </div>
+
         <div class="filter-group">
             <form id="filterNgay" action="/giamgia/searchByDateRange" method="get"
                   style="display: flex; align-items: center; gap: 10px">
@@ -343,39 +354,39 @@
         </thead>
         <tbody>
         <c:forEach var="listPhieu" items="${page.content}" varStatus="loop">
-                <td>${loop.index + 1}</td>
-                <td>${listPhieu.maGiamGia}</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${listPhieu.loaiPhieu == 1}">Tiền mặt</c:when>
-                        <c:when test="${listPhieu.loaiPhieu == 2}">%</c:when>
-                    </c:choose>
-                </td>
-                <td>
-                    <c:choose>
-                        <c:when test="${listPhieu.loaiPhieu == 1}">
-                            <fmt:formatNumber value="${listPhieu.tienGiam}" type="currency"/>
-                        </c:when>
-                        <c:when test="${listPhieu.loaiPhieu == 2}">
-                            ${listPhieu.phanTramGiam}%
-                        </c:when>
-                    </c:choose>
-                </td>
-                <td>${listPhieu.soLuongPhieu}</td>
-                <td><fmt:formatNumber value="${listPhieu.giaTriDonToiThieu}" type="currency"/></td>
-                <td><fmt:formatNumber value="${listPhieu.giaTriGiamToiDa}" type="currency"/></td>
-                <td>${listPhieu.ngayBatDau}</td>
-                <td>${listPhieu.ngayKetThuc}</td>
+            <td>${loop.index + 1}</td>
+            <td>${listPhieu.maGiamGia}</td>
+            <td>
+                <c:choose>
+                    <c:when test="${listPhieu.loaiPhieu == 1}">Tiền mặt</c:when>
+                    <c:when test="${listPhieu.loaiPhieu == 2}">%</c:when>
+                </c:choose>
+            </td>
+            <td>
+                <c:choose>
+                    <c:when test="${listPhieu.loaiPhieu == 1}">
+                        <fmt:formatNumber value="${listPhieu.tienGiam}" type="currency"/>
+                    </c:when>
+                    <c:when test="${listPhieu.loaiPhieu == 2}">
+                        ${listPhieu.phanTramGiam}%
+                    </c:when>
+                </c:choose>
+            </td>
+            <td>${listPhieu.soLuongPhieu}</td>
+            <td><fmt:formatNumber value="${listPhieu.giaTriDonToiThieu}" type="currency"/></td>
+            <td><fmt:formatNumber value="${listPhieu.giaTriGiamToiDa}" type="currency"/></td>
+            <td>${listPhieu.ngayBatDau}</td>
+            <td>${listPhieu.ngayKetThuc}</td>
             <td class="
                     <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">trangThai-dangdienra</c:if>
                     <c:if test="${listPhieu.trangThai == 'Sắp diễn ra'}">trangThai-sapdienra</c:if>
                     <c:if test="${listPhieu.trangThai == 'Kết thúc'}">trangThai-ketthuc</c:if>">${listPhieu.trangThai}</td>
             <td>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="/giamgia/detail/${listPhieu.phieuGiamGiaId}">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">
+                <div style="display: flex; gap: 10px;">
+                    <a href="/giamgia/detail/${listPhieu.phieuGiamGiaId}">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch"
                                    id="flexSwitchCheckDefault${listPhieu.phieuGiamGiaId}"
@@ -383,9 +394,9 @@
                                    <c:if test="${listPhieu.trangThai == 'Đang diễn ra'}">checked</c:if>
                             >
                         </div>
-                        </c:if>
-                    </div>
-                </td>
+                    </c:if>
+                </div>
+            </td>
 
 
             </tr>

@@ -143,5 +143,10 @@ public class PhieuGiamGiaImpl implements PhieuGiamGiaService {
 
     }
 
+//    @Override
+//    public Page<PhieuGiamGia> searchAllFields(String query, Pageable pageable) {
+//        return repository.searchAllFields(query, pageable);
+//    }
+
 
 }

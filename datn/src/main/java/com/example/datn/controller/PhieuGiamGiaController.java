@@ -262,10 +262,37 @@ public class PhieuGiamGiaController {
             bindingResult.rejectValue("giaTriGiamToiDa", "Compare.phieuGiamGia.giaTriGiamToiDa", "Giá trị giảm tối đa không được lớn hơn tiền giảm.");
         }
 
-        if (phieuGiamGia.getNgayBatDau() != null && phieuGiamGia.getNgayBatDau().isBefore(LocalDate.now())) {
-            bindingResult.rejectValue("ngayBatDau", "Invalid.phieuGiamGia.ngayBatDau", "Ngày bắt đầu không được chọn trước ngày hôm nay.");
-        }
+//        if (phieuGiamGia.getNgayBatDau() != null && phieuGiamGia.getNgayBatDau().isBefore(LocalDate.now())) {
+//            bindingResult.rejectValue("ngayBatDau", "Invalid.phieuGiamGia.ngayBatDau", "Ngày bắt đầu không được chọn trước ngày hôm nay.");
+//        }
     }
+
+//    @GetMapping("/search")
+//    public String searchAllFields(@RequestParam(name = "page", defaultValue = "0") int page,
+//                                  @RequestParam("query") String query,
+//                                  Model model) {
+////        // Số lượng phần tử trên mỗi trang
+////        int pageSize = 10;
+////
+////        // Tìm kiếm và lấy dữ liệu phân trang
+////        Page<PhieuGiamGia> searchResults = service.searchAllFields(query, PageRequest.of(page, pageSize));
+////
+////        // Các thông tin cần thiết để trả về trang JSP
+////        model.addAttribute("searchResults", searchResults.getContent());
+////        model.addAttribute("currentPage", page);
+////        model.addAttribute("totalPages", searchResults.getTotalPages());
+////        model.addAttribute("query", query);
+////
+////        return "giamgia"; // Tên của trang JSP để hiển thị kết quả tìm kiếm và phân trang
+//
+//        Page<PhieuGiamGia> phieuGiamGias;
+//        if (page < 1) page = 1;
+//        Pageable pageable = PageRequest.of(page - 1, 5);
+//        phieuGiamGias = service.searchAllFields(query, pageable);
+//        model.addAttribute("page", phieuGiamGias);
+//        return "giamgia/left-menu-phieu";
+//    }
+
 
 
 }

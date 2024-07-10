@@ -30,4 +30,7 @@ public interface PhieuGiamGiaService {
 
 
     Page<PhieuGiamGia> searchDonToiThieu(BigDecimal donToiThieuMin, BigDecimal donToiThieuMax, Pageable pageable);
+
+//    Page<PhieuGiamGia> searchAllFields(String query, Pageable pageable);
+
 }
