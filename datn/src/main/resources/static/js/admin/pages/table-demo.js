@@ -1,86 +1,106 @@
 $(document).ready(function () {
-    $('#data-table-all, #data-table-cancel, #data-table-delivery, #data-table-confirm, #data-table-confirmed, #data-table-shipping, #data-table-delivered, #data-table-completed, #data-table-cart, #data-table-sp, #data-table-pgg, #data-table-account').DataTable({
-        paging: true,
-        searching: true,
-        ordering: true,
-        info: true,
-        lengthChange: false,
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json'
-        }
-    });
+    const tables = [
+        '#data-table-all', '#data-table-cancel', '#data-table-delivery',
+        '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
+        '#data-table-delivered', '#data-table-completed', '#data-table-cart',
+        '#data-table-sp', '#data-table-pgg', '#data-table-account'
+    ];
 
-    $('#search').on('input', function () {
-        const keyword = $(this).val().toLowerCase();
-        $('#data-table-all, #data-table-cancel, #data-table-delivery, #data-table-confirm, #data-table-confirmed, #data-table-shipping, #data-table-delivered, #data-table-completed, #data-table-cart, #data-table-sp, #data-table-pgg').DataTable().search(keyword).draw();
-    });
+    const initializeDataTable = (selector) => {
+        $(selector).DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            lengthChange: false,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json'
+            }
+        });
+    };
 
-    $('#trangThaiFilter').on('change', function () {
-        const selectedTrangThai = $(this).val();
-        $('#data-table-all, #data-table-cancel, #data-table-delivery, #data-table-confirm, #data-table-confirmed, #data-table-shipping, #data-table-delivered, #data-table-completed, #data-table-cart').DataTable().column(7).search(selectedTrangThai).draw();
-    });
+    tables.forEach(initializeDataTable);
 
-    $('#loaiHoaDonFilter').on('change', function () {
-        const selectedLoaiHoaDon = $(this).val();
-        $('#data-table-all, #data-table-cancel, #data-table-delivery, #data-table-confirm, #data-table-confirmed, #data-table-shipping, #data-table-delivered, #data-table-completed, #data-table-cart').DataTable().column(5).search(selectedLoaiHoaDon).draw();
-    });
+    const applyGlobalSearch = (event) => {
+        const keyword = $(event.target).val().toLowerCase();
+        tables.forEach(selector => {
+            $(selector).DataTable().search(keyword).draw();
+        });
+    };
 
-    $('#maNhanVienFilter').on('change', function () {
-        const selectedMaNhanVien = $(this).val();
-        $('#data-table-all, #data-table-cancel, #data-table-delivery, #data-table-confirm, #data-table-confirmed, #data-table-shipping, #data-table-delivered, #data-table-completed, #data-table-cart').DataTable().column(3).search(selectedMaNhanVien).draw();
-    });
+    $('#search').on('input', applyGlobalSearch);
 
-    $('#sanPhamFilter').on('change', function () {
-        const selectedTrangThai = $(this).val();
-        $('#data-table-sp').DataTable().column(3).search(selectedTrangThai).draw();
-    });
+    const filterColumn = (filterSelector, columnIndex, tableSelector = tables) => {
+        $(filterSelector).on('change', function () {
+            const value = $(this).val();
+            tableSelector.forEach(selector => {
+                $(selector).DataTable().column(columnIndex).search(value).draw();
+            });
+        });
+    };
 
-    $('#loaiPhieuFilter').on('change', function () {
-        const selectedLoaiPhieu = $(this).val();
-        $('#data-table-pgg').DataTable().column(2).search(selectedLoaiPhieu).draw();
-    });
+    filterColumn('#trangThaiFilter', 7);
+    filterColumn('#loaiHoaDonFilter', 5);
+    filterColumn('#maNhanVienFilter', 3);
+    filterColumn('#sanPhamFilter', 3, ['#data-table-sp']);
+    filterColumn('#loaiPhieuFilter', 2, ['#data-table-pgg']);
+    filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
+    filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
+    filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
 
-    $('#trangThaiPggFilter').on('change', function () {
-        const selectedTrangThaiPgg = $(this).val();
-        $('#data-table-pgg').DataTable().column(9).search(selectedTrangThaiPgg).draw();
-    });
-
-    $('#gioiTinhAccFilter').on('change', function () {
-        const selectedGioiTinh = $(this).val();
-        $('#data-table-account').DataTable().column(5).search(selectedGioiTinh).draw();
-    });
-
-    $('#trangThaiAccFilter').on('change', function () {
-        const selectedTrangThai = $(this).val();
-        $('#data-table-account').DataTable().column(7).search(selectedTrangThai).draw();
-    });
-
-    $('#fromDate, #toDate').on('change', function() {
+    const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
         const toDate = $('#toDate').val();
 
         if (fromDate && toDate) {
             $('#data-table-pgg').DataTable().draw();
+            $('#data-table-account').DataTable().draw();
         }
-    });
+    };
+
+    $('#fromDate, #toDate').on('change', filterDateRange);
 
     $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            const fromDate = $('#fromDate').val();
-            const toDate = $('#toDate').val();
-            const startDate = data[7];
-            const endDate = data[8];
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id === 'data-table-pgg') {
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const startDate = data[7];
+                const endDate = data[8];
 
-            return (fromDate === '' && toDate === '') ||
-                (fromDate === '' && endDate <= toDate) ||
-                (fromDate <= startDate && toDate === '') ||
-                (fromDate <= startDate && endDate <= toDate);
-            
+                if (!fromDate && !toDate) {
+                    return true;
+                }
+                if (!fromDate && endDate <= toDate) {
+                    return true;
+                }
+                if (fromDate <= startDate && !toDate) {
+                    return true;
+                }
+                if (fromDate <= startDate && endDate <= toDate) {
+                    return true;
+                }
+                return false;
+} else if (settings.nTable.id === 'data-table-account') {
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const dateStr = data[4];
+
+                if (!fromDate && !toDate) {
+                    return true;
+                }
+
+                if (fromDate && toDate) {
+                    return dateStr >= fromDate && dateStr <= toDate;
+                } else if (fromDate) {
+                    return dateStr >= fromDate;
+                } else if (toDate) {
+                    return dateStr <= toDate;
+                }
+
+                return true;
+            }
+            return true;
         }
     );
-
-    $('#data-table-pgg').DataTable().on('draw', function() {
-        $('#data-table-pgg').DataTable().columns([7, 8]).search('').draw();
-    });
-
 });
