@@ -68,7 +68,7 @@ public class HoaDonController {
     @GetMapping("/hoadon/cartdetail/{id}")
     public String getCartDetail(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getALL();
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";

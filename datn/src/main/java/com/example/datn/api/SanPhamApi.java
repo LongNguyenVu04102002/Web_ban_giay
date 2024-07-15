@@ -17,14 +17,14 @@ public class SanPhamApi {
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllSanPham(){
-        return sanPhamService.getAllSanPham();
-    }
-
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<?> getSanPhamById(@PathVariable Long id) {
-        return sanPhamService.getAllSanPhamById(id);
-    }
+//    @GetMapping("/getAll")
+//    public ResponseEntity<?> getAllSanPham(){
+//        return sanPhamService.getAllSanPham();
+//    }
+//
+//    @GetMapping("/getById/{id}")
+//    public ResponseEntity<?> getSanPhamById(@PathVariable Long id) {
+//        return sanPhamService.getAllSanPhamById(id);
+//    }
 
 }

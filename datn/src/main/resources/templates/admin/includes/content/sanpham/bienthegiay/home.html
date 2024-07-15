@@ -4,13 +4,13 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Biến Thể Giầy</title>
 </head>
 <body>
 <div layout:fragment="admincontent">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
-            Nhân Viên
+            Biến Thể Giầy
         </h2>
     </div>
     <div class="bg-white">
@@ -23,17 +23,7 @@
                 </label>
                 <div class="flex-shrink-0">
                     <label>
-                        <select id="gioiTinhAccFilter" name="loaiHoaDon"
-                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
-                            <option>Giới Tính</option>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="flex-shrink-0">
-                    <label>
-                        <select id="trangThaiAccFilter" name="trangThai"
+                        <select id="trangThaiSpFilter" name="trangThai"
                                 class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
                             <option value="0">Trạng Thái</option>
                             <option value="Ngừng hoạt động">Ngừng hoạt động</option>
@@ -41,70 +31,59 @@
                         </select>
                     </label>
                 </div>
-                <span class="ml-4">From Date:</span>
-                <label class="flex-grow">
-                    <input type="date" id="fromDate"
-                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                           placeholder="From date">
-                </label>
-                <span>To Date:</span>
-                <label class="flex-grow">
-                    <input type="date" id="toDate"
-                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                           placeholder="To date">
-                </label>
             </div>
             <div>
-                <a th:href="@{/admin/taikhoan/nhanvien/form}"
+                <a th:href="@{/admin/sanpham/bienthegiay/form}"
                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
-                    Thêm nhân viên
+                    Thêm Biến Thể Giầy
                 </a>
             </div>
         </div>
 
         <div id="DataTableAll" class="px-4">
-            <table id="data-table-account" class="table-default table-hover data-table">
+            <table id="data-table-sp" class="table-default table-hover data-table">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Tên Nhân Viên</th>
-                    <th>Email</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Ngày Sinh</th>
-                    <th>Giới Tính</th>
-                    <th>Địa Chỉ</th>
+                    <th>Tên Biến Thể Giầy</th>
+                    <th>Chất Liệu</th>
+                    <th>Cổ Giầy</th>
+                    <th>Dây Giầy</th>
+                    <th>Đế Giầy</th>
+                    <th>Lót Giầy</th>
+                    <th>Mũi Giầy</th>
+                    <th>Thương Hiệu</th>
+                    <th>Mô tả</th>
                     <th>Trạng Thái</th>
                     <th>Hành Động</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="nv, rowStat : ${nhanVienList}">
+                <tr th:each="sp, rowStat : ${sanPhamList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td th:text="${nv.hoTen}"></td>
-                    <td th:text="${nv.email}"></td>
-                    <td th:text="${nv.sdt}"></td>
-                    <td th:text="${nv.ngaySinh}"></td>
+                    <td th:text="${sp.ten}"></td>
+                    <td th:text="${sp.chatLieu.ten}"></td>
+                    <td th:text="${sp.coGiay.ten}"></td>
+                    <td th:text="${sp.dayGiay.ten}"></td>
+                    <td th:text="${sp.deGiay.ten}"></td>
+                    <td th:text="${sp.lotGiay.ten}"></td>
+                    <td th:text="${sp.muiGiay.ten}"></td>
+                    <td th:text="${sp.thuongHieu.ten}"></td>
+                    <td th:text="${sp.moTa}"></td>
                     <td>
-                        <button th:class="${nv.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${nv.gioiTinh ? 'Nam' : 'Nữ'}"></span>
-                        </button>
-                    </td>
-                    <td></td>
-<!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
-                    <td>
-                        <button th:class="${nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${sp.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/taikhoan/nhanvien/update/{id}(id=${nv.nhanVienId})}" method="get">
+                        <form th:action="@{/admin/sanpham/giay/update/{id}(id=${sp.sanPhamId})}" method="post">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!nv.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${!sp.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
-                        <a th:href="@{/admin/taikhoan/nhanvien/detail/{id}(id=${nv.nhanVienId})}">
+                        <a th:href="@{/admin/sanpham/giay/detail/{id}(id=${sp.sanPhamId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                  height="24" fill="none" viewBox="0 0 24 24">

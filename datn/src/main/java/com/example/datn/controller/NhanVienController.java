@@ -43,5 +43,10 @@ public class NhanVienController {
         return "redirect:/admin/taikhoan/nhanvien";
     }
 
+    @GetMapping("/nhanvien/update/{id}")
+    public String toggleTrangThai(@PathVariable Long id) {
+        nhanVienService.updateTrangThai(id);
+        return "redirect:/admin/taikhoan/nhanvien";
+    }
 
 }
