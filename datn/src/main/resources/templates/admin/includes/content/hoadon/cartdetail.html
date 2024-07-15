@@ -7,211 +7,203 @@
     <title>Title</title>
 </head>
 <body>
-    <div layout:fragment="admincontent">
-        <div class="container mx-auto">
-            <div class="mb-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h3>
-                        <span>Chỉnh Sửa Hóa Đơn</span>
-                        <span class="ltr:ml-2 rtl:mr-2 ml-2" th:text="${hoaDon.maVanDon}"></span>
-                    </h3>
-                    <div>
-                        <a class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"
-                           th:href="@{/admin/hoadon/detail/{id}(id=${hoaDon.hoaDonId})}" type="submit">
-                            Quay lại
-                        </a>
-                    </div>
+<div layout:fragment="admincontent">
+    <div class="container mx-auto">
+        <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <h3>
+                    <span>Chỉnh Sửa Hóa Đơn</span>
+                    <span class="ltr:ml-2 rtl:mr-2 ml-2" th:text="${hoaDon.maVanDon}"></span>
+                </h3>
+                <div>
+                    <a class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"
+                       th:href="@{/admin/hoadon/detail/{id}(id=${hoaDon.hoaDonId})}" type="submit">
+                        Quay lại
+                    </a>
                 </div>
             </div>
-            <div class="xl:flex gap-4 mt-4">
-                <div class="w-full">
-                    <div class="card adaptable-card">
-                        <div class="card-body flex items-center justify-between">
-                            <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
-                            <div class="flex">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#dialogSize" class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
-                                    Thêm sản phẩm
-                                </button>
-                                <div  class="modal fade" id="dialogSize" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog dialog md:max-w-[960px]">
-                                        <div class="dialog-content">
-                                            <label>
-                                                <input type="text" id="search" class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                                                       placeholder="Search...">
-                                            </label>
-                                            <div id="DataTableCart">
-                                                <table id="data-table-cart" class="table-default table-hover data-table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Tên sản phẩm</th>
-                                                        <th>Màu sắc</th>
-                                                        <th>Kích thước</th>
-                                                        <th>Giá</th>
-                                                        <th>Hành động</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr th:each="spct, rowStat : ${sanPhamChiTietList}">
-                                                        <td th:text="${rowStat.index + 1}"></td>
-                                                        <td th:text="${spct.getSanPham().getTen()}"></td>
-                                                        <td th:text="${spct.getMauSac().getTen()}"></td>
-                                                        <td th:text="${spct.getKichThuoc().getTen()}"></td>
-                                                        <td th:text="${#numbers.formatDecimal(spct.getSanPham().getGiaBan(), 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800"
-                                                                    th:data-id="${spct.getSanPhamChiTietId}">
+        </div>
+        <div class="xl:flex gap-4 mt-4">
+            <div class="w-full">
+                <div class="card adaptable-card">
+                    <div class="card-body flex items-center justify-between">
+                        <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
+                        <div class="flex">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#dialogSize"
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                Thêm sản phẩm
+                            </button>
+                            <div class="modal fade" id="dialogSize" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog dialog md:max-w-[960px]">
+                                    <div class="dialog-content">
+                                        <label>
+                                            <input type="text" id="search"
+                                                   class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                                                   placeholder="Search...">
+                                        </label>
+                                        <div id="DataTableCart">
+                                            <table id="data-table-cart" class="table-default table-hover data-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Màu sắc</th>
+                                                    <th>Kích thước</th>
+                                                    <th>Giá</th>
+                                                    <th>Hành động</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="spct, rowStat : ${sanPhamChiTietList}">
+                                                    <td th:text="${rowStat.index + 1}"></td>
+                                                    <td th:text="${spct.getSanPham().getTen()}"></td>
+                                                    <td th:text="${spct.getMauSac().getTen()}"></td>
+                                                    <td th:text="${spct.getKichThuoc().getTen()}"></td>
+                                                    <td th:text="${#numbers.formatDecimal(spct.getGiaBan(), 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                                    <td>
+                                                        <form th:action="@{/admin/hoadon/update}" method="post">
+                                                            <input type="hidden" name="idHoaDon"
+                                                                   th:value="${hoaDon.hoaDonId}"/>
+                                                            <input type="hidden" name="idSanPhamChiTiet"
+                                                                   th:value="${spct.getSanPhamChiTietId()}"/>
+                                                            <button type="submit"
+                                                                    class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800">
                                                                 Chọn
                                                             </button>
-
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="overflow-x-auto">
-                                <table id="selected-products-table" class="table-default table-hover" >
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Màu sắc</th>
-                                        <th>Kích thước</th>
-                                        <th>Giá</th>
-                                        <th>Số Lượng</th>
-                                        <th>Tổng</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="hdct, rowStat : ${hoaDon.hoaDonChiTietList}">
-                                        <td th:text="${rowStat.index + 1}"></td>
-                                        <td>
-                                            <div class="flex items-center">
+                    </div>
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table id="selected-products-table" class="table-default table-hover">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Màu sắc</th>
+                                    <th>Kích thước</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="hdct : ${hoaDon.hoaDonChiTietList}">
+                                    <td>
+                                        <form th:action="@{/admin/hoadon/delete}" method="post">
+                                            <input type="hidden" name="hoaDonId"
+                                                   th:value="${hoaDon.hoaDonId}"/>
+                                            <input type="hidden" name="hoaDonChiTietId"
+                                                   th:value="${hdct.hoaDonChiTietId}"/>
+                                            <button type="submit" class="text-red-500 hover:text-red-700"
+                                                    th:disabled="${hoaDon.hoaDonChiTietList.size() == 1}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true"
+                                                     class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center">
                                             <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
                                                 <img class="avatar-img avatar-rounded" src="img/products/product-2.jpg"
                                                      loading="lazy">
                                             </span>
-                                                <div class="ml-4 text-center">
-                                                    <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
-                                                </div>
+                                            <div class="ml-4 text-center">
+                                                <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
                                             </div>
-                                        </td>
-                                        <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
-                                        <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
-                                        <td>
-                                            <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
-                                            VNĐ
-                                        </td>
-                                        <td >
-                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                                    class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
-                                                -
-                                            </button>
-                                            <input min="0" name="quantity" th:value="${hdct.getSoLuong()}"  type="number"
+                                        </div>
+                                    </td>
+                                    <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
+                                    <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                    <td>
+                                        <div class="inline-flex items-center justify-center space-x-2">
+                                            <form th:action="@{/admin/hoadon/update/stepdown}" method="post">
+                                                <input type="hidden" name="hoaDonId"
+                                                       th:value="${hoaDon.hoaDonId}"/>
+                                                <input type="hidden" name="hoaDonChiTietId"
+                                                       th:value="${hdct.hoaDonChiTietId}"/>
+                                                <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                        class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                                    -
+                                                </button>
+                                            </form>
+                                            <input min="0" name="quantity" th:value="${hdct.getSoLuong()}" type="number"
                                                    class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
-                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                                    class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">
-                                                +
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
-                                            VNĐ
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td class="!border-t-0" colspan="5"></td>
-                                        <td class="font-semibold !border-t-0">Tạm Tính</td>
-                                        <td class="!py-5 !border-t-0">
-                                            <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.sanPham.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
-                                            VNĐ
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="!border-t-0" colspan="5"></td>
-                                        <td class="font-semibold !border-t-0">Phí ship</td>
-                                        <td class="!py-5 !border-t-0">
-                                            <span th:text="${hoaDon.phiShip != null ? #numbers.formatDecimal(hoaDon.phiShip, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
-                                        </td>
+                                            <form th:action="@{/admin/hoadon/update/stepup}" method="post">
+                                                <input type="hidden" name="hoaDonId"
+                                                       th:value="${hoaDon.hoaDonId}"/>
+                                                <input type="hidden" name="hoaDonChiTietId"
+                                                       th:value="${hdct.hoaDonChiTietId}"/>
+                                                <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                        class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                                    +
+                                                </button>
+                                            </form>
+                                        </div>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="!border-t-0" colspan="5"></td>
-                                        <td class="font-semibold !border-t-0">Tiền giảm</td>
-                                        <td class="!py-5 !border-t-0">
-                                            <span th:text="${hoaDon.tienGiam != null ? #numbers.formatDecimal(hoaDon.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="!border-t-0" colspan="5"></td>
-                                        <td class="font-semibold text-base">Tổng tiền</td>
-                                        <td class="font-semibold text-base !py-5">
-                                            <span th:text="${#numbers.formatDecimal(hoaDon.tongTien, 1, 'COMMA', 0, 'POINT')}"></span>
-                                            VNĐ
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                                    </td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="!border-t-0" colspan="5"></td>
+                                    <td class="font-semibold !border-t-0">Tạm Tính</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="5"></td>
+                                    <td class="font-semibold !border-t-0">Phí ship</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${hoaDon.phiShip != null ? #numbers.formatDecimal(hoaDon.phiShip, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="5"></td>
+                                    <td class="font-semibold !border-t-0">Tiền giảm</td>
+                                    <td class="!py-5 !border-t-0">
+                                        <span th:text="${hoaDon.tienGiam != null ? #numbers.formatDecimal(hoaDon.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="!border-t-0" colspan="5"></td>
+                                    <td class="font-semibold text-base">Tổng tiền</td>
+                                    <td class="font-semibold text-base !py-5">
+                                        <span th:text="${#numbers.formatDecimal(hoaDon.tongTien, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        VNĐ
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<script>
-    $(document).ready(function() {
-        const selectedProducts = [];
-
-        function addProductToTable(product) {
-            const productRow = `
-            <tr>
-                <td>${product.index + 1}</td>
-                <td>${product.ten}</td>
-                <td>${product.mauSac}</td>
-                <td>${product.kichThuoc}</td>
-                <td>${product.giaBan} VNĐ</td>
-                <td>
-                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                            class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">-</button>
-                    <input min="0" name="quantity" value="1" type="number"
-                           class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
-                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                            class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">+</button>
-                </td>
-                <td>${product.giaBan} VNĐ</td>
-            </tr>
-        `;
-
-            $('#selected-products-table tbody').append(productRow);
-        }
-
-        $('.btn-select-product').click(function() {
-            const productId = $(this).data('id');
-            const productRow = $(this).closest('tr');
-            const product = {
-                index: selectedProducts.length + 1,
-                ten: productRow.find('td:nth-child(2)').text(),
-                mauSac: productRow.find('td:nth-child(3)').text(),
-                kichThuoc: productRow.find('td:nth-child(4)').text(),
-                giaBan: parseFloat(productRow.find('td:nth-child(5)').text()),
-            };
-            console.log(product)
-            selectedProducts.push(product);
-            addProductToTable(product);
-            $('#dialogSize').modal('hide');
-        });
-    });
-</script>
-
-
+</div>
 </body>
 </html>

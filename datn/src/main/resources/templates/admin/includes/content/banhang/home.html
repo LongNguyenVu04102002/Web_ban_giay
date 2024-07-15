@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to handle form toggling
+            function handleToggleForm(toggleId, formSectionId) {
+                const switcher = document.getElementById(toggleId);
+                const formSection = document.getElementById(formSectionId);
+
+                if (switcher && formSection) {
+                    switcher.addEventListener('change', function () {
+                        formSection.classList.toggle('hidden-visibility', !this.checked);
+                    });
+                }
+            }
+
+            // Initialize form toggle handlers
+            handleToggleForm('toggleForm', 'form-section');
+            handleToggleForm('toggleForm2', 'form-section2');
+            handleToggleForm('toggleForm3', 'form-section3');
+            handleToggleForm('toggleForm4', 'form-section4');
+            handleToggleForm('toggleForm5', 'form-section5');
+
+            // Load saved customer data
+            const customerNameSpan = document.querySelector('#customer-name .font-semibold');
+            const customerEmailSpan = document.querySelector('#customer-email .font-semibold');
+            const customerPhoneSpan = document.querySelector('#customer-phone .font-semibold');
+            const customerIdInput = document.getElementById('customer-id');
+
+            const savedCustomer = JSON.parse(localStorage.getItem('selectedCustomer'));
+            if (savedCustomer) {
+                customerIdInput.value = savedCustomer.id;
+                customerNameSpan.textContent = savedCustomer.name;
+                customerEmailSpan.textContent = savedCustomer.email;
+                customerPhoneSpan.textContent = savedCustomer.phone;
+
+                document.getElementById('customer-name').style.display = 'flex';
+                document.getElementById('customer-email').style.display = 'flex';
+                document.getElementById('customer-phone').style.display = 'flex';
+            }
+
+            document.getElementById('thanhToanButton').addEventListener('click', function () {
+                localStorage.removeItem('selectedCustomer');
+            });
+        });
+
+        function selectCustomer(button) {
+            const khachHangId = button.getAttribute('data-id');
+            const hoTen = button.getAttribute('data-ho-ten');
+            const email = button.getAttribute('data-email');
+            const sdt = button.getAttribute('data-sdt');
+
+            // Update the content of spans
+            document.getElementById('customer-id').value = khachHangId;
+            document.querySelector('#customer-name .font-semibold').textContent = hoTen;
+            document.querySelector('#customer-email .font-semibold').textContent = email;
+            document.querySelector('#customer-phone .font-semibold').textContent = sdt;
+
+            // Show customer info section
+            document.getElementById('customer-name').style.display = 'flex';
+            document.getElementById('customer-email').style.display = 'flex';
+            document.getElementById('customer-phone').style.display = 'flex';
+
+            // Save customer info to localStorage
+            const customer = {id: khachHangId, name: hoTen, email: email, phone: sdt};
+            localStorage.setItem('selectedCustomer', JSON.stringify(customer));
+
+            // Hide the modal
+            const modal = document.getElementById('dialogKhachHang1');
+            if (modal) {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+<div layout:fragment="admincontent">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white">
+            Bán Hàng Tại Quầy
+        </h2>
+    </div>
+    <div class="tabs bg-white">
+        <div role="tablist" class="tab-list tab-list-pill mx-4">
+            <button class="tab-nav tab-nav-pill active mt-3" data-bs-toggle="tab" data-bs-target="#tab-all" role="tab"
+                    aria-selected="true" tabindex="0">
+                Hóa Đơn 1
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-pending-confirm"
+                    role="tab" aria-selected="false" tabindex="0">
+                Hóa Đơn 2
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-pending-confirmed"
+                    role="tab" aria-selected="false" tabindex="0">
+                Hóa Đơn 3
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-pending-delivery"
+                    role="tab" aria-selected="false" tabindex="0">
+                Hóa Đơn 4
+            </button>
+            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab-shipping" role="tab"
+                    aria-selected="false" tabindex="0">
+                Hóa Đơn 5
+            </button>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-all" role="tabpanel" aria-labelledby="tab-all"
+                 tabindex="0">
+                <div id="DataTableAll">
+                    <div class="modal fade" id="dialogSanPham1" tabindex="-1"
+                         aria-hidden="true">
+                        <div class="modal-dialog dialog md:max-w-[960px]">
+                            <div class="dialog-content">
+                                <label>
+                                    <input type="text" id="search1"
+                                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                                           placeholder="Search...">
+                                </label>
+                                <div id="DataTableCart1">
+                                    <table id="data-table-cart1"
+                                           class="table-default table-hover data-table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Màu sắc</th>
+                                            <th>Kích thước</th>
+                                            <th>Giá</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="spct, rowStat : ${sanPhamChiTietList}">
+                                            <td th:text="${rowStat.index + 1}"></td>
+                                            <td th:text="${spct.getSanPham().getTen()}"></td>
+                                            <td th:text="${spct.getMauSac().getTen()}"></td>
+                                            <td th:text="${spct.getKichThuoc().getTen()}"></td>
+                                            <td th:text="${#numbers.formatDecimal(spct.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                            <td>
+                                                <form th:action="@{/admin/banhang/addToCart}" method="post">
+                                                    <input type="hidden" name="gioHangId"
+                                                           th:value="${gioHangList.get(0).gioHangId}"/>
+                                                    <input type="hidden" name="sanPhamChiTietId"
+                                                           th:value="${spct.sanPhamChiTietId}"/>
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800">
+                                                        Chọn
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/banhang/save}" method="post">
+                        <div class="xl:flex gap-4 mt-4">
+                            <div class="w-full">
+                                <div class="card adaptable-card">
+                                    <div class="card-body flex items-center justify-between">
+                                        <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
+                                        <div class="flex">
+                                            <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#dialogSanPham1"
+                                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                                Thêm sản phẩm
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body"
+                                         th:if="${gioHangList.get(0).gioHangChiTietList != null and #lists.size(gioHangList.get(0).gioHangChiTietList) > 0}">
+                                        <input type="hidden" name="gioHangId"
+                                               th:value="${gioHangList.get(0).gioHangId}"/>
+                                        <table id="data-table-all" class="table-default table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Màu sắc</th>
+                                                <th>Kích thước</th>
+                                                <th>Giá</th>
+                                                <th>Số Lượng</th>
+                                                <th>Tổng</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="ghct, iterStat : ${gioHangList.get(0).gioHangChiTietList}">
+                                                <td>
+                                                    <a th:href="@{/admin/banhang/delete/{id}(id=${ghct.gioHangChiTietId})}"
+                                                       class="text-red-500 hover:text-red-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                             viewBox="0 0 24 24" stroke-width="1.5"
+                                                             stroke="currentColor" aria-hidden="true"
+                                                             class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                                        </svg>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="flex items-center ml-8">
+                                                    <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
+                                                        <!-- <img class="avatar-img avatar-rounded" th:src="@{${gh.gioHangChiTietList[0].sanPhamChiTiet.sanPham.image}}" loading="lazy"> -->
+                                                    </span>
+                                                        <div class="ml-4 text-center">
+                                                            <h6 th:text="${ghct.sanPhamChiTiet.sanPham.ten}"></h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td th:text="${ghct.sanPhamChiTiet.mauSac.ten}"></td>
+                                                <td th:text="${ghct.sanPhamChiTiet.kichThuoc.ten}"></td>
+                                                <td>
+                                                    <span th:text="${#numbers.formatDecimal(ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                    VNĐ
+                                                </td>
+                                                <td>
+                                                    <div class="inline-flex items-center justify-center space-x-2">
+                                                        <form th:action="@{/admin/banhang/update/stepdown}"
+                                                              method="post">
+                                                            <input type="hidden" name="gioHangChiTietId"
+                                                                   th:value="${ghct.gioHangChiTietId}"/>
+                                                            <input type="hidden" name="sanPhamChiTietId"
+                                                                   th:value="${ghct.sanPhamChiTiet.sanPhamChiTietId}"/>
+                                                            <button type="submit"
+                                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                                    class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                                                -
+                                                            </button>
+                                                        </form>
+                                                        <input min="1" name="quantity" type="number"
+                                                               th:value="${ghct.soLuong}"
+                                                               class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
+                                                        <form th:action="@{/admin/banhang/update/stepup}" method="post">
+                                                            <input type="hidden" name="gioHangChiTietId"
+                                                                   th:value="${ghct.gioHangChiTietId}"/>
+                                                            <input type="hidden" name="sanPhamChiTietId"
+                                                                   th:value="${ghct.sanPhamChiTiet.sanPhamChiTietId}"/>
+                                                            <button type="submit"
+                                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                                    class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                                                +
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${#numbers.formatDecimal(ghct.soLuong * ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                    VNĐ
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-body"
+                                         th:if="${gioHangList.get(0).gioHangChiTietList == null or #lists.size(gioHangList.get(0).gioHangChiTietList) == 0}">
+                                        <p class="text-center">Giỏ hàng của bạn đang trống.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full mt-4">
+                            <div class="grid gap-4">
+                                <div class="card card-layout-frame card-body">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="mb-4">Thông Tin Khách Hàng</h3>
+                                        <div class="flex">
+                                            <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#dialogKhachHang1"
+                                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                                Chọn khách hàng
+                                            </button>
+                                            <div class="modal fade" id="dialogKhachHang1" tabindex="-1"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog dialog md:max-w-[960px]">
+                                                    <div class="dialog-content">
+                                                        <label>
+                                                            <input type="text" id="searchKhachHang1"
+                                                                   class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary mb-4"
+                                                                   placeholder="Search...">
+                                                        </label>
+                                                        <div id="DataTableKhachHang1">
+                                                            <table id="data-table-khachhang1"
+                                                                   class="table-default table-hover data-table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Tên Khách Hàng</th>
+                                                                    <th>Email</th>
+                                                                    <th>Số Điện Thoại</th>
+                                                                    <th>Hành Động</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr th:each="kh, rowStat : ${khachHangList}">
+                                                                    <td th:text="${rowStat.index + 1}"></td>
+                                                                    <td th:text="${kh.hoTen}"></td>
+                                                                    <td th:text="${kh.email}"></td>
+                                                                    <td th:text="${kh.sdt}"></td>
+                                                                    <td>
+                                                                        <button type="button"
+                                                                                class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800"
+                                                                                th:data-id="${kh.khachHangId}"
+                                                                                th:data-ho-ten="${kh.hoTen}"
+                                                                                th:data-email="${kh.email}"
+                                                                                th:data-sdt="${kh.sdt}"
+                                                                                onclick="selectCustomer(this)">
+                                                                            Chọn
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="customer-info">
+                                        <input id="customer-id" type="text" class="hidden" name="khachHangId"/>
+                                        <span id="customer-name" class="flex items-center gap-2 mb-4 mt-2"
+                                              style="display:none;">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                                      d="M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                            </svg>
+                                            <span class="font-semibold"></span>
+                                        </span>
+                                        <span id="customer-email" class="flex items-center gap-2 mb-4 mt-2"
+                                              style="display:none;">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                                      d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                                            </svg>
+                                            <span class="font-semibold"></span>
+                                        </span>
+                                        <span id="customer-phone" class="flex items-center gap-2" style="display:none;">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                      stroke-width="2"
+                                                      d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+                                            </svg>
+                                            <span class="font-semibold"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full mt-4">
+                            <div class="grid gap-4">
+                                <div class="card card-layout-frame card-body">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="mb-4">Thông Tin Thanh Toán</h3>
+                                    </div>
+                                    <div class="grid lg:grid-cols-12 gap-6 w-full">
+                                        <div id="form-section" class="lg:col-span-6 hidden-visibility">
+                                            <div class="p-6 rounded-md">
+                                                <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                                                    <div class="lg:col-span-6">
+                                                        <label class="form-label font-semibold">Tên Khách Hàng: </label>
+                                                        <label>
+                                                            <input type="text"
+                                                                   class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                                                   placeholder="Tên Khách Hàng">
+                                                        </label>
+                                                    </div>
+                                                    <div class="lg:col-span-6">
+                                                        <label class="form-label font-semibold">Số Điện Thoại:</label>
+                                                        <label>
+                                                            <input type="text"
+                                                                   class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                                                   placeholder="Số Điện Thoại">
+                                                        </label>
+                                                    </div>
+                                                    <div class="lg:col-span-12">
+                                                        <label class="form-label font-semibold">Email: </label>
+                                                        <label>
+                                                            <input type="email"
+                                                                   class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                                                   placeholder="Email">
+                                                        </label>
+                                                    </div>
+                                                    <div class="lg:col-span-4">
+                                                        <label class="font-semibold">Thành Phố:</label>
+                                                        <select id="province"
+                                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                                            <option value="">Chọn thành phố</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="lg:col-span-4">
+                                                        <label class="font-semibold">Huyện:</label>
+                                                        <select id="district"
+                                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                                            <option value="">Chọn huyện</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="lg:col-span-4">
+                                                        <label class="font-semibold">Xã:</label>
+                                                        <select id="ward"
+                                                                class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                                            <option value="">Chọn xã</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="lg:col-span-12">
+                                                        <label class="form-label font-semibold">Địa Chỉ: </label>
+                                                        <input type="text"
+                                                               class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                                               placeholder="Địa Chỉ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="lg:col-span-1"></div>
+                                        <div class="lg:col-span-4">
+                                            <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                                                <form th:action="@{/admin/banhang/pgg}" method="post"
+                                                      class="lg:col-span-12 flex justify-between items-center">
+                                                    <input type="hidden" name="gioHangId"
+                                                           th:value="${gioHangList.get(0).gioHangId}"/>
+                                                    <label class="flex-grow">
+                                                        <input type="text" name="discountCode"
+                                                               th:value="${discountCode}"
+                                                               class="w-full py-2 px-3 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"
+                                                               placeholder="Nhập mã giảm giá"/>
+                                                    </label>
+                                                    <button type="submit"
+                                                            class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 ml-4">
+                                                        Áp Mã
+                                                    </button>
+                                                </form>
+                                                <input type="text" name="discountCode" th:value="${discountCode}"
+                                                       class="hidden"/>
+                                                <div class="lg:col-span-12 flex items-center justify-between">
+                                                    <label class="form-label font-semibold">Giao Hàng: </label>
+                                                    <label class="switcher mb-4">
+                                                        <input type="checkbox" id="toggleForm">
+                                                        <span class="switcher-toggle"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="lg:col-span-12 flex items-center justify-between">
+                                                    <label class="form-label font-semibold">Tạm Tính: </label>
+                                                    <label th:text="${tamTinh != null ? #numbers.formatDecimal(tamTinh, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
+                                                           class="form-label font-semibold">
+                                                    </label>
+                                                </div>
+                                                <div class="lg:col-span-12 flex items-center justify-between">
+                                                    <label class="form-label font-semibold">Phí Ship: </label>
+                                                    <label class="form-label font-semibold">0 VNĐ</label>
+                                                </div>
+                                                <div class="lg:col-span-12 flex items-center justify-between">
+                                                    <label class="form-label font-semibold">Giảm Giá: </label>
+                                                    <label id="discountAmount" class="form-label font-semibold">
+                                                        <span th:text="${tongTienGiam != null ? #numbers.formatDecimal(tongTienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                                    </label>
+                                                    <input name="discountAmount" th:value="${tongTienGiam}"
+                                                           class="hidden"/>
+                                                </div>
+                                                <div class="lg:col-span-12 flex items-center justify-between">
+                                                    <label class="form-label font-semibold">Tổng Tiền: </label>
+                                                    <label id="totalAmount" class="form-label font-semibold">
+                                                        <span th:text="${tongTienSauGiam != null ? #numbers.formatDecimal(tongTienSauGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                                    </label>
+                                                    <input name="totalAmount" th:value="${tongTienSauGiam}"
+                                                           class="hidden"/>
+                                                </div>
+                                                <div class="lg:col-span-12 flex flex-col gap-4">
+                                                    <h4 class="font-semibold mt-2">Phương Thức Thanh Toán</h4>
+                                                    <label class="radio-label inline-flex">
+                                                        <input type="radio" class="radio" name="thanhToan" value="1"
+                                                               checked>
+                                                        <span class="font-semibold">Tiền Mặt</span>
+                                                    </label>
+                                                    <label class="radio-label inline-flex">
+                                                        <input type="radio" class="radio" name="thanhToan" value="2">
+                                                        <span class="font-semibold">Chuyển Khoản</span>
+                                                    </label>
+                                                </div>
+                                                <div class="lg:col-span-12">
+                                                    <div class="mt-10">
+                                                        <button type="submit" id="thanhToanButton"
+                                                                class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
+                                                            Thanh Toán
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-pending-confirm" role="tabpanel" aria-labelledby="tab-pending-confirm"
+                 tabindex="0">
+                <div id="DataTableConfirm">
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-pending-confirmed" role="tabpanel" aria-labelledby="tab-pending-confirm"
+                 tabindex="0">
+                <div id="DataTableConfirmed">
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-pending-delivery" role="tabpanel" aria-labelledby="tab-pending-delivery"
+                 tabindex="0">
+                <div id="DataTableDelivery">
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-shipping" role="tabpanel" aria-labelledby="tab-shipping"
+                 tabindex="0">
+                <div id="DataTableShipping">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

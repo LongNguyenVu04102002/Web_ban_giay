@@ -562,7 +562,7 @@
 }
 
 .card-gutterless{
-    padding: 0px;
+    padding: 0;
 }
 
 .checkbox{
@@ -7331,6 +7331,10 @@ hr{
 .mt-8{
     margin-top: 2rem;
 }
+.gap-4{
+    gap: 1rem;
+}
+
 .block{
     display: block;
 }
@@ -7360,6 +7364,9 @@ hr{
 }
 .hidden{
     display: none;
+}
+.hidden-visibility {
+    visibility: hidden;
 }
 .\!h-\[300px\]{
     height: 300px !important;
