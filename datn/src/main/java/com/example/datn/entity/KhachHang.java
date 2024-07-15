@@ -45,7 +45,7 @@ public class KhachHang {
     @Column(name = "ngaySinh")
 //    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-    @NotNull(message = "khong dc de trong")
+    @NotNull(message = "Không được để trống")
     private LocalDate ngaySinh;
 
     @NotBlank(message = "Số điện thoại không được để trống")
@@ -55,6 +55,7 @@ public class KhachHang {
     private String sdt;
 
     @Column(name = "email")
+    @NotBlank(message = "Email không được để trống")
     private String email;
 
     @Column(name = "matKhau")
