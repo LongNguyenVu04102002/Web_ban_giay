@@ -1,8 +1,14 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.SanPham;
+import com.example.datn.service.Impl.ChatLieuServiceImpl;
+import com.example.datn.service.Impl.CoGiayServiceImpl;
 import com.example.datn.service.Impl.DayGiayServiceImpl;
+import com.example.datn.service.Impl.DeGiayServiceImpl;
+import com.example.datn.service.Impl.LotGiayServiceImpl;
+import com.example.datn.service.Impl.MuiGiayServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
+import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +53,7 @@ public class SanPhamController {
         model.addAttribute("sanPhamList", sanPhamList);
         return "admin/includes/content/sanpham/giay/home";
     }
+
     @GetMapping("/giay/form")
     public String form(Model model) {
         model.addAttribute("sanPham", new SanPham());
@@ -64,8 +71,7 @@ public class SanPhamController {
         return "admin/includes/content/sanpham/giay/form";
     }
 
-
-    @GetMapping("/sanpham/detail/{id}")
+    @GetMapping("/giay/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         SanPham sanPham = sanPhamService.getSanPhamById(id);
         model.addAttribute("sanPham", sanPham);
@@ -77,4 +83,13 @@ public class SanPhamController {
         sanPhamService.save(sanPham);
         return "redirect:/admin/sanpham/giay";
     }
+
+    @PostMapping("/giay/update/{id}")
+    public String update(@PathVariable Long id) {
+        sanPhamService.update(id);
+        return "redirect:/admin/sanpham/giay";
+    }
+
 }
+
+

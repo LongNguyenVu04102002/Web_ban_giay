@@ -12,8 +12,6 @@ public interface SanPhamService {
 
     void save(SanPham sanPham);
 
-    ResponseEntity<?> getAllSanPham();
-
-    ResponseEntity<?> getAllSanPhamById(Long id);
+    void update(Long id);
 
 }

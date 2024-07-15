@@ -4,6 +4,7 @@ import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
+import com.example.datn.service.Impl.NhanVienServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,8 @@ public class HoaDonController {
     @Autowired
     private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
-//    @Autowired
-//    NhanVienServiceImpl nhanVienService;
+    @Autowired
+    NhanVienServiceImpl nhanVienService;
 
     @GetMapping("/hoadon")
     public String hoaDon(Model model) {
@@ -37,7 +38,7 @@ public class HoaDonController {
         List<HoaDon> hoaDonDaGiaoHang = hoaDonService.getHoaDonDaGiaoHang();
         List<HoaDon> hoaDonHoanThanh = hoaDonService.getHoaDonHoanThanh();
         List<HoaDon> hoaDonHuy = hoaDonService.getHoaDonHuy();
-//        List<NhanVien> nhanViens = nhanVienService.getAllNhanVien();
+        List<NhanVien> nhanViens = nhanVienService.getAllNhanVien();
         model.addAttribute("hoaDonList", hoaDonList);
         model.addAttribute("hoaDonChoXacNhan", hoaDonChoXacNhan);
         model.addAttribute("hoaDonDaXacNhan", hoaDonDaXacNhan);
@@ -46,7 +47,7 @@ public class HoaDonController {
         model.addAttribute("hoaDonDaGiaoHang", hoaDonDaGiaoHang);
         model.addAttribute("hoaDonHoanThanh", hoaDonHoanThanh);
         model.addAttribute("hoaDonHuy",hoaDonHuy);
-//        model.addAttribute("nhanVien", nhanViens);
+        model.addAttribute("nhanVien", nhanViens);
         return "admin/includes/content/hoadon/hoadon";
     }
 
@@ -67,7 +68,7 @@ public class HoaDonController {
     @GetMapping("/hoadon/cartdetail/{id}")
     public String getCartDetail(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getALL();
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";

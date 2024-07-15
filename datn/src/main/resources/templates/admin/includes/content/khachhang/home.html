@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="admincontent">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white">
+            Khách Hàng
+        </h2>
+    </div>
+    <div class="bg-white">
+        <div class="flex items-center justify-between border-b border-stroke py-4 px-4">
+            <div class="flex flex-wrap items-center gap-4">
+                <label class="flex-grow">
+                    <input type="text" id="search"
+                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                           placeholder="Search...">
+                </label>
+                <div class="flex-shrink-0">
+                    <label>
+                        <select id="gioiTinhAccFilter" name="loaiHoaDon"
+                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                            <option>Giới Tính</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="flex-shrink-0">
+                    <label>
+                        <select id="trangThaiAccFilter" name="trangThai"
+                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                            <option value="0">Trạng Thái</option>
+                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            <option value="Đang Hoạt Động">Đang Hoạt Động</option>
+                        </select>
+                    </label>
+                </div>
+                <span class="ml-4">From Date:</span>
+                <label class="flex-grow">
+                    <input type="date" id="fromDate"
+                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                           placeholder="From date">
+                </label>
+                <span>To Date:</span>
+                <label class="flex-grow">
+                    <input type="date" id="toDate"
+                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                           placeholder="To date">
+                </label>
+            </div>
+            <div>
+                <a th:href="@{/admin/taikhoan/khachhang/form}"
+                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
+                    Thêm khách hàng
+                </a>
+            </div>
+        </div>
+
+        <div id="DataTableAll" class="px-4">
+            <table id="data-table-account" class="table-default table-hover data-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên Khách Hàng</th>
+                    <th>Email</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Ngày Sinh</th>
+                    <th>Giới Tính</th>
+                    <th>Địa Chỉ</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="kh, rowStat : ${khachHangList}">
+                    <td th:text="${rowStat.index + 1}"></td>
+                    <td th:text="${kh.hoTen}"></td>
+                    <td th:text="${kh.email}"></td>
+                    <td th:text="${kh.sdt}"></td>
+                    <td th:text="${kh.ngaySinh}"></td>
+                    <td>
+                        <button th:class="${kh.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
+                        </button>
+                    </td>
+                    <td></td>
+<!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
+                    <td>
+                        <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        </button>
+                    </td>
+                    <td class="flex items-center justify-center space-x-2">
+                        <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get">
+                            <label class="switcher">
+                                <input type="checkbox" name="trangThai"
+                                       th:checked="${!kh.trangThai}" onchange="this.form.submit()">
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
+                        <a th:href="@{/admin/taikhoan/khachhang/detail/{id}(id=${kh.khachHangId})}">
+                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                 height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

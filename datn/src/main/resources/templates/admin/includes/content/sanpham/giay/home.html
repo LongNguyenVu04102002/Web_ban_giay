@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="admincontent">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white">
+            Giầy
+        </h2>
+    </div>
+    <div class="bg-white">
+        <div class="flex items-center justify-between border-b border-stroke py-4 px-4">
+            <div class="flex flex-wrap items-center gap-4">
+                <label class="flex-grow">
+                    <input type="text" id="search"
+                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                           placeholder="Search...">
+                </label>
+                <div class="flex-shrink-0">
+                    <label>
+                        <select id="trangThaiSpFilter" name="trangThai"
+                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                            <option value="0">Trạng Thái</option>
+                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            <option value="Đang Hoạt Động">Đang Hoạt Động</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{/admin/sanpham/giay/form}"
+                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
+                    Thêm Giầy
+                </a>
+            </div>
+        </div>
+
+        <div id="DataTableAll" class="px-4">
+            <table id="data-table-sp" class="table-default table-hover data-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên Giầy</th>
+                    <th>Chất Liệu</th>
+                    <th>Cổ Giầy</th>
+                    <th>Dây Giầy</th>
+                    <th>Đế Giầy</th>
+                    <th>Lót Giầy</th>
+                    <th>Mũi Giầy</th>
+                    <th>Thương Hiệu</th>
+                    <th>Mô tả</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sp, rowStat : ${sanPhamList}">
+                    <td th:text="${rowStat.index + 1}"></td>
+                    <td th:text="${sp.ten}"></td>
+                    <td th:text="${sp.chatLieu.ten}"></td>
+                    <td th:text="${sp.coGiay.ten}"></td>
+                    <td th:text="${sp.dayGiay.ten}"></td>
+                    <td th:text="${sp.deGiay.ten}"></td>
+                    <td th:text="${sp.lotGiay.ten}"></td>
+                    <td th:text="${sp.muiGiay.ten}"></td>
+                    <td th:text="${sp.thuongHieu.ten}"></td>
+                    <td th:text="${sp.moTa}"></td>
+                    <td>
+                        <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${sp.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        </button>
+                    </td>
+                    <td class="flex items-center justify-center space-x-2">
+                        <form th:action="@{/admin/sanpham/giay/update/{id}(id=${sp.sanPhamId})}" method="post">
+                            <label class="switcher">
+                                <input type="checkbox" name="trangThai"
+                                       th:checked="${!sp.trangThai}" onchange="this.form.submit()">
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
+                        <a th:href="@{/admin/sanpham/giay/detail/{id}(id=${sp.sanPhamId})}">
+                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                 height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
