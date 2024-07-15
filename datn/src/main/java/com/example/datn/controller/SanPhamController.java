@@ -1,14 +1,14 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.SanPham;
-import com.example.datn.service.Impl.ChatLieuServiceImpl;
-import com.example.datn.service.Impl.CoGiayServiceImpl;
-import com.example.datn.service.Impl.DayGiayServiceImpl;
-import com.example.datn.service.Impl.DeGiayServiceImpl;
-import com.example.datn.service.Impl.LotGiayServiceImpl;
-import com.example.datn.service.Impl.MuiGiayServiceImpl;
-import com.example.datn.service.Impl.SanPhamServiceImpl;
-import com.example.datn.service.Impl.ThuongHieuServiceImpl;
+import com.example.datn.service.impl.ChatLieuServiceImpl;
+import com.example.datn.service.impl.CoGiayServiceImpl;
+import com.example.datn.service.impl.DayGiayServiceImpl;
+import com.example.datn.service.impl.DeGiayServiceImpl;
+import com.example.datn.service.impl.LotGiayServiceImpl;
+import com.example.datn.service.impl.MuiGiayServiceImpl;
+import com.example.datn.service.impl.SanPhamServiceImpl;
+import com.example.datn.service.impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
