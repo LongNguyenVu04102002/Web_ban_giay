@@ -23,9 +23,6 @@ public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
 
-    @Autowired
-    private DiaChiService diaChiService;
-
     @GetMapping("/khachhang")
     public String show(Model model) {
         List<KhachHang> khachHangList = khachHangService.getAll();
@@ -52,25 +49,7 @@ public class KhachHangController {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
         }
-
-        // Lưu thông tin KhachHang
         khachHangService.save(khachHang);
-
-        // Lấy thông tin địa chỉ từ KhachHang
-        String thanhPho = khachHang.getDiaChiList().get(0).getThanhPho();
-        String huyen = khachHang.getDiaChiList().get(0).getHuyen();
-        String xa = khachHang.getDiaChiList().get(0).getXa();
-
-        // Tạo đối tượng DiaChi mới và thiết lập quan hệ với KhachHang
-        DiaChi diaChi = new DiaChi();
-        diaChi.setThanhPho(thanhPho);
-        diaChi.setHuyen(huyen);
-        diaChi.setXa(xa);
-        diaChi.setKhachHang(khachHang); // Thiết lập quan hệ với KhachHang
-
-        // Lưu DiaChi vào cơ sở dữ liệu thông qua service
-        diaChiService.saveDiaChi(diaChi);
-
         return "redirect:/admin/taikhoan/khachhang";
     }
 
@@ -79,16 +58,6 @@ public class KhachHangController {
     public String toggleTrangThai(@PathVariable Long khachHangId) {
         khachHangService.toggleTrangThai(khachHangId);
         return "redirect:/admin/taikhoan/khachhang";
-    }
-
-    @GetMapping("/khachhang/search")
-    public String searchKhachHang(@RequestParam(value = "sdt", required = false) String sdt,
-                                  @RequestParam(value = "hoTen", required = false) String hoTen,
-                                  @RequestParam(value = "email", required = false) String email,
-                                  Model model) {
-        List<KhachHang> result = khachHangService.searchKhachHang(sdt, hoTen, email);
-        model.addAttribute("khachHangList", result);
-        return "admin/includes/content/khachhang/home";
     }
 
 }
