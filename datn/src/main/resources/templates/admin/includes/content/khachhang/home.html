@@ -89,6 +89,12 @@
                             <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
+                    <td>
+                        <!-- Duyệt qua danh sách địa chỉ của khách hàng -->
+                        <ul>
+                            <li th:each="diaChi : ${kh.diaChiList}" th:text="${diaChi.diaChi} + ', ' + ${diaChi.xa} + ', ' + ${diaChi.huyen} + ', ' + ${diaChi.thanhPho}"></li>
+                        </ul>
+                    </td>
                     <td></td>
 <!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
                     <td>

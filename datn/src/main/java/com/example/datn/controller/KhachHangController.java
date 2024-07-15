@@ -1,5 +1,6 @@
 package com.example.datn.controller;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.service.DiaChiService;
@@ -21,6 +22,9 @@ public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
+
+    @Autowired
+    private DiaChiService diaChiService;
 
     @GetMapping("/khachhang")
     public String show(Model model) {
@@ -48,9 +52,28 @@ public class KhachHangController {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
         }
+
+        // Lưu thông tin KhachHang
         khachHangService.save(khachHang);
+
+        // Lấy thông tin địa chỉ từ KhachHang
+        String thanhPho = khachHang.getDiaChiList().get(0).getThanhPho();
+        String huyen = khachHang.getDiaChiList().get(0).getHuyen();
+        String xa = khachHang.getDiaChiList().get(0).getXa();
+
+        // Tạo đối tượng DiaChi mới và thiết lập quan hệ với KhachHang
+        DiaChi diaChi = new DiaChi();
+        diaChi.setThanhPho(thanhPho);
+        diaChi.setHuyen(huyen);
+        diaChi.setXa(xa);
+        diaChi.setKhachHang(khachHang); // Thiết lập quan hệ với KhachHang
+
+        // Lưu DiaChi vào cơ sở dữ liệu thông qua service
+        diaChiService.saveDiaChi(diaChi);
+
         return "redirect:/admin/taikhoan/khachhang";
     }
+
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId) {
