@@ -40,9 +40,4 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return null;
     }
-
-    @Override
-    public List<KhachHang> searchKhachHang(String sdt, String hoTen, String email) {
-        return khachHangRepository.searchKhachHang(sdt, hoTen, email);
-    }
 }
