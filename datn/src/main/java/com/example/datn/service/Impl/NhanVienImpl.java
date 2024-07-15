@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class NhanVienImpl implements NhanVienService {
 
@@ -26,6 +28,27 @@ public class NhanVienImpl implements NhanVienService {
     @Override
     public void save(NhanVien nhanVien) {
         nhanVienRepository.save(nhanVien);
+    }
+
+    @Override
+    public boolean existsBySdt(String sdt) {
+        return nhanVienRepository.findBySdt(sdt).isPresent();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return nhanVienRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public NhanVien toggleTrangThai(Long nhanVienId) {
+        Optional<NhanVien> optionalNhanVien = nhanVienRepository.findById(nhanVienId);
+        if (optionalNhanVien.isPresent()) {
+            NhanVien nhanVien = optionalNhanVien.get();
+            nhanVien.setTrangThai(!nhanVien.isTrangThai());
+            return nhanVienRepository.save(nhanVien);
+        }
+        return null;
     }
 
 }

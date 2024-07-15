@@ -90,17 +90,20 @@
                         </button>
                     </td>
                     <td></td>
-<!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
+                    <!--                    <td th:text="${nv.diaChi + ', ' + nv.xa + ', ' + nv.huyen + ', ' + nv.thanhPho}"></td>-->
                     <td>
                         <button th:class="${nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
                             <span th:text="${nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <label class="switcher">
-                            <input type="checkbox">
-                            <span class="switcher-toggle"></span>
-                        </label>
+                        <form th:action="@{/admin/taikhoan/nhanvien/{nhanVienId}/toggle(nhanVienId=${nv.nhanVienId})}" method="get">
+                            <label class="switcher">
+                                <input type="checkbox" id="trangThai${nv.nhanVienId}" name="trangThai"
+                                       th:checked="${!nv.trangThai}" onchange="this.form.submit()">
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
                         <a th:href="@{/admin/taikhoan/nhanvien/detail/{id}(id=${nv.nhanVienId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
