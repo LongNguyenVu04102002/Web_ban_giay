@@ -46,15 +46,38 @@
                                             th:text="${ms.ten}"></option>
                                 </select>
                             </div>
-                            <div class="lg:col-span-6">
+                            <div class="lg:col-span-4">
                                 <label class="font-semibold">Giá Bán:</label>
                                 <input type="text" name="giaBan"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                             </div>
-                            <div class="lg:col-span-6">
+                            <div class="lg:col-span-4">
                                 <label class="font-semibold">Số Lượng:</label>
                                 <input type="text" name="soLuong"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                            </div>
+                            <div class="lg:col-span-4 mb-2">
+                                <label class="font-semibold">Đợt giảm giá:</label>
+                                <select th:field="*{dotGiamGia}"
+                                        class="form-select form-input mt-2 w-full h-10">
+                                    <option th:each="dgg : ${lsDotGiamGia}" th:value="${dgg.dotGiamGiaId}"
+                                            th:text="${dgg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-12">
+                                <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
+                                <div class="mt-1 flex items-center space-x-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" th:field="*{trangThai}" value="false"
+                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                        <span class="ml-2">Hoạt Động</span>
+                                    </label>
+                                    <label class="inline-flex items-center ml-4" th:if="${spct.sanPhamChiTietId} != null">
+                                        <input type="radio" th:field="*{trangThai}" value="true"
+                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                        <span class="ml-2">Ngừng Hoạt Động</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-10 mb-10 flex justify-center space-x-4">
@@ -68,7 +91,7 @@
             </div>
         </div>
     </section>
-    <form id="saveForm" method="post" th:action="@{/admin/sanpham/bienthegiay/save}" th:object="${sanPhamChiTietList}">
+    <form id="saveForm" method="post" th:action="@{/admin/sanpham/bienthegiay/save}" th:object="${sanPhamChiTietResponse}">
         <table class="table-default table-hover data-table px-4 mt-6 bg-white">
             <thead>
             <tr>
@@ -78,7 +101,7 @@
                 <th>Kích Thước</th>
                 <th>Giá bán</th>
                 <th>Số Lượng</th>
-                <th>Image</th>
+                <th>Đợt giảm giá</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -121,6 +144,8 @@
             }));
             const giaBan = document.querySelector('input[name="giaBan"]').value;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
+            const dotGiamGiaId = document.querySelector('select[name="dotGiamGia"]').value;
+            const dotGiamGiaTen = document.querySelector('select[name="dotGiamGia"] option:checked').innerText;
 
             selectedColors.forEach(color => {
                 selectedSizes.forEach(size => {
@@ -129,7 +154,8 @@
                         kichThuoc: [{kichThuocId: size.id, ten: size.ten}],
                         mauSac: [{mauSacId: color.id, ten: color.ten}],
                         giaBan: giaBan,
-                        soLuong: soLuong
+                        soLuong: soLuong,
+                        dotGiamGia: {dotGiamGiaId: dotGiamGiaId, ten: dotGiamGiaTen}
                     };
                     appendToTable(sanPhamChiTiet);
                 });
@@ -145,8 +171,11 @@
                    <td>${sanPhamChiTiet.kichThuoc[0].ten}</td>
                    <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${sanPhamChiTiet.giaBan}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
                    <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${sanPhamChiTiet.soLuong}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-                   <td>
-                   </td>
+                   <td>${sanPhamChiTiet.dotGiamGia.ten}</td>
+                   <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
+<!--                   <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc[0].kichThuocId" value="${sanPhamChiTiet.kichThuoc[0].kichThuocId}">-->
+<!--                   <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac[0].mauSacId" value="${sanPhamChiTiet.mauSac[0].mauSacId}">-->
+                   <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].dotGiamGia.dotGiamGiaId" value="${sanPhamChiTiet.dotGiamGia.dotGiamGiaId}">
                </tr>`;
             tableBody.innerHTML += row;
             rowCount++;
