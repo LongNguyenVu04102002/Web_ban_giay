@@ -2,10 +2,10 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
-import com.example.datn.service.Impl.KichThuocServiceImpl;
-import com.example.datn.service.Impl.MauSacServiceImpl;
-import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
-import com.example.datn.service.Impl.SanPhamServiceImpl;
+import com.example.datn.service.impl.KichThuocServiceImpl;
+import com.example.datn.service.impl.MauSacServiceImpl;
+import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.impl.SanPhamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,7 +53,7 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("/bienthegiay/save")
-    public String save(@ModelAttribute("sanPhamChiTietList")SanPhamChiTietResponse sanPhamChiTietResponse) {
+    public String save(@ModelAttribute("sanPhamChiTietList") SanPhamChiTietResponse sanPhamChiTietResponse) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
         sanPhamChiTietService.save(sanPhamChiTietList);
         return "redirect:/admin/sanpham/bienthegiay";
@@ -66,5 +66,9 @@ public class SanPhamChiTietController {
         return "admin/includes/content/sanpham/bienthegiay/form";
     }
 
-
+    @PostMapping("/bienthegiay/update/{id}")
+    public String update(@PathVariable Long id) {
+        sanPhamChiTietService.update(id);
+        return "redirect:/admin/sanpham/bienthegiay";
+    }
 }
