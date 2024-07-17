@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
@@ -45,7 +45,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return null;
     }
-<<<<<<< HEAD
+
 
     @Override
     public void changeDiaChiStatus(Long diaChiId, boolean newStatus) {
@@ -65,6 +65,5 @@ public class KhachHangServiceImpl implements KhachHangService {
     public List<KhachHang> searchKhachHang(String sdt, String hoTen, String email) {
         return List.of();
     }
-=======
->>>>>>> parent of 04f5341 (fix lại)
+
 }
