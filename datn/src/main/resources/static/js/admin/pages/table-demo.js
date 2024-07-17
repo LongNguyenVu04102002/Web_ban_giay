@@ -47,6 +47,7 @@ $(document).ready(function () {
 <<<<<<< HEAD
 =======
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
+<<<<<<< HEAD
 >>>>>>> hoa-don
 =======
     $('#loaiPhieuFilter').on('change', function () {
@@ -54,6 +55,9 @@ $(document).ready(function () {
         $('#data-table-pgg').DataTable().column(2).search(selectedLoaiPhieu).draw();
     });
 >>>>>>> parent of ab5fb6c (table-demo)
+=======
+>>>>>>> hieu_sp
+>>>>>>> PhieuGiamGia-Chien
 
     $('#trangThaiPggFilter').on('change', function () {
         const selectedTrangThaiPgg = $(this).val();
@@ -104,7 +108,11 @@ $(document).ready(function () {
 } else if (settings.nTable.id === 'data-table-account') {
 =======
             } else if (settings.nTable.id === 'data-table-account') {
+<<<<<<< HEAD
 >>>>>>> hoa-don
+=======
+>>>>>>> hieu_sp
+>>>>>>> PhieuGiamGia-Chien
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
@@ -130,6 +138,7 @@ $(document).ready(function () {
 });
 =======
 });
+<<<<<<< HEAD
 >>>>>>> hoa-don
 =======
             return (fromDate === '' && toDate === '') ||
@@ -146,3 +155,6 @@ $(document).ready(function () {
 
 });
 >>>>>>> parent of ab5fb6c (table-demo)
+=======
+>>>>>>> hieu_sp
+>>>>>>> PhieuGiamGia-Chien

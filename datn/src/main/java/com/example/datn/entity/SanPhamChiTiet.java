@@ -48,11 +48,11 @@ public class SanPhamChiTiet {
     @Column(name = "trangThai")
     private boolean trangThai;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kichThuocId")
     private KichThuoc kichThuoc;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mauSacId")
     private MauSac mauSac;
 

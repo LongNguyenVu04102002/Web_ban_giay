@@ -14,9 +14,18 @@ public interface PhieuGiamGiaService {
     PhieuGiamGia getById(Long id);
 
     void save(PhieuGiamGia phieuGiamGia);
+<<<<<<< HEAD
 
 
     void update(Long id);
 
 
+=======
+<<<<<<< HEAD
+=======
+
+    void update(Long id);
+
+>>>>>>> hieu_sp
+>>>>>>> PhieuGiamGia-Chien
 }

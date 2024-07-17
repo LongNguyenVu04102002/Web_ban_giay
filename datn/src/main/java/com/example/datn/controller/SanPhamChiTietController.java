@@ -2,10 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
-import com.example.datn.service.impl.KichThuocServiceImpl;
-import com.example.datn.service.impl.MauSacServiceImpl;
-import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
-import com.example.datn.service.impl.SanPhamServiceImpl;
+import com.example.datn.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +27,9 @@ public class SanPhamChiTietController {
     @Autowired
     private MauSacServiceImpl mauSacService;
 
+    @Autowired
+    private DotGiamGiaServiceImpl dotGiamGiaService;
+
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
@@ -53,7 +53,7 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("/bienthegiay/save")
-    public String save(@ModelAttribute("sanPhamChiTietList") SanPhamChiTietResponse sanPhamChiTietResponse) {
+    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
         sanPhamChiTietService.save(sanPhamChiTietList);
         return "redirect:/admin/sanpham/bienthegiay";
@@ -63,6 +63,7 @@ public class SanPhamChiTietController {
         model.addAttribute("lstKichThuoc", kichThuocService.getAll());
         model.addAttribute("lsMauSac", mauSacService.getAll());
         model.addAttribute("lstSanPham", sanPhamService.getAll());
+        model.addAttribute("lsDotGiamGia", dotGiamGiaService.getAll());
         return "admin/includes/content/sanpham/bienthegiay/form";
     }
 
