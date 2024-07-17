@@ -3,9 +3,9 @@ package com.example.datn.controller;
 import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
-import com.example.datn.service.Impl.HoaDonServiceImpl;
-import com.example.datn.service.Impl.NhanVienServiceImpl;
-import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.impl.HoaDonServiceImpl;
+import com.example.datn.service.impl.NhanVienServiceImpl;
+import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,7 +68,7 @@ public class HoaDonController {
     @GetMapping("/hoadon/cartdetail/{id}")
     public String getCartDetail(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getALL();
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";

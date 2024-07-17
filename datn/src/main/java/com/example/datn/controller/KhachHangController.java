@@ -2,8 +2,6 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
-import com.example.datn.entity.NhanVien;
-import com.example.datn.service.DiaChiService;
 import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @Controller
 @RequestMapping("/admin/taikhoan")

@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.PhieuGiamGia;
-import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
+import com.example.datn.service.impl.PhieuGiamGiaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,17 +29,24 @@ public class PhieuGiamGiaController {
         return "admin/includes/content/giamgia/form";
     }
 
-    @PostMapping("/giamgia/save")
-    public String savePhieuGiamGia(PhieuGiamGia phieuGiamGia) {
-        phieuGiamGiaService.save(phieuGiamGia);
-        return "redirect:/admin/giamgia";
-    }
-
     @GetMapping("/giamgia/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaService.getById(id);
         model.addAttribute("phieuGiamGia", phieuGiamGia);
         return "admin/includes/content/giamgia/form";
+    }
+
+    @PostMapping("/giamgia/save")
+    public String save(PhieuGiamGia phieuGiamGia) {
+        phieuGiamGiaService.save(phieuGiamGia);
+        return "redirect:/admin/giamgia";
+    }
+
+
+    @PostMapping("/giamgia/update/{id}")
+    public String update(@PathVariable Long id) {
+        phieuGiamGiaService.update(id);
+        return "redirect:/admin/giamgia";
     }
 
 }

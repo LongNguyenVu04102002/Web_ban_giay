@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.ChatLieu;
-import com.example.datn.service.Impl.ChatLieuServiceImpl;
+import com.example.datn.service.impl.ChatLieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

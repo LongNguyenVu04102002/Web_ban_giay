@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.NhanVien;
-import com.example.datn.service.Impl.NhanVienServiceImpl;
+import com.example.datn.service.impl.NhanVienServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,5 +43,10 @@ public class NhanVienController {
         return "redirect:/admin/taikhoan/nhanvien";
     }
 
+    @GetMapping("/nhanvien/update/{id}")
+    public String toggleTrangThai(@PathVariable Long id) {
+        nhanVienService.updateTrangThai(id);
+        return "redirect:/admin/taikhoan/nhanvien";
+    }
 
 }
