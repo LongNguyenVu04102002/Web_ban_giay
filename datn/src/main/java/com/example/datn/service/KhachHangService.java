@@ -14,13 +14,6 @@ public interface KhachHangService {
     KhachHang toggleTrangThai(Long khachHangId);
     void changeDiaChiStatus(Long diaChiId, boolean newStatus);
 
-<<<<<<< HEAD
-    List<KhachHang> searchKhachHang(String sdt, String hoTen, String email);
 
-=======
-<<<<<<< HEAD
-    List<KhachHang> searchKhachHang(String sdt, String hoTen, String email);
-=======
->>>>>>> hieu_sp
->>>>>>> PhieuGiamGia-Chien
+
 }
