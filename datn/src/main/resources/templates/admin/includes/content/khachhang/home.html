@@ -88,6 +88,23 @@
                             <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
+<<<<<<< HEAD
+=======
+                    <td>
+                        <ul>
+                            <!-- Kiểm tra điều kiện trước khi lặp qua danh sách địa chỉ -->
+                            <li th:if="${kh.diaChiList != null}" th:each="diaChi : ${kh.diaChiList}">
+                                <span th:text="${diaChi.diaChi}"></span>,
+                                <span th:text="${diaChi.xa}"></span>,
+                                <span th:text="${diaChi.huyen}"></span>,
+                                <span th:text="${diaChi.thanhPho}"></span>
+                            </li>
+                        </ul>
+                    </td>
+
+                    <td></td>
+                    <!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
+>>>>>>> parent of 04f5341 (fix lại)
                     <td>
                         <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
                             <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
@@ -96,7 +113,7 @@
                     <td class="flex items-center justify-center space-x-2">
                         <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get">
                             <label class="switcher">
-                                <input type="checkbox" id="trangThai${kh.khachHangId}" name="trangThai"
+                                <input type="checkbox" name="trangThai"
                                        th:checked="${!kh.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
