@@ -63,36 +63,39 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="lg:col-span-4">
-                                <label class="font-semibold">Thành Phố:</label>
-                                <select id="province" th:onchange="|loadDistricts('${provinces}')|"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option th:each="province : ${provinces}"
-                                            th:value="${province.provinceId}"
-                                            th:text="${province.provinceName}">
-                                    </option>
+
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Tỉnh/Thành Phố: </label>
+                                <select id="province" onchange="loadDistricts(this.value)"
+                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                    <option value="" disabled selected>Chọn tỉnh/thành phố</option>
                                 </select>
                             </div>
-                            <div class="lg:col-span-4">
-                                <label class="font-semibold">Huyện:</label>
-                                <select id="district"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option value="">Chọn huyện</option>
+
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Quận/Huyện: </label>
+                                <select id="district" onchange="loadWards(this.value)"
+                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                    <option value="" disabled selected>Chọn huyện</option>
                                 </select>
                             </div>
-                            <div class="lg:col-span-4">
-                                <label class="font-semibold">Xã:</label>
-                                <select id="ward"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                    <option value="">Chọn xã</option>
+
+                            <div class="lg:col-span-6">
+                                <label class="form-label font-semibold">Xã/Phường: </label>
+                                <select id="ward" th:field="*{diaChiList[0].xa}"
+                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                    <option value="" disabled selected>Chọn xã/phường</option>
                                 </select>
                             </div>
+
+
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Địa Chỉ: </label>
-                                <input type="text"
+                                <input type="text" th:field="*{diaChiList[0].diaChi}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Địa Chỉ">
                             </div>
+
                         </div>
                         <div class="mt-10 mb-10 flex justify-center space-x-4">
                             <a th:href="@{/admin/taikhoan/khachhang}"
@@ -116,3 +119,4 @@
 </div>
 </body>
 </html>
+

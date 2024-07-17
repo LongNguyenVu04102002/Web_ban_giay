@@ -1,5 +1,6 @@
 package com.example.datn.controller;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.service.DiaChiService;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,6 +52,7 @@ public class KhachHangController {
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";
     }
+
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId) {
