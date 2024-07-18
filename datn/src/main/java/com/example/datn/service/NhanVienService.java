@@ -11,4 +11,6 @@ public interface NhanVienService {
 
     void save(NhanVien nhanVien);
 
+    void updateTrangThai(Long id);
+
 }

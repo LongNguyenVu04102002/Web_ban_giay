@@ -1,4 +1,4 @@
-package com.example.datn.service.Impl;
+package com.example.datn.service.impl;
 
 import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.repository.PhieuGiamGiaRepository;
@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
@@ -48,6 +49,20 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
         }
 
         phieuGiamGiaRepository.save(phieuGiamGia);
+    }
+
+    @Override
+    public void update(Long id) {
+        Optional<PhieuGiamGia> phieuGiamGia = phieuGiamGiaRepository.findById(id);
+        if(phieuGiamGia.isPresent()){
+            PhieuGiamGia pgg = phieuGiamGia.get();
+            if(pgg.getTrangThai() == 1){
+                pgg.setTrangThai(3);
+            }else if(pgg.getTrangThai() == 3){
+                pgg.setTrangThai(1);
+            }
+            phieuGiamGiaRepository.save(pgg);
+        }
     }
 
     public static String randomMaGiamGia(int length) {

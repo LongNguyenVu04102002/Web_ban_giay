@@ -96,7 +96,7 @@
                     <td class="flex items-center justify-center space-x-2">
                         <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get">
                             <label class="switcher">
-                                <input type="checkbox" id="trangThai${kh.khachHangId}" name="trangThai"
+                                <input type="checkbox" name="trangThai"
                                        th:checked="${!kh.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>

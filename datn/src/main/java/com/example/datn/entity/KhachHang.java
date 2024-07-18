@@ -35,7 +35,6 @@ public class KhachHang {
     @Column(name = "khachHangId", nullable = false)
     private Long khachHangId;
 
-
     @NotBlank(message = "Họ tên không được để trống")
     @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
     @Column(name = "hoTen", length = 100)
@@ -49,7 +48,6 @@ public class KhachHang {
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
     @NotNull(message = "khong dc de trong")
     private LocalDate ngaySinh;
-
 
     @NotBlank(message = "Số điện thoại không được để trống")
     @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
