@@ -14,6 +14,9 @@ public class HomeController {
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
+    @Autowired
+    private SanPhamServiceImpl chiTietService;
+
     @GetMapping("/home")
     public String home(){
         return "user/includes/content/home";
