@@ -13,8 +13,7 @@ public interface KhachHangService {
     void save(KhachHang khachHang);
     KhachHang toggleTrangThai(Long khachHangId);
 
-<<<<<<< HEAD
+
     List<KhachHang> searchKhachHang(String sdt, String hoTen, String email);
-=======
->>>>>>> hieu_sp
+
 }

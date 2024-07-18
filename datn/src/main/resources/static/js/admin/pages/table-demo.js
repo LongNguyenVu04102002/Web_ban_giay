@@ -47,10 +47,6 @@ $(document).ready(function () {
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
     filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
-<<<<<<< HEAD
-=======
-    filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
->>>>>>> hieu_sp
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
@@ -85,11 +81,7 @@ $(document).ready(function () {
                     return true;
                 }
                 return false;
-<<<<<<< HEAD
 } else if (settings.nTable.id === 'data-table-account') {
-=======
-            } else if (settings.nTable.id === 'data-table-account') {
->>>>>>> hieu_sp
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
@@ -111,8 +103,4 @@ $(document).ready(function () {
             return true;
         }
     );
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> hieu_sp
