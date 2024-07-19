@@ -46,7 +46,7 @@ $(document).ready(function () {
     filterColumn('#loaiPhieuFilter', 2, ['#data-table-pgg']);
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
-    filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
+    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
