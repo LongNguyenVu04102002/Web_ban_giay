@@ -76,7 +76,7 @@
                 <div class="lg:col-span-7">
                     <h5 class="text-2xl font-semibold" th:text="${sanPham.ten}"></h5>
                     <div class="mt-2 flex justify-between">
-                        <span th:text="${#numbers.formatDecimal(sanPham.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                        <span th:text="${#numbers.formatDecimal(sanPham.sanPhamChiTietList[0].giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                               class="text-slate-400 font-semibold me-1">
                         </span>
                         <ul class="list-none inline-block text-orange-400">
@@ -91,9 +91,10 @@
 
                     <div class="mt-4">
                         <h5 class="text-lg font-semibold">Overview :</h5>
-                        <p class="text-slate-400 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
-                            exercitationem, unde molestiae sint quae inventore atque minima natus fugiat nihil quisquam
-                            voluptates ea omnis. Modi laborum soluta tempore unde accusantium.</p>
+                        <div class="text-slate-400 mt-2" >
+                            <p th:text="${sanPham.moTa}"></p>
+                        </div>
+
 
                         <ul class="list-none text-slate-400 mt-4">
                             <li class="mb-1 flex"><i

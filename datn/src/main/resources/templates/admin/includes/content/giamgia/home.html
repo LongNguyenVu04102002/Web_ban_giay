@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
 <div layout:fragment="admincontent">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -63,7 +64,6 @@
             </div>
         </div>
 
-
         <div id="DataTableAll" class="px-4">
             <table id="data-table-pgg" class="table-default table-hover data-table">
                 <thead>
@@ -92,7 +92,7 @@
                     </td>
                     <td>
                         <span th:if="${pgg.loaiPhieu == false}"
-                            th:text="${#numbers.formatDecimal(pgg.giaTriGiam, 1, 'COMMA', 0, 'POINT')} + ' VND'">
+                              th:text="${#numbers.formatDecimal(pgg.giaTriGiam, 1, 'COMMA', 0, 'POINT')} + ' VND'">
                         </span>
                         <span th:if="${pgg.loaiPhieu == true}"
                               th:text="${#numbers.formatDecimal(pgg.giaTriGiam, 1, 'COMMA', 0, 'POINT')} + ' %'">
@@ -115,13 +115,6 @@
                               th:text="'Đã kết thúc'"></span>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/giamgia/update/{id}(id=${pgg.phieuGiamGiaId})}" method="post">
-                            <label class="switcher">
-                                <input type="checkbox" name="trangThai"
-                                       th:checked="${pgg.trangThai == 1}" onchange="this.form.submit()">
-                                <span class="switcher-toggle"></span>
-                            </label>
-                        </form>
                         <a th:href="@{/admin/giamgia/detail/{id}(id=${pgg.phieuGiamGiaId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -132,6 +125,21 @@
                                       d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
                         </a>
+                        <form th:if="${pgg.trangThai == 1}"
+                              th:action="@{/admin/giamgia/{phieuGiamGiaId}/toggle(phieuGiamGiaId=${pgg.phieuGiamGiaId})}"
+                              method="get">
+                            <label class="switcher">
+                                <input type="checkbox" name="trangThai"
+                                       th:checked="${pgg.trangThai == 1}" onchange="this.form.submit()">
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
+                        <form th:if="${pgg.trangThai != 1}">
+                            <label class="switcher">
+                                <input type="checkbox" name="trangThai" disabled>
+                                <span class="switcher-toggle"></span>
+                            </label>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

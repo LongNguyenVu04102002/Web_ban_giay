@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -32,7 +35,7 @@ public class KhachHangController {
     public String detail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.getById(id);
         model.addAttribute("khachHang", khachHang);
-        return "admin/includes/content/khachhang/form";
+        return "admin/includes/content/khachhang/detail";
     }
 
     @GetMapping("/khachhang/form")
@@ -45,6 +48,10 @@ public class KhachHangController {
     public String save(@Valid KhachHang khachHang, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
+        }
+
+        for (DiaChi diaChi : khachHang.getDiaChiList()) {
+            diaChi.setKhachHang(khachHang);
         }
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";

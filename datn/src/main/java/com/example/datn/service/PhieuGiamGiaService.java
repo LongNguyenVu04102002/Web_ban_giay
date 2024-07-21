@@ -18,4 +18,5 @@ public interface PhieuGiamGiaService {
 
     void update(Long id);
 
+    PhieuGiamGia tonggleTrangThaiGiamGia(Long id);
 }
