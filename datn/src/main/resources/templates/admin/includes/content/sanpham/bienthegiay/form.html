@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
-    <title th:text="${spct.sanPhamChiTietId == null} ? 'Thêm Biến Thể Giầy' : 'Cập Nhập Biến Thể Giầy'"></title>
+    <title>Thêm Biến Thể Giầy></title>
 </head>
 <body>
 <div layout:fragment="admincontent">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 class="text-title-md2 font-semibold text-black dark:text-white"
-            th:text="${spct.sanPhamChiTietId == null} ? 'Thêm Biến Thể Giầy' : 'Cập Nhập Biến Thể Giầy'">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white">
+            Thêm Biến Thể Giầy
         </h2>
     </div>
     <section class="relative md:py-10 bg-white px-25">
@@ -46,23 +46,15 @@
                                             th:text="${ms.ten}"></option>
                                 </select>
                             </div>
-                            <div class="lg:col-span-4">
+                            <div class="lg:col-span-6">
                                 <label class="font-semibold">Giá Bán:</label>
                                 <input type="text" name="giaBan"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                             </div>
-                            <div class="lg:col-span-4">
+                            <div class="lg:col-span-6">
                                 <label class="font-semibold">Số Lượng:</label>
                                 <input type="text" name="soLuong"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                            </div>
-                            <div class="lg:col-span-4 mb-2">
-                                <label class="font-semibold">Đợt giảm giá:</label>
-                                <select th:field="*{dotGiamGia}"
-                                        class="form-select form-input mt-2 w-full h-10">
-                                    <option th:each="dgg : ${lsDotGiamGia}" th:value="${dgg.dotGiamGiaId}"
-                                            th:text="${dgg.ten}"></option>
-                                </select>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
@@ -98,12 +90,12 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Tên Giầy</th>
-                <th>Màu Sắc</th>
-                <th>Kích Thước</th>
+                <th>Tên giầy</th>
+                <th>Màu sắc</th>
+                <th>Kích thước</th>
                 <th>Giá bán</th>
-                <th>Số Lượng</th>
-                <th>Đợt giảm giá</th>
+                <th>Số lượng</th>
+                <th>Hình ảnh</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -119,7 +111,7 @@
         </div>
     </form>
     <script>
-        document.getElementById('saveForm').addEventListener('submit', function(event) {
+        document.getElementById('saveForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Ngăn chặn hành vi mặc định của form submit
 
             const tableBody = document.getElementById('table-body');
@@ -129,7 +121,6 @@
                 const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
                 const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
                 const mauSacId = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`).value;
-                const dotGiamGiaId = row.querySelector(`input[name="sanPhamChiTietList[${index}].dotGiamGia.dotGiamGiaId"]`).value;
                 const giaBan = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`).value;
                 const soLuong = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`).value;
 
@@ -137,7 +128,6 @@
                     sanPham: {sanPhamId: sanPhamId},
                     kichThuoc: {kichThuocId: kichThuocId},
                     mauSac: {mauSacId: mauSacId},
-                    dotGiamGia: {dotGiamGiaId: dotGiamGiaId},
                     giaBan: giaBan,
                     soLuong: soLuong
                 };
@@ -148,8 +138,9 @@
             // Gọi API lưu data
             saveSanPhamChiTiet(sanPhamChiTietList);
 
-            window.location.href = 'http://localhost:8080/admin/sanpham/bienthegiay';
-            window.location.reload(true);
+            setTimeout(function() {
+                window.location.href = '/admin/sanpham/bienthegiay';
+            }, 300);
         });
 
         const selectColor = new TomSelect('#color', {
@@ -179,8 +170,6 @@
             }));
             const giaBan = document.querySelector('input[name="giaBan"]').value;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
-            const dotGiamGiaId = document.querySelector('select[name="dotGiamGia"]').value;
-            const dotGiamGiaTen = document.querySelector('select[name="dotGiamGia"] option:checked').innerText;
 
             console.log('San Pham ID:', sanPhamId);
             console.log('San Pham Ten:', sanPhamTen);
@@ -188,8 +177,6 @@
             console.log('Selected Colors:', selectedColors);
             console.log('Gia Ban:', giaBan);
             console.log('So Luong:', soLuong);
-            console.log('Dot Giam Gia ID:', dotGiamGiaId);
-            console.log('Dot Giam Gia Ten:', dotGiamGiaTen);
 
             const sanPhamChiTietList = [];
 
@@ -201,7 +188,6 @@
                         mauSac: {mauSacId: color.id, ten: color.ten},
                         giaBan: giaBan,
                         soLuong: soLuong,
-                        dotGiamGia: {dotGiamGiaId: dotGiamGiaId, ten: dotGiamGiaTen}
                     };
                     sanPhamChiTietList.push(sanPhamChiTiet);
                     appendToTable(sanPhamChiTiet);
@@ -218,11 +204,10 @@
                <td>${sanPhamChiTiet.kichThuoc.ten}</td>
                <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${sanPhamChiTiet.giaBan}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
                <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${sanPhamChiTiet.soLuong}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <td>${sanPhamChiTiet.dotGiamGia.ten}</td>
                <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
                <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
                <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].dotGiamGia.dotGiamGiaId" value="${sanPhamChiTiet.dotGiamGia.dotGiamGiaId}">
+               <td><input type="file" name=""></td>
            </tr>`;
             tableBody.innerHTML += row;
             rowCount++;

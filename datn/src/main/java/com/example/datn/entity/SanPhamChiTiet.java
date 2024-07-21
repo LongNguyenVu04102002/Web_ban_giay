@@ -65,9 +65,9 @@ public class SanPhamChiTiet {
     @JsonManagedReference(value = "sanPhamChiTiet")
     private List<HinhAnh> lstAnh;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dotGiamGiaId")
-    @JsonBackReference(value = "dotGiamGia")
-    private DotGiamGia dotGiamGia;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "dotGiamGiaId")
+//    @JsonBackReference(value = "dotGiamGia")
+//    private DotGiamGia dotGiamGia;
 
 }

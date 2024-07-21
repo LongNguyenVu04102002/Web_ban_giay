@@ -48,6 +48,7 @@ $(document).ready(function () {
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
     filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
+    filterColumn('#trangThaiSpctFilter', 9, ['#data-table-sp']);
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();

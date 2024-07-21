@@ -23,11 +23,11 @@
                 </label>
                 <div class="flex-shrink-0">
                     <label>
-                        <select id="trangThaiSpFilter" name="trangThai"
+                        <select id="trangThaiSpctFilter" name="trangThai"
                                 class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
-                            <option value="0">Trạng Thái</option>
-                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            <option value="">Trạng Thái</option>
                             <option value="Đang Hoạt Động">Đang Hoạt Động</option>
+                            <option value="Ngừng Hoạt Động">Ngừng Hoạt Động</option>
                         </select>
                     </label>
                 </div>
@@ -45,11 +45,11 @@
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Hình ảnh</th>
                     <th>Sản phẩm</th>
                     <th>Bar code</th>
                     <th>Giá bán</th>
                     <th>Số lượng</th>
-                    <th>Đợt giảm giá</th>
                     <th>Kích thước</th>
                     <th>Màu sắc</th>
                     <th>Trạng Thái</th>
@@ -59,16 +59,16 @@
                 <tbody>
                 <tr th:each="sp, rowStat : ${sanPhamChiTietList}">
                     <td th:text="${rowStat.index + 1}"></td>
+                    <td ></td>
                     <td th:text="${sp.sanPham.ten}"></td>
                     <td th:text="${sp.barCode}"></td>
                     <td th:text="${sp.giaBan}"></td>
                     <td th:text="${sp.soLuong}"></td>
-                    <td th:text="${sp.dotGiamGia.ten}"></td>
                     <td th:text="${sp.kichThuoc.ten}"></td>
                     <td th:text="${sp.mauSac.ten}"></td>
                     <td>
                         <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                            <span th:text="${sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
