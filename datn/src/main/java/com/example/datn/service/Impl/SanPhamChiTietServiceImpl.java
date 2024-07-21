@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
@@ -38,7 +39,17 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
 
     @Override
     public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
+        for (SanPhamChiTiet spct : sanPhamChiTietList) {
+            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
+                spct.setBarCode(generateBarCode());
+            }
+        }
         sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+    }
+
+    @Override
+    public void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet) {
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
     }
 
     @Override
@@ -49,6 +60,10 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
             spct.setTrangThai(!spct.isTrangThai());
             sanPhamChiTietRepository.save(spct);
         }
+    }
+
+    private String generateBarCode() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
     }
 
 }
