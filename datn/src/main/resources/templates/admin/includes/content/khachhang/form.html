@@ -6,93 +6,47 @@
     <title>Title</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
     <style type="text/css">
-        .css_select_div { text-align: center; }
-        .css_select { display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
+        .css_select_div{ text-align: center;}
+        .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
     </style>
-
-
     <script>
         $(document).ready(function() {
-            const apiToken = 'd7d24c0b-3bcd-11ef-8ba9-b6fbcb92e37e';
-            const provinceUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province';
-            const districtUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district';
-            const wardUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward';
+            //Lấy tỉnh thành
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm',function(data_tinh){
+                if(data_tinh.error==0){
+                   $.each(data_tinh.data, function (key_tinh,val_tinh) {
+                      $("#tinh").append('<option value="'+val_tinh.id+'">'+val_tinh.full_name+'</option>');
+                   });
+                   $("#tinh").change(function(e){
+                        var idtinh=$(this).val();
+                        //Lấy quận huyện
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/'+idtinh+'.htm',function(data_quan){
+                            if(data_quan.error==0){
+                               $("#quan").html('<option value="0">Quận Huyện</option>');
+                               $("#phuong").html('<option value="0">Phường Xã</option>');
+                               $.each(data_quan.data, function (key_quan,val_quan) {
+                                  $("#quan").append('<option value="'+val_quan.id+'">'+val_quan.full_name+'</option>');
+                               });
+                               //Lấy phường xã
+                               $("#quan").change(function(e){
+                                    var idquan=$(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/'+idquan+'.htm',function(data_phuong){
+                                        if(data_phuong.error==0){
+                                           $("#phuong").html('<option value="0">Phường Xã</option>');
+                                           $.each(data_phuong.data, function (key_phuong,val_phuong) {
+                                              $("#phuong").append('<option value="'+val_phuong.id+'">'+val_phuong.full_name+'</option>');
+                                           });
+                                        }
+                                    });
+                               });
 
-            function fetchProvinces() {
-                $.ajax({
-                    url: provinceUrl,
-                    type: 'GET',
-                    headers: {
-                        'token': apiToken
-                    },
-                    success: function(response) {
-                        if (response.code === 200) {
-                            let options = '<option value="0">Tỉnh Thành</option>';
-                            response.data.forEach(function(province) {
-                                options += `<option value="${province.ProvinceID}">${province.ProvinceName}</option>`;
-                            });
-                            $('#tinh').html(options);
-                        }
-                    }
-                });
-            }
+                            }
+                        });
+                   });
 
-            function fetchDistricts(provinceId) {
-                $.ajax({
-                    url: districtUrl,
-                    type: 'GET',
-                    headers: {
-                        'token': apiToken
-                    },
-                    data: {
-                        'province_id': provinceId
-                    },
-                    success: function(response) {
-                        if (response.code === 200) {
-                            let options = '<option value="0">Quận Huyện</option>';
-                            response.data.forEach(function(district) {
-                                options += `<option value="${district.DistrictID}">${district.DistrictName}</option>`;
-                            });
-                            $('#quan').html(options);
-                        }
-                    }
-                });
-            }
-
-            function fetchWards(districtId) {
-                $.ajax({
-                    url: wardUrl,
-                    type: 'GET',
-                    headers: {
-                        'token': apiToken
-                    },
-                    data: {
-                        'district_id': districtId
-                    },
-                    success: function(response) {
-                        if (response.code === 200) {
-                            let options = '<option value="0">Phường Xã</option>';
-                            response.data.forEach(function(ward) {
-                                options += `<option value="${ward.WardCode}">${ward.WardName}</option>`;
-                            });
-                            $('#phuong').html(options);
-                        }
-                    }
-                });
-            }
-
-            fetchProvinces();
-
-            $('#tinh').change(function() {
-                const provinceId = $(this).val();
-                fetchDistricts(provinceId);
+                }
             });
-
-            $('#quan').change(function() {
-                const districtId = $(this).val();
-                fetchWards(districtId);
-            });
-        });
+         });
     </script>
 </head>
 <body>
@@ -154,26 +108,31 @@
                             </div>
                         </div>
 
-
-
-                        <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                        <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5 css_select_div">
                             <div class="lg:col-span-4">
-                                <label class="form-label font-semibold">Tỉnh/Thành Phố:</label>
-                                <select id="tinh"  th:field="*{diaChiList[0].thanhPho}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                <label class="form-label font-semibold css_select">Tỉnh/Thành Phố:</label>
+                                <select id="tinh" th:field="*{diaChiList[0].thanhPho}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="0">Tỉnh Thành</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
-                                <label class="form-label font-semibold">Quận/Huyện:</label>
+                                <label class="form-label font-semibold css_select">Quận/Huyện:</label>
                                 <select id="quan" th:field="*{diaChiList[0].huyen}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="0">Quận Huyện</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
-                                <label class="form-label font-semibold">Phường/Xã:</label>
+                                <label class="form-label font-semibold css_select">Phường/Xã:</label>
                                 <select id="phuong" th:field="*{diaChiList[0].xa}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="0">Phường Xã</option>
                                 </select>
+                            </div>
+
+                            <div class="lg:col-span-12">
+                                <label class="form-label font-semibold">Địa Chỉ: </label>
+                                <input type="text" th:field="*{diaChiList[0].diaChi}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Địa Chỉ">
                             </div>
                         </div>
 
