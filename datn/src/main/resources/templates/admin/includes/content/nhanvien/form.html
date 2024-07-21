@@ -4,20 +4,25 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Thêm hoặc Cập Nhật Nhân Viên</title>
+    <script>
+        function confirmSubmission() {
+            return confirm('Bạn có chắc chắn muốn thêm/cập nhật nhân viên này không?');
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white"
-            th:text="${nhanVien.nhanVienId == null} ? 'Thêm Nhân Viên' : 'Cập Nhập Nhân Viên'">
+            th:text="${nhanVien.nhanVienId == null} ? 'Thêm Nhân Viên' : 'Cập Nhật Nhân Viên'">
         </h2>
     </div>
     <section class="relative md:py-10 bg-white px-25">
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/taikhoan/nhanvien/save}" th:object="${nhanVien}" method="post">
+                    <form th:action="@{/admin/taikhoan/nhanvien/save}" th:object="${nhanVien}" method="post" onsubmit="return confirmSubmission()">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{nhanVienId}"/>
                             <div class="lg:col-span-6">
@@ -25,24 +30,28 @@
                                 <input type="text" th:field="*{hoTen}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Tên Nhân Viên">
+                                <div th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số Điện Thoại:</label>
                                 <input type="number" th:field="*{sdt}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số Điện Thoại">
+                                <div th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Email: </label>
                                 <input type="email" th:field="*{email}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Email">
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Ngày Sinh: </label>
                                 <input type="date" th:field="*{ngaySinh}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Ngày Sinh">
+                                <div th:if="${#fields.hasErrors('ngaySinh')}" th:errors="*{ngaySinh}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Giới tính</label>
@@ -52,42 +61,47 @@
                                                class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
                                         <span class="ml-2">Nữ</span>
                                     </label>
-                                    <label class="inline-flex items-center  ml-4">
+                                    <label class="inline-flex items-center ml-4">
                                         <input type="radio" th:field="*{gioiTinh}" value="true"
                                                class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
                                         <span class="ml-2">Nam</span>
                                     </label>
                                 </div>
+                                <div th:if="${#fields.hasErrors('gioiTinh')}" th:errors="*{gioiTinh}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Thành Phố:</label>
-                                <select id="province" onchange="loadDistricts()"
+                                <select id="province" th:field="*{thanhPho}" onchange="loadDistricts()"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="province : ${provinces}"
                                             th:value="${province.provinceId}"
                                             th:text="${province.provinceName}">
                                     </option>
                                 </select>
+                                <div th:if="${#fields.hasErrors('thanhPho')}" th:errors="*{thanhPho}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Huyện:</label>
-                                <select id="district" onchange="loadWards()"
+                                <select id="district" th:field="*{huyen}" onchange="loadWards()"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option value="">Chọn huyện</option>
                                 </select>
+                                <div th:if="${#fields.hasErrors('huyen')}" th:errors="*{huyen}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Xã:</label>
-                                <select id="ward"
+                                <select id="ward" th:field="*{xa}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
                                     <option value="">Chọn xã</option>
                                 </select>
+                                <div th:if="${#fields.hasErrors('xa')}" th:errors="*{xa}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Địa Chỉ: </label>
                                 <input type="text" th:field="*{diaChi}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Địa Chỉ">
+                                <div th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}" class="text-red-500 text-sm"></div>
                             </div>
                         </div>
                         <div class="mt-10 mb-10 flex justify-center space-x-4">
@@ -97,7 +111,7 @@
                             </a>
                             <button type="submit"
                                     class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
-                                <span th:text="${nhanVien.nhanVienId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
+                                <span th:text="${nhanVien.nhanVienId == null} ? 'Thêm Mới' : 'Cập Nhật'"></span>
                             </button>
                             <a th:href="@{/admin/taikhoan/nhanvien/form}"
                                class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">
