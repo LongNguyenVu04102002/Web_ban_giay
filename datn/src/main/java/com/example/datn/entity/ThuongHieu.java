@@ -29,7 +29,6 @@ public class ThuongHieu {
     @Column(name = "thuongHieuId", nullable = false)
     private Long thuongHieuId;
 
-    @NotEmpty(message = "Tên không được trống!")
     @Size(max = 100)
     @Column(name = "ten", length = 100)
     private String ten;

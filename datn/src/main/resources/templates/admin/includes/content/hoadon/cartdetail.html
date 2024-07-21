@@ -57,7 +57,7 @@
                                                         <td th:text="${spct.getSanPham().getTen()}"></td>
                                                         <td th:text="${spct.getMauSac().getTen()}"></td>
                                                         <td th:text="${spct.getKichThuoc().getTen()}"></td>
-                                                        <td th:text="${#numbers.formatDecimal(spct.getSanPham().getGiaBan(), 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                                        <td th:text="${#numbers.formatDecimal(spct.getGiaBan(), 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                                                         <td>
                                                             <button type="button" class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800"
                                                                     th:data-id="${spct.getSanPhamChiTietId}">
@@ -105,7 +105,7 @@
                                         <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                         <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                         <td>
-                                            <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                            <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                             VNĐ
                                         </td>
                                         <td >
@@ -121,7 +121,7 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                            <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                             VNĐ
                                         </td>
                                     </tr>

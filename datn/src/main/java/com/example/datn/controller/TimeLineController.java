@@ -1,6 +1,6 @@
 package com.example.datn.controller;
 
-import com.example.datn.service.Impl.TimeLineServiceImpl;
+import com.example.datn.service.impl.TimeLineServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

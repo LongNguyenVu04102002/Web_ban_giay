@@ -12,8 +12,9 @@ import java.util.Optional;
 @Service
 public class NhanVienImpl implements NhanVienService {
 
+
     @Autowired
-    NhanVienRepository nhanVienRepository;
+    private NhanVienRepository nhanVienRepository;
 
     @Override
     public List<NhanVien> getAllNhanVien() {

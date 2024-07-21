@@ -10,8 +10,8 @@ public interface SanPhamService {
 
     SanPham getSanPhamById(Long id);
 
-    ResponseEntity<?> getAllSanPham();
+    void save(SanPham sanPham);
 
-    ResponseEntity<?> getAllSanPhamById(Long id);
+    void update(Long id);
 
 }

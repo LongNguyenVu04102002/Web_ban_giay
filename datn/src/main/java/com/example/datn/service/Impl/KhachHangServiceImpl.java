@@ -1,4 +1,4 @@
-package com.example.datn.service.Impl;
+package com.example.datn.service.impl;
 
 import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
@@ -41,8 +41,5 @@ public class KhachHangServiceImpl implements KhachHangService {
         return null;
     }
 
-    @Override
-    public List<KhachHang> searchKhachHang(String sdt, String hoTen, String email) {
-        return khachHangRepository.searchKhachHang(sdt, hoTen, email);
-    }
+
 }

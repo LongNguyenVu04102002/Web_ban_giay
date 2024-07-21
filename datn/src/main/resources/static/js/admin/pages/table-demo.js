@@ -39,14 +39,16 @@ $(document).ready(function () {
         });
     };
 
-    filterColumn('#trangThaiFilter', 7);
+    filterColumn('#trangThaiFilter', 8);
     filterColumn('#loaiHoaDonFilter', 5);
     filterColumn('#maNhanVienFilter', 3);
     filterColumn('#sanPhamFilter', 3, ['#data-table-sp']);
     filterColumn('#loaiPhieuFilter', 2, ['#data-table-pgg']);
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
-    filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
+    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+
+    filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
@@ -81,7 +83,12 @@ $(document).ready(function () {
                     return true;
                 }
                 return false;
+
 } else if (settings.nTable.id === 'data-table-account') {
+            } else if (settings.nTable.id === 'data-table-account') {
+
+} else if (settings.nTable.id === 'data-table-account') {
+
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
@@ -103,4 +110,7 @@ $(document).ready(function () {
             return true;
         }
     );
+
 });
+
+

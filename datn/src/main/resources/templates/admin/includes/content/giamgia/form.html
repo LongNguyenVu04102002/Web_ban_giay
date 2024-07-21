@@ -22,9 +22,11 @@
                             <input type="hidden" th:field="*{phieuGiamGiaId}"/>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Mã giảm giá: </label>
-                                <input type="text" th:field="*{maGiamGia}"
+                                <input type="text" th:field="*{maGiamGia}" autocomplete="off"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Có thể nhập hoặc không...">
+                                <div th:if="${#fields.hasErrors('maGiamGia')}" th:errors="*{maGiamGia}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Loại Phiếu:</label>
@@ -41,6 +43,8 @@
                                            placeholder="dd-MM-yyyy"
                                            th:value="${#dates.format(ngayBatDau, 'dd-MM-yyyy')}">
                                 </span>
+                                <div th:if="${#fields.hasErrors('ngayBatDau')}" th:errors="*{ngayBatDau}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Ngày Kết Thúc:</label>
@@ -50,30 +54,39 @@
                                            placeholder="dd-MM-yyyy"
                                            th:value="${#dates.format(ngayKetThuc, 'dd-MM-yyyy')}">
                                 </span>
+                                <div th:if="${#fields.hasErrors('ngayKetThuc')}" th:errors="*{ngayKetThuc}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Đơn Tối Thiểu: </label>
-                                <input type="number" th:field="*{giaTriDonToiThieu}"
+                                <input type="number" th:field="*{giaTriDonToiThieu}" autocomplete="off"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Đơn Tối Thiểu">
+                                <div th:if="${#fields.hasErrors('giaTriDonToiThieu')}" th:errors="*{giaTriDonToiThieu}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Giảm Tối Đa:</label>
-                                <input type="number" th:field="*{giaTriGiamToiDa}"
+                                <input type="number" th:field="*{giaTriGiamToiDa}" autocomplete="off"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Giảm Tối Đa">
+                                <div th:if="${#fields.hasErrors('giaTriGiamToiDa')}" th:errors="*{giaTriGiamToiDa}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Giảm: </label>
-                                <input type="number" th:field="*{giaTriGiam}"
+                                <input type="number" th:field="*{giaTriGiam}" autocomplete="off"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Giảm">
+                                <div th:if="${#fields.hasErrors('giaTriGiam')}" th:errors="*{giaTriGiam}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số Lượng: </label>
-                                <input type="number" th:field="*{soLuongPhieu}"
+                                <input type="number" th:field="*{soLuongPhieu}" autocomplete="off"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số Lượng">
+                                <div th:if="${#fields.hasErrors('soLuongPhieu')}" th:errors="*{soLuongPhieu}" class="text-red-500 text-sm mt-1"></div>
+
                             </div>
 
                         </div>

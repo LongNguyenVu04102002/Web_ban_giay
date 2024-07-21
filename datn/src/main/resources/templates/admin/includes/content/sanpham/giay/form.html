@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="admincontent">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-semibold text-black dark:text-white"
+            th:text="${sanPham.sanPhamId == null} ? 'Thêm Giầy' : 'Cập Nhập Giầy'">
+        </h2>
+    </div>
+    <section class="relative md:py-10 bg-white px-25">
+        <div class="grid lg:grid-cols-12 gap-6 w-full">
+            <div class="lg:col-span-8">
+                <div class="p-6 rounded-md">
+                    <form th:action="@{/admin/sanpham/giay/save}" th:object="${sanPham}" method="post">
+                        <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                            <input type="hidden" th:field="*{sanPhamId}"/>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Tên Giầy: </label>
+                                <input type="text" th:field="*{ten}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Tên Giầy">
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Thương Hiệu:</label>
+                                <select th:field="*{thuongHieu}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="th : ${lstThuongHieu}" th:value="${th.thuongHieuId}" th:text="${th.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Chất Liệu:</label>
+                                <select th:field="*{chatLieu}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="cl : ${lstChatLieu}" th:value="${cl.chatLieuId}" th:text="${cl.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Cổ Giầy:</label>
+                                <select th:field="*{coGiay}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="cg : ${lstCoGiay}" th:value="${cg.coGiayId}" th:text="${cg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Dây Giầy:</label>
+                                <select th:field="*{dayGiay}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="dg : ${lstDayGiay}" th:value="${dg.dayGiayId}" th:text="${dg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Đế Giầy:</label>
+                                <select th:field="*{deGiay}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="dg : ${lstDeGiay}" th:value="${dg.deGiayId}" th:text="${dg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Lót Giầy:</label>
+                                <select th:field="*{lotGiay}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="lg : ${lstLotGiay}" th:value="${lg.lotGiayId}" th:text="${lg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-6">
+                                <label class="font-semibold">Mũi Giầy:</label>
+                                <select th:field="*{muiGiay}"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option th:each="mg : ${lstMuiGiay}" th:value="${mg.muiGiayId}" th:text="${mg.ten}"></option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-12">
+                                <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
+                                <div class="mt-1 flex items-center space-x-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" th:field="*{trangThai}" value="false"
+                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                        <span class="ml-2">Hoạt Động</span>
+                                    </label>
+                                    <label class="inline-flex items-center ml-4" th:if="${sanPham.sanPhamId} != null">
+                                        <input type="radio" th:field="*{trangThai}" value="true"
+                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
+                                        <span class="ml-2">Ngừng Hoạt Động</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-12">
+                                <label class="font-semibold">Mô Tả: </label>
+                                <textarea th:field="*{moTa}"
+                                          class="w-full py-2 px-3 h-32 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                          placeholder="Mô Tả"></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-10 mb-10 flex justify-center space-x-4">
+                            <a th:href="@{/admin/sanpham/giay}"
+                               class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                Quay lại
+                            </a>
+                            <button type="submit"
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
+                                <span th:text="${sanPham.sanPhamId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
+                            </button>
+                            <a th:href="@{/admin/sanpham/giay/form}"
+                               class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">
+                                Xóa
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
