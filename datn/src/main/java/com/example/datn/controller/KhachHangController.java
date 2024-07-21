@@ -1,5 +1,6 @@
 package com.example.datn.controller;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
@@ -34,7 +35,7 @@ public class KhachHangController {
     public String detail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.getById(id);
         model.addAttribute("khachHang", khachHang);
-        return "admin/includes/content/khachhang/form";
+        return "admin/includes/content/khachhang/detail";
     }
 
     @GetMapping("/khachhang/form")
@@ -48,9 +49,14 @@ public class KhachHangController {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
         }
+
+        for (DiaChi diaChi : khachHang.getDiaChiList()) {
+            diaChi.setKhachHang(khachHang);
+        }
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";
     }
+
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId) {

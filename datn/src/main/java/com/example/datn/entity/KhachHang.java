@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,9 +44,9 @@ public class KhachHang {
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-//    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-    @NotNull(message = "khong dc de trong")
+    @NotNull(message = "Không được để trống")
     private LocalDate ngaySinh;
 
     @NotBlank(message = "Số điện thoại không được để trống")
@@ -55,6 +56,7 @@ public class KhachHang {
     private String sdt;
 
     @Column(name = "email")
+    @NotNull(message = "Không được để trống")
     private String email;
 
     @Column(name = "matKhau")

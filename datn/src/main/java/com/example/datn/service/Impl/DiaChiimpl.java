@@ -1,6 +1,7 @@
 //package com.example.datn.service.Impl;
 //
 //import com.example.datn.entity.DiaChi;
+//import com.example.datn.repository.DiaChiRepository;
 //import com.example.datn.service.DiaChiService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //
@@ -40,7 +41,7 @@
 //        DiaChi existingDiaChi = diaChiRepository.findById(updatedDiaChi.getDiaChiId())
 //                .orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ có ID: " + updatedDiaChi.getDiaChiId()));
 //
-//        existingDiaChi.setDiaChiNhan(updatedDiaChi.getDiaChiNhan());
+//        existingDiaChi.setDiaChi(updatedDiaChi.getDiaChi());
 //        existingDiaChi.setXa(updatedDiaChi.getXa());
 //        existingDiaChi.setHuyen(updatedDiaChi.getHuyen());
 //        existingDiaChi.setThanhPho(updatedDiaChi.getThanhPho());

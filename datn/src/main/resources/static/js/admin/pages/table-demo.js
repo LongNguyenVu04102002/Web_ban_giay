@@ -46,9 +46,13 @@ $(document).ready(function () {
     filterColumn('#loaiPhieuFilter', 2, ['#data-table-pgg']);
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
+<<<<<<< HEAD
     filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
     filterColumn('#trangThaiSpctFilter', 9, ['#data-table-sp']);
+=======
+    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+>>>>>>> KhachHang_LongFix
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
@@ -83,7 +87,7 @@ $(document).ready(function () {
                     return true;
                 }
                 return false;
-            } else if (settings.nTable.id === 'data-table-account') {
+} else if (settings.nTable.id === 'data-table-account') {
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
