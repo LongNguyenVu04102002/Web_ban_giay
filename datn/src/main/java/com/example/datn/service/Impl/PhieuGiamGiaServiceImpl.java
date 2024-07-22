@@ -5,6 +5,7 @@ import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.repository.PhieuGiamGiaRepository;
 import com.example.datn.service.PhieuGiamGiaService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,8 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
 
     @Override
     public List<PhieuGiamGia> getAll() {
-        return phieuGiamGiaRepository.findAll(Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+        return phieuGiamGiaRepository.findAll(Sort
+                .by(Sort.Direction.DESC, "phieuGiamGiaId"));
     }
 
     @Override
