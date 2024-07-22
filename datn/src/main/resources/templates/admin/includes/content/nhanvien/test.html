@@ -10,7 +10,7 @@
 <div layout:fragment="admincontent">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
-            Nhân Viên
+           Nhân Viên
         </h2>
     </div>
     <div class="bg-white">
@@ -56,8 +56,8 @@
             </div>
             <div>
                 <a th:href="@{/admin/taikhoan/nhanvien/form}"
-                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
-                    Thêm nhân viên
+                       class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
+                    Thêm nv
                 </a>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Tên Nhân Viên</th>
+                    <th>Tên Khách Hàng</th>
                     <th>Email</th>
                     <th>Số Điện Thoại</th>
                     <th>Ngày Sinh</th>
@@ -77,31 +77,32 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="nv, rowStat : ${nhanVienList}">
+                <tr th:each="kh, rowStat : ${nhanVienList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td th:text="${nv.hoTen}"></td>
-                    <td th:text="${nv.email}"></td>
-                    <td th:text="${nv.sdt}"></td>
-                    <td th:text="${nv.ngaySinh}"></td>
+                    <td th:text="${kh.hoTen}"></td>
+                    <td th:text="${kh.email}"></td>
+                    <td th:text="${kh.sdt}"></td>
+                    <td th:text="${kh.ngaySinh}"></td>
                     <td>
-                        <button th:class="${nv.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${nv.gioiTinh ? 'Nam' : 'Nữ'}"></span>
+                        <button th:class="${kh.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
+
                     <td>
-                        <button th:class="${nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/taikhoan/nhanvien/{nhanVienId}/toggle(nhanVienId=${nv.nhanVienId})}" method="get">
+                        <form th:action="@{/admin/taikhoan/nhanvien/{nhanVienId}/toggle(nhanVienId=${kh.nhanVienId})}" method="get">
                             <label class="switcher">
-                                <input type="checkbox" id="trangThai${nv.nhanVienId}" name="trangThai"
-                                       th:checked="${!nv.trangThai}" onchange="this.form.submit()">
+                                <input type="checkbox" name="trangThai"
+                                       th:checked="${!kh.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
-                        <a th:href="@{/admin/taikhoan/nhanvien/detail/{id}(id=${nv.nhanVienId})}">
+                        <a th:href="@{/admin/taikhoan/nhanvien/detail/{id}(id=${kh.nhanVienId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                  height="24" fill="none" viewBox="0 0 24 24">
