@@ -39,7 +39,7 @@ $(document).ready(function () {
         });
     };
 
-    filterColumn('#trangThaiFilter', 8);
+    filterColumn('#trangThaiFilter', 7);
     filterColumn('#loaiHoaDonFilter', 5);
     filterColumn('#maNhanVienFilter', 3);
     filterColumn('#sanPhamFilter', 3, ['#data-table-sp']);
