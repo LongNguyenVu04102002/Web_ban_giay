@@ -112,7 +112,7 @@ public class KhachHangController {
         // Cập nhật thông tin khách hàng
         khachHangService.update(khachHang);
 
-        return "redirect:/admin/taikhoan/khachhang";
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
 
 
