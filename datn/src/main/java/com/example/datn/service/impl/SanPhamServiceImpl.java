@@ -4,7 +4,10 @@ import com.example.datn.entity.SanPham;
 import com.example.datn.repository.SanPhamRepository;
 import com.example.datn.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.http.ResponseEntity;
+=======
+>>>>>>> a79652573ae00091410f44bcb9474371fc386898
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Autowired
     private SanPhamRepository sanPhamRepository;
+<<<<<<< HEAD
 
     @Override
     public ResponseEntity<?> getAllSanPham() {
@@ -25,6 +29,8 @@ public class SanPhamServiceImpl implements SanPhamService {
     public ResponseEntity<?> getById(Long id) {
         return ResponseEntity.ok(sanPhamRepository.findById(id));
     }
+=======
+>>>>>>> a79652573ae00091410f44bcb9474371fc386898
 
     @Override
     public List<SanPham> getAll() {

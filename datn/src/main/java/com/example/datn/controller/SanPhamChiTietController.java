@@ -1,6 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
+import com.example.datn.model.response.SanPhamChiTietResponse;
 import com.example.datn.service.Impl.KichThuocServiceImpl;
 import com.example.datn.service.Impl.MauSacServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
@@ -49,6 +50,12 @@ public class SanPhamChiTietController {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getById(id);
         model.addAttribute("spct", sanPhamChiTiet);
         return getString(model);
+    }
+    @PostMapping("/bienthegiay/save")
+    public String save(@ModelAttribute("sanPhamChiTietList")SanPhamChiTietResponse sanPhamChiTietResponse) {
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
+        sanPhamChiTietService.save(sanPhamChiTietList);
+        return "redirect:/admin/sanpham/bienthegiay";
     }
 
     private String getString(Model model) {

@@ -3,7 +3,8 @@ $(document).ready(function () {
         '#data-table-all', '#data-table-cancel', '#data-table-delivery',
         '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
         '#data-table-delivered', '#data-table-completed', '#data-table-cart',
-        '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1'
+        '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1',
+        '#data-table-sp', '#data-table-pgg', '#data-table-account'
     ];
 
     const initializeDataTable = (selector) => {
@@ -47,6 +48,7 @@ $(document).ready(function () {
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+    filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
 
     const filterDateRange = () => {

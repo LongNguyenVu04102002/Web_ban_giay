@@ -88,6 +88,22 @@
                             <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
+<<<<<<< HEAD
+=======
+                    <td>
+                        <ul>
+                            <!-- Kiểm tra điều kiện trước khi lặp qua danh sách địa chỉ -->
+                            <li th:if="${kh.diaChiList != null}" th:each="diaChi : ${kh.diaChiList}">
+                                <span th:text="${diaChi.diaChi}"></span>,
+                                <span th:text="${diaChi.xa}"></span>,
+                                <span th:text="${diaChi.huyen}"></span>,
+                                <span th:text="${diaChi.thanhPho}"></span>
+                            </li>
+                        </ul>
+                    </td>
+
+                    <td></td>
+>>>>>>> a79652573ae00091410f44bcb9474371fc386898
 <!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
                     <td>
                         <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
