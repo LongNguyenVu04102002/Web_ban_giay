@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,6 +21,8 @@ public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
+
+
 
     @GetMapping("/khachhang")
     public String show(Model model) {
@@ -38,6 +39,13 @@ public class KhachHangController {
         return "admin/includes/content/khachhang/detail";
     }
 
+    @GetMapping("/khachhang/update/{id}")
+    public String updateView(@PathVariable Long id, Model model) {
+        KhachHang khachHang = khachHangService.getById(id);
+        model.addAttribute("khachHang", khachHang);
+        return "admin/includes/content/khachhang/update";
+    }
+
     @GetMapping("/khachhang/form")
     public String viewAdd(Model model) {
         model.addAttribute("khachHang", new KhachHang());
@@ -45,7 +53,18 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/save")
-    public String save(@Valid KhachHang khachHang, BindingResult result, Model model) {
+    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+        // Kiểm tra trùng lặp số điện thoại
+        if (khachHangService.isSdtExist(khachHang.getSdt())) {
+            result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đã tồn tại"));
+        }
+
+        // Kiểm tra trùng lặp email
+        if (khachHangService.isEmailExist(khachHang.getEmail())) {
+            result.addError(new FieldError("khachHang", "email", "Email đã tồn tại"));
+        }
+
+        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
         }
@@ -56,6 +75,46 @@ public class KhachHangController {
         khachHangService.save(khachHang);
         return "redirect:/admin/taikhoan/khachhang";
     }
+
+
+    @PostMapping("/khachhang/update")
+    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+        // Kiểm tra trùng lặp số điện thoại
+        if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
+            result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
+        }
+
+        // Kiểm tra trùng lặp email
+        if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
+            result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
+        }
+
+        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
+        if (result.hasErrors()) {
+            return "admin/includes/content/khachhang/update";
+        }
+
+        // Loại bỏ các địa chỉ không hợp lệ
+        List<DiaChi> validDiaChiList = new ArrayList<>();
+        for (DiaChi diaChi : khachHang.getDiaChiList()) {
+            if (diaChi.getThanhPho() != null && !diaChi.getThanhPho().isEmpty() &&
+                    diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
+                    diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
+                    diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
+                diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
+                validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
+            }
+        }
+
+        // Cập nhật danh sách địa chỉ của khách hàng
+        khachHang.setDiaChiList(validDiaChiList);
+
+        // Cập nhật thông tin khách hàng
+        khachHangService.update(khachHang);
+
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
+    }
+
 
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
