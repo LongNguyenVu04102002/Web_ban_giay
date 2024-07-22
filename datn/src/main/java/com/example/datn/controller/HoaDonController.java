@@ -4,7 +4,7 @@ import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.service.impl.HoaDonServiceImpl;
-import com.example.datn.service.impl.NhanVienServiceImpl;
+import com.example.datn.service.Impl.NhanVienServiceImpl;
 import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
