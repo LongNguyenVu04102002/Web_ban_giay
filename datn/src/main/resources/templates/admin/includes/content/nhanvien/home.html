@@ -89,8 +89,7 @@
                             <span th:text="${nv.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
-                    <td></td>
-                    <!--                    <td th:text="${nv.diaChi + ', ' + nv.xa + ', ' + nv.huyen + ', ' + nv.thanhPho}"></td>-->
+                                        <td th:text="${nv.diaChi}"></td>
                     <td>
                         <button th:class="${nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
                             <span th:text="${nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
