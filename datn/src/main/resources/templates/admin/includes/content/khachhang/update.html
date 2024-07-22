@@ -8,8 +8,12 @@
     <style type="text/css">
         .css_select_div{ text-align: center;}
         .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #f4f4f4; }
     </style>
     <script>
+
         $(document).ready(function() {
             //Lấy tỉnh thành
             $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm',function(data_tinh){
@@ -39,14 +43,113 @@
                                         }
                                     });
                                });
-
                             }
                         });
                    });
-
                 }
             });
          });
+
+  $(document).ready(function() {
+      // URL của API để lấy thông tin tỉnh/thành phố
+      let apiUrlTinhThanh = 'https://esgoo.net/api-tinhthanh/1/0.htm';
+      let apiUrlHuyen = 'https://esgoo.net/api-tinhthanh/2/';
+      let apiUrlXa = 'https://esgoo.net/api-tinhthanh/3/';
+
+      // Lưu trữ ánh xạ id với full_name
+      let idToFullNameTinh = {};
+      let idToFullNameHuyen = {};
+      let idToFullNameXa = {};
+
+      // Tải dữ liệu từ API tỉnh/thành phố và xây dựng ánh xạ
+      $.getJSON(apiUrlTinhThanh, function(response) {
+          if (response.error === 0) {
+              response.data.forEach(function(item) {
+                  idToFullNameTinh[item.id] = item.full_name;
+              });
+              updateTableTinh();
+          } else {
+              console.error('Error: ' + response.error);
+          }
+      });
+
+      // Tải dữ liệu từ API huyện và xây dựng ánh xạ
+      $('.tinhThanhPho').each(function() {
+          let val_tinh = $(this).text().trim();  // Lấy giá trị của tỉnh/thành phố
+          let url = `${apiUrlHuyen}${val_tinh}.htm`;
+
+          $.getJSON(url, function(response) {
+              if (response.error === 0) {
+                  response.data.forEach(function(item) {
+                      idToFullNameHuyen[item.id] = item.full_name;
+                  });
+                  updateTableHuyen();
+              } else {
+                  console.error('Error: ' + response.error);
+              }
+          });
+      });
+
+      // Tải dữ liệu từ API xã và xây dựng ánh xạ
+      $('.huyenQuan').each(function() {
+          let val_huyen = $(this).text().trim();  // Lấy giá trị của huyện
+          let url = `${apiUrlXa}${val_huyen}.htm`;
+
+          $.getJSON(url, function(response) {
+              if (response.error === 0) {
+                  response.data.forEach(function(item) {
+                      idToFullNameXa[item.id] = item.full_name;
+                  });
+                  updateTableXa();
+              } else {
+                  console.error('Error: ' + response.error);
+              }
+          });
+      });
+
+      function updateTableTinh() {
+          // Cập nhật bảng với dữ liệu từ idToFullNameTinh
+          $('.tinhThanhPho').each(function() {
+              let $this = $(this);
+              let id = $this.text().trim();  // Lấy id từ thanhPho
+              let fullName = idToFullNameTinh[id] || id;  // Tìm full_name từ ánh xạ
+
+              // Cập nhật nội dung của ô
+              $this.text(fullName);
+          });
+      }
+
+      function updateTableHuyen() {
+          // Cập nhật bảng với dữ liệu từ idToFullNameHuyen
+          $('.huyenQuan').each(function() {
+              let $this = $(this);
+              let id = $this.text().trim();  // Lấy id từ huyện
+              let fullName = idToFullNameHuyen[id] || id;  // Tìm full_name từ ánh xạ
+
+              // Cập nhật nội dung của ô
+              $this.text(fullName);
+          });
+      }
+
+      function updateTableXa() {
+          // Cập nhật bảng với dữ liệu từ idToFullNameXa
+          $('.xaPhuong').each(function() {
+              let $this = $(this);
+              let val_huyen = $this.closest('tr').find('.huyenQuan').text().trim();  // Lấy giá trị của huyện
+              let id = $this.text().trim();  // Lấy id từ xã
+              let fullName = idToFullNameXa[id] || id;  // Tìm full_name từ ánh xạ
+
+              // Cập nhật nội dung của ô
+              $this.text(fullName);
+          });
+      }
+  });
+
+
+
+
+
+
     </script>
 </head>
 <body>
@@ -60,7 +163,7 @@
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/taikhoan/khachhang/save}" th:object="${khachHang}" method="post">
+                    <form th:action="@{/admin/taikhoan/khachhang/update}" th:object="${khachHang}" method="post">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{khachHangId}"/>
                             <div class="lg:col-span-6">
@@ -68,36 +171,28 @@
                                 <input type="text" th:field="*{hoTen}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Tên Khách Hàng">
-                                <div th:if="${#fields.hasErrors('hoTen')}" class="text-red-500 text-sm mt-1">
-                                    <p th:errors="*{hoTen}"></p>
-                                </div>
+                                <div th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số Điện Thoại:</label>
                                 <input type="text" th:field="*{sdt}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số Điện Thoại">
-                                <div th:if="${#fields.hasErrors('sdt')}" class="text-red-500 text-sm mt-1">
-                                    <p th:errors="*{sdt}"></p>
-                                </div>
+                                <div th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Email: </label>
                                 <input type="email" th:field="*{email}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Email">
-                                <div th:if="${#fields.hasErrors('email')}" class="text-red-500 text-sm mt-1">
-                                    <p th:errors="*{email}"></p>
-                                </div>
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Ngày Sinh: </label>
                                 <input type="date" th:field="*{ngaySinh}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Ngày Sinh">
-                                <div th:if="${#fields.hasErrors('ngaySinh')}" class="text-red-500 text-sm mt-1">
-                                    <p th:errors="*{ngaySinh}"></p>
-                                </div>
+                                <div th:if="${#fields.hasErrors('ngaySinh')}" th:errors="*{ngaySinh}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Giới tính</label>
@@ -119,20 +214,20 @@
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5 css_select_div">
                             <div class="lg:col-span-4">
 
-                                <select id="tinh" th:field="*{diaChiList[0].thanhPho}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                    <option value="0">Tỉnh Thành</option>
+                                <select id="tinh"  th:field="*{diaChiList[0].thanhPho}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                    <option value="">Tỉnh Thành</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
 
                                 <select id="quan" th:field="*{diaChiList[0].huyen}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                    <option value="0">Quận Huyện</option>
+                                    <option value="">Quận Huyện</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
 
                                 <select id="phuong" th:field="*{diaChiList[0].xa}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                    <option value="0">Phường Xã</option>
+                                    <option value="">Phường Xã</option>
                                 </select>
                             </div>
                         </div>
@@ -144,9 +239,12 @@
                                    placeholder="Địa Chỉ">
                         </div>
 
-                        <div class="lg:col-span-12 mt-4 flex items-center justify-end space-x-4">
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Lưu</button>
-                            <a href="#" class="bg-gray-500 text-white px-4 py-2 rounded-md">Hủy</a>
+                        <!-- Address Table -->
+
+
+                        <div class="mt-6">
+                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Lưu</button>
+                            <a href="#" class="bg-gray-500 text-white py-2 px-4 rounded ml-2">Hủy</a>
                         </div>
                     </form>
                 </div>

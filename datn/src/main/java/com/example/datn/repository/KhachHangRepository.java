@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
     @Query("SELECT k FROM KhachHang k WHERE " +
@@ -15,4 +16,15 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
     List<KhachHang> searchKhachHang(@Param("sdt") String sdt,
                                     @Param("hoTen") String hoTen,
                                     @Param("email") String email);
+
+    boolean existsBySdt(String sdt);
+
+    boolean existsByEmail(String email);
+
+    KhachHang findBySdt(String sdt);
+    KhachHang findByEmail(String email);
+
+    boolean existsBySdtAndKhachHangIdNot(String sdt, Long excludeId);
+
+    boolean existsByEmailAndKhachHangIdNot(String email, Long excludeId);
 }
