@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/save")
-    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isSdtExist(khachHang.getSdt())) {
             result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đã tồn tại"));
@@ -73,6 +74,7 @@ public class KhachHangController {
             diaChi.setKhachHang(khachHang);
         }
         khachHangService.save(khachHang);
+        redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
         return "redirect:/admin/taikhoan/khachhang";
     }
 
