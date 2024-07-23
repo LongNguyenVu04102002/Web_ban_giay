@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<<<<<<< HEAD
 
     <style>
         .btn-container {
@@ -37,9 +36,10 @@
             transform: scale(0.98); /* Thu nhỏ kích thước khi nhấn */
         }
 
+
+
+
     </style>
-=======
->>>>>>> parent of 70dd1e8 (fix)
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -49,6 +49,9 @@
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Khách Hàng
         </h2>
+        <div class="btn-container">
+            <a th:href="@{/admin/taikhoan/khachhang}" class="custom-button">Refresh</a>
+        </div>
     </div>
     <div class="bg-white">
         <div class="flex items-center justify-between border-b border-stroke py-4 px-4">
@@ -140,6 +143,19 @@
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
+
+                        <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
+                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                 height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M21.29 2.71a1 1 0 0 0-1.42 0l-2.13 2.13 2.12 2.12 2.13-2.13a1 1 0 0 0 0-1.42zM3 16.3V21h4.7l11-11-4.7-4.7L3 16.3z"/>
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        </a>
+
+
                         <a th:href="@{/admin/taikhoan/khachhang/detail/{id}(id=${kh.khachHangId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -151,16 +167,7 @@
                             </svg>
                         </a>
 
-                        <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
-                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
-                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                 height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                            </svg>
-                        </a>
+
                     </td>
                 </tr>
                 </tbody>
@@ -170,3 +177,20 @@
 </div>
 </body>
 </html>
+
+<script>
+    function confirmChange() {
+        const form = document.getElementById('toggleForm');
+        const checkbox = form.querySelector('input[name="trangThai"]');
+        const isChecked = checkbox.checked;
+        const confirmationMessage = isChecked
+            ? 'Bạn có chắc chắn muốn bật trạng thái này?'
+            : 'Bạn có chắc chắn muốn tắt trạng thái này?';
+
+        if (confirm(confirmationMessage)) {
+            form.submit(); // Submit the form if the user confirms
+        } else {
+            checkbox.checked = !isChecked; // Revert the checkbox state if the user cancels
+        }
+    }
+</script>
