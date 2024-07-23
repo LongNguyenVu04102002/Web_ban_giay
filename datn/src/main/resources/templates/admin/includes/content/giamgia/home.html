@@ -130,7 +130,7 @@
                               method="get">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${pgg.trangThai == 1}" onchange="this.form.submit()">
+                                       th:checked="${pgg.trangThai == 1}" onchange="confirmToggle(this)">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
@@ -149,3 +149,16 @@
 </div>
 </body>
 </html>
+<script>
+    function confirmToggle(checkbox) {
+        var form = checkbox.form;
+        var message = checkbox.checked ? "Bạn có chắc chắn muốn kết thúc?" : "Bạn có chắc chắn muốn kết thúc?";
+        if (confirm(message)) {
+            form.submit();
+        } else {
+            // Hoàn tác thay đổi trạng thái của checkbox nếu người dùng nhấn "Cancel"
+            checkbox.checked = !checkbox.checked;
+        }
+    }
+</script>
+
