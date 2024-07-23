@@ -44,7 +44,7 @@
                             </form>
 
                             <div class="mt-4">
-                                <h5 class="font-medium">Màu sắc:</h5>
+                                <h5 class="font-medium">Colors:</h5>
                                 <ul class="list-none mt-2">
                                     <li class="inline"><a href="#" class="size-6 rounded-full ring-2 ring-gray-200 dark:ring-slate-800 bg-red-600 inline-flex align-middle" title="Red"></a></li>
                                     <li class="inline"><a href="#" class="size-6 rounded-full ring-2 ring-gray-200 dark:ring-slate-800 bg-indigo-600 inline-flex align-middle" title="Blue"></a></li>
@@ -57,29 +57,29 @@
                             </div>
 
                             <div class="mt-4">
-                                <h5 class="font-medium">Thương hiệu:</h5>
-                                <ul class="list-none mt-2" th:each="thuonghieu : ${thuongHieuList}">
-                                    <li>
-                                        <a href="#" class="text-slate-400 dark:text-gray-100">
-                                            <i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>
-                                            <span th:text="${thuonghieu.ten}"></span>
-                                        </a>
-                                    </li>
+                                <h5 class="font-medium">Brands:</h5>
+                                <ul class="list-none mt-2">
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>Alexander McQueen</a></li>
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>Alexander Wang</a></li>
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>Allegra K</a></li>
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>AllSaints</a></li>
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>Badgley Mischka</a></li>
+                                    <li><a href="#" class="text-slate-400 dark:text-gray-100"><i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>Baldinini</a></li>
                                 </ul>
                             </div>
-
 
                             <div class="mt-4">
-                                <h5 class="font-medium">Kích cỡ:</h5>
+                                <h5 class="font-medium">Sizes:</h5>
                                 <ul class="list-none mt-2">
-                                    <li th:each="size : ${kichThuocList}" class="inline">
-                                        <a href="#" class="size-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100"
-                                           th:text="${size.ten}">
-                                        </a>
-                                    </li>
+                                    <li class="inline"><a href="#" class="size-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">S</a></li>
+                                    <li class="inline"><a href="#" class="size-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">M</a></li>
+                                    <li class="inline"><a href="#" class="size-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">L</a></li>
+                                    <li class="inline"><a href="#" class="size-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">XL</a></li>
+                                    <li class="inline"><a href="#" class="w-10 h-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">2XL</a></li>
+                                    <li class="inline"><a href="#" class="w-10 h-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">3XL</a></li>
+                                    <li class="inline"><a href="#" class="w-10 h-7 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md border border-gray-100 dark:border-gray-800 text-slate-900 dark:text-gray-50 hover:border-slate-900 dark:hover:border-gray-100 hover:text-white dark:hover:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100">4XL</a></li>
                                 </ul>
                             </div>
-
                         </div>
                     </div><!--end col-->
 
@@ -102,34 +102,31 @@
                         <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
                             <div class="group" th:each="sp : ${sanPhamList}">
                                 <div class="relative flex justify-center overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                                    <img src="/images/shop/fashion-shoes-sneaker.jpg" class="group-hover:scale-110 duration-500" alt="">
+                                    <img src="/images/shop/black-print-t-shirt.jpg" class="group-hover:scale-110 duration-500" alt="">
                                     <ul class="absolute -bottom-20 group-hover:bottom-3 left-1/2 -translate-x-1/2 transform duration-500 flex justify-center space-x-2 list-none">
-<!--                                        <li class="mt-1">-->
-<!--                                            <a class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">-->
-<!--                                                <i data-feather="heart" class="size-4"></i>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
                                         <li class="mt-1">
-                                            <a th:href="@{/shop/detail/{id}(id=${sp.sanPhamId})}"
+                                            <a class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
+                                                <i data-feather="heart" class="size-4"></i>
+                                            </a>
+                                        </li>
+                                        <li class="mt-1">
+                                            <a th:href="@{/sanpham/detail/{id}(id=${sp.sanPhamId})}"
                                                     class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
                                                 <i data-feather="eye" class="size-4"></i>
                                             </a>
                                         </li>
                                         <li class="mt-1">
                                             <a class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
-                                                <i data-feather="shopping-bag" class="size-4"></i>
+                                                <i data-feather="bookmark" class="size-4"></i>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
 
                                 <div class="mt-4">
-                                    <a th:href="@{/shop/detail/{id}(id=${sp.sanPhamId})}"
-                                       class="hover:text-orange-500 text-lg font-medium"
-                                       th:text="${sp.ten}">
-                                    </a>
+                                    <a href="#" class="hover:text-orange-500 text-lg font-medium" th:text="${sp.ten}"></a>
                                     <div class="flex justify-between items-center mt-1">
-                                        <p th:text="${#numbers.formatDecimal(sp.sanPhamChiTietList[0].giaBan,1, 'COMMA', 0, 'POINT')} + ' VND'"></p>
+                                        <p th:text="${sp.giaBan}"></p>
                                         <ul class="font-medium text-amber-400 list-none">
                                             <li class="inline"><i class="mdi mdi-star"></i></li>
                                             <li class="inline"><i class="mdi mdi-star"></i></li>

@@ -15,10 +15,6 @@ public interface PhieuGiamGiaService {
 
     void save(PhieuGiamGia phieuGiamGia);
 
-
     void update(Long id);
-
-    PhieuGiamGia tonggleTrangThaiGiamGia(Long id);
-
 
 }

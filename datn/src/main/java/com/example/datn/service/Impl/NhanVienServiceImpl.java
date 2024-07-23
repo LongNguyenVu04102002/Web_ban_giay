@@ -1,5 +1,6 @@
 package com.example.datn.service.Impl;
 
+import com.example.datn.entity.KhachHang;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.service.NhanVienService;
@@ -31,24 +32,13 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public boolean existsBySdt(String sdt) {
-        return nhanVienRepository.findBySdt(sdt).isPresent();
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-        return nhanVienRepository.findByEmail(email).isPresent();
-    }
-
-    @Override
-    public NhanVien toggleTrangThai(Long nhanVienId) {
-        Optional<NhanVien> optionalNhanVien = nhanVienRepository.findById(nhanVienId);
-        if (optionalNhanVien.isPresent()) {
-            NhanVien nhanVien = optionalNhanVien.get();
-            nhanVien.setTrangThai(!nhanVien.isTrangThai());
-            return nhanVienRepository.save(nhanVien);
+    public void updateTrangThai(Long id) {
+        Optional<NhanVien> nhanVien = nhanVienRepository.findById(id);
+        if(nhanVien.isPresent()) {
+            NhanVien nv = nhanVien.get();
+            nv.setTrangThai(!nv.isTrangThai());
+            nhanVienRepository.save(nv);
         }
-        return null;
     }
 
 }

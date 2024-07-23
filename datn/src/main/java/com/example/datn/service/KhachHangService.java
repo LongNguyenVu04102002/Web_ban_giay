@@ -10,16 +10,7 @@ public interface KhachHangService {
 
     KhachHang getById(Long Id);
 
-    KhachHang  save(KhachHang khachHang);
+    void save(KhachHang khachHang);
     KhachHang toggleTrangThai(Long khachHangId);
 
-
-    KhachHang update(KhachHang khachHang);
-    boolean isSdtExist(String sdt);
-
-    boolean isEmailExist(String email);
-
-    boolean isPhoneNumberDuplicate(String sdt, Long excludeId);
-
-    boolean isEmailDuplicate(String email, Long excludeId);
 }

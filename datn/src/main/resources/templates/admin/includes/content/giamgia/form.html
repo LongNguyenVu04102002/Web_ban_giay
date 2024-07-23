@@ -5,13 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-        function confirmAction(button) {
-            var buttonId = button.id;
-            var message = buttonId === 'btnAdd' ? "Bạn có chắc chắn muốn thêm?" : "Bạn có chắc chắn muốn cập nhật?";
-            return confirm(message);
-        }
-    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -27,14 +20,6 @@
                     <form th:action="@{/admin/giamgia/save}" th:object="${phieuGiamGia}" method="post">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{phieuGiamGiaId}"/>
-                            <div class="lg:col-span-12">
-                                <label class="form-label font-semibold">Mã giảm giá: </label>
-                                <input type="text" th:field="*{maGiamGia}" autocomplete="off"
-                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                       placeholder="Có thể nhập hoặc không...">
-                                <div th:if="${#fields.hasErrors('maGiamGia')}" th:errors="*{maGiamGia}" class="text-red-500 text-sm mt-1"></div>
-
-                            </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Loại Phiếu:</label>
                                 <select th:field="*{loaiPhieu}" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
@@ -50,8 +35,6 @@
                                            placeholder="dd-MM-yyyy"
                                            th:value="${#dates.format(ngayBatDau, 'dd-MM-yyyy')}">
                                 </span>
-                                <div th:if="${#fields.hasErrors('ngayBatDau')}" th:errors="*{ngayBatDau}" class="text-red-500 text-sm mt-1"></div>
-
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Ngày Kết Thúc:</label>
@@ -61,39 +44,30 @@
                                            placeholder="dd-MM-yyyy"
                                            th:value="${#dates.format(ngayKetThuc, 'dd-MM-yyyy')}">
                                 </span>
-                                <div th:if="${#fields.hasErrors('ngayKetThuc')}" th:errors="*{ngayKetThuc}" class="text-red-500 text-sm mt-1"></div>
-
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Đơn Tối Thiểu: </label>
-                                <input type="number" th:field="*{giaTriDonToiThieu}" autocomplete="off"
+                                <input type="number" th:field="*{giaTriDonToiThieu}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Đơn Tối Thiểu">
-                                <div th:if="${#fields.hasErrors('giaTriDonToiThieu')}" th:errors="*{giaTriDonToiThieu}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Giảm Tối Đa:</label>
-                                <input type="number" th:field="*{giaTriGiamToiDa}" autocomplete="off"
+                                <input type="number" th:field="*{giaTriGiamToiDa}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Giảm Tối Đa">
-                                <div th:if="${#fields.hasErrors('giaTriGiamToiDa')}" th:errors="*{giaTriGiamToiDa}" class="text-red-500 text-sm mt-1"></div>
-
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Giá Trị Giảm: </label>
-                                <input type="number" th:field="*{giaTriGiam}" autocomplete="off"
+                                <input type="number" th:field="*{giaTriGiam}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Giá Trị Giảm">
-                                <div th:if="${#fields.hasErrors('giaTriGiam')}" th:errors="*{giaTriGiam}" class="text-red-500 text-sm mt-1"></div>
-
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số Lượng: </label>
-                                <input type="number" th:field="*{soLuongPhieu}" autocomplete="off"
+                                <input type="number" th:field="*{soLuongPhieu}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số Lượng">
-                                <div th:if="${#fields.hasErrors('soLuongPhieu')}" th:errors="*{soLuongPhieu}" class="text-red-500 text-sm mt-1"></div>
-
                             </div>
 
                         </div>
@@ -103,10 +77,8 @@
                                 Quay lại
                             </a>
                             <button type="submit"
-                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"
-                                    th:id="${phieuGiamGia.phieuGiamGiaId == null} ? 'btnAdd' : 'btnUpdate'"
-                                    onclick="return confirmAction(this)">
-                                <span th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Mới' : 'Cập Nhật'"></span>
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
+                                <span th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
                             </button>
                             <a th:href="@{/admin/giamgia/form}"
                                class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">
@@ -120,6 +92,5 @@
     </section>
 
 </div>
-
 </body>
 </html>

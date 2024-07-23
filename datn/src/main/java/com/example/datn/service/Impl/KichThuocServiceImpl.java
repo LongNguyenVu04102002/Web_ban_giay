@@ -33,5 +33,4 @@ public class KichThuocServiceImpl implements KichThuocService {
     public void delete(Long id) {
         kichThuocRepository.deleteById(id);
     }
-
 }

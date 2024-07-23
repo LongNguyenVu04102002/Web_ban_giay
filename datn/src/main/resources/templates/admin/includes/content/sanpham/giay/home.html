@@ -25,9 +25,9 @@
                     <label>
                         <select id="trangThaiSpFilter" name="trangThai"
                                 class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
-                            <option value="">Trạng Thái</option>
+                            <option value="0">Trạng Thái</option>
+                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
                             <option value="Đang Hoạt Động">Đang Hoạt Động</option>
-                            <option value="Ngừng Hoạt Động">Ngừng Hoạt Động</option>
                         </select>
                     </label>
                 </div>
@@ -72,7 +72,7 @@
                     <td th:text="${sp.moTa}"></td>
                     <td>
                         <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
+                            <span th:text="${sp.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">

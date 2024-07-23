@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-<<<<<<< HEAD
-=======
-import java.util.UUID;
->>>>>>> master
 
 @Service
 public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
@@ -42,26 +38,10 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
 
     @Override
     public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
-<<<<<<< HEAD
-=======
-        for (SanPhamChiTiet spct : sanPhamChiTietList) {
-            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
-                spct.setBarCode(generateBarCode());
-            }
-        }
->>>>>>> master
         sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
     }
 
     @Override
-<<<<<<< HEAD
-=======
-    public void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet) {
-        sanPhamChiTietRepository.save(sanPhamChiTiet);
-    }
-
-    @Override
->>>>>>> master
     public void update(Long id) {
         Optional<SanPhamChiTiet> sanPhamChiTiet = sanPhamChiTietRepository.findById(id);
         if(sanPhamChiTiet.isPresent()){
@@ -71,11 +51,4 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         }
     }
 
-<<<<<<< HEAD
-=======
-    private String generateBarCode() {
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
-    }
-
->>>>>>> master
 }

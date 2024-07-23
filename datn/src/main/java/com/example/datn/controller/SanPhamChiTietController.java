@@ -2,7 +2,10 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
-import com.example.datn.service.*;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,22 +19,16 @@ import java.util.List;
 public class SanPhamChiTietController {
 
     @Autowired
-    private SanPhamChiTietService sanPhamChiTietService;
+    private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
     @Autowired
-    private SanPhamService sanPhamService;
+    private SanPhamServiceImpl sanPhamService;
 
     @Autowired
-    private KichThuocService kichThuocService;
+    private KichThuocServiceImpl kichThuocService;
 
     @Autowired
-    private MauSacService mauSacService;
-
-    @Autowired
-    private HinhAnhService hinhAnhService;
-
-//    @Autowired
-//    private DotGiamGiaServiceImpl dotGiamGiaService;
+    private MauSacServiceImpl mauSacService;
 
     @GetMapping("/bienthegiay")
     public String show(Model model) {
@@ -52,20 +49,12 @@ public class SanPhamChiTietController {
     public String detail(@PathVariable Long id, Model model) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getById(id);
         model.addAttribute("spct", sanPhamChiTiet);
-        return getStringUpdate(model);
+        return getString(model);
     }
     @PostMapping("/bienthegiay/save")
-    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
+    public String save(@ModelAttribute("sanPhamChiTietList")SanPhamChiTietResponse sanPhamChiTietResponse) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
-        List<HinhAnh> hinhAnhList = new ArrayList<>();
-        hinhAnhService.save(hinhAnhList);
         sanPhamChiTietService.save(sanPhamChiTietList);
-        return "redirect:/admin/sanpham/bienthegiay";
-    }
-
-    @PostMapping("/bienthegiay/save-update")
-    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {
-        sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
 
@@ -76,16 +65,5 @@ public class SanPhamChiTietController {
         return "admin/includes/content/sanpham/bienthegiay/form";
     }
 
-    private String getStringUpdate(Model model) {
-        model.addAttribute("lstKichThuoc", kichThuocService.getAll());
-        model.addAttribute("lsMauSac", mauSacService.getAll());
-        model.addAttribute("lstSanPham", sanPhamService.getAll());
-        return "admin/includes/content/sanpham/bienthegiay/form-update";
-    }
 
-    @PostMapping("/bienthegiay/update/{id}")
-    public String update(@PathVariable Long id) {
-        sanPhamChiTietService.update(id);
-        return "redirect:/admin/sanpham/bienthegiay";
-    }
 }

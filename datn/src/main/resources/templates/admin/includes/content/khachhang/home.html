@@ -5,46 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<<<<<<< HEAD
-
-    <style>
-        .btn-container {
-            margin-left: auto; /* Đẩy nút về phía bên phải */
-        }
-
-        .custom-button {
-            display: inline-block;
-            padding: 8px 16px; /* Điều chỉnh kích thước padding */
-            font-size: 14px; /* Kích thước font nhỏ hơn */
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff; /* Màu nền xanh dương */
-            border: none;
-            border-radius: 8px; /* Bo tròn góc với bán kính lớn hơn */
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .custom-button:hover {
-            background-color: #0056b3; /* Màu nền khi hover */
-            transform: scale(1.05); /* Tăng kích thước khi hover */
-        }
-
-        .custom-button:active {
-            background-color: #004080; /* Màu nền khi nhấn */
-            transform: scale(0.98); /* Thu nhỏ kích thước khi nhấn */
-        }
-
-    </style>
-=======
->>>>>>> parent of 70dd1e8 (fix)
 </head>
 <body>
 <div layout:fragment="admincontent">
-
-    <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Khách Hàng
@@ -125,11 +88,6 @@
                             <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
-<<<<<<< HEAD
-=======
-
-                    <!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
->>>>>>> master
                     <td>
                         <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
                             <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
@@ -145,17 +103,6 @@
                             </label>
                         </form>
                         <a th:href="@{/admin/taikhoan/khachhang/detail/{id}(id=${kh.khachHangId})}">
-                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
-                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                 height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                            </svg>
-                        </a>
-
-                        <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                  height="24" fill="none" viewBox="0 0 24 24">
