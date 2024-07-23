@@ -1,7 +1,6 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.GioHang;
-import com.example.datn.entity.HoaDonChiTiet;
 import com.example.datn.service.Impl.GioHangServiceImpl;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -49,22 +49,10 @@ public class BanHangTaiQuayController {
                 gioHangService.getById(5L)
         );
 
-        BigDecimal tamTinh = gioHangList.stream()
-                .flatMap(gioHang -> gioHang.getGioHangChiTietList().stream())
-                .map(chiTiet -> {
-                    BigDecimal giaBan = chiTiet.getSanPhamChiTiet().getGiaBan();
-                    BigDecimal soLuong = BigDecimal.valueOf(chiTiet.getSoLuong());
-                    return soLuong.multiply(giaBan);
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         BigDecimal tongTienGiam = (BigDecimal) model.asMap().getOrDefault("tongTienGiam", BigDecimal.ZERO);
-        BigDecimal tongTienSauGiam = tamTinh.subtract(tongTienGiam);
 
         model.addAttribute("gioHangList", gioHangList);
-        model.addAttribute("tamTinh", tamTinh);
         model.addAttribute("tongTienGiam", tongTienGiam);
-        model.addAttribute("tongTienSauGiam", tongTienSauGiam);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietService.getAll());
         model.addAttribute("khachHangList", khachHangService.getAll());
 
@@ -77,14 +65,16 @@ public class BanHangTaiQuayController {
         return "redirect:/admin/banhang";
     }
 
-    @PostMapping("/banhang/update/stepdown")
-    public String stepDown(@RequestParam Long gioHangChiTietId, @RequestParam Long sanPhamChiTietId) {
+    @GetMapping("/banhang/update/stepdown")
+    public String stepDown(@RequestParam("gioHangChiTietId") Long gioHangChiTietId,
+                           @RequestParam("sanPhamChiTietId") Long sanPhamChiTietId) {
         gioHangService.stepDown(gioHangChiTietId, sanPhamChiTietId);
         return "redirect:/admin/banhang";
     }
 
-    @PostMapping("/banhang/update/stepup")
-    public String stepUp(@RequestParam Long gioHangChiTietId, @RequestParam Long sanPhamChiTietId) {
+    @GetMapping("/banhang/update/stepup")
+    public String stepUp(@RequestParam("gioHangChiTietId") Long gioHangChiTietId,
+                         @RequestParam("sanPhamChiTietId") Long sanPhamChiTietId) {
         gioHangService.stepUp(gioHangChiTietId, sanPhamChiTietId);
         return "redirect:/admin/banhang";
     }
@@ -108,9 +98,10 @@ public class BanHangTaiQuayController {
                        @RequestParam(defaultValue = "0") Long khachHangId,
                        @RequestParam(defaultValue = "") String discountCode,
                        @RequestParam(defaultValue = "0") BigDecimal discountAmount,
-                       @RequestParam BigDecimal totalAmount,
+                       @RequestParam(defaultValue = "0") BigDecimal totalAmount,
                        @RequestParam Long thanhToan) {
-        hoaDonService.save(gioHangId, khachHangId, discountCode, discountAmount, totalAmount, thanhToan);
+        System.out.println(khachHangId);
+//        hoaDonService.save(gioHangId, khachHangId, discountCode, discountAmount, totalAmount, thanhToan);
         return "redirect:/admin/hoadon";
     }
 

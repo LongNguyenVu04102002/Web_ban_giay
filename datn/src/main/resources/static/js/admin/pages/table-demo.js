@@ -4,7 +4,7 @@ $(document).ready(function () {
         '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
         '#data-table-delivered', '#data-table-completed', '#data-table-cart',
         '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1',
-        '#data-table-sp', '#data-table-pgg', '#data-table-account'
+        '#data-table-cart2','#data-table-cart3','#data-table-cart4','#data-table-cart5'
     ];
 
     const initializeDataTable = (selector) => {
@@ -48,7 +48,6 @@ $(document).ready(function () {
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
-    filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
 
     const filterDateRange = () => {
@@ -80,10 +79,8 @@ $(document).ready(function () {
                 if (fromDate <= startDate && !toDate) {
                     return true;
                 }
-                if (fromDate <= startDate && endDate <= toDate) {
-                    return true;
-                }
-                return false;
+                return fromDate <= startDate && endDate <= toDate;
+
             } else if (settings.nTable.id === 'data-table-account') {
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
