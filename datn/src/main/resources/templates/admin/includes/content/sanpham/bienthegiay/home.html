@@ -23,11 +23,11 @@
                 </label>
                 <div class="flex-shrink-0">
                     <label>
-                        <select id="trangThaiSpFilter" name="trangThai"
+                        <select id="trangThaiSpctFilter" name="trangThai"
                                 class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
-                            <option value="0">Trạng Thái</option>
-                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            <option value="">Trạng Thái</option>
                             <option value="Đang Hoạt Động">Đang Hoạt Động</option>
+                            <option value="Ngừng Hoạt Động">Ngừng Hoạt Động</option>
                         </select>
                     </label>
                 </div>
@@ -45,45 +45,41 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Tên Biến Thể Giầy</th>
-                    <th>Chất Liệu</th>
-                    <th>Cổ Giầy</th>
-                    <th>Dây Giầy</th>
-                    <th>Đế Giầy</th>
-                    <th>Lót Giầy</th>
-                    <th>Mũi Giầy</th>
-                    <th>Thương Hiệu</th>
-                    <th>Mô tả</th>
+                    <th>Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Bar code</th>
+                    <th>Giá bán</th>
+                    <th>Số lượng</th>
+                    <th>Kích thước</th>
+                    <th>Màu sắc</th>
                     <th>Trạng Thái</th>
                     <th>Hành Động</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="sp, rowStat : ${sanPhamList}">
+                <tr th:each="sp, rowStat : ${sanPhamChiTietList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td th:text="${sp.ten}"></td>
-                    <td th:text="${sp.chatLieu.ten}"></td>
-                    <td th:text="${sp.coGiay.ten}"></td>
-                    <td th:text="${sp.dayGiay.ten}"></td>
-                    <td th:text="${sp.deGiay.ten}"></td>
-                    <td th:text="${sp.lotGiay.ten}"></td>
-                    <td th:text="${sp.muiGiay.ten}"></td>
-                    <td th:text="${sp.thuongHieu.ten}"></td>
-                    <td th:text="${sp.moTa}"></td>
+                    <td ></td>
+                    <td th:text="${sp.sanPham.ten}"></td>
+                    <td th:text="${sp.barCode}"></td>
+                    <td th:text="${sp.giaBan}"></td>
+                    <td th:text="${sp.soLuong}"></td>
+                    <td th:text="${sp.kichThuoc.ten}"></td>
+                    <td th:text="${sp.mauSac.ten}"></td>
                     <td>
                         <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                            <span th:text="${sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/sanpham/giay/update/{id}(id=${sp.sanPhamId})}" method="post">
+                        <form th:action="@{/admin/sanpham/bienthegiay/update/{id}(id=${sp.sanPhamChiTietId})}" method="post">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
                                        th:checked="${!sp.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
-                        <a th:href="@{/admin/sanpham/giay/detail/{id}(id=${sp.sanPhamId})}">
+                        <a th:href="@{/admin/sanpham/bienthegiay/detail/{id}(id=${sp.sanPhamChiTietId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                  height="24" fill="none" viewBox="0 0 24 24">

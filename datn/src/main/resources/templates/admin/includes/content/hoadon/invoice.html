@@ -120,12 +120,12 @@
                                     <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                     <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                     <td>
-                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                         VNĐ
                                     </td>
                                     <td th:text="${hdct.soLuong}"></td>
                                     <td>
-                                        <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                         VNĐ
                                     </td>
                                 </tr>
@@ -135,7 +135,7 @@
                                     <td class="!border-t-0" colspan="5"></td>
                                     <td class="font-semibold !border-t-0">Tạm Tính</td>
                                     <td class="!py-5 !border-t-0">
-                                        <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.sanPham.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
+                                        <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
                                         VNĐ
                                     </td>
                                 </tr>

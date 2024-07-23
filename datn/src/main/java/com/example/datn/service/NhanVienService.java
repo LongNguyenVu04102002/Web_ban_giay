@@ -10,7 +10,8 @@ public interface NhanVienService {
     NhanVien getById(Long id);
 
     void save(NhanVien nhanVien);
-
-    void updateTrangThai(Long id);
+    boolean existsBySdt(String sdt);
+    boolean existsByEmail(String email);
+    NhanVien toggleTrangThai(Long nhanVienId);
 
 }

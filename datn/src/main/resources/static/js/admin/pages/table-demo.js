@@ -48,6 +48,10 @@ $(document).ready(function () {
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
 
     const filterDateRange = () => {
@@ -79,9 +83,21 @@ $(document).ready(function () {
                 if (fromDate <= startDate && !toDate) {
                     return true;
                 }
+<<<<<<< HEAD
                 return fromDate <= startDate && endDate <= toDate;
 
+=======
+                if (fromDate <= startDate && endDate <= toDate) {
+                    return true;
+                }
+                return false;
+
+} else if (settings.nTable.id === 'data-table-account') {
+>>>>>>> master
             } else if (settings.nTable.id === 'data-table-account') {
+
+} else if (settings.nTable.id === 'data-table-account') {
+
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
@@ -103,4 +119,7 @@ $(document).ready(function () {
             return true;
         }
     );
+
 });
+
+

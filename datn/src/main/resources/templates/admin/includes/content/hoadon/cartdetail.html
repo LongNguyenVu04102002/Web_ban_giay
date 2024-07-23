@@ -22,6 +22,7 @@
                     </a>
                 </div>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="xl:flex gap-4 mt-4">
             <div class="w-full">
@@ -68,6 +69,46 @@
                                                                    th:value="${spct.getSanPhamChiTietId()}"/>
                                                             <button type="submit"
                                                                     class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800">
+=======
+            <div class="xl:flex gap-4 mt-4">
+                <div class="w-full">
+                    <div class="card adaptable-card">
+                        <div class="card-body flex items-center justify-between">
+                            <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
+                            <div class="flex">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#dialogSize" class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                    Thêm sản phẩm
+                                </button>
+                                <div  class="modal fade" id="dialogSize" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog dialog md:max-w-[960px]">
+                                        <div class="dialog-content">
+                                            <label>
+                                                <input type="text" id="search" class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                                                       placeholder="Search...">
+                                            </label>
+                                            <div id="DataTableCart">
+                                                <table id="data-table-cart" class="table-default table-hover data-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Tên sản phẩm</th>
+                                                        <th>Màu sắc</th>
+                                                        <th>Kích thước</th>
+                                                        <th>Giá</th>
+                                                        <th>Hành động</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="spct, rowStat : ${sanPhamChiTietList}">
+                                                        <td th:text="${rowStat.index + 1}"></td>
+                                                        <td th:text="${spct.getSanPham().getTen()}"></td>
+                                                        <td th:text="${spct.getMauSac().getTen()}"></td>
+                                                        <td th:text="${spct.getKichThuoc().getTen()}"></td>
+                                                        <td th:text="${#numbers.formatDecimal(spct.getGiaBan(), 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-select-product bg-sky-50 hover:bg-sky-100 text-sky-800"
+                                                                    th:data-id="${spct.getSanPhamChiTietId}">
+>>>>>>> master
                                                                 Chọn
                                                             </button>
                                                         </form>
@@ -123,6 +164,7 @@
                                             <div class="ml-4 text-center">
                                                 <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
                                             </div>
+<<<<<<< HEAD
                                         </div>
                                     </td>
                                     <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
@@ -156,6 +198,48 @@
                                                 </button>
                                             </form>
                                         </div>
+=======
+                                        </td>
+                                        <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
+                                        <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
+                                        <td>
+                                            <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                            VNĐ
+                                        </td>
+                                        <td >
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                    class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                                -
+                                            </button>
+                                            <input min="0" name="quantity" th:value="${hdct.getSoLuong()}"  type="number"
+                                                   class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                    class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">
+                                                +
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                            VNĐ
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="!border-t-0" colspan="5"></td>
+                                        <td class="font-semibold !border-t-0">Tạm Tính</td>
+                                        <td class="!py-5 !border-t-0">
+                                            <span th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDon.hoaDonChiTietList.![soLuong * sanPhamChiTiet.sanPham.giaBan]), 1, 'COMMA', 0, 'POINT')}"></span>
+                                            VNĐ
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="!border-t-0" colspan="5"></td>
+                                        <td class="font-semibold !border-t-0">Phí ship</td>
+                                        <td class="!py-5 !border-t-0">
+                                            <span th:text="${hoaDon.phiShip != null ? #numbers.formatDecimal(hoaDon.phiShip, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                        </td>
+>>>>>>> master
 
                                     </td>
                                     <td>

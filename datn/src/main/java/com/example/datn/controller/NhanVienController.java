@@ -2,9 +2,11 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.NhanVien;
 import com.example.datn.service.Impl.NhanVienServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,15 +40,30 @@ public class NhanVienController {
     }
 
     @PostMapping("/nhanvien/save")
-    public String save(NhanVien nhanVien) {
-        nhanVienService.save(nhanVien);
+    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model ) {
+        if (nhanVienService.existsByEmail(nhanVien.getEmail())){
+//                ||nhanVienService.existsBySdt(nhanVien.getSdt())) {
+            bindingResult.rejectValue("email", "error.nhanVien", "email da ton tai");
+//            bindingResult.rejectValue("sdt", "error.nhanVien", "sdt da ton tai");
+            return "admin/includes/content/nhanvien/form";
+        }
+        if (nhanVienService.existsBySdt(nhanVien.getSdt())) {
+            bindingResult.rejectValue("sdt", "error.nhanVien", "sdt da ton tai");
+            return "admin/includes/content/nhanvien/form";
+        }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("nhanVien", nhanVien);
+            return "admin/includes/content/nhanvien/form";
+        } else {
+            nhanVienService.save(nhanVien);
+            return "redirect:/admin/taikhoan/nhanvien";
+        }
+    }
+    @GetMapping("/nhanvien/{nhanVienId}/toggle")
+    public String toggleTrangThai(@PathVariable Long nhanVienId) {
+        nhanVienService.toggleTrangThai(nhanVienId);
         return "redirect:/admin/taikhoan/nhanvien";
     }
 
-    @GetMapping("/nhanvien/update/{id}")
-    public String toggleTrangThai(@PathVariable Long id) {
-        nhanVienService.updateTrangThai(id);
-        return "redirect:/admin/taikhoan/nhanvien";
-    }
 
 }
