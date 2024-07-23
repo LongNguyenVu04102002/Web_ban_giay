@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.LotGiay;
-import com.example.datn.service.impl.LotGiayServiceImpl;
+import com.example.datn.service.Impl.LotGiayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

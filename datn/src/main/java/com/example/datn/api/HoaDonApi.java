@@ -1,7 +1,7 @@
 package com.example.datn.api;
 
 import com.example.datn.model.response.HoaDonResponse;
-import com.example.datn.service.impl.HoaDonServiceImpl;
+import com.example.datn.service.Impl.HoaDonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

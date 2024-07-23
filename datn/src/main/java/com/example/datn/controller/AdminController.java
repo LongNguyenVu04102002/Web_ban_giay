@@ -2,7 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.HoaDonChiTiet;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.example.datn.service.impl.HoaDonChiTietServiceImpl;
+import com.example.datn.service.Impl.HoaDonChiTietServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
