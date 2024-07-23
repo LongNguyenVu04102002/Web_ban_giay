@@ -45,7 +45,7 @@ public class GioHang {
     @Column(name = "trangThai")
     private boolean trangThai;
 
-    @OneToMany(mappedBy = "gioHang", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gioHang",  cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "gioHang")
     private List<GioHangChiTiet> gioHangChiTietList;
 
