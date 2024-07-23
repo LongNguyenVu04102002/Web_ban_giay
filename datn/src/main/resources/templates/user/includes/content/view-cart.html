@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ Hàng</title>
+</head>
+<body>
+<h1>Giỏ Hàng</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Ngày thêm</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="chiTiet : ${gioHang.gioHangChiTietList}">
+        <td th:text="${chiTiet.sanPhamChiTiet.tenSanPham}"></td>
+        <td th:text="${chiTiet.soLuong}"></td>
+        <td th:text="${chiTiet.ngayTao}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Link quay lại trang trước -->
+<a href="#" th:href="@{/giohang/add-product(khachHangId=${gioHang.khachHang.khachHangId})}">Thêm sản phẩm khác</a>
+</body>
+</html>
