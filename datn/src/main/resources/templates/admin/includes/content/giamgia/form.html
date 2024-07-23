@@ -5,6 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        function confirmAction(button) {
+            var buttonId = button.id;
+            var message = buttonId === 'btnAdd' ? "Bạn có chắc chắn muốn thêm?" : "Bạn có chắc chắn muốn cập nhật?";
+            return confirm(message);
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -96,8 +103,10 @@
                                 Quay lại
                             </a>
                             <button type="submit"
-                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
-                                <span th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"
+                                    th:id="${phieuGiamGia.phieuGiamGiaId == null} ? 'btnAdd' : 'btnUpdate'"
+                                    onclick="return confirmAction(this)">
+                                <span th:text="${phieuGiamGia.phieuGiamGiaId == null} ? 'Thêm Mới' : 'Cập Nhật'"></span>
                             </button>
                             <a th:href="@{/admin/giamgia/form}"
                                class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">
@@ -111,5 +120,6 @@
     </section>
 
 </div>
+
 </body>
 </html>
