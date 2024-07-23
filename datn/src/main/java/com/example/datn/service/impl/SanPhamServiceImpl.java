@@ -1,8 +1,6 @@
 package com.example.datn.service.Impl;
 
 import com.example.datn.entity.SanPham;
-import com.example.datn.entity.SanPhamChiTiet;
-import com.example.datn.repository.SanPhamChiTietRepository;
 import com.example.datn.repository.SanPhamRepository;
 import com.example.datn.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,6 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Autowired
     private SanPhamRepository sanPhamRepository;
 
-    @Autowired
-    private SanPhamChiTietRepository chiTietRepository;
     @Override
     public List<SanPham> getAll() {
         return sanPhamRepository.findAll();
@@ -26,15 +22,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public SanPham getSanPhamById(Long id) {
-        Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
-        if (optionalSanPham.isPresent()) {
-            SanPham sanPham = optionalSanPham.get();
-            List<SanPhamChiTiet> chiTietList = chiTietRepository.findBySanPham(sanPham);
-            sanPham.setSanPhamChiTietList(chiTietList);
-            return sanPham;
-        } else {
-            return null;
-        }
+        return sanPhamRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -51,7 +39,5 @@ public class SanPhamServiceImpl implements SanPhamService {
             sanPhamRepository.save(sp);
         }
     }
-
-
 
 }
