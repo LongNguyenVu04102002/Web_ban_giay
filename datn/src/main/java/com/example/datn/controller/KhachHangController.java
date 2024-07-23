@@ -1,6 +1,5 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
@@ -9,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,8 +18,6 @@ public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
-
-
 
     @GetMapping("/khachhang")
     public String show(Model model) {
@@ -37,14 +31,7 @@ public class KhachHangController {
     public String detail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.getById(id);
         model.addAttribute("khachHang", khachHang);
-        return "admin/includes/content/khachhang/detail";
-    }
-
-    @GetMapping("/khachhang/update/{id}")
-    public String updateView(@PathVariable Long id, Model model) {
-        KhachHang khachHang = khachHangService.getById(id);
-        model.addAttribute("khachHang", khachHang);
-        return "admin/includes/content/khachhang/update";
+        return "admin/includes/content/khachhang/form";
     }
 
     @GetMapping("/khachhang/form")
@@ -54,29 +41,14 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/save")
-    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        // Kiểm tra trùng lặp số điện thoại
-        if (khachHangService.isSdtExist(khachHang.getSdt())) {
-            result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đã tồn tại"));
-        }
-
-        // Kiểm tra trùng lặp email
-        if (khachHangService.isEmailExist(khachHang.getEmail())) {
-            result.addError(new FieldError("khachHang", "email", "Email đã tồn tại"));
-        }
-
-        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
+    public String save(@Valid KhachHang khachHang, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
         }
-
-        for (DiaChi diaChi : khachHang.getDiaChiList()) {
-            diaChi.setKhachHang(khachHang);
-        }
         khachHangService.save(khachHang);
-        redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
         return "redirect:/admin/taikhoan/khachhang";
     }
+
 
 
     @PostMapping("/khachhang/update")
@@ -114,8 +86,9 @@ public class KhachHangController {
         // Cập nhật thông tin khách hàng
         khachHangService.update(khachHang);
 
-        return "redirect:/admin/taikhoan/khachhang";
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
+
 
 
 

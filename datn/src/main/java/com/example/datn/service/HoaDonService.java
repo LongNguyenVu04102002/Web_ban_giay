@@ -1,9 +1,9 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.HoaDon;
+import com.example.datn.model.response.HoaDonResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -26,14 +26,8 @@ public interface HoaDonService {
 
     HoaDon getHoaDonById(Long id);
 
-    void update(Long idHoaDon, Long idSanPhamChiTiet);
+    ResponseEntity<?> addHoaDon(HoaDonResponse hoaDonResponse);
 
-    void stepDown(Long hoaDonId, Long hoaDonChiTietId);
-
-    void stepUp(Long hoaDonId, Long hoaDonChiTietId);
-
-    void delete(Long hoaDonId, Long hoaDonChiTietId);
-
-    void save(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan);
+    ResponseEntity<?> getAll();
 
 }
