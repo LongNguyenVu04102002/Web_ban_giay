@@ -73,4 +73,5 @@ public class KhachHang {
     @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
 
+
 }
