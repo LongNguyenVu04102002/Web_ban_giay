@@ -38,13 +38,32 @@
 
 
 
+        .alert-success {
+            color: green;
+        }
+        .alert-danger {
+            color: red;
+        }
+
 
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
 
-    <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
+  
+    <!-- Hiển thị thông báo nếu có -->
+    <div th:if="${message}" th:classappend="${isActive ? 'alert-danger' : 'alert-success'}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Khách Hàng
@@ -143,6 +162,7 @@
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
+
 
                         <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
