@@ -30,7 +30,7 @@ public class RegisterController {
     @GetMapping("/register")
     public String  register(){
 
-            return "user/includes/content/login";
+            return "user/includes/content/register";
         }
 
 

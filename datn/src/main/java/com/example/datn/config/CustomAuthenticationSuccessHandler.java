@@ -35,7 +35,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response.sendRedirect("/admin/nhanvien");
         }
         else {
-            response.sendRedirect("/shop");
+            response.sendRedirect("/home");
         }
     }
 }
