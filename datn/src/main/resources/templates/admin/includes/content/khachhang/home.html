@@ -38,11 +38,37 @@
 
 
 
+        .alert-success {
+            color: green;
+        }
+        .alert-danger {
+            color: red;
+        }
+
 
     </style>
+
+    <script>
+        function confirmToggle() {
+            return confirm("Bạn có muốn chuyển trạng thái không?");
+        }
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
+    <a href="#" th:href="@{/api/export/khachhang}" class="btn btn-primary">Xuất Excel</a>
+    <div th:if="${message2}" th:classappend="${isActive ? 'alert-danger' : 'alert-success'}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message2}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Khách Hàng
@@ -134,13 +160,15 @@
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form id="toggleForm" th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get">
+                        <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get" onsubmit="return confirmToggle()">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!kh.trangThai}" onchange="confirmChange()">
+                                       th:checked="${!kh.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
+
+
 
                         <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
@@ -176,19 +204,3 @@
 </body>
 </html>
 
-<script>
-    function confirmChange() {
-        const form = document.getElementById('toggleForm');
-        const checkbox = form.querySelector('input[name="trangThai"]');
-        const isChecked = checkbox.checked;
-        const confirmationMessage = isChecked
-            ? 'Bạn có chắc chắn muốn bật trạng thái này?'
-            : 'Bạn có chắc chắn muốn tắt trạng thái này?';
-
-        if (confirm(confirmationMessage)) {
-            form.submit(); // Submit the form if the user confirms
-        } else {
-            checkbox.checked = !isChecked; // Revert the checkbox state if the user cancels
-        }
-    }
-</script>

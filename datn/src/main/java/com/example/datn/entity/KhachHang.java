@@ -35,8 +35,9 @@ public class KhachHang {
     @Column(name = "khachHangId", nullable = false)
     private Long khachHangId;
 
-    @NotBlank(message = "Họ tên không được để trống")
-    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+//    @NotBlank(message = "Họ tên không được để trống")
+//    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+//    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 
@@ -55,7 +56,11 @@ public class KhachHang {
     @Column(name = "sdt", length = 20)
     private String sdt;
 
+<<<<<<< HEAD
 //    @Column(name = "email")
+=======
+    @Column(name = "email")
+>>>>>>> master
 //    @NotNull(message = "Không được để trống")
     private String email;
 
@@ -72,5 +77,6 @@ public class KhachHang {
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
+
 
 }

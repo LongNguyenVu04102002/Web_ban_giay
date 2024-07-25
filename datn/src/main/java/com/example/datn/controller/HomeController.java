@@ -1,11 +1,18 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
+<<<<<<< HEAD
 import com.example.datn.service.Impl.KhachHangServiceImpl;
 import com.example.datn.service.impl.KichThuocServiceImpl;
 import com.example.datn.service.impl.MauSacServiceImpl;
 import com.example.datn.service.impl.SanPhamServiceImpl;
 import com.example.datn.service.impl.ThuongHieuServiceImpl;
+=======
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
+import com.example.datn.service.Impl.ThuongHieuServiceImpl;
+>>>>>>> master
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

@@ -1,6 +1,6 @@
 package com.example.datn.api;
 
-import com.example.datn.service.impl.PhieuGiamGiaServiceImpl;
+import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

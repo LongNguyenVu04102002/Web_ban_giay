@@ -2,7 +2,7 @@ package com.example.datn.api;
 
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.model.response.SanPhamChiTietResponse;
-import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
