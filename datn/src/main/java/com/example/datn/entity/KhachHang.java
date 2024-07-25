@@ -41,22 +41,22 @@ public class KhachHang {
     private String hoTen;
 
     @Column(name = "gioiTinh")
-    private boolean gioiTinh;
+    private Boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-    @NotNull(message = "Không được để trống")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+//    @NotNull(message = "Không được để trống")
     private LocalDate ngaySinh;
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
-    @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
+//    @NotBlank(message = "Số điện thoại không được để trống")
+//    @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
+//    @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
     @Column(name = "sdt", length = 20)
     private String sdt;
 
-    @Column(name = "email")
-    @NotNull(message = "Không được để trống")
+//    @Column(name = "email")
+//    @NotNull(message = "Không được để trống")
     private String email;
 
     @Column(name = "matKhau")

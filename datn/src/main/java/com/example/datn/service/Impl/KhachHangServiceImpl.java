@@ -1,9 +1,10 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
@@ -15,7 +16,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public List<KhachHang> getAll() {
         return khachHangRepository.findAll((Sort.by(Sort.Direction.DESC, "khachHangId")));
@@ -24,6 +26,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang getById(Long id) {
         return khachHangRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public KhachHang getByEmail(String email) {
+        return khachHangRepository.findByEmail(email);
     }
 
     @Override
@@ -72,6 +79,21 @@ public class KhachHangServiceImpl implements KhachHangService {
     public boolean isEmailDuplicate(String email, Long excludeId) {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
+    public void registerNewKhachHang(String email, String password, String tenKhachHang, String sdt) {
+        // Kiểm tra xem email đã tồn tại chưa
+        if (khachHangRepository.findByEmail(email) != null) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
 
+        KhachHang khachHang = new KhachHang();
+        khachHang.setEmail(email);
+        khachHang.setMatKhau(passwordEncoder.encode(password)); // Mã hóa mật khẩu
+        khachHang.setHoTen(tenKhachHang);
+        khachHang.setSdt(sdt);
+        // Set các trường khác nếu cần
 
+        khachHangRepository.save(khachHang);
+    }
 }
+
+

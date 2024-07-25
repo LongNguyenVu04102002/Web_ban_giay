@@ -1,11 +1,13 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
+import com.example.datn.service.Impl.KhachHangServiceImpl;
 import com.example.datn.service.impl.KichThuocServiceImpl;
 import com.example.datn.service.impl.MauSacServiceImpl;
 import com.example.datn.service.impl.SanPhamServiceImpl;
 import com.example.datn.service.impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,25 +33,44 @@ public class HomeController {
 
     @Autowired
     private MauSacServiceImpl mauSacService;
-
-    @GetMapping("/home")
+    @Autowired
+    private KhachHangServiceImpl khachHangService;
+@GetMapping("/home")
+    public String home(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
+            KhachHang khachHang = khachHangService.getByEmail(email); // Tìm thông tin khách hàng từ database
+            model.addAttribute("khachHang", khachHang);
+        }
+        return "user/includes/content/home";
+    }
     public String home() {
         return "user/includes/content/home";
     }
 
+
+
+    @GetMapping("/")
+    public String defaultPage() {
+        return "user/includes/content/home";
+    }
     @GetMapping("/shop")
-    public String shop(Model model) {
+    public String shop(Model model,Authentication authentication) {
         List<SanPham> sanPhamList = sanPhamService.getAll();
         List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
         List<KichThuoc> kichThuocList = kichThuocService.getAll();
         model.addAttribute("sanPhamList", sanPhamList);
         model.addAttribute("thuongHieuList", thuongHieuList);
         model.addAttribute("kichThuocList", kichThuocList);
-        return "user/includes/content/shop";
-    }
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
+            KhachHang khachHang = khachHangService.getByEmail(email); // Tìm thông tin khách hàng từ database
+            model.addAttribute("khachHang", khachHang);
 
+        } return "user/includes/content/shop";
+    }
     @GetMapping("/shop/detail/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    public String detail(@PathVariable Long id, Model model,Authentication authentication) {
         SanPham sanPham = sanPhamService.getSanPhamById(id);
         if (sanPham == null) {
             // Xử lý khi không tìm thấy sản phẩm, ví dụ: chuyển hướng đến trang lỗi
