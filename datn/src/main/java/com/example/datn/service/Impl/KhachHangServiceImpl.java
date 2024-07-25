@@ -28,10 +28,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public KhachHang getByEmail(String email) {
-        return khachHangRepository.findByEmail(email);
-    }
+
 
     @Override
     public KhachHang  save(KhachHang khachHang) {
@@ -68,6 +65,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
+    public KhachHang getAllByEmail(String email) {
+        return khachHangRepository.getAllByEmail(email);
+    }
+
+    @Override
     public boolean isEmailExist(String email) {
         return khachHangRepository.existsByEmail(email);
     }
@@ -79,18 +81,16 @@ public class KhachHangServiceImpl implements KhachHangService {
     public boolean isEmailDuplicate(String email, Long excludeId) {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
-    public void registerNewKhachHang(String email, String password, String tenKhachHang, String sdt) {
-        // Kiểm tra xem email đã tồn tại chưa
+    public void registerNewKhachHang(String email, String password, String hoTen, String sdt) {
         if (khachHangRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email đã tồn tại");
         }
 
         KhachHang khachHang = new KhachHang();
         khachHang.setEmail(email);
-        khachHang.setMatKhau(passwordEncoder.encode(password)); // Mã hóa mật khẩu
-        khachHang.setHoTen(tenKhachHang);
+        khachHang.setMatKhau(passwordEncoder.encode(password));
+        khachHang.setHoTen(hoTen);
         khachHang.setSdt(sdt);
-        // Set các trường khác nếu cần
 
         khachHangRepository.save(khachHang);
     }

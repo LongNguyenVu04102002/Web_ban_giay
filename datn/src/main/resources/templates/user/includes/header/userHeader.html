@@ -121,7 +121,7 @@
                         </li>
                         <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
                         <li>
-<!--                            <div sec:authorize="isAuthenticated()">-->
+                            <div sec:authorize="isAuthenticated()">
                                 <form th:action="@{/logout}" method="post" class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white">
                                     <button type="submit" class="flex items-center w-full text-left bg-transparent border-0 p-0 m-0">
                                         <i class="h-4 w-4 me-2" data-feather="log-out"></i> Đăng xuất

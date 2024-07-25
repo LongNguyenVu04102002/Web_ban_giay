@@ -1,18 +1,14 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
-<<<<<<< HEAD
+
 import com.example.datn.service.Impl.KhachHangServiceImpl;
-import com.example.datn.service.impl.KichThuocServiceImpl;
-import com.example.datn.service.impl.MauSacServiceImpl;
-import com.example.datn.service.impl.SanPhamServiceImpl;
-import com.example.datn.service.impl.ThuongHieuServiceImpl;
-=======
+
 import com.example.datn.service.Impl.KichThuocServiceImpl;
 import com.example.datn.service.Impl.MauSacServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
 import com.example.datn.service.Impl.ThuongHieuServiceImpl;
->>>>>>> master
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -46,7 +42,7 @@ public class HomeController {
     public String home(Model model, Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
-            KhachHang khachHang = khachHangService.getByEmail(email); // Tìm thông tin khách hàng từ database
+            KhachHang khachHang = khachHangService.getAllByEmail(email); // Tìm thông tin khách hàng từ database
             model.addAttribute("khachHang", khachHang);
         }
         return "user/includes/content/home";
@@ -71,7 +67,7 @@ public class HomeController {
         model.addAttribute("kichThuocList", kichThuocList);
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
-            KhachHang khachHang = khachHangService.getByEmail(email); // Tìm thông tin khách hàng từ database
+            KhachHang khachHang = khachHangService.getAllByEmail(email); // Tìm thông tin khách hàng từ database
             model.addAttribute("khachHang", khachHang);
 
         } return "user/includes/content/shop";

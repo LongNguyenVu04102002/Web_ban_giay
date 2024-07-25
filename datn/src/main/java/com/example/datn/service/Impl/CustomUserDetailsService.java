@@ -37,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + nhanVien.getRole().toUpperCase())));
         }
 
-        KhachHang khachHang = khachHangRepository.findByEmail(email);
+        KhachHang khachHang = khachHangRepository.getAllByEmail(email);
         if (khachHang != null) {
             System.out.println("Found KhachHang: " + khachHang.getEmail());
             System.out.println("Stored password: " + khachHang.getMatKhau());

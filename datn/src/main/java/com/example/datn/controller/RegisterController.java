@@ -26,4 +26,12 @@ public class RegisterController {
             return "redirect:/?error=" + e.getMessage();
         }
     }
+
+    @GetMapping("/register")
+    public String  register(){
+
+            return "user/includes/content/login";
+        }
+
+
 }

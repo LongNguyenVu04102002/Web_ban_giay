@@ -42,7 +42,7 @@ public class KhachHang {
     private String hoTen;
 
     @Column(name = "gioiTinh")
-    private Boolean gioiTinh;
+    private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -56,15 +56,13 @@ public class KhachHang {
     @Column(name = "sdt", length = 20)
     private String sdt;
 
-<<<<<<< HEAD
-//    @Column(name = "email")
-=======
+
     @Column(name = "email")
->>>>>>> master
+
 //    @NotNull(message = "Không được để trống")
     private String email;
 
-    @Column(name = "matKhau")
+    @Column(name = "matKhau", columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
     private String matKhau;
 
     @Column(name = "trangThai")

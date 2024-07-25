@@ -9,7 +9,6 @@ public interface KhachHangService {
     List<KhachHang> getAll();
 
     KhachHang getById(Long Id);
-    KhachHang getByEmail(String email);
 
     KhachHang  save(KhachHang khachHang);
     KhachHang toggleTrangThai(Long khachHangId);
@@ -17,7 +16,7 @@ public interface KhachHangService {
 
     KhachHang update(KhachHang khachHang);
     boolean isSdtExist(String sdt);
-
+    KhachHang getAllByEmail(String email);
     boolean isEmailExist(String email);
 
     boolean isPhoneNumberDuplicate(String sdt, Long excludeId);

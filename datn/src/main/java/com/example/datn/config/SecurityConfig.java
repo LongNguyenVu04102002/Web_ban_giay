@@ -25,13 +25,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/nhanvien/**").hasAnyRole("NHANVIEN", "ADMIN")
+                        .requestMatchers("/admin/nhanvien/**").hasAnyRole("NHANVIEN", "ADMIN")
                         .requestMatchers("/khachhang/**").hasRole("KHACHHANG")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/shop", true)
                         .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl("/login?error")
                         .permitAll()
