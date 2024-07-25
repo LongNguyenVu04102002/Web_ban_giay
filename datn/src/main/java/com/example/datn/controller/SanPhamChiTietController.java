@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -30,13 +31,19 @@ public class SanPhamChiTietController {
     @Autowired
     private HinhAnhService hinhAnhService;
 
-//    @Autowired
-//    private DotGiamGiaServiceImpl dotGiamGiaService;
-
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
-        model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+        List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
+
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
+            SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
+            sanPhamChiTietResponse.setSanPhamChiTiet(sanPhamChiTiet);
+            sanPhamChiTietResponse.setDataImg(Base64.getEncoder().encodeToString(hinhAnhService.getImageBySanPhamChiTietIdWithPriority(sanPhamChiTiet.getSanPhamChiTietId(), 1)));
+            sanPhamChiTietResponses.add(sanPhamChiTietResponse);
+        }
+
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
         return "admin/includes/content/sanpham/bienthegiay/home";
     }
 
@@ -55,14 +62,14 @@ public class SanPhamChiTietController {
         return getStringUpdate(model);
     }
 
-    @PostMapping("/bienthegiay/save")
-    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
-        List<HinhAnh> hinhAnhList = new ArrayList<>();
-        hinhAnhService.save(hinhAnhList);
-        sanPhamChiTietService.save(sanPhamChiTietList);
-        return "redirect:/admin/sanpham/bienthegiay";
-    }
+//    @PostMapping("/bienthegiay/save")
+//    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
+//        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
+//        List<HinhAnh> hinhAnhList = new ArrayList<>();
+//        hinhAnhService.save(hinhAnhList);
+//        sanPhamChiTietService.save(sanPhamChiTietList);
+//        return "redirect:/admin/sanpham/bienthegiay";
+//    }
 
     @PostMapping("/bienthegiay/save-update")
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {

@@ -30,6 +30,18 @@ public class HinhAnhServiceImpl implements HinhAnhService {
     }
 
     @Override
+    public void add(HinhAnh hinhAnh) {
+        hinhAnhRepository.save(hinhAnh);
+    }
+
+    @Override
+    public byte[] getImageBySanPhamChiTietIdWithPriority(Long sanPhamChiTietId, Integer priority) {
+        HinhAnh hinhAnh = hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietIdAndUuTien(sanPhamChiTietId, priority)
+                .orElseThrow(() -> new RuntimeException("Image not found with priority " + priority));
+        return hinhAnh.getDataImg();
+    }
+
+    @Override
     public void saveAndUpdateOne(HinhAnh hinhAnh) {
         hinhAnhRepository.save(hinhAnh);
     }

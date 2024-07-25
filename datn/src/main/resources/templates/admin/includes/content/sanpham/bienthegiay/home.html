@@ -59,7 +59,9 @@
                 <tbody>
                 <tr th:each="sp, rowStat : ${sanPhamChiTietList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td ></td>
+                    <td>
+                        <img th:src="'data:image/png;base64,' + ${sp.dataImg}" alt="Ảnh từ Base64" style="width: 45px; height: 55px; margin-left: 30px"/>
+                    </td>
                     <td th:text="${sp.sanPham.ten}"></td>
                     <td th:text="${sp.barCode}"></td>
                     <td th:text="${sp.giaBan}"></td>

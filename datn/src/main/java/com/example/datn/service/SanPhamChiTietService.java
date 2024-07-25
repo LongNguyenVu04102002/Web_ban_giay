@@ -18,6 +18,8 @@ public interface SanPhamChiTietService {
 
     void save(List<SanPhamChiTiet> sanPhamChiTietList);
 
+    void add(SanPhamChiTiet sanPhamChiTiet);
+
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 
     void update(Long id);

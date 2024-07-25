@@ -48,6 +48,11 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     }
 
     @Override
+    public void add(SanPhamChiTiet sanPhamChiTiet) {
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
+    }
+
+    @Override
     public void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet) {
         sanPhamChiTietRepository.save(sanPhamChiTiet);
     }

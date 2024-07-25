@@ -12,6 +12,10 @@ public interface HinhAnhService {
 
     void save(List<HinhAnh> hinhAnhList);
 
+    void add(HinhAnh hinhAnh);
+
+    byte[] getImageBySanPhamChiTietIdWithPriority(Long sanPhamChiTietId, Integer priority);
+
     void saveAndUpdateOne(HinhAnh hinhAnh);
 
 }

@@ -6,7 +6,23 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
-    <title>Thêm Biến Thể Giầy></title>
+    <title>Thêm Biến Thể Giầy</title>
+
+    <style>
+        .imagePreview {
+            display: flex;
+            overflow-x: auto;
+            max-width: 300px;
+            white-space: nowrap;
+        }
+        .imagePreview img {
+            width: 45px;
+            height: 55px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+    </style>
+
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -85,7 +101,7 @@
         </div>
     </section>
     <form id="saveForm" method="post" th:action="@{/admin/sanpham/bienthegiay/save}"
-          th:object="${sanPhamChiTietResponse}">
+          th:object="${sanPhamChiTietResponse}" enctype="multipart/form-data">
         <table class="table-default table-hover data-table px-4 mt-6 bg-white">
             <thead>
             <tr>
@@ -96,6 +112,7 @@
                 <th>Giá bán</th>
                 <th>Số lượng</th>
                 <th>Hình ảnh</th>
+                <th>Hành động</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -117,30 +134,51 @@
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
 
-            const sanPhamChiTietList = Array.from(rows).map((row, index) => {
+            const sanPhamChiTietRequestList = Array.from(rows).map((row, index) => {
                 const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
                 const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
                 const mauSacId = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`).value;
                 const giaBan = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`).value;
                 const soLuong = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`).value;
+                const imageData = row.querySelector(`input[name="sanPhamChiTietList[${index}].imageData"]`).value;
 
                 return {
-                    sanPham: {sanPhamId: sanPhamId},
-                    kichThuoc: {kichThuocId: kichThuocId},
-                    mauSac: {mauSacId: mauSacId},
-                    giaBan: giaBan,
-                    soLuong: soLuong
+                    sanPhamChiTiet: {
+                        sanPham: { sanPhamId: sanPhamId },
+                        kichThuoc: { kichThuocId: kichThuocId },
+                        mauSac: { mauSacId: mauSacId },
+                        giaBan: giaBan,
+                        soLuong: soLuong
+                    },
+                    hinhAnhs: imageData.split(';')
+                        .map((base64Image, imgIndex) => {
+                            const dataImg = base64Image.split(',')[1];
+                            if (dataImg) {
+                                return {
+                                    link: '',
+                                    dataImg: dataImg,
+                                    uuTien: imgIndex
+                                };
+                            }
+                        })
+                        .filter(item => item !== undefined)
+                        .sort((a, b) => a.uuTien - b.uuTien)
+                        .map((item, index) => ({
+                            ...item,
+                            uuTien: index + 1
+                        }))
                 };
             });
 
-            console.log('San Pham Chi Tiet List:', sanPhamChiTietList);
+            console.log('San Pham Chi Tiet Request List:', sanPhamChiTietRequestList);
 
-            // Gọi API lưu data
-            saveSanPhamChiTiet(sanPhamChiTietList);
+            saveSanPhamChiTiet(sanPhamChiTietRequestList);
+        });
 
-            setTimeout(function() {
-                window.location.href = '/admin/sanpham/bienthegiay';
-            }, 300);
+        const selectSanPham = new TomSelect('select[name="sanPham"]', {
+            plugins: ['remove_button'],
+            create: true,
+            placeholder: 'Chọn giầy'
         });
 
         const selectColor = new TomSelect('#color', {
@@ -148,89 +186,110 @@
             create: true,
             placeholder: 'Chọn màu sắc'
         });
+
         const selectSize = new TomSelect('#size', {
             plugins: ['remove_button'],
             create: true,
             placeholder: 'Chọn kích thước'
         });
 
-        let rowCount = 1;
+        var rowCount = 0;
+        var base64Images = [];
 
         function addToTable() {
-            const tableBody = document.getElementById('table-body');
-            const sanPhamId = document.querySelector('select[name="sanPham"]').value;
-            const sanPhamTen = document.querySelector('select[name="sanPham"] option:checked').innerText;
-            const selectedSizes = Array.from(document.querySelectorAll('#size option:checked')).map(option => ({
-                id: option.value,
-                ten: option.innerText
-            }));
-            const selectedColors = Array.from(document.querySelectorAll('#color option:checked')).map(option => ({
-                id: option.value,
-                ten: option.innerText
-            }));
-            const giaBan = document.querySelector('input[name="giaBan"]').value;
-            const soLuong = document.querySelector('input[name="soLuong"]').value;
-
-            console.log('San Pham ID:', sanPhamId);
-            console.log('San Pham Ten:', sanPhamTen);
-            console.log('Selected Sizes:', selectedSizes);
-            console.log('Selected Colors:', selectedColors);
-            console.log('Gia Ban:', giaBan);
-            console.log('So Luong:', soLuong);
-
-            const sanPhamChiTietList = [];
-
-            selectedColors.forEach(color => {
-                selectedSizes.forEach(size => {
-                    const sanPhamChiTiet = {
-                        sanPham: {sanPhamId: sanPhamId, ten: sanPhamTen},
-                        kichThuoc: {kichThuocId: size.id, ten: size.ten},
-                        mauSac: {mauSacId: color.id, ten: color.ten},
-                        giaBan: giaBan,
-                        soLuong: soLuong,
-                    };
-                    sanPhamChiTietList.push(sanPhamChiTiet);
-                    appendToTable(sanPhamChiTiet);
-                });
-            });
-        }
-
-        function appendToTable(sanPhamChiTiet) {
-            const tableBody = document.getElementById('table-body');
-            const row = `<tr>
-               <td>${rowCount}</td>
-               <td>${sanPhamChiTiet.sanPham.ten}</td>
-               <td>${sanPhamChiTiet.mauSac.ten}</td>
-               <td>${sanPhamChiTiet.kichThuoc.ten}</td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${sanPhamChiTiet.giaBan}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${sanPhamChiTiet.soLuong}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
-               <td><input type="file" name=""></td>
-           </tr>`;
-            tableBody.innerHTML += row;
             rowCount++;
+            var sanPham = document.querySelector('select[name="sanPham"]').value;
+            var sanPhamText = document.querySelector('select[name="sanPham"] option:checked').textContent;
+            var mauSac = document.querySelector('#color').value;
+            var mauSacText = Array.from(document.querySelector('#color').selectedOptions).map(option => option.text).join(', ');
+            var kichThuoc = document.querySelector('#size').value;
+            var kichThuocText = Array.from(document.querySelector('#size').selectedOptions).map(option => option.text).join(', ');
+            var giaBan = document.querySelector('input[name="giaBan"]').value;
+            var soLuong = document.querySelector('input[name="soLuong"]').value;
+
+            var tableBody = document.getElementById('table-body');
+            var newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td>${sanPhamText}<input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPham}"></td>
+                <td>${mauSacText}<input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${mauSac}"></td>
+                <td>${kichThuocText}<input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc.kichThuocId" value="${kichThuoc}"></td>
+                <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${giaBan}" readonly></td>
+                <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${soLuong}" readonly></td>
+                <td>
+                    <input type="file" id="imageInput-${rowCount}" name="imageInput-${rowCount}" multiple onchange="previewImages(${rowCount})">
+                    <input type="hidden" id="imageData-${rowCount}" name="sanPhamChiTietList[${rowCount - 1}].imageData">
+                    <div id="imagePreview-${rowCount}" class="flex imagePreview"></div>
+                </td>
+                <td>
+                    <button type="button" onclick="removeRow(this)">Xóa</button>
+                </td>
+            `;
+
+            tableBody.appendChild(newRow);
         }
 
-        function saveSanPhamChiTiet(sanPhamChiTietList) {
-            fetch('http://localhost:8080/sanphamchitiet/bienthegiay/save', {
+        function removeRow(button) {
+            var row = button.closest('tr');
+            row.parentNode.removeChild(row);
+            rowCount--;
+        }
+
+        function previewImages(rowCount) {
+            var preview = document.getElementById('imagePreview-' + rowCount);
+            preview.innerHTML = '';
+
+            var fileInput = document.getElementById('imageInput-' + rowCount);
+            var fileInputData = document.getElementById('imageData-' + rowCount);
+            var files = fileInput.files;
+
+            var fileReaders = [];
+            base64Images[rowCount - 1] = [];
+
+            for (var i = 0; i < files.length; i++) {
+                let fileReader = new FileReader();
+                fileReaders.push(fileReader);
+
+                fileReader.onload = function (event) {
+                    var base64Image = event.target.result;
+                    base64Images[rowCount - 1].push(base64Image);
+                    fileInputData.value = base64Images[rowCount - 1].join(';');
+
+                    var imgElement = document.createElement('img');
+                    imgElement.src = base64Image;
+                    preview.appendChild(imgElement);
+                };
+
+                fileReader.readAsDataURL(files[i]);
+            }
+        }
+
+        function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
+            fetch('/admin/sanpham/bienthegiay/save', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({sanPhamChiTietList})
+                body: JSON.stringify(sanPhamChiTietRequestList),
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     console.log('Success:', data);
+                    alert('Biến thể giày đã được lưu thành công');
+                    location.reload();
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('Error:', error);
+                    alert('Đã xảy ra lỗi khi lưu biến thể giày');
                 });
         }
     </script>
-
 </div>
 </body>
 </html>
