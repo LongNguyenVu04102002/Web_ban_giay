@@ -33,6 +33,12 @@ public class DiaChi {
     @Column(name = "diaChi")
     private String diaChi;
 
+    @Column(name = "sdt")
+    private String sdt;
+
+    @Column(name = "ten")
+    private String ten;
+
     @Column(name = "trangThai")
     private boolean trangThai;
 
