@@ -97,6 +97,7 @@
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
                     <form th:action="@{/admin/taikhoan/khachhang/save}" th:object="${khachHang}"  onsubmit="return confirm('Bạn có chắc chắn muốn thêm khách hàng mới không?');" method="post">
+
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{khachHangId}"/>
                             <div class="lg:col-span-6">

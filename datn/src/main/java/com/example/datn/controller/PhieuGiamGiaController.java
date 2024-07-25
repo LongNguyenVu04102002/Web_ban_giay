@@ -2,7 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.repository.PhieuGiamGiaRepository;
-import com.example.datn.service.impl.PhieuGiamGiaServiceImpl;
+import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.DeGiay;
 import com.example.datn.repository.DeGiayRepository;

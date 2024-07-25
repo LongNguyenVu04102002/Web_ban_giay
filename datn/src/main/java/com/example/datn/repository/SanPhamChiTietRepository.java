@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, Long> {
     List<SanPhamChiTiet> findBySanPham(SanPham sanPham);
-
+    List<SanPhamChiTiet> findBySanPhamSanPhamId(Long sanPhamId);
 }

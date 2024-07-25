@@ -18,7 +18,7 @@ public class DiaChiController {
     private DiaChiService diaChiService;
 
     @GetMapping("diaChi/delete/{id}")
-    public String deleteDiaChi(@PathVariable("id") Long id, @ModelAttribute("khachHang") KhachHang khachHang, RedirectAttributes redirectAttributes) {
+    public String deleteDiaChi(@ModelAttribute("khachHang") KhachHang khachHang,@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             diaChiService.deleteDiaChi(id);
             redirectAttributes.addFlashAttribute("message", "Xóa địa chỉ thành công");

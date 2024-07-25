@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.MauSac;
 import com.example.datn.repository.MauSacRepository;

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/save")
-    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+    public String save(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isSdtExist(khachHang.getSdt())) {
             result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đã tồn tại"));
@@ -73,12 +74,39 @@ public class KhachHangController {
             diaChi.setKhachHang(khachHang);
         }
         khachHangService.save(khachHang);
+        redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
         return "redirect:/admin/taikhoan/khachhang";
     }
 
 
+
     @PostMapping("/khachhang/update")
-    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
+        // Kiểm tra trùng lặp số điện thoại
+        if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
+            result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
+        }
+
+        // Kiểm tra trùng lặp email
+        if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
+            result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
+        }
+
+        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
+        if (result.hasErrors()) {
+            return "admin/includes/content/khachhang/update";
+        }
+
+        // Cập nhật thông tin khách hàng
+        redirectAttributes.addFlashAttribute("message", "Chỉnh sửa thông tin khách hàng thành công!");
+        khachHangService.update(khachHang);
+
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
+    }
+
+
+    @PostMapping("/khachhang/updateDiaChi")
+    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
             result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
@@ -110,6 +138,7 @@ public class KhachHangController {
         khachHang.setDiaChiList(validDiaChiList);
 
         // Cập nhật thông tin khách hàng
+        redirectAttributes.addFlashAttribute("message", "Thêm địa chỉ thành công!");
         khachHangService.update(khachHang);
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
@@ -117,10 +146,20 @@ public class KhachHangController {
 
 
 
+
     @GetMapping("/khachhang/{khachHangId}/toggle")
-    public String toggleTrangThai(@PathVariable Long khachHangId) {
-        khachHangService.toggleTrangThai(khachHangId);
+    public String toggleTrangThai(@PathVariable Long khachHangId, RedirectAttributes redirectAttributes) {
+        KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
+        boolean isActive = khachHang.isTrangThai();
+        String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
+        String message = "Trạng thái của khách hàng có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
+        redirectAttributes.addFlashAttribute("message2", message);
+        redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";
     }
+
+
+
+
 
 }
