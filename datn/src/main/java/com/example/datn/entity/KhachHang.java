@@ -57,7 +57,7 @@ public class KhachHang {
     private String sdt;
 
     @Column(name = "email")
-    @NotNull(message = "Không được để trống")
+    @NotBlank(message = "Không được để trống")
     private String email;
 
     @Column(name = "matKhau")
