@@ -29,7 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "khachHang")
 public class KhachHang {
-
+//sadasadsdsdsdsd
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "khachHangId", nullable = false)
