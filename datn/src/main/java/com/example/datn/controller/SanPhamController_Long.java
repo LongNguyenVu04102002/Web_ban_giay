@@ -43,16 +43,16 @@ public class SanPhamController_Long {
         return "user/includes/content/sp-ct";
     }
 
-    @PostMapping("/add-to-cart")
-    public String addToCart(@RequestParam Long sanPhamChiTietId, @RequestParam Integer soLuong, HttpSession session) {
-        CartDTO cart = (CartDTO) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new CartDTO();
-            session.setAttribute("cart", cart);
-        }
-        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findById(sanPhamChiTietId);
-        CartItemDTO item = new CartItemDTO(sanPhamChiTietId, sanPhamChiTiet.getSanPham().getTen(), sanPhamChiTiet.getGiaBan(), soLuong, sanPhamChiTiet.getGiaBan().multiply(new BigDecimal(soLuong)));
-        cart.addItem(item);
-        return "redirect:/cartOn";
-    }
+//    @PostMapping("/add-to-cart")
+//    public String addToCart(@RequestParam Long sanPhamChiTietId, @RequestParam Integer soLuong, HttpSession session) {
+//        CartDTO cart = (CartDTO) session.getAttribute("cart");
+//        if (cart == null) {
+//            cart = new CartDTO();
+//            session.setAttribute("cart", cart);
+//        }
+//        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findById(sanPhamChiTietId);
+//        CartItemDTO item = new CartItemDTO(sanPhamChiTietId, sanPhamChiTiet.getSanPham().getTen(), sanPhamChiTiet.getGiaBan(), soLuong, sanPhamChiTiet.getGiaBan().multiply(new BigDecimal(soLuong)));
+//        cart.addItem(item);
+//        return "redirect:/cartOn";
+//    }
 }

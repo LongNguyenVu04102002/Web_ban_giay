@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        form {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form input[type="date"]:focus {
+            border-color: #f97316;
+            outline: none;
+        }
+
+        form button[type="submit"] {
+            background-color: #f97316;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #fb923c;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                padding: 15px;
+                width: 90%;
+            }
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('.quantity-input').on('change', function () {
+                var sanPhamChiTietId = $(this).data('id');
+                var soLuong = $(this).val();
+                var giaBan = $(this).data('price');
+
+                // Gửi yêu cầu AJAX để cập nhật số lượng
+                $.ajax({
+                    url: '/cartOn/update',
+                    method: 'POST',
+                    data: {
+                        sanPhamChiTietId: sanPhamChiTietId,
+                        soLuong: soLuong
+                    },
+                    success: function (response) {
+                        // Cập nhật thành tiền
+                        var thanhTien = giaBan * soLuong;
+                        $('#total-' + sanPhamChiTietId).text(thanhTien.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }));
+
+                        // Cập nhật tổng tiền
+                        $('#tongTien').text(response.tongTien.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }));
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="usercontent">
+    <section class="relative table w-full py-20 lg:py-24 bg-gray-50 dark:bg-slate-800">
+        <div class="container relative">
+            <div class="grid grid-cols-1 mt-14">
+                <h3 class="text-3xl leading-normal font-semibold">Shopcart</h3>
+            </div>
+
+            <div class="relative mt-3">
+                <ul class="tracking-[0.5px] mb-0 inline-block">
+                    <li class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out hover:text-orange-500">
+                        <a href="index.html">XBoy</a>
+                    </li>
+                    <li class="inline-block text-base text-slate-950 dark:text-white mx-0.5 ltr:rotate-0 rtl:rotate-180">
+                        <i class="mdi mdi-chevron-right"></i>
+                    </li>
+                    <li class="inline-block uppercase text-[13px] font-bold text-orange-500" aria-current="page">
+                        Giỏ Hàng</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative md:py-24 py-16">
+        <div class="container">
+            <div class="grid lg:grid-cols-1">
+                <div class="relative overflow-x-auto shadow dark:shadow-gray-800 rounded-md">
+                    <table class="w-full text-start">
+                        <thead class="text-sm uppercase bg-slate-50 dark:bg-slate-800">
+                        <tr>
+                            <th scope="col" class="p-4 w-4"></th>
+                            <th scope="col" class="text-start p-4 min-w-[300px]">Tên Sản Phẩm</th>
+                            <th scope="col" class="p-4 w-24 min-w-[100px]">Màu Sắc</th>
+                            <th scope="col" class="p-4 w-24 min-w-[150px]">Kích Thước</th>
+                            <th scope="col" class="p-4 w-24 min-w-[150px]">Giá</th>
+                            <th scope="col" class="p-4 w-56 min-w-[220px]">Số Lượng</th>
+                            <th scope="col" class="p-4 w-24 min-w-[150px]">Tổng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${cart.items}" class="bg-white dark:bg-slate-900">
+                            <td class="p-4">
+                                <a href="#" th:onclick="'removeItem(' + ${item.sanPhamChiTietId} + ')'"><i
+                                        class="mdi mdi-window-close text-red-600"></i></a>
+                            </td>
+                            <td class="p-4">
+                                    <span class="flex items-center">
+<!--                                        <img th:src="${item.image}" class="rounded shadow dark:shadow-gray-800 w-12"-->
+<!--                                             th:alt="${item.ten}">-->
+                                        <span class="ms-3">
+                                            <span class="block font-semibold" th:text="${item.tenSanPham}"></span>
+                                        </span>
+                                    </span>
+                            </td>
+                            <td class="p-4 text-center" th:text="${item.tenMauSac}"></td>
+                            <td class="p-4 text-center" th:text="${item.tenKichThuoc}"></td>
+                            <td class="p-4 text-center" th:text="${#numbers.formatDecimal(item.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                            <td class="p-4 text-center">
+                                <div class="qty-icons">
+                                    <button class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                            type="button">
+                                        -
+                                    </button>
+                                    <input class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-auto w-16 ps-4 quantity"
+                                           min="1" name="soLuong" type="number"
+                                           th:value="${item.soLuong}">
+                                    <button class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                            type="button">
+                                        +
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="p-4 text-end" th:text="${#numbers.formatDecimal(item.thanhTien, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 mt-6 gap-6">
+                    <div class="lg:col-span-9 md:order-1 order-3">
+                        <form th:action="@{/cartOn/checkoutOn}" method="post">
+                            <div>
+                                <label for="hoTen">Họ Tên:</label>
+                                <input type="text" id="hoTen" name="hoTen" required>
+                            </div>
+                            <div>
+                                <label for="sdt">Số Điện Thoại:</label>
+                                <input type="text" id="sdt" name="sdt" required>
+                            </div>
+                            <div>
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div>
+                                <label for="ngaySinh">Ngày Sinh:</label>
+                                <input type="date" id="ngaySinh" name="ngaySinh" required>
+                            </div>
+
+
+                            <input type="hidden" id="nhanVienId" name="nhanVienId" value="1">
+
+                            <button type="submit">Đặt Hàng</button>
+                        </form>
+                    </div>
+
+                    <div class="lg:col-span-3 md:order-2 order-1">
+                        <ul class="list-none shadow dark:shadow-gray-800 rounded-md">
+                            <li class="flex justify-between p-4">
+                                <span class="font-semibold text-lg">Tạm Tính :</span>
+                                <span id="tongTien" class="text-slate-400" th:text="${#numbers.formatDecimal(cart.tongTien, 1, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                            </li>
+<!--                            <li class="flex justify-between p-4 border-t border-gray-100 dark:border-gray-800">-->
+<!--                                <span class="font-semibold text-lg">Tiền Giảm :</span>-->
+<!--                                <span class="text-red-600" th:text="${{sale}}.toLocaleString() + ' VND'"></span>-->
+<!--                            </li>-->
+<!--                            <li class="flex justify-between font-semibold p-4 border-t border-gray-200 dark:border-gray-600">-->
+<!--                                <span class="font-semibold text-lg">Tổng Tiền :</span>-->
+<!--                                <span class="font-semibold" th:text="${{total}}.toLocaleString() + ' VND'"></span>-->
+<!--                            </li>-->
+                        </ul>
+
+<!--                        <div class="subcribe-form mt-6">-->
+<!--                            <form class="relative max-w-xl" th:action="@{/apPhieuGiamGia}" th:object="${maGiamGia}" method="post">-->
+<!--                                <input type="text" th:field="*{maGiamGia}"-->
+<!--                                       class="py-4 pe-40 ps-6 w-full h-[50px] outline-none text-black dark:text-white rounded-full bg-white dark:bg-slate-900 shadow dark:shadow-gray-800">-->
+<!--                                <button type="submit"-->
+<!--                                        class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center absolute top-[2px] end-[3px] h-[46px] bg-orange-500 text-white rounded-full">Áp-->
+<!--                                    mã</button>-->
+<!--                            </form>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

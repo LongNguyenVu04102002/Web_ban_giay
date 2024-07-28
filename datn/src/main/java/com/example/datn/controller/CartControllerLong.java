@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/cartOn")
@@ -42,7 +41,7 @@ public class CartControllerLong {
             session.setAttribute("cart", cart);
         }
         model.addAttribute("cart", cart);
-        return "user/includes/content/cartLong";
+        return "user/includes/content/cart-chien";
     }
 
     @PostMapping("/add")
@@ -53,7 +52,17 @@ public class CartControllerLong {
             session.setAttribute("cart", cart);
         }
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findById(sanPhamChiTietId);
-        CartItemDTO item = new CartItemDTO(sanPhamChiTietId, sanPhamChiTiet.getSanPham().getTen(), sanPhamChiTiet.getGiaBan(), soLuong, sanPhamChiTiet.getGiaBan().multiply(new BigDecimal(soLuong)));
+        CartItemDTO item = new CartItemDTO(
+                sanPhamChiTietId,
+                sanPhamChiTiet.getSanPham().getTen(),
+                sanPhamChiTiet.getGiaBan(),
+                soLuong,
+                sanPhamChiTiet.getGiaBan().multiply(new BigDecimal(soLuong)),
+                sanPhamChiTiet.getMauSac().getMauSacId(),
+                sanPhamChiTiet.getMauSac().getTen(),
+                sanPhamChiTiet.getKichThuoc().getKichThuocId(),
+                sanPhamChiTiet.getKichThuoc().getTen()
+        );
         cart.addItem(item);
         return "redirect:/cartOn";
     }
@@ -87,11 +96,13 @@ public class CartControllerLong {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTenNguoiNhan(khachHang.getHoTen());
+        hoaDon.setSdtNhan(khachHang.getSdt());
         hoaDon.setNhanVien(nhanVien);
         hoaDon.setTongTien(cart.getTongTien());
 
         hoaDon.setTrangThai(1);
-
+// Sinh mã hóa đơn
+        hoaDon.setMaVanDon(UUID.randomUUID().toString());
         List<HoaDonChiTiet> hoaDonChiTietList = cart.getItems().stream().map(item -> {
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setHoaDon(hoaDon);
@@ -125,5 +136,34 @@ public class CartControllerLong {
         // Thêm dữ liệu vào model nếu cần
 
         return "user/includes/content/hoanThanh"; // Tên của template Thymeleaf
+    }
+
+
+    @PostMapping("/update")
+    @ResponseBody
+    public Map<String, Object> updateCartItem(HttpSession session,
+                                              @RequestParam Long sanPhamChiTietId,
+                                              @RequestParam int soLuong) {
+        CartDTO cart = (CartDTO) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new CartDTO();
+        }
+
+        cart.getItems().forEach(item -> {
+            if (item.getSanPhamChiTietId().equals(sanPhamChiTietId)) {
+                item.setSoLuong(soLuong);
+                item.setThanhTien(item.getGiaBan().multiply(BigDecimal.valueOf(soLuong)));
+            }
+        });
+
+        cart.setTongTien(cart.getItems().stream()
+                .map(item -> item.getGiaBan().multiply(BigDecimal.valueOf(item.getSoLuong())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+
+        session.setAttribute("cart", cart);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("tongTien", cart.getTongTien());
+        return response;
     }
 }

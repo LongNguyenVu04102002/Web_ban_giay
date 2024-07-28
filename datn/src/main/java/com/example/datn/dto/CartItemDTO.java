@@ -16,5 +16,9 @@ public class CartItemDTO {
     private BigDecimal giaBan;
     private Integer soLuong;
     private BigDecimal thanhTien;
+    private Long mauSacId;
+    private String tenMauSac;
+    private Long kichThuocId;
+    private String tenKichThuoc;
 
 }

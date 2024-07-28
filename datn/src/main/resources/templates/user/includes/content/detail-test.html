@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{user/layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shoe Detail</title>
+    <style>
+        .selectable-button {
+            border: 2px solid #FFA500; /* Orange border */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #f9f9f9; /* Background color */
+            color: #333; /* Text color */
+            cursor: pointer; /* Indicate that the button is clickable */
+            display: inline-block; /* Ensure it only takes up as much space as needed */
+            margin-right: 5px; /* Space between buttons */
+            text-align: center; /* Center text inside */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            padding: 10px 20px; /* Optional padding */
+        }
+
+        .selectable-button.selected {
+            background-color: #FFA500; /* Highlighted background color */
+            color: white; /* Text color when selected */
+            border-color: #FFA500; /* Border color when selected */
+        }
+
+        .button-container {
+            display: flex; /* Align buttons in a row */
+            flex-wrap: wrap; /* Allow wrapping if there are many buttons */
+            gap: 10px; /* Space between buttons */
+        }
+
+        .price-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.selectable-button');
+            const priceDisplay = document.querySelector('.price-display');
+            const hiddenField = document.getElementById('sanPhamChiTietId'); // Trường ẩn cho sanPhamChiTietId
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Xóa 'selected' class từ tất cả các nút
+                    buttons.forEach(btn => btn.classList.remove('selected'));
+                    // Thêm 'selected' class cho nút đã được nhấp
+                    this.classList.add('selected');
+
+                    // Cập nhật hiển thị giá
+                    const price = this.getAttribute('data-price');
+                    priceDisplay.textContent = `${price} VND`;
+
+                    // Cập nhật sanPhamChiTietId trong trường ẩn
+                    const sanPhamChiTietId = this.getAttribute('data-id');
+                    hiddenField.value = sanPhamChiTietId;
+
+                    // Lấy id của màu sắc và kích thước
+                    const colorId = this.getAttribute('data-color-id');
+                    const sizeId = this.getAttribute('data-size-id');
+                    console.log(`Selected Color ID: ${colorId}, Size ID: ${sizeId}`); // Debugging line
+                });
+            });
+
+            // Tự động chọn nút đầu tiên
+            if (buttons.length > 0) {
+                buttons[0].click(); // Giả lập nhấp vào nút đầu tiên
+            }
+        });
+
+
+    </script>
+</head>
+<body>
+<div layout:fragment="usercontent">
+    <section class="relative md:py-24 py-16">
+        <div class="container relative">
+            <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6 items-center">
+                <div class="lg:col-span-5">
+                    <img alt="Product Image" class="shadow dark:shadow-gray-700" src="/images/shop/mens-jecket.jpg">
+                </div>
+
+                <div class="lg:col-span-7">
+                    <!-- Tên sản phẩm -->
+                    <h5 class="text-2xl font-semibold" th:text="${sanPham.ten}">Tên Sản Phẩm</h5>
+                    <div class="mt-2 flex justify-between">
+                        <!-- Hiển thị giá bán của sản phẩm đã chọn -->
+                        <span class="price-display text-slate-400 font-semibold me-1">
+                            <!-- Placeholder for price -->
+                        </span>
+                    </div>
+                    <h6 style="margin-top: 20px">Lựa chọn sản phẩm</h6>
+                    <!-- Form chọn sản phẩm -->
+                    <div class="button-container">
+                        <div th:each="chiTiet : ${sanPhamChiTietList}">
+                                 <span class="selectable-button"
+                                       th:attr="data-id=${chiTiet.sanPhamChiTietId},
+                                       data-price=${#numbers.formatDecimal(chiTiet.giaBan, 1, 'COMMA', 0, 'POINT')},
+                                       data-color-id=${chiTiet.mauSac.mauSacId},
+                                       data-size-id=${chiTiet.kichThuoc.kichThuocId}"
+                                       th:text="${chiTiet.mauSac.ten} + ' - ' + ${chiTiet.kichThuoc.ten}">
+                                 </span>
+                        </div>
+                    </div>
+                    <form method="post" th:action="@{/shopp/add-to-cart}">
+                        <!-- Trường ẩn để giữ sanPhamChiTietId đã chọn -->
+                        <input id="sanPhamChiTietId" name="sanPhamChiTietId" type="hidden" value="">
+
+                        <div class="flex items-center" style="margin-top: 20px">
+                            <h5 class="text-lg font-semibold me-2">Số lượng:</h5>
+                            <div class="qty-icons ms-3 space-x-0.5">
+                                <button class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                        type="button">
+                                    -
+                                </button>
+                                <input class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-auto w-16 ps-4 quantity"
+                                       min="1" name="soLuong" type="number"
+                                       value="1">
+                                <button class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                        type="button">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-x-1">
+                            <button class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500 text-white hover:bg-orange-600 mt-2"
+                                    type="submit">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
