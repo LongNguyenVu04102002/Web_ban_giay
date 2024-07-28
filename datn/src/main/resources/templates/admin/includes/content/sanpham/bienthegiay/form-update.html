@@ -4,7 +4,42 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
+
     <title>Cập Nhập Biến Thế Giầy</title>
+    <style>
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Khoảng cách giữa các hình ảnh */
+        }
+        .image-container div {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image-container img {
+            width: 45px;
+            height: 55px;
+        }
+        .image-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .image-container button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -17,12 +52,21 @@
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/sanpham/bienthegiay/save-update}" th:object="${spct}" method="post">
+                    <form th:action="@{/admin/sanpham/bienthegiay/save-update}" th:object="${spct}" method="post" enctype="multipart/form-data">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{sanPhamChiTietId}"/>
                             <input type="hidden" th:field="*{barCode}"/>
                             <div class="lg:col-span-12">
-                                <label class="font-semibold">Tên Giầy:</label>
+                                <label class="font-semibold">Hình Ảnh</label>
+                                <div class="image-container">
+                                    <div th:each="image, iterStat : ${encodedImages}" class="image-item">
+                                        <img th:src="'data:image/png;base64,' + ${image}" alt="Ảnh từ Base64"/>
+                                        <input type="file" name="image" accept="image/*" onchange="updateImage(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-12">
+                                <label class="font-semibold">Tên Giầy</label>
                                 <select th:field="*{sanPham}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="sp : ${lstSanPham}" th:value="${sp.sanPhamId}"
@@ -30,7 +74,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Kích Thước:</label>
+                                <label class="font-semibold">Kích Thước</label>
                                 <select th:field="*{kichThuoc}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="kt : ${lstKichThuoc}" th:value="${kt.kichThuocId}"
@@ -38,7 +82,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6 mb-4">
-                                <label class="font-semibold">Màu Sắc:</label>
+                                <label class="font-semibold">Màu Sắc</label>
                                 <select th:field="*{mauSac}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="ms : ${lsMauSac}" th:value="${ms.mauSacId}"
@@ -46,12 +90,12 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Giá Bán:</label>
+                                <label class="font-semibold">Giá Bán</label>
                                 <input type="text" th:field="*{giaBan}"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Số Lượng:</label>
+                                <label class="font-semibold">Số Lượng</label>
                                 <input type="text" th:field="*{soLuong}"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                             </div>
@@ -91,6 +135,37 @@
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const imgElement = input.previousElementSibling;
+                            if (imgElement) {
+                                imgElement.src = e.target.result;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        });
+
+        function updateImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = input.nextElementSibling;
+                    imgElement.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </div>
 </body>
 </html>

@@ -7,6 +7,7 @@ import com.example.datn.model.response.request.HinhAnhRequest;
 import com.example.datn.model.response.request.SanPhamChiTietRequest;
 import com.example.datn.service.impl.HinhAnhServiceImpl;
 import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.List;
 
@@ -62,25 +64,46 @@ public class SanPhamChiTietApi {
 
     @PostMapping("/bienthegiay/save")
     public ResponseEntity<?> save(@RequestBody List<SanPhamChiTietRequest> sanPhamChiTietRequestList) {
-        for (SanPhamChiTietRequest request : sanPhamChiTietRequestList) {
-            SanPhamChiTiet sanPhamChiTiet = request.getSanPhamChiTiet();
-            List<HinhAnhRequest> hinhAnhs = request.getHinhAnhs();
+        try {
+            for (SanPhamChiTietRequest request : sanPhamChiTietRequestList) {
+                SanPhamChiTiet sanPhamChiTiet = request.getSanPhamChiTiet();
+                List<HinhAnhRequest> hinhAnhs = request.getHinhAnhs();
 
-            sanPhamChiTietService.add(sanPhamChiTiet);
+                validateSanPhamChiTiet(sanPhamChiTiet);
 
-            for (HinhAnhRequest hinhAnhRequest : hinhAnhs) {
+                sanPhamChiTietService.add(sanPhamChiTiet);
 
-                HinhAnh hinhAnh = new HinhAnh();
-                hinhAnh.setLink(hinhAnhRequest.getLink());
-                hinhAnh.setDataImg(Base64.getDecoder().decode(hinhAnhRequest.getDataImg()));
-                hinhAnh.setUuTien(hinhAnhRequest.getUuTien());
-                hinhAnh.setSanPhamChiTiet(sanPhamChiTiet);
+                for (HinhAnhRequest hinhAnhRequest : hinhAnhs) {
 
-                hinhAnhService.add(hinhAnh);
+                    HinhAnh hinhAnh = new HinhAnh();
+                    hinhAnh.setLink(hinhAnhRequest.getLink());
+                    hinhAnh.setDataImg(Base64.getDecoder().decode(hinhAnhRequest.getDataImg()));
+                    hinhAnh.setUuTien(hinhAnhRequest.getUuTien());
+                    hinhAnh.setSanPhamChiTiet(sanPhamChiTiet);
+
+                    hinhAnhService.add(hinhAnh);
+                }
             }
-        }
 
-        return ResponseEntity.ok(sanPhamChiTietRequestList);
+            return ResponseEntity.ok(sanPhamChiTietRequestList);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    private void validateSanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet) {
+        if (sanPhamChiTiet.getGiaBan().compareTo(BigDecimal.valueOf(1000)) < 0) {
+            throw new ValidationException("Giá bán phải lớn hơn hoặc bằng 1000.");
+        }
+        if (sanPhamChiTiet.getSoLuong() < 1) {
+            throw new ValidationException("Số lượng phải lớn hơn hoặc bằng 1.");
+        }
+        if (sanPhamChiTiet.getKichThuoc() == null) {
+            throw new ValidationException("Vui lòng chọn kích thước.");
+        }
+        if (sanPhamChiTiet.getMauSac() == null) {
+            throw new ValidationException("Vui lòng chọn màu sắc.");
+        }
     }
 
 }
