@@ -52,9 +52,10 @@ public class KhachHang {
 
     @NotBlank(message = "Số điện thoại không được để trống")
     @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
-    @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
+    @Pattern(regexp = "^0\\d{9,19}$", message = "Số điện thoại phải bắt đầu bằng số 0 và chỉ chứa các chữ số")
     @Column(name = "sdt", length = 20)
     private String sdt;
+
 
     @Column(name = "email")
     @NotBlank(message = "Không được để trống")

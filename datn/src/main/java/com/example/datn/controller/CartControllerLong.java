@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/cartOn")
@@ -62,20 +61,17 @@ public class CartControllerLong {
 
     @PostMapping("/checkoutOn")
     public String checkout(HttpSession session,
-
                            @RequestParam Long nhanVienId,
                            @RequestParam String hoTen,
                            @RequestParam String sdt,
                            @RequestParam String email,
-                           @RequestParam LocalDate ngaySinh
-                         ) {
+                           @RequestParam LocalDate ngaySinh) {
         CartDTO cart = (CartDTO) session.getAttribute("cart");
         if (cart == null || cart.getItems().isEmpty()) {
             return "redirect:/cartOn";
         }
 
-        NhanVien nhanVien= nhanVienService.getById(nhanVienId);
-
+        NhanVien nhanVien = nhanVienService.getById(nhanVienId);
 
         KhachHang khachHang = new KhachHang();
         khachHang.setHoTen(hoTen);
@@ -84,13 +80,18 @@ public class CartControllerLong {
         khachHang.setNgaySinh(ngaySinh);
 
         khachHangService.save(khachHang);
+
         HoaDon hoaDon = new HoaDon();
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTenNguoiNhan(khachHang.getHoTen());
         hoaDon.setNhanVien(nhanVien);
         hoaDon.setTongTien(cart.getTongTien());
-
         hoaDon.setTrangThai(1);
+        hoaDon.setSdtNhan(khachHang.getSdt());
+
+
+        // Sinh mã hóa đơn
+        hoaDon.setMaVanDon(UUID.randomUUID().toString());
 
         List<HoaDonChiTiet> hoaDonChiTietList = cart.getItems().stream().map(item -> {
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
@@ -103,6 +104,7 @@ public class CartControllerLong {
         }).toList();
 
         hoaDon.setHoaDonChiTietList(hoaDonChiTietList);
+
         TimeLine timeLine = new TimeLine();
         timeLine.setHoaDon(hoaDon);
         timeLine.setTrangThai(1);
@@ -115,10 +117,15 @@ public class CartControllerLong {
 
         hoaDonService.save(hoaDon);
 
+        // Lấy số điện thoại của khách hàng từ hóa đơn
+        String khachHangSdt = hoaDon.getKhachHang().getSdt();
+        System.out.println("Số điện thoại của khách hàng: " + khachHangSdt);
+
         session.removeAttribute("cart");
 
         return "redirect:/cartOn/order-success";
     }
+
 
     @GetMapping("/order-success")
     public String showOrderSuccessPage(Model model) {
@@ -126,4 +133,34 @@ public class CartControllerLong {
 
         return "user/includes/content/hoanThanh"; // Tên của template Thymeleaf
     }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public Map<String, Object> updateCartItem(HttpSession session,
+                                              @RequestParam Long sanPhamChiTietId,
+                                              @RequestParam int soLuong) {
+        CartDTO cart = (CartDTO) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new CartDTO();
+        }
+
+        cart.getItems().forEach(item -> {
+            if (item.getSanPhamChiTietId().equals(sanPhamChiTietId)) {
+                item.setSoLuong(soLuong);
+                item.setThanhTien(item.getGiaBan().multiply(BigDecimal.valueOf(soLuong)));
+            }
+        });
+
+        cart.setTongTien(cart.getItems().stream()
+                .map(item -> item.getGiaBan().multiply(BigDecimal.valueOf(item.getSoLuong())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+
+        session.setAttribute("cart", cart);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("tongTien", cart.getTongTien());
+        return response;
+    }
+
+
 }

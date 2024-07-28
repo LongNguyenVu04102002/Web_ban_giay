@@ -3,27 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Giỏ Hàng</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.quantity-input').on('change', function() {
+                var sanPhamChiTietId = $(this).data('id');
+                var soLuong = $(this).val();
+                var giaBan = $(this).data('price');
+
+                // Gửi yêu cầu AJAX để cập nhật số lượng
+                $.ajax({
+                    url: '/cartOn/update',
+                    method: 'POST',
+                    data: {
+                        sanPhamChiTietId: sanPhamChiTietId,
+                        soLuong: soLuong
+                    },
+                    success: function(response) {
+                        // Cập nhật thành tiền
+                        var thanhTien = giaBan * soLuong;
+                        $('#total-' + sanPhamChiTietId).text(thanhTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+
+                        // Cập nhật tổng tiền
+                        $('#tongTien').text(response.tongTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <h2>Giỏ Hàng</h2>
-<table border="1">
-    <tr>
-        <th>Sản Phẩm</th>
-        <th>Đơn Giá</th>
-        <th>Số Lượng</th>
-        <th>Thành Tiền</th>
-    </tr>
-    <tr th:each="item : ${cart.items}">
-        <td th:text="${item.tenSanPham}">Tên Sản Phẩm</td>
-        <td th:text="${item.giaBan}">Đơn Giá</td>
-        <td th:text="${item.soLuong}">Số Lượng</td>
-        <td th:text="${item.thanhTien}">Thành Tiền</td>
-    </tr>
-    <tr>
-        <td colspan="3">Tổng Tiền</td>
-        <td th:text="${cart.tongTien}">Tổng Tiền</td>
-    </tr>
-</table>
+
+<div>
+    <table border="1">
+        <tr>
+
+            <th>Tên Sản Phẩm</th>
+            <th>Giá</th>
+            <th>Số Lượng</th>
+            <th>Tổng</th>
+            <th>Hành Động</th>
+        </tr>
+        <tr th:each="item : ${cart.items}">
+            <td th:text="${item.tenSanPham}">Tên Sản Phẩm</td>
+            <td th:text="${item.giaBan}">Giá</td>
+            <td>
+                <input type="number" class="quantity-input" th:data-id="${item.sanPhamChiTietId}" th:data-price="${item.giaBan}" th:value="${item.soLuong}" min="1" required>
+            </td>
+            <td id="total-${item.sanPhamChiTietId}" th:text="${cart.tongTien}">Tổng</td>
+            <td>
+                <form th:action="@{/cart/remove}" method="post">
+                    <input type="hidden" name="sanPhamChiTietId" th:value="${item.sanPhamChiTietId}">
+                    <button type="submit">Xóa</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <h3>Tổng Tiền: <span id="tongTien" th:text="${cart.tongTien}"></span></h3>
+</div>
+
 <h3>Thông Tin Khách Hàng</h3>
 <form th:action="@{/cartOn/checkoutOn}" method="post">
     <div>
@@ -40,16 +79,17 @@
     </div>
 
     <div>
-        <label for="ngaySinh">Ngày Sinh:</label>
+        <label for="email">ngaySinh:</label>
         <input type="date" id="ngaySinh" name="ngaySinh" required>
     </div>
-
-    <label for="nhanVienId">Khách Hàng ID:</label>
-    <input type="text" id="nhanVienId" name="nhanVienId">
-
+    <div>
+        <label for="diaChi">Địa Chỉ:</label>
+        <input type="text" id="diaChi" name="diaChi" required>
+    </div>
+    <input type="hidden" id="nhanVienId" name="nhanVienId" value="1" required>
     <button type="submit">Đặt Hàng</button>
 </form>
 
-<a th:href="@{/san-pham}">Tiếp Tục Mua Sắm</a>
+<a th:href="@{/san-pham}">Quay lại danh sách sản phẩm</a>
 </body>
 </html>
