@@ -2,16 +2,11 @@ package com.example.datn.api;
 
 import com.example.datn.entity.HinhAnh;
 import com.example.datn.entity.SanPhamChiTiet;
-import com.example.datn.model.response.SanPhamChiTietResponse;
-<<<<<<< HEAD
 import com.example.datn.model.response.request.HinhAnhRequest;
 import com.example.datn.model.response.request.SanPhamChiTietRequest;
-import com.example.datn.service.impl.HinhAnhServiceImpl;
-import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.HinhAnhServiceImpl;
 import jakarta.validation.ValidationException;
-=======
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
->>>>>>> KhachHang_LongFix
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -23,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import java.util.Base64;
-=======
->>>>>>> KhachHang_LongFix
 import java.util.List;
 
 @RestController

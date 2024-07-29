@@ -8,17 +8,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class SanPhamChiTietResponse {
-<<<<<<< HEAD
+
     private SanPhamChiTiet sanPhamChiTiet;
     private String dataImg;
-=======
+
     private List<SanPhamChiTiet> sanPhamChiTietList;
     private List<HinhAnhDTO> hinhAnhDTOList;
     private List<SanPhamChiTietDTO> sanPhamChiTietDTOList;
     private List<HinhAnh> hinhAnhList;
     private List<MultipartFile> logoFiles;
->>>>>>> KhachHang_LongFix
 }

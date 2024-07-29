@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-    package com.example.datn.service.impl;
-=======
 package com.example.datn.service.Impl;
->>>>>>> KhachHang_LongFix
 
     import com.example.datn.entity.HinhAnh;
     import com.example.datn.entity.SanPhamChiTiet;
