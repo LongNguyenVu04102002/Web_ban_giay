@@ -5,13 +5,10 @@
     <title>Giỏ Hàng</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-<<<<<<< HEAD
+
         $(document).ready(function() {
             $('.quantity-input').on('change', function() {
-=======
-        $(document).ready(function () {
-            $('.quantity-input').on('change', function () {
->>>>>>> master
+
                 var sanPhamChiTietId = $(this).data('id');
                 var soLuong = $(this).val();
                 var giaBan = $(this).data('price');
@@ -24,7 +21,7 @@
                         sanPhamChiTietId: sanPhamChiTietId,
                         soLuong: soLuong
                     },
-<<<<<<< HEAD
+
                     success: function(response) {
                         // Cập nhật thành tiền
                         var thanhTien = giaBan * soLuong;
@@ -32,7 +29,7 @@
 
                         // Cập nhật tổng tiền
                         $('#tongTien').text(response.tongTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
-=======
+
                     success: function (response) {
                         // Cập nhật thành tiền
                         var thanhTien = giaBan * soLuong;
@@ -46,7 +43,7 @@
                             style: 'currency',
                             currency: 'VND'
                         }));
->>>>>>> master
+
                     }
                 });
             });
@@ -70,14 +67,14 @@
             <td th:text="${item.tenSanPham}">Tên Sản Phẩm</td>
             <td th:text="${item.giaBan}">Giá</td>
             <td>
-<<<<<<< HEAD
+
                 <input type="number" class="quantity-input" th:data-id="${item.sanPhamChiTietId}" th:data-price="${item.giaBan}" th:value="${item.soLuong}" min="1" required>
             </td>
             <td id="total-${item.sanPhamChiTietId}" th:text="${cart.tongTien}">Tổng</td>
             <td>
                 <form th:action="@{/cart/remove}" method="post">
                     <input type="hidden" name="sanPhamChiTietId" th:value="${item.sanPhamChiTietId}">
-=======
+
                 <input class="quantity-input" min="1" required
                        th:data-id="${item.sanPhamChiTietId}" th:data-price="${item.giaBan}" th:value="${item.soLuong}" type="number">
             </td>
@@ -85,7 +82,7 @@
             <td>
                 <form method="post" th:action="@{/cart/remove}">
                     <input name="sanPhamChiTietId" th:value="${item.sanPhamChiTietId}" type="hidden">
->>>>>>> master
+
                     <button type="submit">Xóa</button>
                 </form>
             </td>
@@ -111,7 +108,7 @@
 
     <div>
         <label for="email">ngaySinh:</label>
-<<<<<<< HEAD
+
         <input type="date" id="ngaySinh" name="ngaySinh" required>
     </div>
     <div>
@@ -119,7 +116,7 @@
         <input type="text" id="diaChi" name="diaChi" required>
     </div>
     <input type="hidden" id="nhanVienId" name="nhanVienId" value="1" required>
-=======
+
         <input id="ngaySinh" name="ngaySinh" required type="date">
     </div>
     <div>
@@ -127,7 +124,7 @@
         <input id="diaChi" name="diaChi" required type="text">
     </div>
     <input id="nhanVienId" name="nhanVienId" required type="hidden" value="1">
->>>>>>> master
+
     <button type="submit">Đặt Hàng</button>
 </form>
 

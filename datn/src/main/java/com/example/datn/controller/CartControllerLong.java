@@ -98,17 +98,17 @@ public class CartControllerLong {
         hoaDon.setNhanVien(nhanVien);
         hoaDon.setTongTien(cart.getTongTien());
         hoaDon.setTrangThai(1);
-<<<<<<< HEAD
+
         hoaDon.setSdtNhan(khachHang.getSdt());
 
 
         // Sinh mã hóa đơn
         hoaDon.setMaVanDon(UUID.randomUUID().toString());
 
-=======
+
 // Sinh mã hóa đơn
         hoaDon.setMaVanDon(UUID.randomUUID().toString());
->>>>>>> master
+
         List<HoaDonChiTiet> hoaDonChiTietList = cart.getItems().stream().map(item -> {
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setHoaDon(hoaDon);
@@ -150,10 +150,7 @@ public class CartControllerLong {
         return "user/includes/content/hoanThanh"; // Tên của template Thymeleaf
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> master
     @PostMapping("/update")
     @ResponseBody
     public Map<String, Object> updateCartItem(HttpSession session,
@@ -181,9 +178,5 @@ public class CartControllerLong {
         response.put("tongTien", cart.getTongTien());
         return response;
     }
-<<<<<<< HEAD
 
-
-=======
->>>>>>> master
 }
