@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,14 +111,8 @@ public class HomeController {
         return "user/includes/content/contact";
     }
 
-    @GetMapping("/checkout")
-    public String checkout() {
-        return "user/includes/content/checkout";
-    }
 
-    @GetMapping("/cart")
-    public String cart() {
-        return "user/includes/content/cart";
-    }
+
+
 
 }

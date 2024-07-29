@@ -120,7 +120,7 @@
                                     <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                     <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                     <td>
-                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                        <span th:text="${#numbers.formatDecimal(hdct.sanPhamChiTiet.sanPham.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                         VNĐ
                                     </td>
                                     <td th:text="${hdct.soLuong}"></td>

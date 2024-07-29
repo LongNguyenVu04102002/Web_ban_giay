@@ -24,11 +24,6 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
     private PhieuGiamGiaRepository phieuGiamGiaRepository;
 
     @Override
-    public ResponseEntity<?> getPhieuGiamGiaByMa(String maGiamGia) {
-        return ResponseEntity.ok(phieuGiamGiaRepository.findByMaGiamGia(maGiamGia));
-    }
-
-    @Override
     public List<PhieuGiamGia> getAll() {
         return phieuGiamGiaRepository.findAll(Sort
                 .by(Sort.Direction.DESC, "phieuGiamGiaId"));

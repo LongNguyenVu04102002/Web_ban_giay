@@ -4,125 +4,205 @@
       layout:decorate="~{user/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Giỏ hàng</title>
+    <script src="/js/admin/vendors.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const notificationTypeHtml = {
+            Success: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-emerald-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Success</div>
+                                    <div class="notification-description">
+                                        Cập nhập giỏ hàng thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+            Delete: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-emerald-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Success</div>
+                                    <div class="notification-description">
+                                        Cập nhập giỏ hàng thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+        };
+
+        function handleNotificationType(type) {
+            console.log('type', type)
+            $('#notification-toast').append(notificationTypeHtml[type])
+            $('#notification-toast .toast:last-child').toast('show');
+            setTimeout(function () {
+                $('#notification-toast .toast:first-child').remove();
+            }, 5000);
+        }
+
+        $(document).ready(function () {
+            const success = JSON.parse([[${success}]]);
+            console.log('Success variable:', success);
+            if (success) {
+                handleNotificationType('Success');
+            }
+        });
+    </script>
 </head>
 <body>
-    <div layout:fragment="usercontent">
-        <section class="relative table w-full py-20 lg:py-24 bg-gray-50 dark:bg-slate-800">
-            <div class="container relative">
-                <div class="grid grid-cols-1 mt-14">
-                    <h3 class="text-3xl leading-normal font-semibold">Shopcart</h3>
-                </div>
-
-                <div class="relative mt-3">
-                    <ul class="tracking-[0.5px] mb-0 inline-block">
-                        <li class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out hover:text-orange-500">
-                            <a href="index.html">XBoy</a>
-                        </li>
-                        <li class="inline-block text-base text-slate-950 dark:text-white mx-0.5 ltr:rotate-0 rtl:rotate-180">
-                            <i class="mdi mdi-chevron-right"></i>
-                        </li>
-                        <li class="inline-block uppercase text-[13px] font-bold text-orange-500" aria-current="page">
-                            Giỏ Hàng</li>
-                    </ul>
-                </div>
+<div layout:fragment="usercontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
+    <section class="relative table w-full py-20 lg:py-24 bg-gray-50 dark:bg-slate-800">
+        <div class="container relative">
+            <div class="grid grid-cols-1 mt-14">
+                <h3 class="text-3xl leading-normal font-semibold">Shopcart</h3>
             </div>
-        </section>
 
-        <section class="relative md:py-24 py-16">
-            <div class="container">
-                <div class="grid lg:grid-cols-1">
-                    <div class="relative overflow-x-auto shadow dark:shadow-gray-800 rounded-md">
-                        <table class="w-full text-start">
-                            <thead class="text-sm uppercase bg-slate-50 dark:bg-slate-800">
-                            <tr>
-                                <th scope="col" class="p-4 w-4"></th>
-                                <th scope="col" class="text-start p-4 min-w-[300px]">Tên Sản Phẩm</th>
-                                <th scope="col" class="p-4 w-24 min-w-[100px]">Màu Sắc</th>
-                                <th scope="col" class="p-4 w-24 min-w-[150px]">Kích Thước</th>
-                                <th scope="col" class="p-4 w-24 min-w-[150px]">Giá</th>
-                                <th scope="col" class="p-4 w-56 min-w-[220px]">Số Lượng</th>
-                                <th scope="col" class="p-4 w-24 min-w-[150px]">Tổng</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="item : ${cart}" th:key="${item.sanPhamChiTietId}" class="bg-white dark:bg-slate-900">
-                                <td class="p-4">
-                                    <a href="#" th:onclick="'removeItem(' + ${item.sanPhamChiTietId} + ')'"><i
-                                            class="mdi mdi-window-close text-red-600"></i></a>
-                                </td>
-                                <td class="p-4">
-                                    <span class="flex items-center">
-                                        <img th:src="${item.image}" class="rounded shadow dark:shadow-gray-800 w-12"
-                                             th:alt="${item.ten}">
-                                        <span class="ms-3">
-                                            <span class="block font-semibold" th:text="${item.ten}"></span>
-                                        </span>
+            <div class="relative mt-3">
+                <ul class="tracking-[0.5px] mb-0 inline-block">
+                    <li class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out hover:text-orange-500">
+                        <a href="index.html">XBoy</a>
+                    </li>
+                    <li class="inline-block text-base text-slate-950 dark:text-white mx-0.5 ltr:rotate-0 rtl:rotate-180">
+                        <i class="mdi mdi-chevron-right"></i>
+                    </li>
+                    <li class="inline-block uppercase text-[13px] font-bold text-orange-500" aria-current="page">
+                        Giỏ Hàng
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative md:py-24 py-16">
+        <div class="container">
+            <div class="grid lg:grid-cols-1">
+                <div class="relative overflow-x-auto shadow dark:shadow-gray-800 rounded-md">
+                    <table class="w-full text-start">
+                        <thead class="text-sm uppercase bg-slate-50 dark:bg-slate-800">
+                        <tr>
+                            <th scope="col" class="p-4 w-4"></th>
+                            <th scope="col" class="text-start p-4">Tên Sản Phẩm</th>
+                            <th scope="col" class="p-4">Màu Sắc</th>
+                            <th scope="col" class="p-4">Kích Thước</th>
+                            <th scope="col" class="p-4">Giá</th>
+                            <th scope="col" class="p-4">Số Lượng</th>
+                            <th scope="col" class="p-4">Tổng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${cartItems}" class="bg-white dark:bg-slate-900">
+                            <td class="p-4">
+                                <a th:href="@{/cart/remove/{id}(id=${item.id})}" class="remove-item">
+                                    <i class="mdi mdi-window-close text-red-600"></i>
+                                </a>
+                            </td>
+                            <td class="p-4">
+                                <span class="flex items-center">
+                                    <img src="/images/ab1.jpg" class="rounded shadow dark:shadow-gray-800 w-12"
+                                         alt="Product Image">
+                                    <span class="ms-3">
+                                        <span class="block font-semibold" th:text="${item.tenSanPham}"></span>
                                     </span>
-                                </td>
-                                <td class="p-4 text-center" th:text="${item.mauSac}"></td>
-                                <td class="p-4 text-center" th:text="${item.kichThuoc}"></td>
-                                <td class="p-4 text-center" th:text="${{item.gia}}.toLocaleString() + ' VND'"></td>
-                                <td class="p-4 text-center">
-                                    <div class="qty-icons">
-                                        <button type="button" th:onclick="'giamSoLuong(' + ${item.sanPhamChiTietId} + ')'"
-                                                class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">-</button>
-                                        <input min="1" type="number" th:value="${item.soLuong}"
-                                               class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
-                                        <button type="button" th:onclick="'tangSoLuong(' + ${item.sanPhamChiTietId} + ')'"
-                                                class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">+</button>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-end" th:text="${{item.gia * item.soLuong}}.toLocaleString() + ' VND'"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                </span>
+                            </td>
+                            <td class="p-4 text-center" th:text="${item.mauSac}"></td>
+                            <td class="p-4 text-center" th:text="${item.kichThuoc}"></td>
+                            <td class="p-4 text-center"
+                                th:text="${#numbers.formatDecimal(item.gia, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                            <td class="p-4 text-center">
+                                <div class="inline-flex items-center justify-center space-x-2">
+                                    <form th:action="@{/cart/update/stepdown}" method="post">
+                                        <input type="hidden" name="id"
+                                               th:value="${item.id}"/>
+                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                            -
+                                        </button>
+                                    </form>
+                                    <input min="1" name="quantity" th:value="${item.soLuong}" type="number"
+                                           class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
+                                    <form th:action="@{/cart/update/stepup}" method="post">
+                                        <input type="hidden" name="id"
+                                               th:value="${item.id}"/>
+                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                class="size-9 tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                            +
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td class="p-4 text-center"
+                                th:text="${#numbers.formatDecimal(item.gia * item.soLuong, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 mt-6 gap-6">
+                    <div class="lg:col-span-9 md:order-1 order-3">
+                        <div class="space-x-1">
+                            <a th:href="@{/shop}"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center bg-orange-500 text-white rounded-md mt-2">
+                                Shop Now
+                            </a>
+                            <a th:href="@{/checkout}"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white mt-2">
+                                Checkout
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 mt-6 gap-6">
-                        <div class="lg:col-span-9 md:order-1 order-3">
-                            <div class="space-x-1">
-                                <a th:href="@{/shop}"
-                                   class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center bg-orange-500 text-white rounded-md mt-2">
-                                    Shop Now
-                                </a>
-                                <a th:href="@{/checkout}"
-                                   class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white mt-2">
-                                    Checkout
-                                </a>
-                            </div>
-                        </div>
+                    <div class="lg:col-span-3 md:order-2 order-1">
+                        <ul class="list-none shadow dark:shadow-gray-800 rounded-md">
+                            <li class="flex justify-between p-4">
+                                <span class="font-semibold text-lg">Tạm Tính :</span>
+                                <span class="font-semibold" th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></span>
 
-                        <div class="lg:col-span-3 md:order-2 order-1">
-                            <ul class="list-none shadow dark:shadow-gray-800 rounded-md">
-                                <li class="flex justify-between p-4">
-                                    <span class="font-semibold text-lg">Tạm Tính :</span>
-                                    <span class="text-slate-400" th:text="${{subtotal}}.toLocaleString() + ' VND'"></span>
-                                </li>
-                                <li class="flex justify-between p-4 border-t border-gray-100 dark:border-gray-800">
-                                    <span class="font-semibold text-lg">Tiền Giảm :</span>
-                                    <span class="text-red-600" th:text="${{sale}}.toLocaleString() + ' VND'"></span>
-                                </li>
-                                <li class="flex justify-between font-semibold p-4 border-t border-gray-200 dark:border-gray-600">
-                                    <span class="font-semibold text-lg">Tổng Tiền :</span>
-                                    <span class="font-semibold" th:text="${{total}}.toLocaleString() + ' VND'"></span>
-                                </li>
-                            </ul>
+                            </li>
+                            <li class="flex justify-between p-4 border-t border-gray-100 dark:border-gray-800">
+                                <span class="font-semibold text-lg">Tiền Giảm :</span>
+                                <span class="text-red-600">0 VNĐ</span>
+                            </li>
+                            <li class="flex justify-between font-semibold p-4 border-t border-gray-200 dark:border-gray-600">
+                                <span class="font-semibold text-lg">Tổng Tiền :</span>
+                                <span class="font-semibold" th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></span>
+                            </li>
+                        </ul>
 
-                            <div class="subcribe-form mt-6">
-                                <form class="relative max-w-xl" th:action="@{/apPhieuGiamGia}" th:object="${maGiamGia}" method="post">
-                                    <input type="text" th:field="*{maGiamGia}"
-                                           class="py-4 pe-40 ps-6 w-full h-[50px] outline-none text-black dark:text-white rounded-full bg-white dark:bg-slate-900 shadow dark:shadow-gray-800">
-                                    <button type="submit"
-                                            class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center absolute top-[2px] end-[3px] h-[46px] bg-orange-500 text-white rounded-full">Áp
-                                        mã</button>
-                                </form>
-                            </div>
+                        <div class="subcribe-form mt-6">
+                            <form class="relative max-w-xl" th:action="@{/apPhieuGiamGia}"
+                                  method="post">
+                                <input type="text"
+                                       class="py-4 pe-40 ps-6 w-full h-[50px] outline-none text-black dark:text-white rounded-full bg-white dark:bg-slate-900 shadow dark:shadow-gray-800">
+                                <button type="submit"
+                                        class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center absolute top-[2px] end-[3px] h-[46px] bg-orange-500 text-white rounded-full">
+                                    Áp mã
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 </body>
 </html>
