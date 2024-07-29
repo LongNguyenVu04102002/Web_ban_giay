@@ -53,12 +53,6 @@
                     </select>
                 </label>
             </div>
-            <div>
-                <a th:href="@{/admin/banhang/banhang}"
-                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
-                    Thêm Hóa Đơn
-                </a>
-            </div>
         </div>
         <div role="tablist" class="tab-list tab-list-pill mx-4">
             <button class="tab-nav tab-nav-pill active mt-3" data-bs-toggle="tab" data-bs-target="#tab-all" role="tab"
@@ -116,9 +110,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonList}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -168,9 +164,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonChoXacNhan}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -220,9 +218,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonDaXacNhan}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -272,9 +272,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonChoGiaoHang}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -324,9 +326,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonDangGiaoHang}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -376,9 +380,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonDaGiaoHang}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -427,9 +433,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonHoanThanh}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>
@@ -478,9 +486,11 @@
                         <tr th:each="hoaDon, rowStat : ${hoaDonHuy}">
                             <td th:text="${rowStat.index + 1}"></td>
                             <td th:text="${hoaDon.maVanDon}"></td>
-                            <td th:text="${hoaDon.tenNguoiNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.hoTen : 'null'}"></td>
+
                             <td th:text="${hoaDon.getNhanVien().maNhanVien}"></td>
-                            <td th:text="${hoaDon.sdtNhan}"></td>
+                            <td th:text="${hoaDon.khachHang != null ? hoaDon.khachHang.sdt : 'null'}"></td>
+
                             <td>
                                 <button th:class="${hoaDon.loaiHoaDon ? 'btn-custom bg-orange-50 text-orange-600 rounded-full' : 'btn-custom bg-emerald-50 text-emerald-600 rounded-full'}">
                                     <span th:text="${hoaDon.loaiHoaDon ? 'Tại Quầy' : 'Online'}"></span>

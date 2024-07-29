@@ -681,8 +681,8 @@
 
 .modal{
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     z-index: 40;
     display: none;
     height: 100%;
@@ -696,7 +696,6 @@
     --tw-scale-y: .9;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
     transition-property: transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
@@ -733,10 +732,32 @@
     width: 100%;
 }
 
+.dialog{
+    margin-top: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
 .dialog-content{
     pointer-events: auto;
     position: relative;
     width: 60rem;
+    height: 100%;
+    border-radius: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    padding: 1.5rem;
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.dialog-confirm{
+    margin-top: auto;
+    pointer-events: auto;
+    position: relative;
+    width: 30rem;
     height: 100%;
     border-radius: 0.5rem;
     --tw-bg-opacity: 1;
@@ -762,11 +783,11 @@
         max-width: 24rem;
     }
 }
-@media (min-width: 768px) {
-    .dialog{
-        max-width: 520px;
-    }
-}
+/*@media (min-width: 768px) {*/
+/*    .dialog{*/
+/*        max-width: 520px;*/
+/*    }*/
+/*}*/
 .dialog-overlay-after-open {
     opacity: 1;
 }
@@ -2044,7 +2065,7 @@
 
 .notification {
     position: fixed;
-    top: 20px;
+    top: 80px;
     right: 20px;
     margin-bottom: 0.75rem;
     width: 350px;
@@ -3073,7 +3094,7 @@ td {
 }
 
 .tab-content{
-    padding: 1rem;
+    padding: 0rem;
 }
 .tab-content > .tab-pane{
     display: none;
@@ -7361,6 +7382,9 @@ hr{
 .hidden{
     display: none;
 }
+.hidden-visibility{
+    visibility: hidden;
+}
 .\!h-\[300px\]{
     height: 300px !important;
 }
@@ -9919,6 +9943,9 @@ hr{
     }
     .md\:min-w-\[450px\]{
         min-width: 450px;
+    }
+    .md\:max-w-\[200px\]{
+        max-width: 200px;
     }
     .md\:max-w-\[700px\]{
         max-width: 700px;

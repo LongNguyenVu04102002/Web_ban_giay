@@ -16,7 +16,6 @@ public class SanPhamChiTietResponse {
     private List<SanPhamChiTiet> sanPhamChiTietList;
     private List<HinhAnhDTO> hinhAnhDTOList;
     private List<SanPhamChiTietDTO> sanPhamChiTietDTOList;
-
     private List<HinhAnh> hinhAnhList;
     private List<MultipartFile> logoFiles;
 }

@@ -13,5 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class PhieuGiamGiaResponse {
     private Long phieuGiamGiaId;
+    private String maPhieu;
     private BigDecimal tienGiam;
+    private BigDecimal muaThemDeGiam;
 }

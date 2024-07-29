@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/sanphamchitiet")
@@ -36,6 +36,18 @@ public class SanPhamChiTietApi {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
         sanPhamChiTietService.save(sanPhamChiTietList);
         return ResponseEntity.ok(sanPhamChiTietList);
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<BigDecimal> getPrice(@RequestParam("sanPhamId") Long sanPhamId,
+                                      @RequestParam("sizeId") Long sizeId,
+                                      @RequestParam("colorId") Long colorId) {
+        BigDecimal price = sanPhamChiTietService.getPrice(sanPhamId,sizeId,colorId);
+        if (price != null) {
+            return ResponseEntity.ok(price);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
