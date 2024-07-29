@@ -44,7 +44,7 @@ public class NhanVien {
     private String hoTen;
 
     @Column(name = "gioiTinh")
-    private Boolean gioiTinh;
+    private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
     @NotNull(message = "Ngày sinh không được để trống")

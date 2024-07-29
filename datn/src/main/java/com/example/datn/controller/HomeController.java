@@ -1,16 +1,10 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
-
-import com.example.datn.service.Impl.KhachHangServiceImpl;
-
-import com.example.datn.service.Impl.KichThuocServiceImpl;
-import com.example.datn.service.Impl.MauSacServiceImpl;
-import com.example.datn.service.Impl.SanPhamServiceImpl;
-import com.example.datn.service.Impl.ThuongHieuServiceImpl;
-
+import com.example.datn.service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +16,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
+    @Autowired
+    private KhachHangServiceImpl khachHangService;
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
@@ -36,44 +32,42 @@ public class HomeController {
 
     @Autowired
     private MauSacServiceImpl mauSacService;
-    @Autowired
-    private KhachHangServiceImpl khachHangService;
-@GetMapping("/home")
+    @GetMapping("/home")
+//    public String home(Model model) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+//            // Người dùng đã đăng nhập, thêm thông tin vào model
+//            String email = auth.getName();
+//            KhachHang khachHang = khachHangService.getbyEmail(email);
+//            if (khachHang != null) {
+//                model.addAttribute("hoTen", khachHang.getHoTen());
+//            } else {
+//                model.addAttribute("hoTen", null);
+//            }
+//        }
     public String home(Model model, Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
-            String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
-            KhachHang khachHang = khachHangService.getAllByEmail(email); // Tìm thông tin khách hàng từ database
-            model.addAttribute("khachHang", khachHang);
+            model.addAttribute("isAuthenticated", true);
+            model.addAttribute("username", authentication.getName());
+        } else {
+            model.addAttribute("isAuthenticated", false);
         }
         return "user/includes/content/home";
     }
-    public String home() {
-        return "user/includes/content/home";
-    }
 
-
-
-    @GetMapping("/")
-    public String defaultPage() {
-        return "user/includes/content/home";
-    }
     @GetMapping("/shop")
-    public String shop(Model model,Authentication authentication) {
+    public String shop(Model model) {
         List<SanPham> sanPhamList = sanPhamService.getAll();
         List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
         List<KichThuoc> kichThuocList = kichThuocService.getAll();
         model.addAttribute("sanPhamList", sanPhamList);
         model.addAttribute("thuongHieuList", thuongHieuList);
         model.addAttribute("kichThuocList", kichThuocList);
-        if (authentication != null && authentication.isAuthenticated()) {
-            String email = authentication.getName(); // Lấy email của người dùng đã đăng nhập
-            KhachHang khachHang = khachHangService.getAllByEmail(email); // Tìm thông tin khách hàng từ database
-            model.addAttribute("khachHang", khachHang);
-
-        } return "user/includes/content/shop";
+        return "user/includes/content/shop";
     }
+
     @GetMapping("/shop/detail/{id}")
-    public String detail(@PathVariable Long id, Model model,Authentication authentication) {
+    public String detail(@PathVariable Long id, Model model) {
         SanPham sanPham = sanPhamService.getSanPhamById(id);
         if (sanPham == null) {
             // Xử lý khi không tìm thấy sản phẩm, ví dụ: chuyển hướng đến trang lỗi

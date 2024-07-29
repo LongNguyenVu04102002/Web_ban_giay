@@ -2,6 +2,7 @@ package com.example.datn.service;
 
 import com.example.datn.entity.KhachHang;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface KhachHangService {
@@ -22,5 +23,6 @@ public interface KhachHangService {
     boolean isPhoneNumberDuplicate(String sdt, Long excludeId);
 
     boolean isEmailDuplicate(String email, Long excludeId);
-    void registerNewKhachHang(String email, String password, String tenKhachHang,String sdt);
-}
+void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) ;
+
+    }

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     private KhachHangRepository khachHangRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public List<KhachHang> getAll() {
         return khachHangRepository.findAll((Sort.by(Sort.Direction.DESC, "khachHangId")));
@@ -29,9 +31,8 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
 
-
     @Override
-    public KhachHang  save(KhachHang khachHang) {
+    public KhachHang save(KhachHang khachHang) {
 
         if (isSdtExist(khachHang.getSdt())) {
             throw new RuntimeException("Số điện thoại đã tồn tại");
@@ -66,7 +67,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang getAllByEmail(String email) {
-        return khachHangRepository.getAllByEmail(email);
+        return khachHangRepository.findByEmail(email);
     }
 
     @Override
@@ -81,9 +82,13 @@ public class KhachHangServiceImpl implements KhachHangService {
     public boolean isEmailDuplicate(String email, Long excludeId) {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
-    public void registerNewKhachHang(String email, String password, String hoTen, String sdt) {
+
+    public void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) {
         if (khachHangRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email đã tồn tại");
+        }
+        if (khachHangRepository.findBySdt(sdt) != null) {
+            throw new RuntimeException("Số điện thoại đã tồn tại");
         }
 
         KhachHang khachHang = new KhachHang();
@@ -91,9 +96,10 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setMatKhau(passwordEncoder.encode(password));
         khachHang.setHoTen(hoTen);
         khachHang.setSdt(sdt);
+        khachHang.setNgaySinh(ngaySinh);
+        khachHang.setGioiTinh(gioiTinh);
+        khachHang.setTrangThai(trangThai);
 
         khachHangRepository.save(khachHang);
     }
 }
-
-

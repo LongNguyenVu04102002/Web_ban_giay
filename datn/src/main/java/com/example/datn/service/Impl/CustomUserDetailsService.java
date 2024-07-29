@@ -6,16 +6,13 @@ import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -37,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + nhanVien.getRole().toUpperCase())));
         }
 
-        KhachHang khachHang = khachHangRepository.getAllByEmail(email);
+        KhachHang khachHang = khachHangRepository.findByEmail(email);
         if (khachHang != null) {
             System.out.println("Found KhachHang: " + khachHang.getEmail());
             System.out.println("Stored password: " + khachHang.getMatKhau());
