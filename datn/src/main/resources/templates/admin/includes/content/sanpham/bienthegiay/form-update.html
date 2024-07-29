@@ -27,15 +27,6 @@
             width: 45px;
             height: 55px;
         }
-        .image-container input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
         .image-container button {
             margin-top: 10px;
         }
@@ -56,14 +47,15 @@
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{sanPhamChiTietId}"/>
                             <input type="hidden" th:field="*{barCode}"/>
+                            <input type="hidden" name="imageId" value="" />
                             <div class="lg:col-span-12">
                                 <label class="font-semibold">Hình Ảnh</label>
                                 <div class="image-container">
-                                    <div th:each="image, iterStat : ${encodedImages}" class="image-item">
-                                        <img th:src="'data:image/png;base64,' + ${image}" alt="Ảnh từ Base64"/>
-                                        <input type="file" name="image" accept="image/*" onchange="updateImage(this)">
+                                    <div th:each="imageDTO : ${imageDTOs}" class="image-item">
+                                        <img th:src="'data:image/png;base64,' + ${imageDTO.dataImg}" alt="Ảnh từ Base64"/>
                                     </div>
                                 </div>
+                                <input type="file" id="imageUpload" name="image" accept="image/*" multiple onchange="handleFiles(this)">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="font-semibold">Tên Giầy</label>
@@ -137,34 +129,42 @@
     </section>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('input[type="file"]').forEach(input => {
-                input.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const imgElement = input.previousElementSibling;
-                            if (imgElement) {
-                                imgElement.src = e.target.result;
-                            }
+            const imageUpload = document.getElementById('imageUpload');
+            imageUpload.addEventListener('change', function(event) {
+                const files = event.target.files;
+                const imageContainer = document.querySelector('.image-container');
+
+                // Clear existing images
+                imageContainer.innerHTML = '';
+
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.width = '45px'; // Adjust size as needed
+                        imgElement.style.height = '55px'; // Adjust size as needed
+
+                        const imageWrapper = document.createElement('div');
+                        imageWrapper.style.position = 'relative';
+                        imageWrapper.style.display = 'flex';
+                        imageWrapper.style.flexDirection = 'column';
+                        imageWrapper.style.alignItems = 'center';
+
+                        const removeButton = document.createElement('button');
+                        removeButton.textContent = 'Xóa';
+                        removeButton.onclick = function() {
+                            imageWrapper.remove(); // Remove image on button click
                         };
-                        reader.readAsDataURL(file);
-                    }
+
+                        imageWrapper.appendChild(imgElement);
+                        imageWrapper.appendChild(removeButton);
+                        imageContainer.appendChild(imageWrapper);
+                    };
+                    reader.readAsDataURL(file);
                 });
             });
         });
-
-        function updateImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imgElement = input.nextElementSibling;
-                    imgElement.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
     </script>
 </div>
 </body>

@@ -2,6 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
+import com.example.datn.model.response.request.HinhAnhDTO;
 import com.example.datn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,16 +63,29 @@ public class SanPhamChiTietController {
     public String detail(@PathVariable Long id, Model model) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getById(id);
         List<HinhAnh> hinhAnhList = hinhAnhService.getImagesBySanPhamChiTietId(id);
-        List<String> encodedImages = hinhAnhList.stream()
-                .map(hinhAnh -> Base64.getEncoder().encodeToString(hinhAnh.getDataImg()))
+        List<HinhAnhDTO> anhDTOS = hinhAnhList.stream()
+                .map(hinhAnh -> new HinhAnhDTO(hinhAnh.getHinhAnhId(), Base64.getEncoder().encodeToString(hinhAnh.getDataImg())))
                 .collect(Collectors.toList());
+        anhDTOS.forEach(dto -> System.out.println("Image ID: " + dto.getId()));
         model.addAttribute("spct", sanPhamChiTiet);
-        model.addAttribute("encodedImages", encodedImages);
+        model.addAttribute("imageDTOs", anhDTOS);
         return getStringUpdate(model);
     }
 
     @PostMapping("/bienthegiay/save-update")
-    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet, @RequestParam("image") MultipartFile[] images) throws IOException {
+    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
+                             @RequestParam("image") MultipartFile[] images,
+                             @RequestParam(value = "imageId", required = false) Long[] imageIds) throws IOException {
+
+        System.out.println("Received Image IDs:");
+        if (imageIds != null) {
+            for (Long imageId : imageIds) {
+                System.out.println("Image ID: " + imageId);
+            }
+        } else {
+            System.out.println("No Image IDs received");
+        }
+
         List<byte[]> imageDatas = new ArrayList<>();
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {
@@ -79,7 +93,7 @@ public class SanPhamChiTietController {
                 imageDatas.add(imageData);
             }
         }
-        hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas);
+        hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
