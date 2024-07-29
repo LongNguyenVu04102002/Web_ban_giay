@@ -10,11 +10,13 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemDTO {
-    private Long sanPhamChiTietId;
+public class CartItem {
+    private Long id;
     private String tenSanPham;
-    private BigDecimal giaBan;
-    private Integer soLuong;
+    private String mauSac;
+    private String kichThuoc;
+    private BigDecimal gia;
+    private int soLuong;
     private BigDecimal thanhTien;
 
 }
