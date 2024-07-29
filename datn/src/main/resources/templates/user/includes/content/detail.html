@@ -5,9 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/js/user/detail.js"></script>
+    <script src="/js/admin/vendors.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div layout:fragment="usercontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <section class="relative table w-full py-20 lg:py-24 md:pt-28 bg-gray-50 dark:bg-slate-800">
         <div class="container relative">
             <div class="grid grid-cols-1 mt-14">
@@ -30,7 +34,6 @@
             </div>
         </div>
     </section>
-
     <section class="relative md:py-24 py-16">
         <div class="container relative">
             <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6 items-center">
@@ -42,15 +45,39 @@
                                      alt="">
                             </div>
                         </div>
+                        <div class="tiny-slide">
+                            <div class="m-0.5">
+                                <img src="/images/shop/mens-jecket-3.jpg" class="shadow dark:shadow-gray-700"
+                                     alt="">
+                            </div>
+                        </div>
+                        <div class="tiny-slide">
+                            <div class="m-0.5">
+                                <img src="/images/shop/mens-jecket-left.jpg" class="shadow dark:shadow-gray-700"
+                                     alt="">
+                            </div>
+                        </div>
+                        <div class="tiny-slide">
+                            <div class="m-0.5">
+                                <img src="/images/shop/mens-jecket-back.jpg" class="shadow dark:shadow-gray-700"
+                                     alt="">
+                            </div>
+                        </div>
+                        <div class="tiny-slide">
+                            <div class="m-0.5">
+                                <img src="/images/shop/mens-jecket-4.jpg" class="shadow dark:shadow-gray-700"
+                                     alt="">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
                 <div class="lg:col-span-7">
                     <h5 class="text-2xl font-semibold" th:text="${sanPham.ten}"></h5>
                     <div class="mt-2 flex justify-between">
-        <span th:text="${#numbers.formatDecimal(sanPham.sanPhamChiTietList[0].giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"
-              class="text-slate-400 font-semibold me-1">
-        </span>
+                        <input type="text" id="sanPhamId" class="hidden" th:value="${sanPham.sanPhamId}">
+                        <div class="price-display">
+                            <span id="product-price" class="text-slate-400 font-semibold me-1">0 VNĐ</span>
+                        </div>
                         <ul class="list-none inline-block text-orange-400">
                             <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
                             <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
@@ -60,69 +87,321 @@
                             <li class="inline text-slate-400 font-semibold">4.8 (45)</li>
                         </ul>
                     </div>
+                    <div class="mt-4">
+                        <h5 class="text-lg font-semibold">Overview :</h5>
+                        <p class="text-slate-400 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
+                            exercitationem, unde molestiae sint quae inventore atque minima natus fugiat nihil quisquam
+                            voluptates ea omnis. Modi laborum soluta tempore unde accusantium.</p>
 
-                    <form th:action="@{/cart/add}" method="post" class="mt-4">
-                        <div class="grid lg:grid-cols-2 grid-cols-1 gap-6">
-                            <div class="flex items-center">
-                                <h5 class="text-lg font-semibold me-2">Size:</h5>
-                                <div class="space-x-1">
-                                    <button th:each="chiTiet, index : ${uniqueSizes}"
-                                            th:key="${index}"
-                                            th:text="${chiTiet.ten}"
-                                            th:onclick="'selectSize(' + ${chiTiet.kichThuocId} + ')'"
-                                            class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
-                                            th:classappend="${selectedSizeId == chiTiet.kichThuocId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center">
-                                <h5 class="text-lg font-semibold me-2">Quantity:</h5>
-                                <div class="qty-icons ms-3 space-x-0.5">
-                                    <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                            class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
-                                        -
-                                    </button>
-                                    <input min="1" name="soLuong" value="1" type="number"
-                                           class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-auto w-16 ps-4 quantity">
-                                    <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                            class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center">
-                                <h5 class="text-lg font-semibold me-2">Colors:</h5>
-                                <div class="space-x-2">
-                                    <button th:each="color : ${uniqueColors}"
-                                            th:attr="class='size-9 inline-flex items-center justify-center tracking-wide rounded-md ring-2 inline-flex align-middle bg-'+ ${color.ten}">
-                                    </button>
-                                </div>
+                        <ul class="list-none text-slate-400 mt-4">
+                            <li class="mb-1 flex"><i
+                                    class="mdi mdi-check-circle-outline text-orange-500 text-xl me-2"></i> Digital
+                                Marketing Solutions for Tomorrow
+                            </li>
+                            <li class="mb-1 flex"><i
+                                    class="mdi mdi-check-circle-outline text-orange-500 text-xl me-2"></i> Our Talented
+                                & Experienced Marketing Agency
+                            </li>
+                            <li class="mb-1 flex"><i
+                                    class="mdi mdi-check-circle-outline text-orange-500 text-xl me-2"></i> Create your
+                                own skin to match your brand
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid lg:grid-cols-2 grid-cols-1 gap-6 mt-4">
+                        <div class="flex items-center">
+                            <h5 class="text-lg font-semibold me-2">Size:</h5>
+                            <div class="space-x-1">
+                                <!-- Size buttons -->
+                                <button th:each="chiTiet, index : ${uniqueSizes}"
+                                        th:id="'size-' + ${chiTiet.kichThuocId}"
+                                        th:text="${chiTiet.ten}"
+                                        th:onclick="'selectSize(' + ${chiTiet.kichThuocId} + ')'"
+                                        class="size-size inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
+                                        th:classappend="${selectedSizeId == chiTiet.kichThuocId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Thêm sản phẩm vào giỏ hàng -->
-                        <input type="hidden" name="sanPhamId" th:value="${sanPham.sanPhamId}" />
-                        <input type="hidden" name="khachHangId" th:value="${khachHangId}" />
-                        <input type="hidden" name="sanPhamChiTietId" th:value="${sanPham.sanPhamChiTietList[0].sanPhamChiTietId}" /> <!-- Cần logic để chọn sản phẩm chi tiết phù hợp -->
-
-                        <div class="mt-4 space-x-1">
-                            <a href="#"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center bg-orange-500 text-white rounded-md mt-2">Shop
-                                Now</a>
-                            <button type="submit"
-                                    class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500 text-white hover:bg-orange-600 mt-2">Add
-                                to Cart</button>
+                        <div class="flex items-center">
+                            <h5 class="text-lg font-semibold me-2">Quantity:</h5>
+                            <div class="qty-icons ms-3 space-x-0.5">
+                                <button type="button"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                        class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
+                                    -
+                                </button>
+                                <input min="1" name="soLuong" value="1" type="number"
+                                       class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-auto w-16 ps-4 quantity">
+                                <button type="button"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                        class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">
+                                    +
+                                </button>
+                            </div>
                         </div>
-                    </form>
+
+                        <div class="flex items-center">
+                            <h5 class="text-lg font-semibold me-2">Colors:</h5>
+                            <div class="space-x-2">
+                                <!-- Color buttons -->
+                                <button th:each="chiTiet, index : ${uniqueColors}"
+                                        th:id="'color-' + ${chiTiet.mauSacId}"
+                                        th:text="${chiTiet.ten}"
+                                        th:onclick="'selectColor(' + ${chiTiet.mauSacId} + ')'"
+                                        class="size-color inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
+                                        th:classappend="${selectedColorId == chiTiet.mauSacId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-x-1">
+                        <a href="#"
+                           class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center bg-orange-500 text-white rounded-md mt-2">Shop
+                            Now</a>
+                        <button type="submit"
+                                class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500 text-white hover:bg-orange-600 mt-2">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-12 grid-cols-1 mt-6 gap-6">
+                <div class="lg:col-span-3 md:col-span-5">
+                    <div class="sticky top-20">
+                        <ul class="flex-column p-6 bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 rounded-md"
+                            id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                            <li role="presentation">
+                                <button class="px-4 py-2 text-start text-base font-semibold rounded-md w-full hover:text-orange-500 duration-500"
+                                        id="description-tab" data-tabs-target="#description" type="button" role="tab"
+                                        aria-controls="description" aria-selected="true">Mô Tả Sản Phẩm
+                                </button>
+                            </li>
+                            <li role="presentation">
+                                <button class="px-4 py-2 text-start text-base font-semibold rounded-md w-full mt-3 duration-500"
+                                        id="addinfo-tab" data-tabs-target="#addinfo" type="button" role="tab"
+                                        aria-controls="addinfo" aria-selected="false">Chi Tiết Sản Phẩm
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
+                <div class="lg:col-span-9 md:col-span-7">
+                    <div id="myTabContent"
+                         class="p-6 bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 rounded-md">
+                        <div class="" id="description" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="text-slate-400" th:text="${sanPham.moTa != null ? sanPham.moTa : 'Không có mô tả'}"></p>
+                        </div>
+                        <div class="hidden" id="addinfo" role="tabpanel" aria-labelledby="addinfo-tab">
+                            <table class="w-full text-start">
+                                <tbody>
+                                <tr class="bg-white dark:bg-slate-900">
+                                    <td class="font-semibold pb-4">Thương Hiệu</td>
+                                    <td class="text-slate-400 pb-4" th:text="${sanPham.thuongHieu.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold py-4">Dây Giày</td>
+                                    <td class="text-slate-400 py-4" th:text="${sanPham.dayGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Lót Giầy</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.lotGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Đế Giầy</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.deGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Cổ Giày</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.coGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Chất Liệu</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.chatLieu.ten}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--end container-->
+        <div class="container lg:mt-24 mt-16">
+            <div class="grid grid-cols-1 mb-6 text-center">
+                <h3 class="font-semibold text-3xl leading-normal">New Arrival Items</h3>
             </div>
 
-        </div><!--end container-->
+            <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 pt-6">
+                <div class="group">
+                    <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
+                        <img src="/images/shop/sweater-t-shirt.jpg" class="group-hover:scale-110 duration-500"
+                             alt="">
 
+                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
+                            <a href="shop-cart.html"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
+                                to Cart</a>
+                        </div>
 
+                        <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
+                            <li><a href="javascript:void(0)"
+                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="heart" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="shop-item-detail.html"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="eye" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="javascript:void(0)"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="bookmark" class="size-4"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Sweater
+                            T-Shirt</a>
+                        <div class="flex justify-between items-center mt-1">
+                            <p>$16.00
+                                <del class="text-slate-400">$21.00</del>
+                            </p>
+                            <ul class="font-medium text-amber-400 list-none">
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
+                        <img src="/images/shop/trendy-t-shirt2.jpg" class="group-hover:scale-110 duration-500"
+                             alt="">
+
+                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
+                            <a href="shop-cart.html"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
+                                to Cart</a>
+                        </div>
+
+                        <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
+                            <li><a href="javascript:void(0)"
+                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="heart" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="shop-item-detail.html"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="eye" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="javascript:void(0)"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="bookmark" class="size-4"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Trendy
+                            T-shirt</a>
+                        <div class="flex justify-between items-center mt-1">
+                            <p>$16.00
+                                <del class="text-slate-400">$21.00</del>
+                            </p>
+                            <ul class="font-medium text-amber-400 list-none">
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
+                        <img src="/images/shop/men-white-espadrilles-slip-shoes.jpg"
+                             class="group-hover:scale-110 duration-500" alt="">
+
+                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
+                            <a href="shop-cart.html"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
+                                to Cart</a>
+                        </div>
+
+                        <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
+                            <li><a href="javascript:void(0)"
+                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="heart" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="shop-item-detail.html"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="eye" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="javascript:void(0)"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="bookmark" class="size-4"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Mens White
+                            Slip Shoes</a>
+                        <div class="flex justify-between items-center mt-1">
+                            <p>$16.00
+                                <del class="text-slate-400">$21.00</del>
+                            </p>
+                            <ul class="font-medium text-amber-400 list-none">
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
+                        <img src="/images/shop/luxurious-bag.jpg" class="group-hover:scale-110 duration-500"
+                             alt="">
+
+                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
+                            <a href="shop-cart.html"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
+                                to Cart</a>
+                        </div>
+
+                        <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
+                            <li><a href="javascript:void(0)"
+                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="heart" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="shop-item-detail.html"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="eye" class="size-4"></i></a></li>
+                            <li class="mt-1"><a href="javascript:void(0)"
+                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
+                                    data-feather="bookmark" class="size-4"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Ladies
+                            Luxurious Bag</a>
+                        <div class="flex justify-between items-center mt-1">
+                            <p>$16.00
+                                <del class="text-slate-400">$21.00</del>
+                            </p>
+                            <ul class="font-medium text-amber-400 list-none">
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                                <li class="inline"><i class="mdi mdi-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 </body>

@@ -12,11 +12,11 @@
 
 </head>
 <body class="dark:bg-slate-900">
-    <div th:replace="user/includes/header/userHeader"></div>
-    <div layout:fragment="usercontent"></div>
-    <div th:replace="user/includes/footer/userFooter"></div>
+<div th:insert="~{user/includes/header/userHeader}"></div>
+<div layout:fragment="usercontent"></div>
+<div th:insert="~{user/includes/footer/userFooter}"></div>
 
-    <script src="/vendors/tiny-slider/min/tiny-slider.js"></script>
+<script src="/vendors/tiny-slider/min/tiny-slider.js"></script>
 <script src="/vendors/tobii/js/tobii.min.js"></script>
 <script src="/vendors/feather-icons/feather.min.js"></script>
 <script src="/js/user/plugins.init.js"></script>

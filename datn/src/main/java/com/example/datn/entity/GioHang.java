@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -45,7 +46,10 @@ public class GioHang {
     @Column(name = "trangThai")
     private boolean trangThai;
 
-    @OneToMany(mappedBy = "gioHang",  cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "gioHang")
+    @Column(name = "tienGiam")
+    private BigDecimal tienGiam;
+
+    @OneToMany(mappedBy = "gioHang", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GioHangChiTiet> gioHangChiTietList;
+
 }

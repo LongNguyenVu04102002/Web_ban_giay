@@ -20,10 +20,6 @@ public class AdminController {
         return "admin/includes/content/thongke/thongke";
     }
 
-    @GetMapping("/admin/banhang")
-    public String banHang(){
-        return "admin/includes/content/banhang/banhang";
-    }
 
     @GetMapping("/hoadon/hoadonchitiet")
     public List<HoaDonChiTiet> hoaDonChiTiet(){
