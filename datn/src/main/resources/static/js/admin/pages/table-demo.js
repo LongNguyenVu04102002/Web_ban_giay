@@ -3,7 +3,8 @@ $(document).ready(function () {
         '#data-table-all', '#data-table-cancel', '#data-table-delivery',
         '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
         '#data-table-delivered', '#data-table-completed', '#data-table-cart',
-        '#data-table-sp', '#data-table-pgg', '#data-table-account'
+        '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1',
+        '#data-table-cart2','#data-table-cart3','#data-table-cart4','#data-table-cart5'
     ];
 
     const initializeDataTable = (selector) => {
@@ -46,10 +47,16 @@ $(document).ready(function () {
     filterColumn('#loaiPhieuFilter', 2, ['#data-table-pgg']);
     filterColumn('#trangThaiPggFilter', 9, ['#data-table-pgg']);
     filterColumn('#gioiTinhAccFilter', 5, ['#data-table-account']);
+<<<<<<< HEAD
     filterColumn('#trangThaiAccFilter', 7, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
     filterColumn('#trangThaiSpctFilter', 8, ['#data-table-sp']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+=======
+    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+
+    filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
+>>>>>>> KhachHang_LongFix
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
@@ -84,7 +91,12 @@ $(document).ready(function () {
                     return true;
                 }
                 return false;
+
 } else if (settings.nTable.id === 'data-table-account') {
+            } else if (settings.nTable.id === 'data-table-account') {
+
+} else if (settings.nTable.id === 'data-table-account') {
+
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
                 const dateStr = data[4];
@@ -106,4 +118,7 @@ $(document).ready(function () {
             return true;
         }
     );
+
 });
+
+

@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.KichThuoc;
 import com.example.datn.repository.KichThuocRepository;
@@ -33,4 +33,5 @@ public class KichThuocServiceImpl implements KichThuocService {
     public void delete(Long id) {
         kichThuocRepository.deleteById(id);
     }
+
 }

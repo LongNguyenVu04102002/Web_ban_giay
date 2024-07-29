@@ -5,9 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/js/user/detail.js"></script>
+    <script src="/js/admin/vendors.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div layout:fragment="usercontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <section class="relative table w-full py-20 lg:py-24 md:pt-28 bg-gray-50 dark:bg-slate-800">
         <div class="container relative">
             <div class="grid grid-cols-1 mt-14">
@@ -30,7 +34,6 @@
             </div>
         </div>
     </section>
-
     <section class="relative md:py-24 py-16">
         <div class="container relative">
             <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6 items-center">
@@ -42,28 +45,24 @@
                                      alt="">
                             </div>
                         </div>
-
                         <div class="tiny-slide">
                             <div class="m-0.5">
                                 <img src="/images/shop/mens-jecket-3.jpg" class="shadow dark:shadow-gray-700"
                                      alt="">
                             </div>
                         </div>
-
                         <div class="tiny-slide">
                             <div class="m-0.5">
                                 <img src="/images/shop/mens-jecket-left.jpg" class="shadow dark:shadow-gray-700"
                                      alt="">
                             </div>
                         </div>
-
                         <div class="tiny-slide">
                             <div class="m-0.5">
                                 <img src="/images/shop/mens-jecket-back.jpg" class="shadow dark:shadow-gray-700"
                                      alt="">
                             </div>
                         </div>
-
                         <div class="tiny-slide">
                             <div class="m-0.5">
                                 <img src="/images/shop/mens-jecket-4.jpg" class="shadow dark:shadow-gray-700"
@@ -72,13 +71,13 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="lg:col-span-7">
                     <h5 class="text-2xl font-semibold" th:text="${sanPham.ten}"></h5>
                     <div class="mt-2 flex justify-between">
-                        <span th:text="${#numbers.formatDecimal(sanPham.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"
-                              class="text-slate-400 font-semibold me-1">
-                        </span>
+                        <input type="text" id="sanPhamId" class="hidden" th:value="${sanPham.sanPhamId}">
+                        <div class="price-display">
+                            <span id="product-price" class="text-slate-400 font-semibold me-1">0 VNĐ</span>
+                        </div>
                         <ul class="list-none inline-block text-orange-400">
                             <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
                             <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
@@ -88,7 +87,6 @@
                             <li class="inline text-slate-400 font-semibold">4.8 (45)</li>
                         </ul>
                     </div>
-
                     <div class="mt-4">
                         <h5 class="text-lg font-semibold">Overview :</h5>
                         <p class="text-slate-400 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
@@ -110,30 +108,33 @@
                             </li>
                         </ul>
                     </div>
-
                     <div class="grid lg:grid-cols-2 grid-cols-1 gap-6 mt-4">
                         <div class="flex items-center">
                             <h5 class="text-lg font-semibold me-2">Size:</h5>
-                            <div class="space-x-1" >
+                            <div class="space-x-1">
+                                <!-- Size buttons -->
                                 <button th:each="chiTiet, index : ${uniqueSizes}"
-                                        th:key="${index}"
-                                        th:text="${chiTiet.kichThuoc.ten}"
-                                        th:onclick="'selectSize(' + ${chiTiet.kichThuoc.kichThuocId} + ')'"
-                                        class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
-                                        th:classappend="${selectedSizeId == chiTiet.kichThuoc.kichThuocId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
+                                        th:id="'size-' + ${chiTiet.kichThuocId}"
+                                        th:text="${chiTiet.ten}"
+                                        th:onclick="'selectSize(' + ${chiTiet.kichThuocId} + ')'"
+                                        class="size-size inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
+                                        th:classappend="${selectedSizeId == chiTiet.kichThuocId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
                                 </button>
                             </div>
                         </div>
+
                         <div class="flex items-center">
                             <h5 class="text-lg font-semibold me-2">Quantity:</h5>
                             <div class="qty-icons ms-3 space-x-0.5">
-                                <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                <button type="button"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
                                         class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white minus">
                                     -
                                 </button>
-                                <input min="0" name="quantity" value="0" type="number"
-                                       class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-none w-16 ps-4 quantity">
-                                <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                <input min="1" name="soLuong" value="1" type="number"
+                                       class="h-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white pointer-events-auto w-16 ps-4 quantity">
+                                <button type="button"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
                                         class="size-9 inline-flex items-center justify-center tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white plus">
                                     +
                                 </button>
@@ -143,24 +144,28 @@
                         <div class="flex items-center">
                             <h5 class="text-lg font-semibold me-2">Colors:</h5>
                             <div class="space-x-2">
-                                <button th:each="color : ${uniqueColors}"
-                                        th:attr="class='size-9 inline-flex items-center justify-center tracking-wide rounded-md ring-2 inline-flex align-middle bg-' + ${color.getMauSac().ten}">
+                                <!-- Color buttons -->
+                                <button th:each="chiTiet, index : ${uniqueColors}"
+                                        th:id="'color-' + ${chiTiet.mauSacId}"
+                                        th:text="${chiTiet.ten}"
+                                        th:onclick="'selectColor(' + ${chiTiet.mauSacId} + ')'"
+                                        class="size-color inline-flex items-center justify-center tracking-wide align-middle text-base text-center border border-orange-500 rounded-md"
+                                        th:classappend="${selectedColorId == chiTiet.mauSacId} ? 'bg-orange-500 text-white' : 'text-orange-500 hover:bg-orange-500 hover:text-white'">
                                 </button>
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-4 space-x-1">
                         <a href="#"
                            class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center bg-orange-500 text-white rounded-md mt-2">Shop
                             Now</a>
-                        <a th:href="@{/cart/add}"
-                           class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500/5 hover:bg-orange-500 text-orange-500 hover:text-white mt-2">Add
-                            to Cart</a>
+                        <button type="submit"
+                                class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-base text-center rounded-md bg-orange-500 text-white hover:bg-orange-600 mt-2">
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>
-
             <div class="grid md:grid-cols-12 grid-cols-1 mt-6 gap-6">
                 <div class="lg:col-span-3 md:col-span-5">
                     <div class="sticky top-20">
@@ -169,19 +174,13 @@
                             <li role="presentation">
                                 <button class="px-4 py-2 text-start text-base font-semibold rounded-md w-full hover:text-orange-500 duration-500"
                                         id="description-tab" data-tabs-target="#description" type="button" role="tab"
-                                        aria-controls="description" aria-selected="true">Description
+                                        aria-controls="description" aria-selected="true">Mô Tả Sản Phẩm
                                 </button>
                             </li>
                             <li role="presentation">
                                 <button class="px-4 py-2 text-start text-base font-semibold rounded-md w-full mt-3 duration-500"
                                         id="addinfo-tab" data-tabs-target="#addinfo" type="button" role="tab"
-                                        aria-controls="addinfo" aria-selected="false">Additional Information
-                                </button>
-                            </li>
-                            <li role="presentation">
-                                <button class="px-4 py-2 text-start text-base font-semibold rounded-md w-full mt-3 duration-500"
-                                        id="review-tab" data-tabs-target="#review" type="button" role="tab"
-                                        aria-controls="review" aria-selected="false">Review
+                                        aria-controls="addinfo" aria-selected="false">Chi Tiết Sản Phẩm
                                 </button>
                             </li>
                         </ul>
@@ -192,224 +191,42 @@
                     <div id="myTabContent"
                          class="p-6 bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 rounded-md">
                         <div class="" id="description" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="text-slate-400">Due to its widespread use as filler text for layouts,
-                                non-readability is of great importance: human perception is tuned to recognize certain
-                                patterns and repetitions in texts. If the distribution of letters and 'words' is random,
-                                the reader will not be distracted from making a neutral judgement on the visual impact
-                                and readability of the typefaces (typography), or the distribution of text on the page
-                                (layout or type area). For this reason, dummy text usually consists of a more or less
-                                random series of words or syllables.</p>
+                            <p class="text-slate-400" th:text="${sanPham.moTa != null ? sanPham.moTa : 'Không có mô tả'}"></p>
                         </div>
-
                         <div class="hidden" id="addinfo" role="tabpanel" aria-labelledby="addinfo-tab">
                             <table class="w-full text-start">
                                 <tbody>
                                 <tr class="bg-white dark:bg-slate-900">
-                                    <td class="font-semibold pb-4" style="width: 100px;">Color</td>
-                                    <td class="text-slate-400 pb-4">Red, White, Black, Orange</td>
+                                    <td class="font-semibold pb-4">Thương Hiệu</td>
+                                    <td class="text-slate-400 pb-4" th:text="${sanPham.thuongHieu.ten}"></td>
                                 </tr>
-
                                 <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
-                                    <td class="font-semibold py-4">Material</td>
-                                    <td class="text-slate-400 py-4">Cotton</td>
+                                    <td class="font-semibold py-4">Dây Giày</td>
+                                    <td class="text-slate-400 py-4" th:text="${sanPham.dayGiay.ten}"></td>
                                 </tr>
-
                                 <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
-                                    <td class="font-semibold pt-4">Size</td>
-                                    <td class="text-slate-400 pt-4">S, M, L, XL, XXL</td>
+                                    <td class="font-semibold pt-4 py-4">Lót Giầy</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.lotGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Đế Giầy</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.deGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Cổ Giày</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.coGiay.ten}"></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-700">
+                                    <td class="font-semibold pt-4 py-4">Chất Liệu</td>
+                                    <td class="text-slate-400 pt-4 py-4" th:text="${sanPham.chatLieu.ten}"></td>
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
-
-                        <div class="hidden" id="review" role="tabpanel" aria-labelledby="review-tab">
-                            <div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <img src="/images/client/01.jpg" class="h-11 w-11 rounded-full shadow"
-                                             alt="">
-
-                                        <div class="ms-3 flex-1">
-                                            <a href="#"
-                                               class="text-lg font-semibold hover:text-orange-500 duration-500">Calvin
-                                                Carlo</a>
-                                            <p class="text-sm text-slate-400">6th May 2022 at 01:25 pm</p>
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="text-slate-400 hover:text-orange-500 duration-500 ms-5"><i
-                                            class="mdi mdi-reply"></i> Reply</a>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-slate-800 rounded-md shadow dark:shadow-gray-800 mt-6">
-                                    <ul class="list-none inline-block text-orange-400">
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline text-slate-400 font-semibold">5.0</li>
-                                    </ul>
-
-                                    <p class="text-slate-400 italic">" There are many variations of passages of Lorem
-                                        Ipsum available, but the majority have suffered alteration in some form, by
-                                        injected humour "</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-8">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <img src="/images/client/02.jpg" class="h-11 w-11 rounded-full shadow"
-                                             alt="">
-
-                                        <div class="ms-3 flex-1">
-                                            <a href="#"
-                                               class="text-lg font-semibold hover:text-orange-500 duration-500">Calvin
-                                                Carlo</a>
-                                            <p class="text-sm text-slate-400">6th May 2022 at 01:25 pm</p>
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="text-slate-400 hover:text-orange-500 duration-500 ms-5"><i
-                                            class="mdi mdi-reply"></i> Reply</a>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-slate-800 rounded-md shadow dark:shadow-gray-800 mt-6">
-                                    <ul class="list-none inline-block text-orange-400">
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline text-slate-400 font-semibold">5.0</li>
-                                    </ul>
-
-                                    <p class="text-slate-400 italic">" There are many variations of passages of Lorem
-                                        Ipsum available, but the majority have suffered alteration in some form, by
-                                        injected humour "</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-8">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <img src="/images/client/03.jpg" class="h-11 w-11 rounded-full shadow"
-                                             alt="">
-
-                                        <div class="ms-3 flex-1">
-                                            <a href="#"
-                                               class="text-lg font-semibold hover:text-orange-500 duration-500">Calvin
-                                                Carlo</a>
-                                            <p class="text-sm text-slate-400">6th May 2022 at 01:25 pm</p>
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="text-slate-400 hover:text-orange-500 duration-500 ms-5"><i
-                                            class="mdi mdi-reply"></i> Reply</a>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-slate-800 rounded-md shadow dark:shadow-gray-800 mt-6">
-                                    <ul class="list-none inline-block text-orange-400">
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline text-slate-400 font-semibold">5.0</li>
-                                    </ul>
-
-                                    <p class="text-slate-400 italic">" There are many variations of passages of Lorem
-                                        Ipsum available, but the majority have suffered alteration in some form, by
-                                        injected humour "</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-8">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <img src="/images/client/04.jpg" class="h-11 w-11 rounded-full shadow"
-                                             alt="">
-
-                                        <div class="ms-3 flex-1">
-                                            <a href="#"
-                                               class="text-lg font-semibold hover:text-orange-500 duration-500">Calvin
-                                                Carlo</a>
-                                            <p class="text-sm text-slate-400">6th May 2022 at 01:25 pm</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="text-slate-400 hover:text-orange-500 duration-500 ms-5"><i
-                                            class="mdi mdi-reply"></i> Reply</a>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-slate-800 rounded-md shadow dark:shadow-gray-800 mt-6">
-                                    <ul class="list-none inline-block text-orange-400">
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                                        <li class="inline text-slate-400 font-semibold">5.0</li>
-                                    </ul>
-
-                                    <p class="text-slate-400 italic">" There are many variations of passages of Lorem
-                                        Ipsum available, but the majority have suffered alteration in some form, by
-                                        injected humour "</p>
-                                </div>
-                            </div>
-
-                            <div class="p-6 rounded-md shadow dark:shadow-gray-800 mt-8">
-                                <h5 class="text-lg font-semibold">Leave A Comment:</h5>
-
-                                <form class="mt-8">
-                                    <div class="grid lg:grid-cols-12 lg:gap-6">
-                                        <div class="lg:col-span-6 mb-5">
-                                            <div class="text-start">
-                                                <label for="name" class="font-semibold">Your Name:</label>
-                                                <div class="form-icon relative mt-2">
-                                                    <i data-feather="user" class="w-4 h-4 absolute top-3 start-4"></i>
-                                                    <input name="name" id="name" type="text"
-                                                           class="ps-11 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
-                                                           placeholder="Name :">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="lg:col-span-6 mb-5">
-                                            <div class="text-start">
-                                                <label for="email" class="font-semibold">Your Email:</label>
-                                                <div class="form-icon relative mt-2">
-                                                    <i data-feather="mail" class="w-4 h-4 absolute top-3 start-4"></i>
-                                                    <input name="email" id="email" type="email"
-                                                           class="ps-11 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
-                                                           placeholder="Email :">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1">
-                                        <div class="mb-5">
-                                            <div class="text-start">
-                                                <label for="comments" class="font-semibold">Your Comment:</label>
-                                                <div class="form-icon relative mt-2">
-                                                    <i data-feather="message-circle"
-                                                       class="w-4 h-4 absolute top-3 start-4"></i>
-                                                    <textarea name="comments" id="comments"
-                                                              class="ps-11 w-full py-2 px-3 h-28 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
-                                                              placeholder="Message :"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type="submit" id="submit" name="send"
-                                            class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
-                                        Send Message
-                                    </button>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div><!--end container-->
-
         <div class="container lg:mt-24 mt-16">
             <div class="grid grid-cols-1 mb-6 text-center">
                 <h3 class="font-semibold text-3xl leading-normal">New Arrival Items</h3>

@@ -4,6 +4,7 @@ import com.example.datn.entity.SanPham;
 import com.example.datn.entity.SanPhamChiTiet;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface SanPhamChiTietService {
@@ -23,5 +24,7 @@ public interface SanPhamChiTietService {
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 
     void update(Long id);
+
+    BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId);
 
 }

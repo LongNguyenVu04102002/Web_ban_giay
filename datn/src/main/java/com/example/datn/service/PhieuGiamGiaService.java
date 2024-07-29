@@ -7,16 +7,15 @@ import java.util.List;
 
 public interface PhieuGiamGiaService {
 
-    ResponseEntity<?> getPhieuGiamGiaByMa(String ma);
-
     List<PhieuGiamGia> getAll();
 
     PhieuGiamGia getById(Long id);
 
     void save(PhieuGiamGia phieuGiamGia);
 
-
     void update(Long id);
+
+    PhieuGiamGia tonggleTrangThaiGiamGia(Long id);
 
 
 }

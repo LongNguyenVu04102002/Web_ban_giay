@@ -3,16 +3,20 @@ package com.example.datn.controller;
 import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
-import com.example.datn.service.impl.HoaDonServiceImpl;
-import com.example.datn.service.impl.NhanVienServiceImpl;
-import com.example.datn.service.impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.HoaDonServiceImpl;
+import com.example.datn.service.Impl.NhanVienServiceImpl;
+import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -43,10 +47,10 @@ public class HoaDonController {
         model.addAttribute("hoaDonChoXacNhan", hoaDonChoXacNhan);
         model.addAttribute("hoaDonDaXacNhan", hoaDonDaXacNhan);
         model.addAttribute("hoaDonChoGiaoHang", hoaDonChoGiaoHang);
-        model.addAttribute("hoaDonDangGiaoHang",hoaDonDangGiaoHang);
+        model.addAttribute("hoaDonDangGiaoHang", hoaDonDangGiaoHang);
         model.addAttribute("hoaDonDaGiaoHang", hoaDonDaGiaoHang);
         model.addAttribute("hoaDonHoanThanh", hoaDonHoanThanh);
-        model.addAttribute("hoaDonHuy",hoaDonHuy);
+        model.addAttribute("hoaDonHuy", hoaDonHuy);
         model.addAttribute("nhanVien", nhanViens);
         return "admin/includes/content/hoadon/hoadon";
     }
@@ -72,6 +76,34 @@ public class HoaDonController {
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";
+    }
+
+    @PostMapping("/hoadon/update")
+    public String update(@RequestParam Long idHoaDon, @RequestParam Long idSanPhamChiTiet, RedirectAttributes redirectAttributes) {
+        hoaDonService.update(idHoaDon, idSanPhamChiTiet);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/admin/hoadon/cartdetail/" + idHoaDon;
+    }
+
+    @PostMapping("/hoadon/update/stepdown")
+    public String stepDown(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
+        hoaDonService.stepDown(hoaDonId, hoaDonChiTietId);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
+    }
+
+    @PostMapping("/hoadon/update/stepup")
+    public String stepUp(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
+        hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
+    }
+
+    @PostMapping("/hoadon/delete")
+    public String delete(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
+        hoaDonService.delete(hoaDonId, hoaDonChiTietId);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
     }
 
 }

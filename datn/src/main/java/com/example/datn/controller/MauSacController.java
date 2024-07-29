@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.MauSac;
-import com.example.datn.service.impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

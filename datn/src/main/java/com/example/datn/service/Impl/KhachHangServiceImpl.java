@@ -1,10 +1,11 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public List<KhachHang> getAll() {
-        return khachHangRepository.findAll();
+        return khachHangRepository.findAll((Sort.by(Sort.Direction.DESC, "khachHangId")));
     }
 
     @Override
@@ -26,8 +27,16 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public void save(KhachHang khachHang) {
-        khachHangRepository.save(khachHang);
+    public KhachHang  save(KhachHang khachHang) {
+
+        if (isSdtExist(khachHang.getSdt())) {
+            throw new RuntimeException("Số điện thoại đã tồn tại");
+        }
+        if (isEmailExist(khachHang.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
+        return khachHangRepository.save(khachHang);
+
     }
 
     @Override
@@ -42,7 +51,27 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHang> searchKhachHang(String sdt, String hoTen, String email) {
-        return khachHangRepository.searchKhachHang(sdt, hoTen, email);
+    public KhachHang update(KhachHang khachHang) {
+        return khachHangRepository.save(khachHang);
     }
+
+    @Override
+    public boolean isSdtExist(String sdt) {
+        return khachHangRepository.existsBySdt(sdt);
+    }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        return khachHangRepository.existsByEmail(email);
+    }
+
+    public boolean isPhoneNumberDuplicate(String sdt, Long excludeId) {
+        return khachHangRepository.existsBySdtAndKhachHangIdNot(sdt, excludeId);
+    }
+
+    public boolean isEmailDuplicate(String email, Long excludeId) {
+        return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.Impl;
 
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.repository.SanPhamChiTietRepository;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,6 +69,11 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
             spct.setTrangThai(!spct.isTrangThai());
             sanPhamChiTietRepository.save(spct);
         }
+    }
+
+    @Override
+    public BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId) {
+        return sanPhamChiTietRepository.findPriceBySizeAndColor(sanPhamId,sizeId,colorId);
     }
 
     private String generateBarCode() {

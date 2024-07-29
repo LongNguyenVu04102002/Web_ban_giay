@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.DayGiay;
-import com.example.datn.service.impl.DayGiayServiceImpl;
+import com.example.datn.service.Impl.DayGiayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
