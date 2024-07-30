@@ -1,6 +1,10 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
+import com.example.datn.model.response.ThanhToanResponse;
+import com.example.datn.service.Impl.HoaDonServiceImpl;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,9 @@ import java.util.concurrent.atomic.AtomicLong;
 @SessionAttributes("cartItems")
 public class BanHangOnlineController {
 
+    @Autowired
+    private HoaDonServiceImpl hoaDonService;
+
     private final AtomicLong counter = new AtomicLong();
 
     @ModelAttribute("cartItems")
@@ -30,7 +37,8 @@ public class BanHangOnlineController {
     }
 
     @GetMapping("/checkout")
-    public String checkout() {
+    public String checkout(Model model) {
+        model.addAttribute("thanhToanResponse", new ThanhToanResponse());
         return "user/includes/content/checkout";
     }
 
@@ -86,6 +94,16 @@ public class BanHangOnlineController {
         cartItems.removeIf(item -> item.getId().equals(id));
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/cart";
+    }
+
+    @PostMapping("/checkout/save")
+    public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
+                             @ModelAttribute("cartItems") List<CartItem> cartItems,
+                             Model model){
+        String maVanDon = hoaDonService.saveHoaDonOnline(thanhToanResponse, cartItems);
+        cartItems.clear();
+        model.addAttribute("maVanDon", maVanDon);
+        return "user/includes/content/ordersusses";
     }
 
 }

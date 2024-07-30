@@ -7,10 +7,145 @@
     <title>Title</title>
     <script src="/js/admin/pages/customer.js" defer></script>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const notificationTypeHtml = {
+            Success: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Thêm sản phẩm vào giỏ hàng thành công
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+            StepUp: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Tăng số lượng sản phẩm thành công
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+            StepDown: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Giảm số lượng sản phẩm thành công
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+            Delete: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Xóa sản phẩm thành công
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+        }
 
+        function handleNotificationType(type) {
+            console.log('type', type)
+            $('#notification-toast').append(notificationTypeHtml[type])
+            $('#notification-toast .toast:last-child').toast('show');
+            setTimeout(function () {
+                $('#notification-toast .toast:first-child').remove();
+            }, 5000);
+        }
+
+        $(document).ready(function () {
+            const success = JSON.parse([[${success}]]);
+            if (success) {
+                handleNotificationType('Success');
+            }
+        });
+        $(document).ready(function () {
+            const stepup = JSON.parse([[${stepup}]]);
+            if (stepup) {
+                handleNotificationType('StepUp');
+            }
+        });
+        $(document).ready(function () {
+            const stepdown = JSON.parse([[${stepdown}]]);
+            if (stepdown) {
+                handleNotificationType('StepDown');
+            }
+        });
+        $(document).ready(function () {
+            const deletes = JSON.parse([[${deletes}]]);
+            if (deletes) {
+                handleNotificationType('Delete');
+            }
+        });
+    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Bán Hàng Tại Quầy
@@ -149,7 +284,8 @@
                                             <td th:text="${ghct.sanPhamChiTiet.mauSac.ten}"></td>
                                             <td th:text="${ghct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                             <td>
-                                                <span th:text="${#numbers.formatDecimal(ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                        <span
+                                                                th:text="${#numbers.formatDecimal(ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                                 VNĐ
                                             </td>
                                             <td>
@@ -168,7 +304,8 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <span th:text="${#numbers.formatDecimal(ghct.soLuong * ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                        <span
+                                                                th:text="${#numbers.formatDecimal(ghct.soLuong * ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
                                                 VNĐ
                                             </td>
                                         </tr>
@@ -193,7 +330,8 @@
                                                 class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                             Chọn khách hàng
                                         </button>
-                                        <button type="button" th:onclick="'clearSelectedCustomer(' + ${index.id} + ')'"
+                                        <button type="button"
+                                                th:onclick="'clearSelectedCustomer(' + ${index.id} + ')'"
                                                 class="btn btn-sm bg-red-50 hover:bg-red-600 text-red-600 mr-2">
                                             Xóa
                                         </button>
@@ -269,7 +407,8 @@
                                             </svg>
                                             <span class="font-semibold"></span>
                                         </span>
-                                    <span th:id="'customer-phone-' + ${index.id}" class="flex items-center gap-2"
+                                    <span th:id="'customer-phone-' + ${index.id}"
+                                          class="flex items-center gap-2"
                                           style="display:none;">
                                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -292,11 +431,13 @@
                                     <h3 class="mb-4">Thông Tin Thanh Toán</h3>
                                 </div>
                                 <div class="grid lg:grid-cols-12 gap-6 w-full">
-                                    <div th:id="'form-section-' + ${index.id}" class="lg:col-span-6 hidden-visibility">
+                                    <div th:id="'form-section-' + ${index.id}"
+                                         class="lg:col-span-6 hidden-visibility">
                                         <div class="p-6 rounded-md">
                                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                                 <div class="lg:col-span-6">
-                                                    <label class="form-label font-semibold">Tên Khách Hàng: </label>
+                                                    <label class="form-label font-semibold">Tên Khách
+                                                        Hàng: </label>
                                                     <label>
                                                         <input type="text"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
@@ -304,7 +445,8 @@
                                                     </label>
                                                 </div>
                                                 <div class="lg:col-span-6">
-                                                    <label class="form-label font-semibold">Số Điện Thoại:</label>
+                                                    <label class="form-label font-semibold">Số Điện
+                                                        Thoại:</label>
                                                     <label>
                                                         <input type="text"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
@@ -360,7 +502,8 @@
                                             </div>
                                             <div class="lg:col-span-12 text-red-600"
                                                  th:if="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id - 1).getGioHangChiTietList().isEmpty()}">
-                                                <span th:text="${index.muaThemDeGiam > 0 ? 'Cần mua thêm: ' + #numbers.formatDecimal(index.muaThemDeGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ để nhận thêm ưu đãi.' : 'Đã áp dụng phiếu giảm giá tốt nhất.'}"></span>
+                                                        <span
+                                                                th:text="${index.muaThemDeGiam > 0 ? 'Cần mua thêm: ' + #numbers.formatDecimal(index.muaThemDeGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ để nhận thêm ưu đãi.' : 'Đã áp dụng phiếu giảm giá tốt nhất.'}"></span>
                                             </div>
 
                                             <div class="lg:col-span-12 flex items-center justify-between">
@@ -372,8 +515,9 @@
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Tạm Tính: </label>
-                                                <label th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
-                                                       class="form-label font-semibold">
+                                                <label
+                                                        th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
+                                                        class="form-label font-semibold">
                                                 </label>
                                             </div>
                                             <div th:id="'shipping' + ${index.id}"
@@ -384,13 +528,15 @@
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Giảm Giá: </label>
                                                 <label class="form-label font-semibold">
-                                                    <span th:text="${gioHangList.get(index.id  - 1).tienGiam != null ? #numbers.formatDecimal(gioHangList.get(index.id  - 1).tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                                            <span
+                                                                    th:text="${gioHangList.get(index.id  - 1).tienGiam != null ? #numbers.formatDecimal(gioHangList.get(index.id  - 1).tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Tổng Tiền: </label>
-                                                <label th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
-                                                       class="form-label font-semibold">
+                                                <label
+                                                        th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
+                                                        class="form-label font-semibold">
                                                 </label>
                                                 <input name="totalAmount"
                                                        th:value="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id  - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ?
@@ -405,12 +551,12 @@
                                                     <span class="font-semibold">Tiền Mặt</span>
                                                 </label>
                                                 <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" name="thanhToan" value="2">
+                                                    <input type="radio" class="radio" name="thanhToan"
+                                                           value="2">
                                                     <span class="font-semibold">Thanh toa </span>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12">
-                                                <div id="notification-toast" class="toast-wrapper top-end"></div>
                                                 <div class="mt-10">
                                                     <button th:type="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id  - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ?
                                                                 'submit' : 'button'}"

@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function handleNotificationType(type) {
-        console.log('type', type);
 
         const notificationContainer = document.getElementById('notification-toast');
         const notificationToast = document.createElement('div');

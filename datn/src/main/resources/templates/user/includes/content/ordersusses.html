@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="usercontent">
+    <section class="relative md:py-24 py-16">
+        <div class="container relative">
+            <div class="mt-16">
+                <div class="flex justify-center text-center">
+                    <img class="w-72" src="/images/test.jpg"  alt="">
+                </div>
+                <div class="flex justify-center text-center mt-2">
+                    <p class="font-semibold text-4xl ">Thank you !</p>
+                </div>
+
+                <div class="flex justify-center text-center mt-2">
+                    <p class="sub-menu-item text-2xl">Your Order is Completed !</p>
+                </div>
+                <div class="flex justify-center text-center">
+                    <p class="sub-menu-item text-2xl">You will receive an order confirmation email with details of your order.</p>
+                </div>
+                <div class="flex justify-center text-center mt-4 space-x-2">
+                    <span class="sub-menu-item text-2xl">Order ID:</span>
+                    <span class="sub-menu-item text-2xl text-blue " th:text="' ' + ${maVanDon}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
