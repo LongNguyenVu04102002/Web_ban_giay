@@ -15,4 +15,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("SELECT p.giaBan FROM SanPhamChiTiet p WHERE p.sanPham.sanPhamId = :sanPhamId  AND p.kichThuoc.kichThuocId = :sizeId AND p.mauSac.mauSacId = :colorId")
     BigDecimal findPriceBySizeAndColor(@Param("sanPhamId") Long sanPhamId, @Param("sizeId") Long sizeId, @Param("colorId") Long colorId);
 
+
+    @Query("SELECT p FROM SanPhamChiTiet p WHERE p.sanPham.ten = :tenSanPham  AND p.kichThuoc.ten = :tenKichThuoc AND p.mauSac.ten = :tenMauSac")
+    SanPhamChiTiet findByName(String tenSanPham, String tenKichThuoc, String tenMauSac);
 }

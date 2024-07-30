@@ -1,8 +1,6 @@
 package com.example.datn.service;
 
-import com.example.datn.dto.TabDataDTO;
 import com.example.datn.entity.GioHang;
-import com.example.datn.model.response.PhieuGiamGiaResponse;
 
 public interface GioHangService {
 

@@ -4,7 +4,86 @@
       layout:decorate="~{user/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Check Out</title>
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script>
+        $(document).ready(function() {
+            function getProvinces() {
+                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(response) {
+                    if (response.error === 0) {
+                        $("#province").append('<option value="">Chọn Thành Phố</option>');
+                        $.each(response.data, function(key, value) {
+                            $("#province").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching provinces:', response.message);
+                    }
+                });
+            }
+
+            function getDistricts(provinceId) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function(response) {
+                    if (response.error === 0) {
+                        $("#district").html('<option value="">Chọn Huyện</option>');
+                        $("#ward").html('<option value="">Chọn Xã</option>');
+                        $.each(response.data, function(key, value) {
+                            $("#district").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching districts:', response.message);
+                    }
+                });
+            }
+
+            function getWards(districtId) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function(response) {
+                    if (response.error === 0) {
+                        $("#ward").html('<option value="">Chọn Xã</option>');
+                        $.each(response.data, function(key, value) {
+                            $("#ward").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching wards:', response.message);
+                    }
+                });
+            }
+
+            getProvinces();
+
+            $("#province").on('change', function() {
+                const provinceId = $(this).val();
+                const provinceName = $("#province option:selected").text();
+                if (provinceId) {
+                    getDistricts(provinceId);
+                    $("#provinceName").val(provinceName);
+                } else {
+                    $("#district").html('<option value="">Chọn Huyện</option>');
+                    $("#ward").html('<option value="">Chọn Xã</option>');
+                    $("#provinceName").val('');
+                }
+            });
+
+            $("#district").on('change', function() {
+                const districtId = $(this).val();
+                const districtName = $("#district option:selected").text();
+                if (districtId) {
+                    getWards(districtId);
+                    $("#districtName").val(districtName);
+                } else {
+                    $("#ward").html('<option value="">Chọn Xã</option>');
+                    $("#districtName").val('');
+                }
+            });
+
+            $("#ward").on('change', function() {
+                const wardId = $(this).val();
+                const wardName = $("#ward option:selected").text();
+                $("#wardName").val(wardName);
+            });
+        });
+
+    </script>
+
 </head>
 <body>
 <div layout:fragment="usercontent">
@@ -36,52 +115,49 @@
                 <div class="lg:col-span-8">
                     <div class="p-6 rounded-md shadow dark:shadow-gray-800">
                         <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
-                        <form>
+                        <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post">
                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Tên Khách Hàng : </label>
-                                    <input type="text"
+                                    <input type="text" th:field="*{tenNguoiNhan}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Tên khách hàng">
                                 </div>
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Số Điện Thoại</label>
-                                    <input type="text"
+                                    <input type="text" th:field="*{sdt}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Số điện thoại">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Email : </label>
-                                    <input type="email"
+                                    <input type="email" th:field="*{email}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Email">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Thành Phố:</label>
-                                    <select
-                                            class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                        <option>
-
-                                        </option>
+                                    <select id="province"  class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     </select>
+                                    <input type="hidden" id="provinceName" name="province">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Huyện:</label>
-                                    <select class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                        <option></option>
+                                    <select id="district" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                        <option value="">Chọn Huyện</option>
                                     </select>
+                                    <input type="hidden" id="districtName" name="district" >
                                 </div>
                                 <div class="lg:col-span-4">
-                                    <label class="form-label font-semibold">Xã : </label>
-                                    <select class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                        <option>
-
-                                        </option>
+                                    <label class="font-semibold">Xã:</label>
+                                    <select id="ward" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                        <option value="">Chọn Xã</option>
                                     </select>
+                                    <input type="hidden" id="wardName" name="ward">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Địa Chỉ : </label>
-                                    <input type="text"
+                                    <input type="text" th:field="*{diaChi}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Địa chỉ">
                                 </div>
@@ -89,17 +165,15 @@
                                     <h3 class="text-xl leading-normal font-semibold mt-2">Phương Thức Thanh Toán</h3>
                                     <div class="block mt-2">
                                         <label class="inline-flex items-center">
-                                            <input type="radio"
-                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2"
-                                                   name="paymentMethod" value="true" checked>
+                                            <input type="radio" th:field="*{paymentMethod}" value="3"
+                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2" checked>
                                             <span class="text-slate-400">Thanh toán khi nhận hàng</span>
                                         </label>
                                     </div>
                                     <div class="block">
                                         <label class="inline-flex items-center">
-                                            <input type="radio"
-                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2"
-                                                   name="paymentMethod" value="false">
+                                            <input type="radio" th:field="*{paymentMethod}" value="2"
+                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2">
                                             <span class="text-slate-400">Thanh toán qua VNPAY</span>
                                         </label>
                                     </div>
@@ -112,6 +186,7 @@
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
                 <div class="lg:col-span-4">
@@ -137,11 +212,11 @@
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
                                 <h5 class="font-semibold">Tiền Giảm</h5>
-                                <p class="text-slate-400 font-semibold"></p>
+                                <p class="text-slate-400 font-semibold">0 VNĐ</p>
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
                                 <h5 class="font-semibold">Tiền Ship</h5>
-                                <p class="text-slate-400 font-semibold"></p>
+                                <p class="text-slate-400 font-semibold">0 VNĐ</p>
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800">
                                 <h5 class="font-semibold">Tổng</h5>

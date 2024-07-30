@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class ThanhToanResponse {
-    private String maVanDon;
-    private String hoTen;
-    private String email;
+    private String tenNguoiNhan;
     private String sdt;
+    private String email;
+    private String province;
+    private String district;
+    private String ward;
     private String diaChi;
-    private BigDecimal tienShip;
-    private boolean hinhThuc;
-    private BigDecimal tongTien;
+    private Long paymentMethod;
 }

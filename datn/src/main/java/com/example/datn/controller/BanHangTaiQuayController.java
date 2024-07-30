@@ -63,7 +63,10 @@ public class BanHangTaiQuayController {
     }
 
     @PostMapping("/banhang/addToCart")
-    private String addToCart(@RequestParam Long gioHangId, @RequestParam Long sanPhamChiTietId, Model model) {
+    private String addToCart(@RequestParam Long gioHangId,
+                             @RequestParam Long sanPhamChiTietId,
+                             Model model) {
+        model.addAttribute("success", true);
         gioHangService.addToCart(gioHangId, sanPhamChiTietId);
         return GioHangList(model);
     }
@@ -72,6 +75,7 @@ public class BanHangTaiQuayController {
     public String stepDown(@RequestParam("gioHangChiTietId") Long gioHangChiTietId,
                            @RequestParam("sanPhamChiTietId") Long sanPhamChiTietId,
                            Model model) {
+        model.addAttribute("stepdown", true);
         gioHangService.stepDown(gioHangChiTietId, sanPhamChiTietId);
         return GioHangList(model);
     }
@@ -80,12 +84,14 @@ public class BanHangTaiQuayController {
     public String stepUp(@RequestParam("gioHangChiTietId") Long gioHangChiTietId,
                          @RequestParam("sanPhamChiTietId") Long sanPhamChiTietId,
                          Model model) {
+        model.addAttribute("stepup", true);
         gioHangService.stepUp(gioHangChiTietId, sanPhamChiTietId);
         return GioHangList(model);
     }
 
     @GetMapping("/banhang/delete/{id}")
     public String delete(@PathVariable Long id, Model model) {
+        model.addAttribute("deletes", true);
         gioHangService.delete(id);
         return GioHangList(model);
     }
@@ -97,7 +103,7 @@ public class BanHangTaiQuayController {
                        @RequestParam(defaultValue = "0") BigDecimal discountAmount,
                        @RequestParam(defaultValue = "0") BigDecimal totalAmount,
                        @RequestParam Long thanhToan) {
-        hoaDonService.save(gioHangId, customerId, discountCode, discountAmount, totalAmount, thanhToan);
+        hoaDonService.saveHoaDonTaiQuay(gioHangId, customerId, discountCode, discountAmount, totalAmount, thanhToan);
         return "redirect:/admin/hoadon";
     }
 

@@ -1,5 +1,6 @@
 package com.example.datn.service.Impl;
 
+import com.example.datn.dto.CartItem;
 import com.example.datn.entity.GioHang;
 import com.example.datn.entity.GioHangChiTiet;
 import com.example.datn.entity.HinhThucThanhToan;
@@ -11,6 +12,7 @@ import com.example.datn.entity.PhieuGiamGia;
 import com.example.datn.entity.PhuongThucThanhToan;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.entity.TimeLine;
+import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.repository.GioHangChiTietRepository;
 import com.example.datn.repository.GioHangRepository;
 import com.example.datn.repository.HinhThucThanhToanRepository;
@@ -232,7 +234,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Transactional
     @Override
-    public void save(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan) {
+    public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan) {
         HoaDon hoaDon = new HoaDon();
         Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
         Optional<NhanVien> nhanVien = nhanVienRepository.findById(1L);
@@ -277,6 +279,58 @@ public class HoaDonServiceImpl implements HoaDonService {
         timeLineRepository.save(timeLine);
 
     }
+
+    @Override
+    @Transactional
+    public String saveHoaDonOnline(ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
+        HoaDon hoaDon = new HoaDon();
+        hoaDon.setLoaiHoaDon(false);
+        hoaDon.setThanhToan(false);
+        hoaDon.setTrangThai(1);
+        hoaDon.setPhiShip(BigDecimal.ZERO);
+        hoaDon.setMaVanDon(generateInvoiceCode());
+        hoaDon.setTenNguoiNhan(thanhToanResponse.getTenNguoiNhan());
+        hoaDon.setEmail(thanhToanResponse.getEmail());
+        hoaDon.setSdtNhan(thanhToanResponse.getSdt());
+        hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
+
+        BigDecimal tongTien = BigDecimal.ZERO;
+
+        for (CartItem cartItem : cartItems){
+            BigDecimal giaBan = cartItem.getGia();
+            BigDecimal soLuong = new BigDecimal(cartItem.getSoLuong());
+            BigDecimal thanhTien = giaBan.multiply(soLuong);
+            tongTien = tongTien.add(thanhTien);
+
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
+            HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+            hoaDonChiTiet.setTrangThai(1);
+            hoaDonChiTiet.setDonGia(giaBan);
+            hoaDonChiTiet.setSoLuong(cartItem.getSoLuong());
+            hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+            hoaDonChiTiet.setHoaDon(hoaDon);
+            hoaDonChiTietRepository.save(hoaDonChiTiet);
+        }
+
+        hoaDon.setTongTien(tongTien);
+        hoaDonRepository.save(hoaDon);
+
+        Optional<PhuongThucThanhToan> phuongThucThanhToan = phuongThucThanhToanRepository.findById(thanhToanResponse.getPaymentMethod());
+        if (phuongThucThanhToan.isPresent()) {
+            HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
+            hinhThucThanhToan.setPhuongThucThanhToan(phuongThucThanhToan.get());
+            hinhThucThanhToan.setHoaDon(hoaDon);
+            hinhThucThanhToanRepository.save(hinhThucThanhToan);
+        }
+
+        TimeLine timeLine = new TimeLine();
+        timeLine.setNgayTao(LocalDate.now());
+        timeLine.setHoaDon(hoaDon);
+        timeLine.setTrangThai(1);
+        timeLineRepository.save(timeLine);
+        return hoaDon.getMaVanDon();
+    }
+
 
     private static HoaDonChiTiet getHoaDonChiTiet(GioHangChiTiet ghct, HoaDon hoaDon) {
         HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
