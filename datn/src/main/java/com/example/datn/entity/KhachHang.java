@@ -37,7 +37,8 @@ public class KhachHang {
 
     @NotBlank(message = "Họ tên không được để trống")
     @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+    @Pattern(regexp = "^[\\p{L} \\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 
