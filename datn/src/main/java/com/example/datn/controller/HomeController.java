@@ -115,9 +115,6 @@ public class HomeController {
         return "user/includes/content/ordersusses";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "user/includes/content/login";
-    }
+
 
 }
