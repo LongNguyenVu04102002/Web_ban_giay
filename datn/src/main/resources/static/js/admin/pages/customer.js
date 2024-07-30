@@ -150,7 +150,6 @@ function selectCustomer(button, tabId) {
 }
 
 $(document).ready(function() {
-    // Hàm tải dữ liệu cho các phần tử chọn
     function loadData() {
         $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
             if (data_tinh.error == 0) {
@@ -198,6 +197,5 @@ $(document).ready(function() {
         });
     }
 
-    // Gọi hàm tải dữ liệu
     loadData();
 });

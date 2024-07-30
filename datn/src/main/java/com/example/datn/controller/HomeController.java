@@ -53,8 +53,7 @@ public class HomeController {
     public String detail(@PathVariable Long id, Model model) {
         SanPham sanPham = sanPhamService.getSanPhamById(id);
         if (sanPham == null) {
-            // Xử lý khi không tìm thấy sản phẩm, ví dụ: chuyển hướng đến trang lỗi
-            return "redirect:/error"; // Thay thế bằng trang lỗi phù hợp
+            return "redirect:/error";
         }
         model.addAttribute("sanPham", sanPham);
 
@@ -93,8 +92,9 @@ public class HomeController {
         return "user/includes/content/contact";
     }
 
-
-
-
+    @GetMapping("/success")
+    public String success() {
+        return "user/includes/content/ordersusses";
+    }
 
 }

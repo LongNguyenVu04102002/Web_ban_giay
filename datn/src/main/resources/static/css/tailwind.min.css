@@ -2549,6 +2549,10 @@ video {
     --tw-text-opacity: 1 !important;
     color: rgb(245 158 11 / var(--tw-text-opacity)) !important
 }
+.text-blue {
+    --tw-text-opacity: 1 !important;
+    color: rgb(255 0 0 / var(--tw-text-opacity)) !important;
+}
 
 .text-black {
     --tw-text-opacity: 1 !important;
