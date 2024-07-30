@@ -7,12 +7,12 @@
     <title>Check Out</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             function getProvinces() {
-                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(response) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (response) {
                     if (response.error === 0) {
                         $("#province").append('<option value="">Chọn Thành Phố</option>');
-                        $.each(response.data, function(key, value) {
+                        $.each(response.data, function (key, value) {
                             $("#province").append('<option value="' + value.id + '">' + value.full_name + '</option>');
                         });
                     } else {
@@ -22,11 +22,11 @@
             }
 
             function getDistricts(provinceId) {
-                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function(response) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function (response) {
                     if (response.error === 0) {
                         $("#district").html('<option value="">Chọn Huyện</option>');
                         $("#ward").html('<option value="">Chọn Xã</option>');
-                        $.each(response.data, function(key, value) {
+                        $.each(response.data, function (key, value) {
                             $("#district").append('<option value="' + value.id + '">' + value.full_name + '</option>');
                         });
                     } else {
@@ -36,10 +36,10 @@
             }
 
             function getWards(districtId) {
-                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function(response) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function (response) {
                     if (response.error === 0) {
                         $("#ward").html('<option value="">Chọn Xã</option>');
-                        $.each(response.data, function(key, value) {
+                        $.each(response.data, function (key, value) {
                             $("#ward").append('<option value="' + value.id + '">' + value.full_name + '</option>');
                         });
                     } else {
@@ -50,7 +50,7 @@
 
             getProvinces();
 
-            $("#province").on('change', function() {
+            $("#province").on('change', function () {
                 const provinceId = $(this).val();
                 const provinceName = $("#province option:selected").text();
                 if (provinceId) {
@@ -63,7 +63,7 @@
                 }
             });
 
-            $("#district").on('change', function() {
+            $("#district").on('change', function () {
                 const districtId = $(this).val();
                 const districtName = $("#district option:selected").text();
                 if (districtId) {
@@ -75,7 +75,7 @@
                 }
             });
 
-            $("#ward").on('change', function() {
+            $("#ward").on('change', function () {
                 const wardId = $(this).val();
                 const wardName = $("#ward option:selected").text();
                 $("#wardName").val(wardName);
@@ -137,20 +137,23 @@
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Thành Phố:</label>
-                                    <select id="province"  class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <select id="province"
+                                            class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     </select>
                                     <input type="hidden" id="provinceName" name="province">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Huyện:</label>
-                                    <select id="district" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <select id="district"
+                                            class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Huyện</option>
                                     </select>
-                                    <input type="hidden" id="districtName" name="district" >
+                                    <input type="hidden" id="districtName" name="district">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Xã:</label>
-                                    <select id="ward" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <select id="ward"
+                                            class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Xã</option>
                                     </select>
                                     <input type="hidden" id="wardName" name="ward">
@@ -165,14 +168,14 @@
                                     <h3 class="text-xl leading-normal font-semibold mt-2">Phương Thức Thanh Toán</h3>
                                     <div class="block mt-2">
                                         <label class="inline-flex items-center">
-                                            <input type="radio" th:field="*{paymentMethod}" value="3"
-                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2" checked>
+                                            <input type="radio" name="paymentMethod" value="3" checked
+                                                   class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2">
                                             <span class="text-slate-400">Thanh toán khi nhận hàng</span>
                                         </label>
                                     </div>
                                     <div class="block">
                                         <label class="inline-flex items-center">
-                                            <input type="radio" th:field="*{paymentMethod}" value="2"
+                                            <input type="radio" name="paymentMethod" value="2"
                                                    class="form-radio border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2">
                                             <span class="text-slate-400">Thanh toán qua VNPAY</span>
                                         </label>
@@ -186,7 +189,6 @@
                                 </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="lg:col-span-4">
@@ -220,7 +222,8 @@
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800">
                                 <h5 class="font-semibold">Tổng</h5>
-                                <p class="font-semibold" th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></p>
+                                <p class="font-semibold"
+                                   th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></p>
                             </div>
                         </div>
                     </div>

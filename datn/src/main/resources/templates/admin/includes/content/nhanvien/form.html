@@ -5,11 +5,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Thêm hoặc Cập Nhật Nhân Viên</title>
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
     <script>
         function confirmSubmission() {
             return confirm('Bạn có chắc chắn muốn thêm/cập nhật nhân viên này không?');
         }
     </script>
+    <script>
+        $(document).ready(function () {
+            function getProvinces() {
+                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (response) {
+                    if (response.error === 0) {
+                        $("#province").append('<option value="">Chọn Thành Phố</option>');
+                        $.each(response.data, function (key, value) {
+                            $("#province").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching provinces:', response.message);
+                    }
+                });
+            }
+
+            function getDistricts(provinceId) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function (response) {
+                    if (response.error === 0) {
+                        $("#district").html('<option value="">Chọn Huyện</option>');
+                        $("#ward").html('<option value="">Chọn Xã</option>');
+                        $.each(response.data, function (key, value) {
+                            $("#district").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching districts:', response.message);
+                    }
+                });
+            }
+
+            function getWards(districtId) {
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function (response) {
+                    if (response.error === 0) {
+                        $("#ward").html('<option value="">Chọn Xã</option>');
+                        $.each(response.data, function (key, value) {
+                            $("#ward").append('<option value="' + value.id + '">' + value.full_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error fetching wards:', response.message);
+                    }
+                });
+            }
+
+            getProvinces();
+
+            $("#province").on('change', function () {
+                const provinceId = $(this).val();
+                const provinceName = $("#province option:selected").text();
+                if (provinceId) {
+                    getDistricts(provinceId);
+                    $("#provinceName").val(provinceName);
+                } else {
+                    $("#district").html('<option value="">Chọn Huyện</option>');
+                    $("#ward").html('<option value="">Chọn Xã</option>');
+                    $("#provinceName").val('');
+                }
+            });
+
+            $("#district").on('change', function () {
+                const districtId = $(this).val();
+                const districtName = $("#district option:selected").text();
+                if (districtId) {
+                    getWards(districtId);
+                    $("#districtName").val(districtName);
+                } else {
+                    $("#ward").html('<option value="">Chọn Xã</option>');
+                    $("#districtName").val('');
+                }
+            });
+
+            $("#ward").on('change', function () {
+                const wardId = $(this).val();
+                const wardName = $("#ward option:selected").text();
+                $("#wardName").val(wardName);
+            });
+        });
+
+    </script>
+
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -71,29 +150,28 @@
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Thành Phố:</label>
-                                <select id="province" th:field="*{thanhPho}" onchange="loadDistricts()"
+                                <select id="province"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option th:each="province : ${provinces}"
-                                            th:value="${province.provinceId}"
-                                            th:text="${province.provinceName}">
-                                    </option>
                                 </select>
+                                <input type="hidden" id="provinceName" name="thanhPho">
                                 <div th:if="${#fields.hasErrors('thanhPho')}" th:errors="*{thanhPho}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Huyện:</label>
-                                <select id="district" th:field="*{huyen}" onchange="loadWards()"
+                                <select id="district"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option value="">Chọn huyện</option>
+                                    <option value="">Chọn Huyện</option>
                                 </select>
+                                <input type="hidden" id="districtName" name="huyen">
                                 <div th:if="${#fields.hasErrors('huyen')}" th:errors="*{huyen}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Xã:</label>
-                                <select id="ward" th:field="*{xa}"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                    <option value="">Chọn xã</option>
+                                <select id="ward"
+                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option value="">Chọn Xã</option>
                                 </select>
+                                <input type="hidden" id="wardName" name="xa">
                                 <div th:if="${#fields.hasErrors('xa')}" th:errors="*{xa}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-12">

@@ -302,19 +302,20 @@ public class HoaDonServiceImpl implements HoaDonService {
             BigDecimal thanhTien = giaBan.multiply(soLuong);
             tongTien = tongTien.add(thanhTien);
 
+        }
+
+        hoaDon.setTongTien(tongTien);
+        hoaDonRepository.save(hoaDon);
+        for(CartItem cartItem : cartItems){
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setTrangThai(1);
-            hoaDonChiTiet.setDonGia(giaBan);
+            hoaDonChiTiet.setDonGia(cartItem.getGia());
             hoaDonChiTiet.setSoLuong(cartItem.getSoLuong());
             hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
             hoaDonChiTiet.setHoaDon(hoaDon);
             hoaDonChiTietRepository.save(hoaDonChiTiet);
         }
-
-        hoaDon.setTongTien(tongTien);
-        hoaDonRepository.save(hoaDon);
-
         Optional<PhuongThucThanhToan> phuongThucThanhToan = phuongThucThanhToanRepository.findById(thanhToanResponse.getPaymentMethod());
         if (phuongThucThanhToan.isPresent()) {
             HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
@@ -330,7 +331,6 @@ public class HoaDonServiceImpl implements HoaDonService {
         timeLineRepository.save(timeLine);
         return hoaDon.getMaVanDon();
     }
-
 
     private static HoaDonChiTiet getHoaDonChiTiet(GioHangChiTiet ghct, HoaDon hoaDon) {
         HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
