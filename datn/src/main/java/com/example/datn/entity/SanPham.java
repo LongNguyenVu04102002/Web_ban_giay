@@ -1,5 +1,6 @@
 package com.example.datn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -75,7 +76,8 @@ public class SanPham {
     private DayGiay dayGiay;
 
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private List<SanPhamChiTiet> sanPhamChiTietList;
 
 }
