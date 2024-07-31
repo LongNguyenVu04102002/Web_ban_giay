@@ -59,27 +59,29 @@
                 <tbody>
                 <tr th:each="sp, rowStat : ${sanPhamChiTietList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td ></td>
-                    <td th:text="${sp.sanPham.ten}"></td>
-                    <td th:text="${sp.barCode}"></td>
-                    <td th:text="${sp.giaBan}"></td>
-                    <td th:text="${sp.soLuong}"></td>
-                    <td th:text="${sp.kichThuoc.ten}"></td>
-                    <td th:text="${sp.mauSac.ten}"></td>
                     <td>
-                        <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
+                        <img th:src="'data:image/png;base64,' + ${sp.dataImg}" alt="Ảnh từ Base64" style="width: 45px; height: 55px; margin-left: 30px"/>
+                    </td>
+                    <td th:text="${sp.sanPhamChiTiet.sanPham.ten}"></td>
+                    <td th:text="${sp.sanPhamChiTiet.barCode}"></td>
+                    <td th:text="${sp.sanPhamChiTiet.giaBan}"></td>
+                    <td th:text="${sp.sanPhamChiTiet.soLuong}"></td>
+                    <td th:text="${sp.sanPhamChiTiet.kichThuoc.ten}"></td>
+                    <td th:text="${sp.sanPhamChiTiet.mauSac.ten}"></td>
+                    <td>
+                        <button th:class="${sp.sanPhamChiTiet.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${sp.sanPhamChiTiet.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/sanpham/bienthegiay/update/{id}(id=${sp.sanPhamChiTietId})}" method="post">
+                        <form th:action="@{/admin/sanpham/bienthegiay/update/{id}(id=${sp.sanPhamChiTiet.sanPhamChiTietId})}" method="post">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!sp.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${!sp.sanPhamChiTiet.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
-                        <a th:href="@{/admin/sanpham/bienthegiay/detail/{id}(id=${sp.sanPhamChiTietId})}">
+                        <a th:href="@{/admin/sanpham/bienthegiay/detail/{id}(id=${sp.sanPhamChiTiet.sanPhamChiTietId})}">
                             <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
                                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                  height="24" fill="none" viewBox="0 0 24 24">

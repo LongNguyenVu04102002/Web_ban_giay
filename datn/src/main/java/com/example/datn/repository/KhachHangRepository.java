@@ -22,7 +22,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
     boolean existsByEmail(String email);
 
     KhachHang findBySdt(String sdt);
-    Optional<KhachHang> findByEmail(String email);
+    KhachHang findByEmail(String email);
 
     boolean existsBySdtAndKhachHangIdNot(String sdt, Long excludeId);
 

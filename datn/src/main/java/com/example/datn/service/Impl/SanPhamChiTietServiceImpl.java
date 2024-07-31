@@ -38,14 +38,22 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return sanPhamChiTietRepository.findById(id).orElse(null);
     }
 
+//    @Override
+//    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
+//        for (SanPhamChiTiet spct : sanPhamChiTietList) {
+//            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
+//                spct.setBarCode(generateBarCode());
+//            }
+//        }
+//        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+//    }
+
     @Override
-    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
-        for (SanPhamChiTiet spct : sanPhamChiTietList) {
-            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
-                spct.setBarCode(generateBarCode());
-            }
+    public void add(SanPhamChiTiet sanPhamChiTiet) {
+        if (sanPhamChiTiet.getBarCode() == null || sanPhamChiTiet.getBarCode().isEmpty()) {
+            sanPhamChiTiet.setBarCode(generateBarCode());
         }
-        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
     }
 
     @Override
