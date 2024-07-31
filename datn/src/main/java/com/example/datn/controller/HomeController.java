@@ -1,11 +1,10 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.*;
-import com.example.datn.service.Impl.KichThuocServiceImpl;
-import com.example.datn.service.Impl.MauSacServiceImpl;
-import com.example.datn.service.Impl.SanPhamServiceImpl;
-import com.example.datn.service.Impl.ThuongHieuServiceImpl;
+import com.example.datn.service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
+    @Autowired
+    private KhachHangServiceImpl khachHangService;
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
@@ -32,9 +33,26 @@ public class HomeController {
 
     @Autowired
     private MauSacServiceImpl mauSacService;
-
     @GetMapping("/home")
-    public String home() {
+//    public String home(Model model) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+//            // Người dùng đã đăng nhập, thêm thông tin vào model
+//            String email = auth.getName();
+//            KhachHang khachHang = khachHangService.getbyEmail(email);
+//            if (khachHang != null) {
+//                model.addAttribute("hoTen", khachHang.getHoTen());
+//            } else {
+//                model.addAttribute("hoTen", null);
+//            }
+//        }
+    public String home(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            model.addAttribute("isAuthenticated", true);
+            model.addAttribute("username", authentication.getName());
+        } else {
+            model.addAttribute("isAuthenticated", false);
+        }
         return "user/includes/content/home";
     }
 
@@ -97,9 +115,6 @@ public class HomeController {
         return "user/includes/content/ordersusses";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "user/includes/content/login";
-    }
+
 
 }
