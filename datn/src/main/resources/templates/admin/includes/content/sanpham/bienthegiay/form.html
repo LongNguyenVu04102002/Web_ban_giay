@@ -6,7 +6,28 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
-    <title>Thêm Biến Thể Giầy></title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
+
+    <title>Thêm Biến Thể Giầy</title>
+
+    <style>
+        .imagePreview {
+            display: flex;
+            overflow-x: auto;
+            max-width: 300px;
+            white-space: nowrap;
+        }
+        .imagePreview img {
+            width: 45px;
+            height: 55px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -23,7 +44,7 @@
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{sanPhamChiTietId}"/>
                             <div class="lg:col-span-12">
-                                <label class="font-semibold">Tên Giầy:</label>
+                                <label class="font-semibold">Tên Giầy</label>
                                 <select th:field="*{sanPham}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="sp : ${lstSanPham}" th:value="${sp.sanPhamId}"
@@ -31,7 +52,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Kích Thước:</label>
+                                <label class="font-semibold">Kích Thước</label>
                                 <select id="size" multiple
                                         class="form-select form-input mt-2 w-full h-10">
                                     <option th:each="kt : ${lstKichThuoc}" th:value="${kt.kichThuocId}"
@@ -39,7 +60,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6 mb-4">
-                                <label class="font-semibold">Màu Sắc:</label>
+                                <label class="font-semibold">Màu Sắc</label>
                                 <select id="color" multiple
                                         class="form-select form-input mt-2 w-full h-10">
                                     <option th:each="ms : ${lsMauSac}" th:value="${ms.mauSacId}"
@@ -47,14 +68,14 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Giá Bán:</label>
-                                <input type="text" name="giaBan"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                <label class="font-semibold">Giá Bán</label>
+                                <input type="text" name="giaBan" min="1000" required
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Số Lượng:</label>
-                                <input type="text" name="soLuong"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                <label class="font-semibold">Số Lượng</label>
+                                <input type="text" name="soLuong" min="1" required
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
@@ -85,7 +106,7 @@
         </div>
     </section>
     <form id="saveForm" method="post" th:action="@{/admin/sanpham/bienthegiay/save}"
-          th:object="${sanPhamChiTietResponse}">
+          th:object="${sanPhamChiTietResponse}" enctype="multipart/form-data">
         <table class="table-default table-hover data-table px-4 mt-6 bg-white">
             <thead>
             <tr>
@@ -96,6 +117,7 @@
                 <th>Giá bán</th>
                 <th>Số lượng</th>
                 <th>Hình ảnh</th>
+                <th>Hành động</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -117,44 +139,61 @@
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
 
-            const sanPhamChiTietList = Array.from(rows).map((row, index) => {
+            const sanPhamChiTietRequestList = Array.from(rows).map((row, index) => {
                 const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
                 const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
                 const mauSacId = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`).value;
                 const giaBan = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`).value;
                 const soLuong = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`).value;
+                const imageData = row.querySelector(`input[name="sanPhamChiTietList[${index}].imageData"]`).value;
 
                 return {
-                    sanPham: {sanPhamId: sanPhamId},
-                    kichThuoc: {kichThuocId: kichThuocId},
-                    mauSac: {mauSacId: mauSacId},
-                    giaBan: giaBan,
-                    soLuong: soLuong
+                    sanPhamChiTiet: {
+                        sanPham: { sanPhamId: sanPhamId },
+                        kichThuoc: { kichThuocId: kichThuocId },
+                        mauSac: { mauSacId: mauSacId },
+                        giaBan: giaBan,
+                        soLuong: soLuong
+                    },
+                    hinhAnhs: imageData.split(';')
+                        .map((base64Image, imgIndex) => {
+                            const dataImg = base64Image.split(',')[1];
+                            if (dataImg) {
+                                return {
+                                    link: '',
+                                    dataImg: dataImg,
+                                    uuTien: imgIndex
+                                };
+                            }
+                        })
+                        .filter(item => item !== undefined)
+                        .sort((a, b) => a.uuTien - b.uuTien)
+                        .map((item, index) => ({
+                            ...item,
+                            uuTien: index + 1
+                        }))
                 };
             });
 
-            console.log('San Pham Chi Tiet List:', sanPhamChiTietList);
+            console.log('San Pham Chi Tiet Request List:', sanPhamChiTietRequestList);
 
-            // Gọi API lưu data
-            saveSanPhamChiTiet(sanPhamChiTietList);
-
-            setTimeout(function() {
-                window.location.href = '/admin/sanpham/bienthegiay';
-            }, 300);
+            saveSanPhamChiTiet(sanPhamChiTietRequestList);
         });
 
         const selectColor = new TomSelect('#color', {
             plugins: ['remove_button'],
-            create: true,
+            create: false,
             placeholder: 'Chọn màu sắc'
         });
+
         const selectSize = new TomSelect('#size', {
             plugins: ['remove_button'],
-            create: true,
+            create: false,
             placeholder: 'Chọn kích thước'
         });
 
-        let rowCount = 1;
+        var rowCount = 0;
+        var base64Images = [];
 
         function addToTable() {
             const tableBody = document.getElementById('table-body');
@@ -171,21 +210,47 @@
             const giaBan = document.querySelector('input[name="giaBan"]').value;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
 
-            console.log('San Pham ID:', sanPhamId);
-            console.log('San Pham Ten:', sanPhamTen);
-            console.log('Selected Sizes:', selectedSizes);
-            console.log('Selected Colors:', selectedColors);
-            console.log('Gia Ban:', giaBan);
-            console.log('So Luong:', soLuong);
+            if (giaBan < 1000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Giá bán phải lớn hơn hoặc bằng 1000.',
+                });
+                return;
+            }
+            if (soLuong < 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Số lượng phải lớn hơn hoặc bằng 1.',
+                });
+                return;
+            }
+            if (selectedSizes.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn ít nhất một kích thước.',
+                });
+                return;
+            }
+            if (selectedColors.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn ít nhất một màu sắc.',
+                });
+                return;
+            }
 
             const sanPhamChiTietList = [];
 
             selectedColors.forEach(color => {
                 selectedSizes.forEach(size => {
                     const sanPhamChiTiet = {
-                        sanPham: {sanPhamId: sanPhamId, ten: sanPhamTen},
-                        kichThuoc: {kichThuocId: size.id, ten: size.ten},
-                        mauSac: {mauSacId: color.id, ten: color.ten},
+                        sanPham: { sanPhamId: sanPhamId, ten: sanPhamTen },
+                        kichThuoc: { kichThuocId: size.id, ten: size.ten },
+                        mauSac: { mauSacId: color.id, ten: color.ten },
                         giaBan: giaBan,
                         soLuong: soLuong,
                     };
@@ -198,39 +263,119 @@
         function appendToTable(sanPhamChiTiet) {
             const tableBody = document.getElementById('table-body');
             const row = `<tr>
-               <td>${rowCount}</td>
-               <td>${sanPhamChiTiet.sanPham.ten}</td>
-               <td>${sanPhamChiTiet.mauSac.ten}</td>
-               <td>${sanPhamChiTiet.kichThuoc.ten}</td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${sanPhamChiTiet.giaBan}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${sanPhamChiTiet.soLuong}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
-               <td><input type="file" name=""></td>
-           </tr>`;
+                <td>${rowCount + 1}</td>
+                <td>${sanPhamChiTiet.sanPham.ten}</td>
+                <td>${sanPhamChiTiet.mauSac.ten}</td>
+                <td>${sanPhamChiTiet.kichThuoc.ten}</td>
+                <td><input type="number" min="1000" name="sanPhamChiTietList[${rowCount}].giaBan" value="${sanPhamChiTiet.giaBan}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
+                <td><input type="number" min="1" name="sanPhamChiTietList[${rowCount}].soLuong" value="${sanPhamChiTiet.soLuong}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
+                <td>
+                    <input type="file" id="imageInput-${rowCount}" name="imageInput-${rowCount}" multiple onchange="previewImages(${rowCount})" required>
+                    <input type="hidden" id="imageData-${rowCount}" name="sanPhamChiTietList[${rowCount}].imageData">
+                    <div id="imagePreview-${rowCount}" class="flex imagePreview"></div>
+                </td>
+                <td class="flex items-center justify-center space-x-2">
+                    <button type="button" onclick="removeRow(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" aria-hidden="true"
+                             class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.25-1.014-2.25-2.25-2.25H6.75c-1.236 0-2.25 1-2.25 2.25v.915"></path>
+                        </svg>
+                    </button>
+                </td>
+            </tr>`;
             tableBody.innerHTML += row;
             rowCount++;
         }
 
-        function saveSanPhamChiTiet(sanPhamChiTietList) {
-            fetch('http://localhost:8080/sanphamchitiet/bienthegiay/save', {
+        function removeRow(button) {
+            var row = button.closest('tr');
+            row.remove();
+            // Cập nhật lại chỉ số dòng sau khi xóa
+            updateRowIndexes();
+        }
+
+        function updateRowIndexes() {
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach((row, index) => {
+                row.querySelector('td:first-child').innerText = index + 1;
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    input.name = name.replace(/\[\d+\]/, `[${index}]`);
+                });
+            });
+        }
+
+        function previewImages(rowCount) {
+            var preview = document.getElementById('imagePreview-' + rowCount);
+            preview.innerHTML = '';
+
+            var fileInput = document.getElementById('imageInput-' + rowCount);
+            var fileInputData = document.getElementById('imageData-' + rowCount);
+            var files = fileInput.files;
+
+            var fileReaders = [];
+            base64Images[rowCount - 1] = [];
+
+            for (var i = 0; i < files.length; i++) {
+                let fileReader = new FileReader();
+                fileReaders.push(fileReader);
+
+                fileReader.onload = function (event) {
+                    var base64Image = event.target.result;
+                    base64Images[rowCount - 1].push(base64Image);
+                    fileInputData.value = base64Images[rowCount - 1].join(';');
+
+                    var imgElement = document.createElement('img');
+                    imgElement.src = base64Image;
+                    preview.appendChild(imgElement);
+                };
+
+                fileReader.readAsDataURL(files[i]);
+            }
+        }
+
+        function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
+            fetch('/sanphamchitiet/bienthegiay/save', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({sanPhamChiTietList})
+                body: JSON.stringify(sanPhamChiTietRequestList),
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     console.log('Success:', data);
+                    Swal.fire({
+                        position: 'top-end', // Vị trí của thông báo
+                        toast: true, // Thiết lập kiểu thông báo là "toast"
+                        showConfirmButton: false, // Không hiển thị nút xác nhận
+                        timer: 1000, // Thời gian hiển thị (đơn vị là milliseconds)
+                        width: '300px', // Đặt chiều rộng của thông báo
+                        text: 'Cập nhật thành công!',
+                        icon: 'success',
+                    });
+
+                    setTimeout(function () {
+                        window.location.href = '/admin/sanpham/bienthegiay';
+                    }, 1000);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('Error:', error);
+                    alert('Đã xảy ra lỗi khi lưu biến thể giày');
                 });
         }
     </script>
-
 </div>
 </body>
 </html>
