@@ -56,7 +56,7 @@ public class ThongKeApi {
     }
 
     //dem khach hang thang nay
-    @GetMapping("/countKhacHangThisMonth")
+    @GetMapping("/countKhachHangThisMonth")
     public Long countKhachHangThisMonth(@RequestParam("trangThai") int trangThai) {
         YearMonth currentMonth = YearMonth.now();
         return thongKeService.countKhachHangByYearMonthAndTrangThai(currentMonth.getYear(), currentMonth.getMonthValue(), trangThai);
