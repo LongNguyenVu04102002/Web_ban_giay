@@ -487,6 +487,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
+
     <title>Trang Thống Kê</title>
     <style>
         body {
@@ -572,6 +577,75 @@
         .pagination button:hover {
             background: #0056b3;
         }
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f1f1f1;
+            margin-right: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+            background-color: #fff;
+            transition: background-color 0.3s;
+        }
+        .tab:last-child {
+            border-bottom: none;
+        }
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tab:hover {
+            background-color: #ddd;
+        }
+        .chart-container {
+            flex: 1;
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .chart-container.active {
+            display: block;
+        }
+        .input-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .input-container label {
+            margin-right: 10px;
+        }
+        .input-container select, .input-container input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-container select:focus, .input-container input:focus {
+            border-color: #4CAF50;
+        }
+        .input-container button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -613,7 +687,42 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="tabs">
+            <div class="tab" id="tab1">Sản phẩm</div>
+            <div class="tab" id="tab2">Đơn hàng</div>
+        </div>
+
+        <div class="chart-container" id="chart1">
+            <canvas id="myChart1"></canvas>
+            <div class="input-container">
+                <label for="product1">Thương hiệu:</label>
+                <select id="product1">
+                </select>
+                <label for="product2">Sản phẩm:</label>
+                <select id="product2">
+                </select>
+                <label for="product3">Màu sắc:</label>
+                <select id="product3">
+                </select>
+                <button id="updateChart1">Thống kê</button>
+            </div>
+        </div>
+
+        <div class="chart-container" id="chart2">
+            <canvas id="myChart2"></canvas>
+            <div class="input-container">
+                <label for="startMonth">Tháng bắt đầu:</label>
+                <input type="number" id="startMonth" min="1" max="12" value="1">
+                <label for="endMonth">Tháng kết thúc:</label>
+                <input type="number" id="endMonth" min="1" max="12" value="12">
+                <button id="updateChart2">Chọn</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stats = {
@@ -637,7 +746,10 @@
                 ordersThisMonth: '/admin/api/thong-ke/countHoaDonThisMonth?trangThai=6',
                 ordersLastMonth: '/admin/api/thong-ke/countHoaDonLastMonth?trangThai=6',
                 ordersCurrentWeek: '/admin/api/thong-ke/countHoaDonForCurrentWeek?trangThai=6',
-                ordersToday: '/admin/api/thong-ke/today' // Dữ liệu đơn hàng của hôm nay
+                ordersToday: '/admin/api/thong-ke/today',
+                apiEndpoint: '/admin/api/thong-ke/listThuongHieu',
+                listSanPhamByThuongHieu: '/admin/api/thong-ke/listSanPhamByThuongHieu?id=',
+                listMauSacBySanPham: '/admin/api/thong-ke/listMauSacBySanPham?id='
             };
 
             let orders = []; // Khởi tạo mảng rỗng để lưu dữ liệu đơn hàng
@@ -702,6 +814,214 @@
                 document.getElementById("orders-change-month").className = ordersMonthChange >= 0 ? 'positive-change' : 'negative-change';
             }
 
+            // api lấy ra combobox
+
+            async function updateProductSelects() {
+                try {
+                    const response = await fetch(apiEndpoints.apiEndpoint);
+                    const thuongHieus = await response.json();
+
+                    updateSelectThuongHieu('product1', thuongHieus);
+                } catch (error) {
+                    console.error(`Error fetching data:`, error);
+                }
+            }
+
+            async function fetchSanPhamByThuongHieu(id) {
+                try {
+                    const response = await fetch(apiEndpoints.listSanPhamByThuongHieu + id);
+                    const sanPhams = await response.json();
+                    updateSelectSanPham('product2', sanPhams);
+                } catch (error) {
+                    console.error(`Error fetching products by brand:`, error);
+                }
+            }
+
+            async function fetchMauSacBySanPham(id) {
+                try {
+                    const response = await fetch(apiEndpoints.listMauSacBySanPham + id);
+                    const mauSacs = await response.json();
+                    updateSelectMauSac('product3', mauSacs);
+                } catch (error) {
+                    console.error(`Error fetching products by brand:`, error);
+                }
+            }
+
+            //// hiệu ứng click combobox
+
+            function handleProductSelectChange(event) {
+                const selectedValue = event.target.value;
+                if (selectedValue) {
+                    fetchSanPhamByThuongHieu(selectedValue);
+                }
+            }
+
+            document.getElementById("product1").addEventListener("change", handleProductSelectChange);
+
+            function handleMauSacSelectChange(event) {
+                const selectedValue = event.target.value;
+                if (selectedValue) {
+                    fetchMauSacBySanPham(selectedValue);
+                }
+            }
+
+            document.getElementById("product2").addEventListener("change", handleMauSacSelectChange);
+
+            // hiển thị lên combobox
+            function updateSelectThuongHieu(selectId, thuongHieus) {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = "";
+
+                const defaultOption = document.createElement("option");
+                defaultOption.value = 0;
+                defaultOption.textContent = "Chọn";
+                selectElement.appendChild(defaultOption);
+
+                thuongHieus.forEach(thuongHieu => {
+                    const option = document.createElement("option");
+                    option.value = thuongHieu.thuongHieuId;
+                    option.textContent = thuongHieu.ten;
+                    selectElement.appendChild(option);
+                });
+            }
+
+            function updateSelectSanPham(selectId, sanPhams) {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = "";
+
+                const defaultOption = document.createElement("option");
+                defaultOption.value = 0;
+                defaultOption.textContent = "Chọn";
+                selectElement.appendChild(defaultOption);
+
+                sanPhams.forEach(sanPham => {
+                    const option = document.createElement("option");
+                    option.value = sanPham.sanPhamId;
+                    option.textContent = sanPham.ten;
+                    selectElement.appendChild(option);
+                });
+            }
+
+            function updateSelectMauSac(selectId, mauSacs) {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = "";
+
+                const defaultOption = document.createElement("option");
+                defaultOption.value = 0;
+                defaultOption.textContent = "Chọn";
+                selectElement.appendChild(defaultOption);
+
+                mauSacs.forEach(mauSac => {
+                    const option = document.createElement("option");
+                    option.value = mauSac.mauSacId;
+                    option.textContent = mauSac.ten;
+                    selectElement.appendChild(option);
+                });
+            }
+
+            document.getElementById("updateChart1").addEventListener("click", handleUpdateChart1);
+            document.getElementById("updateChart2").addEventListener("click", handleUpdateChart2);
+
+            /////// thống kê
+
+            async function handleUpdateChart1() {
+                const thuongHieuId = document.getElementById("product1").value;
+                const sanPhamId = document.getElementById("product2").value;
+                const mauSacId = document.getElementById("product3").value;
+
+                if (thuongHieuId === "0" || sanPhamId === "0" || mauSacId === "0") {
+                    Swal.fire({
+                        position: 'center',
+                        toast: false,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: 'Vui lòng chọn đầy đủ thông tin!',
+                        icon: 'warning',
+                    });
+                    return;
+                }
+
+                try {
+                    const nameSpResponse = await fetch(`/admin/api/thong-ke/nameSpOfSanPhamChiTiet?idSp=${sanPhamId}&idMs=${mauSacId}`);
+                    const nameSpData = await nameSpResponse.json();
+
+                    const giaBanOfSanPhamChiTietResponse = await fetch(`/admin/api/thong-ke/giaBanOfSanPhamChiTiet?idSp=${sanPhamId}&idMs=${mauSacId}`);
+                    const giaBanOfSanPhamChiTietData = await giaBanOfSanPhamChiTietResponse.json();
+
+                    const countSoLuongTonResponse = await fetch(`/admin/api/thong-ke/countSoLuongTonOfSanPhamChiTiet?idSp=${sanPhamId}&idMs=${mauSacId}`);
+                    const countSoLuongTonData = await countSoLuongTonResponse.json();
+
+                    const countSoLuongBanResponse = await fetch(`/admin/api/thong-ke/countSoLuongBanOfSanPhamChiTiet?idSp=${sanPhamId}&idMs=${mauSacId}`);
+                    const countSoLuongBanData = await countSoLuongBanResponse.json();
+
+                    updateChart1(nameSpData, giaBanOfSanPhamChiTietData, countSoLuongTonData, countSoLuongBanData);
+                } catch (error) {
+                    console.error(`Error fetching data:`, error);
+                }
+            }
+
+            async function handleUpdateChart2(){
+                var startMonth = parseInt(document.getElementById('startMonth').value);
+                var endMonth = parseInt(document.getElementById('endMonth').value);
+
+                if (isNaN(startMonth) || isNaN(endMonth)) {
+                    Swal.fire({
+                        position: 'center',
+                        toast: false,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: 'Vui lòng nhập giá trị cho cả hai tháng!',
+                        icon: 'warning',
+                    });
+                    return;
+                }
+                if (startMonth < 1 || startMonth > 12 || endMonth < 1 || endMonth > 12) {
+                    Swal.fire({
+                        position: 'center',
+                        toast: false,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: 'Giá trị tháng phải nằm trong khoảng từ 1 đến 12!',
+                        icon: 'warning',
+                    });
+                    return;
+                }
+                if (startMonth >= endMonth) {
+                    Swal.fire({
+                        position: 'center',
+                        toast: false,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: 'Tháng bắt đầu phải nhỏ hơn tháng kết thúc!',
+                        icon: 'warning',
+                    });
+                    return;
+                }
+
+                try {
+                    const nameSpResponse = await fetch(`/admin/api/thong-ke/getNumbersInRange?start=${startMonth}&end=${endMonth}`);
+                    const nameSpData = await nameSpResponse.json();
+
+                    const countsDonHangByMonthHoanThanhResponse = await fetch(`/admin/api/thong-ke/countsDonHangByMonth?start=${startMonth}&end=${endMonth}&trangThai=6`);
+                    const countsDonHangByMonthHoanThanhData = await countsDonHangByMonthHoanThanhResponse.json();
+
+                    const countsDonHangByMonthHuyResponse = await fetch(`/admin/api/thong-ke/countsDonHangByMonth?start=${startMonth}&end=${endMonth}&trangThai=7`);
+                    const countsDonHangByMonthHuyData = await countsDonHangByMonthHuyResponse.json();
+
+                    const sumDonHangByMonthHoanThanhResponse = await fetch(`/admin/api/thong-ke/sumDonHangByMonth?start=${startMonth}&end=${endMonth}&trangThai=6`);
+                    const sumDonHangByMonthHoanThanhData = await sumDonHangByMonthHoanThanhResponse.json();
+
+                    const sumDonHangByMonthHuyResponse = await fetch(`/admin/api/thong-ke/sumDonHangByMonth?start=${startMonth}&end=${endMonth}&trangThai=7`);
+                    const sumDonHangByMonthHuyData = await sumDonHangByMonthHuyResponse.json();
+
+                    updateChart2(nameSpData, countsDonHangByMonthHoanThanhData, countsDonHangByMonthHuyData, sumDonHangByMonthHoanThanhData, sumDonHangByMonthHuyData);
+                } catch (error) {
+                    console.error(`Error fetching data:`, error);
+                }
+            }
+
+            /////////////
+
             function renderOrderList() {
                 const start = (currentPage - 1) * itemsPerPage;
                 const end = start + itemsPerPage;
@@ -760,10 +1080,158 @@
                 }
             }
 
+            function updateChart1(nameSpData, giaBanOfSanPhamChiTietData, countSoLuongTonData, countSoLuongBanData) {
+                var ctx1 = document.getElementById('myChart1').getContext('2d');
+                var myChart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: nameSpData,
+                        datasets: [{
+                            label: 'Tổng tiền',
+                            type: 'bar',
+                            data: giaBanOfSanPhamChiTietData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-axis-1'
+                        }, {
+                            label: 'Số đơn hoàn thành',
+                            type: 'line',
+                            data: countSoLuongTonData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: false,
+                            yAxisID: 'y-axis-2'
+                        }, {
+                            label: 'Số đơn hủy',
+                            type: 'line',
+                            data: countSoLuongBanData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            fill: false,
+                            yAxisID: 'y-axis-2'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                id: 'y-axis-1',
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }, {
+                                id: 'y-axis-2',
+                                type: 'linear',
+                                position: 'right',
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                gridLines: {
+                                    drawOnChartArea: false
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            let myChart2;
+
+            function updateChart2(nameSpData, countsDonHangByMonthHoanThanhData, countsDonHangByMonthHuyData, sumDonHangByMonthHoanThanhData, sumDonHangByMonthHuyData) {
+                var ctx2 = document.getElementById('myChart2').getContext('2d');
+
+                // Nếu biểu đồ đã được tạo, phá hủy biểu đồ cũ
+                if (myChart2) {
+                    myChart2.destroy();
+                }
+
+                // Tạo biểu đồ mới
+                myChart2 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: nameSpData,
+                        datasets: [{
+                            type: 'bar',
+                            label: 'Số đơn hoàn thành',
+                            data: countsDonHangByMonthHoanThanhData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-axis-1'
+                        }, {
+                            type: 'bar',
+                            label: 'Số đơn hủy',
+                            data: countsDonHangByMonthHuyData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-axis-1'
+                        }, {
+                            type: 'line',
+                            label: 'Tổng tiền hoàn thành',
+                            data: sumDonHangByMonthHoanThanhData,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            yAxisID: 'y-axis-2'
+                        }, {
+                            type: 'line',
+                            label: 'Tổng tiền hủy',
+                            data: sumDonHangByMonthHuyData,
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                            fill: true,
+                            yAxisID: 'y-axis-2'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                id: 'y-axis-1',
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }, {
+                                id: 'y-axis-2',
+                                type: 'linear',
+                                position: 'right',
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                gridLines: {
+                                    drawOnChartArea: false
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+
             fetchStats();
+            updateProductSelects();
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('.tab').click(function() {
+                var tabId = $(this).attr('id');
+                $('.tab').removeClass('active');
+                $(this).addClass('active');
+                $('.chart-container').removeClass('active');
+                $('#chart' + tabId.slice(-1)).addClass('active');
+            });
+
+            $('#tab1').click();
+        });
+    </script>
 
 </div>
 
