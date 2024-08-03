@@ -13,9 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,27 +39,19 @@ public class SanPhamChiTiet {
     @Column(name = "barCode", length = 20)
     private String barCode;
 
-    @NotNull(message = "Giá bán không được để trống")
-    @Min(value = 1000, message = "Giá bán phải lớn hơn hoặc bằng 1000")
-    @Positive(message = "Giá bán phải là số dương")
     @Column(name = "giaBan")
     private BigDecimal giaBan;
 
-    @NotNull(message = "Số lượng không được để trống")
-    @Min(value = 1, message = "Số lượng phải lớn hơn hoặc bằng 1")
-    @Positive(message = "Số lượng phải là số dương")
     @Column(name = "soLuong")
     private Integer soLuong;
 
     @Column(name = "trangThai")
     private boolean trangThai;
 
-    @NotNull(message = "Kích thước không được để trống")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kichThuocId")
     private KichThuoc kichThuoc;
 
-    @NotNull(message = "Màu sắc không được để trống")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mauSacId")
     private MauSac mauSac;

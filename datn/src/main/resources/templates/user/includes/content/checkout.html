@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Check Out</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function () {
             function getProvinces() {
@@ -83,7 +85,78 @@
         });
 
     </script>
-
+    <script>
+        $(document).ready(function () {
+            $('#form-validation').validate({
+                ignore: ':hidden:not(:checkbox)',
+                errorElement: 'div',
+                errorClass: 'input-invalid',
+                validClass: 'input-valid',
+                errorPlacement: function (error, element) {
+                    error.addClass('text-red-600 mt-1');
+                    if (element.prop('type') === 'checkbox') {
+                        error.insertAfter(element.parent('label'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    tenNguoiNhan: {
+                        required: true
+                    },
+                    sdt: {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 11
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    province: {
+                        required: true
+                    },
+                    district: {
+                        required: true
+                    },
+                    ward: {
+                        required: true
+                    },
+                    diaChi: {
+                        required: true
+                    }
+                },
+                messages: {
+                    tenNguoiNhan: {
+                        required: 'Vui lòng nhập tên khách hàng'
+                    },
+                    sdt: {
+                        required: 'Vui lòng nhập số điện thoại',
+                        digits: 'Số điện thoại phải là chữ số',
+                        minlength: 'Số điện thoại phải có ít nhất 10 chữ số',
+                        maxlength: 'Số điện thoại không được quá 11 chữ số'
+                    },
+                    email: {
+                        required: 'Vui lòng nhập email',
+                        email: 'Email không đúng định dạng'
+                    },
+                    province: {
+                        required: 'Vui lòng chọn thành phố'
+                    },
+                    district: {
+                        required: 'Vui lòng chọn huyện'
+                    },
+                    ward: {
+                        required: 'Vui lòng chọn xã'
+                    },
+                    diaChi: {
+                        required: 'Vui lòng nhập địa chỉ'
+                    }
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div layout:fragment="usercontent">
@@ -115,54 +188,53 @@
                 <div class="lg:col-span-8">
                     <div class="p-6 rounded-md shadow dark:shadow-gray-800">
                         <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
-                        <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post">
+                        <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post"
+                              id="form-validation">
                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Tên Khách Hàng : </label>
                                     <input type="text" th:field="*{tenNguoiNhan}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                           placeholder="Tên khách hàng">
+                                           placeholder="Tên khách hàng" name="tenNguoiNhan">
                                 </div>
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Số Điện Thoại</label>
                                     <input type="text" th:field="*{sdt}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                           placeholder="Số điện thoại">
+                                           placeholder="Số điện thoại" name="sdt">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Email : </label>
                                     <input type="email" th:field="*{email}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                           placeholder="Email">
+                                           placeholder="Email" name="email">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Thành Phố:</label>
-                                    <select id="province"
+                                    <select id="province" name="province"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                        <option value="">Chọn Thành Phố</option>
                                     </select>
-                                    <input type="hidden" id="provinceName" name="province">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Huyện:</label>
-                                    <select id="district"
+                                    <select id="district" name="district"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Huyện</option>
                                     </select>
-                                    <input type="hidden" id="districtName" name="district">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Xã:</label>
-                                    <select id="ward"
+                                    <select id="ward" name="ward"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Xã</option>
                                     </select>
-                                    <input type="hidden" id="wardName" name="ward">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Địa Chỉ : </label>
                                     <input type="text" th:field="*{diaChi}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                           placeholder="Địa chỉ">
+                                           placeholder="Địa chỉ" name="diaChi">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <h3 class="text-xl leading-normal font-semibold mt-2">Phương Thức Thanh Toán</h3>
