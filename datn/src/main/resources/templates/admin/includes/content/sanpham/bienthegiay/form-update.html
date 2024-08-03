@@ -56,6 +56,7 @@
                                     </div>
                                 </div>
                                 <input type="file" id="imageUpload" name="image" accept="image/*" multiple onchange="handleFiles(this)">
+                                <input type="hidden" id="imageChanged" name="imageChanged" value="false" />
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="font-semibold">Tên Giầy</label>
@@ -130,7 +131,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const imageUpload = document.getElementById('imageUpload');
+            const imageChanged = document.getElementById('imageChanged');
+
             imageUpload.addEventListener('change', function(event) {
+                imageChanged.value = "true";
                 const files = event.target.files;
                 const imageContainer = document.querySelector('.image-container');
 

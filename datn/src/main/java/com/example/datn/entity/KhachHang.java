@@ -35,9 +35,16 @@ public class KhachHang {
     @Column(name = "khachHangId", nullable = false)
     private Long khachHangId;
 
+<<<<<<< HEAD
+    @NotBlank(message = "Họ tên không được để trống")
+    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+    @Pattern(regexp = "^[\\p{L} \\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+
+=======
 //    @NotBlank(message = "Họ tên không được để trống")
 //    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
 //    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+>>>>>>> 7ad8ffbb5f6e88af3108c968d7cd0797e69ce7dd
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 

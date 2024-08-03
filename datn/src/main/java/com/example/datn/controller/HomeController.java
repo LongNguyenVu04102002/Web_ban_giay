@@ -6,6 +6,11 @@ import com.example.datn.service.Impl.MauSacServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
 import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
+=======
+>>>>>>> 7ad8ffbb5f6e88af3108c968d7cd0797e69ce7dd
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +36,36 @@ public class HomeController {
 
     @Autowired
     private MauSacServiceImpl mauSacService;
+<<<<<<< HEAD
+//    @GetMapping("/home")
+//    public String home(Model model) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+//            // Người dùng đã đăng nhập, thêm thông tin vào model
+//            String email = auth.getName();
+//            KhachHang khachHang = khachHangService.getbyEmail(email);
+//            if (khachHang != null) {
+//                model.addAttribute("hoTen", khachHang.getHoTen());
+//            } else {
+//                model.addAttribute("hoTen", null);
+//            }
+//        }
+//    public String home(Model model, Authentication authentication) {
+//        if (authentication != null && authentication.isAuthenticated()) {
+//            model.addAttribute("isAuthenticated", true);
+//            model.addAttribute("username", authentication.getName());
+//        } else {
+//            model.addAttribute("isAuthenticated", false);
+//        }
+//        return "user/includes/content/home";
+//    }
+=======
 
     @GetMapping("/home")
     public String home() {
         return "user/includes/content/home";
     }
+>>>>>>> 7ad8ffbb5f6e88af3108c968d7cd0797e69ce7dd
 
     @GetMapping("/shop")
     public String shop(Model model) {

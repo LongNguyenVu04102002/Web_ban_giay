@@ -58,7 +58,7 @@ public class SanPhamChiTiet {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sanPhamId")
-    @JsonBackReference
+//    @JsonBackReference
     private SanPham sanPham;
 
     @OneToMany(mappedBy = "sanPhamChiTiet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

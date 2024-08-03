@@ -65,7 +65,33 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("/bienthegiay/save-update")
+<<<<<<< HEAD
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {
+=======
+    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
+                             @RequestParam("image") MultipartFile[] images,
+                             @RequestParam(value = "imageId", required = false) Long[] imageIds,
+                             @RequestParam("imageChanged") String imageChanged) throws IOException {
+
+        System.out.println("Received Image IDs:");
+        if (imageIds != null) {
+            for (Long imageId : imageIds) {
+                System.out.println("Image ID: " + imageId);
+            }
+        } else {
+            System.out.println("No Image IDs received");
+        }
+
+        if (imageChanged.equals("true")) {
+        List<byte[]> imageDatas = new ArrayList<>();
+        for (MultipartFile image : images) {
+            if (!image.isEmpty()) {
+                byte[] imageData = image.getBytes();
+                imageDatas.add(imageData);
+            }
+        }
+        hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
+>>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
