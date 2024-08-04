@@ -4,7 +4,7 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
@@ -17,8 +17,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<KhachHang> getAll() {
@@ -93,7 +93,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
         KhachHang khachHang = new KhachHang();
         khachHang.setEmail(email);
-//        khachHang.setMatKhau(passwordEncoder.encode(password));
+        khachHang.setMatKhau(passwordEncoder.encode(password));
         khachHang.setHoTen(hoTen);
         khachHang.setSdt(sdt);
         khachHang.setNgaySinh(ngaySinh);

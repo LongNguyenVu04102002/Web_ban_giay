@@ -83,9 +83,9 @@
             <li th:if="${isAuthenticated}">
                 <div class="dropdown inline-block relative ps-0.5">
                     <button class="dropdown-toggle items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full border border-orange-500 bg-orange-500 text-white">
-                <img alt="User Avatar" class="rounded-full" th:src="@{/images/client/16.jpg}">
-            </span>
+                        <span class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full border border-orange-500 bg-orange-500 text-white">
+                            <img alt="User Avatar" class="rounded-full" th:src="@{/images/client/16.jpg}">
+                        </span>
                     </button>
                     <div class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden" aria-labelledby="userDropdown">
                         <ul class="py-2 text-start">
@@ -125,8 +125,6 @@
             <li th:unless="${isAuthenticated}">
                 <a href="/login" class="btn btn-primary">Login</a>
             </li>
-
-
         </ul>
     </div>
 </nav>

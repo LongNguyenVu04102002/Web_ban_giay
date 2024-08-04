@@ -1,33 +1,91 @@
+
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Đăng ký</title>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="/css/tailwind.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendors/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<h2>Đăng ký</h2>
-<form th:action="@{/register}" method="post">
-    <div>
-        <label>Email:</label>
-        <input type="email" name="email" required />
+<section
+        class="md:h-screen py-36 flex items-center bg-orange-500/10 dark:bg-orange-500/20 bg-[url('../..//images/hero/bg-shape.html')] bg-center bg-no-repeat bg-cover">
+    <div class="container relative">
+        <div class="grid grid-cols-1">
+            <div class="relative overflow-hidden rounded-md shadow dark:shadow-gray-700 bg-white dark:bg-slate-900">
+                <div class="grid md:grid-cols-2 grid-cols-1 items-center">
+                    <div class="relative md:shrink-0">
+                        <img class="h-full w-full object-cover md:h-[44rem]" src="/images/signup.jpg" alt="">
+                    </div>
+
+                    <div class="p-8 lg:px-20">
+                        <div class="text-center">
+                            <a>
+                                <img src="/images/logo_xboy.png" class="h-[75px] mx-auto block" alt="">
+                            </a>
+                        </div>
+
+                        <form class="text-start lg:py-20 py-8 " th:action="@{/register}" method="post">
+                            <div class="grid grid-cols-1">
+                                <div class="mb-4">
+                                    <label class="font-semibold" for="RegisterName">Your Name:</label>
+                                    <input id="RegisterName" type="text" name="hoTen"
+                                           class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="Harry">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="font-semibold" for="LoginEmail">Email Address:</label>
+                                    <input id="LoginEmail" type="email" name="email"
+                                           class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="name@example.com">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="font-semibold" for="LoginPassword">Password:</label>
+                                    <input id="LoginPassword" type="password" name="password"
+                                           class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="Password:">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="font-semibold" for="LoginPassword">Phone:</label>
+                                    <input id="phone" type="number" name="sdt"
+                                           class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="Phone:">
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="flex items-center w-full mb-0">
+                                        <input class="form-checkbox rounded border-gray-100 dark:border-gray-800 text-orange-500 focus:border-orange-300 focus:ring focus:ring-offset-0 focus:ring-orange-200 focus:ring-opacity-50 me-2"
+                                               type="checkbox" value="" id="AcceptT&C">
+                                        <label class="form-check-label text-slate-400" for="AcceptT&C">I Accept <a
+                                                href="#" class="text-orange-500">Terms And Condition</a></label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <input type="submit"
+                                           class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full"
+                                           value="Register">
+                                </div>
+
+                                <div class="text-center">
+                                    <span class="text-slate-400 me-2">Already have an account ? </span> <a
+                                        href="login.html" class="text-black dark:text-white font-bold inline-block">Sign
+                                    in</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label>Mật khẩu:</label>
-        <input type="password" name="password" required />
-    </div>
-    <div>
-        <label>Họ Tên:</label>
-        <input type="text" name="hoTen" required />
-    </div>
-    <div>
-        <label>Số điện thoại:</label>
-        <input type="text" name="sdt" required />
-    </div>
-    <div>
-        <button type="submit">Đăng ký</button>
-    </div>
-    <div th:if="${error}">
-        <p th:text="${error}" style="color: red;"></p>
-    </div>
-</form>
+</section>
+<script src="/js/user/plugins.init.js"></script>
+<script src="/vendors/feather-icons/feather.min.js"></script>
+<script src="/js/user/app.js"></script>
 </body>
 </html>

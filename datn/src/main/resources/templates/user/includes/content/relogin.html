@@ -5,48 +5,26 @@
     <title>Login</title>
     <link href="/css/tailwind.min.css" rel="stylesheet" type="text/css">
     <link href="/vendors/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
-    <style>
-        .alert {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-    </style>
 </head>
 <body>
-<section class="md:h-screen py-36 flex items-center bg-orange-500/10 dark:bg-orange-500/20 bg-[url('../../assets/images/hero/bg-shape.html')] bg-center bg-no-repeat bg-cover">
+<section
+        class="md:h-screen py-36 flex items-center bg-orange-500/10 dark:bg-orange-500/20 bg-[url('../../assets/images/hero/bg-shape.html')] bg-center bg-no-repeat bg-cover">
     <div class="container relative">
         <div class="grid grid-cols-1">
             <div class="relative overflow-hidden rounded-md shadow dark:shadow-gray-700 bg-white dark:bg-slate-900">
                 <div class="grid md:grid-cols-2 grid-cols-1 items-center">
                     <div class="relative md:shrink-0">
-                        <img class="lg:h-full h-full w-full object-cover md:h-[34rem]" src="/images/login.jpg" alt="Login Image">
+                        <img class="lg:h-full h-full w-full object-cover md:h-[34rem]" src="/images/login.jpg"
+                             alt="Login Image">
                     </div>
                     <div class="p-8 lg:px-20">
-                        <div class="text-center mb-4">
+                        <div class="text-center">
                             <a href="#">
                                 <img src="/images/logo_xboy.png" class="h-[75px] mx-auto block" alt="Logo">
                             </a>
                         </div>
 
-                        <!-- Thông báo lỗi hoặc thành công -->
-                        <div th:if="${param.error != null}" class="alert bg-red-500 text-white p-4 rounded-lg mb-4 text-center shadow-md">
-                            <p th:text="${param.error}">Invalid username or password.</p>
-                        </div>
-                        <div th:if="${param.success != null}" class="alert bg-green-500 text-white p-4 rounded-lg mb-4 text-center shadow-md">
-                            <p th:text="${param.success}">Login successful!</p>
-                        </div>
-
-                        <form class="text-start lg:py-20 py-8" th:action="@{/login}" method="post">
+                        <form class="text-start lg:py-20 py-8" th:action="@{/relogin}" method="post">
                             <div class="grid grid-cols-1">
                                 <div class="mb-4">
                                     <label class="font-semibold" for="LoginEmail">Email Address:</label>
@@ -70,7 +48,8 @@
                                             Remember me
                                         </label>
                                     </div>
-                                    <p class="text-slate-400 mb-0"><a href="#" class="text-slate-400">Forgot password?</a></p>
+                                    <p class="text-slate-400 mb-0"><a href="#"
+                                                                      class="text-slate-400">Forgot password?</a></p>
                                 </div>
 
                                 <div class="mb-4">
@@ -98,3 +77,4 @@
 <script src="/js/user/app.js"></script>
 </body>
 </html>
+
