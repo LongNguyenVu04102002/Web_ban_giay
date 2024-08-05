@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, Long> {
-    List<HoaDonChiTiet> findBySanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet);
+    List<HoaDonChiTiet> findBySanPhamChiTietAndHoaDon_TrangThai(SanPhamChiTiet sanPhamChiTiet, Integer trangThai);
 }

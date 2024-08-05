@@ -165,7 +165,7 @@ public class ThongKeServiceImpl implements ThongKeService {
         List<Integer> soLuongBans = new ArrayList<>();
         for (SanPhamChiTiet sanPhamChiTiet :
                 sanPhamChiTietList) {
-            List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.findBySanPhamChiTiet(sanPhamChiTiet);
+            List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.findBySanPhamChiTietAndHoaDon_TrangThai(sanPhamChiTiet, 6);
             Integer sl = hoaDonChiTietList.stream()
                     .mapToInt(HoaDonChiTiet::getSoLuong)
                     .sum();

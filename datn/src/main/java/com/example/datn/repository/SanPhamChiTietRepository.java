@@ -19,5 +19,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("SELECT p FROM SanPhamChiTiet p WHERE p.sanPham.ten = :tenSanPham  AND p.kichThuoc.ten = :tenKichThuoc AND p.mauSac.ten = :tenMauSac")
     SanPhamChiTiet findByName(String tenSanPham, String tenKichThuoc, String tenMauSac);
 
+    List<SanPhamChiTiet> findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
+
     List<SanPhamChiTiet> findAllBySanPham_SanPhamIdAndMauSac_MauSacIdOrderBySanPhamChiTietId(Long idSp, Long idMs);
 }

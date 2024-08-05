@@ -31,8 +31,8 @@ public class SanPhamChiTietApi {
     @Autowired
     private HinhAnhServiceImpl hinhAnhService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllSanPhamChiTiet() {

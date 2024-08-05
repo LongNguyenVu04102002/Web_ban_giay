@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -134,6 +135,47 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#tenChatLieu').on('input', function () {
+                var tenChatLieu = $(this).val().trim();
+                var chatLieuId = $('#chatLieuId').val();
+
+                if (chatLieuId) {
+                    $.ajax({
+                        url: `/check/update-cl?id=${chatLieuId}&ten=${tenChatLieu}`,
+                        method: 'GET',
+                        success: function (response) {
+                            if (!response) {
+                                $('#submitBtn').prop('disabled', false);
+                            } else {
+                                $('#submitBtn').prop('disabled', true);
+                            }
+                        },
+                        error: function () {
+                            $('#submitBtn').prop('disabled', false);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: `/check/add-cl?ten=${tenChatLieu}`,
+                        method: 'GET',
+                        contentType: 'application/json',
+                        success: function (response) {
+                            if (response) {
+                                $('#submitBtn').prop('disabled', true);
+                            } else {
+                                $('#submitBtn').prop('disabled', false);
+                            }
+                        },
+                        error: function () {
+                            $('#submitBtn').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

@@ -14,4 +14,6 @@ public interface SanPhamService {
 
     void update(Long id);
 
+    List<SanPham> getSanPhamsByTrangThai(boolean trangThai);
+
 }

@@ -110,7 +110,7 @@ public class ThongKeApi {
         return thongKeService.nameSpOfSanPhamChiTiet(idSp, idMs);
     }
 
-    @GetMapping("/countSoLuongOfSanPhamChiTiet")
+    @GetMapping("/countSoLuongTonOfSanPhamChiTiet")
     public List<Integer> countSoLuongTonOfSanPhamChiTiet(@RequestParam("idSp") Long isSp, @RequestParam("idMs") Long idMs) {
         return thongKeService.countSoLuongTonOfSanPhamChiTiet(isSp, idMs);
     }

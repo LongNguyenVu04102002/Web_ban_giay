@@ -34,4 +34,9 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
        thuongHieuRepository.deleteById(id);
     }
 
+    @Override
+    public List<ThuongHieu> getThuongHieusByTrangThai(boolean trangThai) {
+        return thuongHieuRepository.findByTrangThai(trangThai);
+    }
+
 }
