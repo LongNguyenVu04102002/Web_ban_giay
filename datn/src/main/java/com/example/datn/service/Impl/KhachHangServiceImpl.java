@@ -4,7 +4,14 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 //import org.springframework.security.crypto.password.PasswordEncoder;
+=======
+<<<<<<< HEAD
+=======
+//import org.springframework.security.crypto.password.PasswordEncoder;
+>>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
+>>>>>>> parent of f4e9d10 (update)
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
@@ -17,8 +24,16 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+<<<<<<< HEAD
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
+=======
+<<<<<<< HEAD
+=======
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+>>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
+>>>>>>> parent of f4e9d10 (update)
 
     @Override
     public List<KhachHang> getAll() {
@@ -32,7 +47,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
 
     @Override
-    public KhachHang save(KhachHang khachHang) {
+    public KhachHang  save(KhachHang khachHang) {
 
         if (isSdtExist(khachHang.getSdt())) {
             throw new RuntimeException("Số điện thoại đã tồn tại");
@@ -83,6 +98,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
 
+<<<<<<< HEAD
     public void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) {
         if (khachHangRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email đã tồn tại");
@@ -91,6 +107,11 @@ public class KhachHangServiceImpl implements KhachHangService {
             throw new RuntimeException("Số điện thoại đã tồn tại");
         }
 
+=======
+
+<<<<<<< HEAD
+=======
+>>>>>>> parent of f4e9d10 (update)
         KhachHang khachHang = new KhachHang();
         khachHang.setEmail(email);
 //        khachHang.setMatKhau(passwordEncoder.encode(password));
@@ -102,4 +123,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
         khachHangRepository.save(khachHang);
     }
+<<<<<<< HEAD
+=======
+>>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
+>>>>>>> parent of f4e9d10 (update)
 }

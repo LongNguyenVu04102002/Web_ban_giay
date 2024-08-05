@@ -23,39 +23,11 @@
         </div>
         <ul class="buy-button list-none mb-0">
             <li class="dropdown inline-block relative ps-0.5">
-                <button data-dropdown-toggle="dropdown"
-                        class="dropdown-toggle size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 border border-orange-500 text-white"
-                        type="button">
-                    <i data-feather="shopping-cart" class="h-4 w-4"></i>
-                </button>
-                <div class="dropdown-menu absolute -left-4 mt-4 z-10 w-100 rounded-md bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 hidden"
-                     onclick="event.stopPropagation();">
-                    <ul class="py-3 text-start" aria-labelledby="dropdownDefault">
-                        <li th:each="item : ${cartItems}" class="flex items-center justify-between py-1.5 px-4">
-                        <span class="flex items-center">
-                            <img th:src="@{/images/shop/mens-jecket-3.jpg}" class="w-9 h-9 rounded shadow" th:alt="${item.tenSanPham}">
-                            <span class="ml-3">
-                                <span class="block font-semibold" th:text="${item.tenSanPham}"></span>
-                                <span class="block text-sm text-slate-400" th:text="${item.gia} + ' X ' + ${item.soLuong}"></span>
-                                <span class="block text-sm text-slate-400" th:text="'Kích Thước: ' + ${item.kichThuoc} + ' || Màu Sắc: ' + ${item.mauSac}"></span>
-                            </span>
-                        </span>
-                        <span class="font-semibold" th:text="${#numbers.formatDecimal(item.gia * item.soLuong, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span>
-                        </li>
-                        <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
-                        <li class="flex items-center justify-between py-1.5 px-4">
-                            <h6 class="font-semibold mb-0">Tạm Tính:</h6>
-                            <h6 class="font-semibold mb-0" th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></h6>
-                        </li>
-                        <li class="py-1.5 px-4">
-            <span class="text-center block">
-                <a th:href="@{/cart}" class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">View Cart</a>
-                <a th:href="@{/checkout}" class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">Checkout</a>
-            </span>
-                        </li>
-                    </ul>
-                </div>
-
+                <a class=" size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 border border-orange-500 text-white"
+                   th:href="@{/cart}" type="button">
+                    <i class="h-4 w-4" data-feather="shopping-cart"></i>
+                </a>
+            </li>
             <li class="inline-block ps-0.5">
                 <a class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 text-white"
                    href="javascript:void(0)">

@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -34,6 +32,12 @@ public class SanPhamChiTietController {
 
     @Autowired
     private HinhAnhService hinhAnhService;
+<<<<<<< HEAD
+=======
+
+//    @Autowired
+//    private DotGiamGiaServiceImpl dotGiamGiaService;
+>>>>>>> parent of f4e9d10 (update)
 
     @GetMapping("/bienthegiay")
     public String show(Model model) {
@@ -73,6 +77,9 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("/bienthegiay/save-update")
+<<<<<<< HEAD
+    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {
+=======
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
@@ -96,6 +103,7 @@ public class SanPhamChiTietController {
             }
         }
         hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
+>>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
