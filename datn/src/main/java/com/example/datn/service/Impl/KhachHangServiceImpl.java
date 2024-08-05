@@ -34,12 +34,12 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang save(KhachHang khachHang) {
 
-        if (isSdtExist(khachHang.getSdt())) {
-            throw new RuntimeException("Số điện thoại đã tồn tại");
-        }
-        if (isEmailExist(khachHang.getEmail())) {
-            throw new RuntimeException("Email đã tồn tại");
-        }
+//        if (isSdtExist(khachHang.getSdt())) {
+//            throw new RuntimeException("Số điện thoại đã tồn tại");
+//        }
+//        if (isEmailExist(khachHang.getEmail())) {
+//            throw new RuntimeException("Email đã tồn tại");
+//        }
         return khachHangRepository.save(khachHang);
 
     }
@@ -101,5 +101,16 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setTrangThai(trangThai);
 
         khachHangRepository.save(khachHang);
+    }
+
+
+    @Override
+    public KhachHang findByResetToken(String token) {
+        return khachHangRepository.findByResetToken(token);
+    }
+
+    @Override
+    public KhachHang findByEmailAndSdt(String email, String sdt) {
+        return khachHangRepository.findByEmailAndSdt(email,sdt);
     }
 }

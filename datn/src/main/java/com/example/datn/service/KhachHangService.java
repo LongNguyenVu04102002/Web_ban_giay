@@ -24,5 +24,7 @@ public interface KhachHangService {
 
     boolean isEmailDuplicate(String email, Long excludeId);
 void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) ;
+    KhachHang findByResetToken(String token);
+    KhachHang findByEmailAndSdt(String email,String sdt);
 
     }

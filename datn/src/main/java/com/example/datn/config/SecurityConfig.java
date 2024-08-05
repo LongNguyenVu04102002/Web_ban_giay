@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,28 +23,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "shop", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/nhanvien/**").hasAnyRole("NHANVIEN", "ADMIN")
-                        .requestMatchers("/khachhang/**").hasRole("KHACHHANG")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/", "/home", "/shop", "/register", "/forgot-password", "/reset-password", "/css/**", "/js/**", "/images/**").permitAll() // Các trang không yêu cầu đăng nhập
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN","NHANVIEN") // Chỉ ADMIN mới được vào các trang /admin/**
+                        .anyRequest().permitAll() // Các request khác đều được phép truy cập không cần đăng nhập
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .successHandler(customAuthenticationSuccessHandler)
-                        .failureUrl("/login?error") // Đặt thông báo lỗi vào query parameter
-                        .permitAll()
+                        .loginPage("/login") // Trang login tùy chỉnh
+                        .loginProcessingUrl("/login") // URL xử lý đăng nhập
+                        .successHandler(customAuthenticationSuccessHandler) // Xử lý khi đăng nhập thành công
+                        .failureUrl("/login?error") // Chuyển hướng khi đăng nhập thất bại, với thông báo lỗi trong query parameter
+                        .permitAll() // Cho phép tất cả truy cập trang login
                 )
                 .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
+                        .logoutUrl("/logout") // URL xử lý logout
+                        .logoutSuccessUrl("/login?logout") // Chuyển hướng khi logout thành công
+                        .invalidateHttpSession(true) // Vô hiệu hóa session hiện tại
+                        .deleteCookies("JSESSIONID") // Xóa cookie JSESSIONID
+                        .permitAll() // Cho phép tất cả thực hiện logout
                 )
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
-                        .accessDeniedHandler(customAccessDeniedHandler) // Sử dụng CustomAccessDeniedHandler
+                        .accessDeniedHandler(customAccessDeniedHandler) // Xử lý khi truy cập bị từ chối
                 );
 
         return http.build();
