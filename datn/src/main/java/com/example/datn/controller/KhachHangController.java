@@ -65,6 +65,17 @@ public class KhachHangController {
             result.addError(new FieldError("khachHang", "email", "Email đã tồn tại"));
         }
 
+        String sdt = khachHang.getSdt();
+        if (sdt != null) {
+            if (sdt.length() < 10) {
+                result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đang ít hơn 10 chữ số"));
+            }
+            if (sdt.length() > 10) {
+                result.addError(new FieldError("khachHang", "sdt", "Số điện thoại không được vượt quá 10 chữ số"));
+            }
+
+        }
+
         // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
