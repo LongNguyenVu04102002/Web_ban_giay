@@ -37,7 +37,14 @@ public class KhachHang {
 
     @NotBlank(message = "Họ tên không được để trống")
     @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+<<<<<<< HEAD
     @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+=======
+    @Pattern(regexp = "^[\\p{L} \\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+    @Pattern(regexp = "^(?!\\s).*$", message = "Họ tên không được bắt đầu bằng khoảng trắng")
+    @Pattern(regexp = ".*\\S$", message = "Họ tên không được kết thúc bằng khoảng trắng")
+    @Pattern(regexp = "^(?!.*\\s{2,}).*$", message = "Họ tên không được chứa nhiều khoảng trắng liên tiếp")
+>>>>>>> KhachHang_LongFix
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 
@@ -51,11 +58,16 @@ public class KhachHang {
     private LocalDate ngaySinh;
 
     @NotBlank(message = "Số điện thoại không được để trống")
+<<<<<<< HEAD
     @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
 
     @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
 
     @Pattern(regexp = "^0\\d{9,19}$", message = "Số điện thoại phải bắt đầu bằng số 0 và chỉ chứa các chữ số")
+=======
+
+    @Pattern(regexp = "^0\\d{9}$", message = "Số điện thoại phải bắt đầu bằng số 0 và chứa đúng 10 chữ số")
+>>>>>>> KhachHang_LongFix
 
     @Column(name = "sdt", length = 20)
     private String sdt;
@@ -82,6 +94,7 @@ public class KhachHang {
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
+
 
 
 }
