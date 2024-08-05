@@ -1,10 +1,10 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
-<<<<<<< HEAD
+
 import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
-=======
+
 import com.example.datn.entity.KichThuoc;
 import com.example.datn.entity.MauSac;
 import com.example.datn.entity.SanPham;
@@ -16,7 +16,7 @@ import com.example.datn.service.Impl.KichThuocServiceImpl;
 import com.example.datn.service.Impl.MauSacServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
 import com.example.datn.service.Impl.ThuongHieuServiceImpl;
->>>>>>> parent of f4e9d10 (update)
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +37,7 @@ public class BanHangOnlineController {
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
-<<<<<<< HEAD
-=======
+
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
@@ -47,7 +46,7 @@ public class BanHangOnlineController {
 
     @Autowired
     private KichThuocServiceImpl kichThuocService;
->>>>>>> parent of f4e9d10 (update)
+
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -124,11 +123,10 @@ public class BanHangOnlineController {
     @PostMapping("/checkout/save")
     public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
-<<<<<<< HEAD
-                             Model model){
-=======
+
                              Model model) {
->>>>>>> parent of f4e9d10 (update)
+
+
         String maVanDon = hoaDonService.saveHoaDonOnline(thanhToanResponse, cartItems);
         cartItems.clear();
         model.addAttribute("maVanDon", maVanDon);

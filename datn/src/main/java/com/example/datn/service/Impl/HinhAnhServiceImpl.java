@@ -4,6 +4,7 @@ package com.example.datn.service.Impl;
 import com.example.datn.entity.HinhAnh;
 import com.example.datn.repository.HinhAnhRepository;
 import com.example.datn.service.HinhAnhService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,7 +110,7 @@ import java.util.List;
             }
         }
     }
-=======
+
     @Override
     public List<HinhAnh> getAll() {
         return hinhAnhRepository.findAll();
@@ -130,4 +131,4 @@ import java.util.List;
         hinhAnhRepository.save(hinhAnh);
     }
 }
->>>>>>> parent of f4e9d10 (update)
+
