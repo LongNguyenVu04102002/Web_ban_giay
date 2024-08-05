@@ -6,47 +6,24 @@
     <link href="/css/tailwind.min.css" rel="stylesheet" type="text/css">
 <<<<<<< HEAD
     <link href="/vendors/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
-<<<<<<< HEAD
 =======
     <link href="/vendors/%40mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
 >>>>>>> 7ad8ffbb5f6e88af3108c968d7cd0797e69ce7dd
-=======
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <style>
-        .alert {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-    </style>
->>>>>>> nv_vinh
 </head>
 <body>
-<section class="md:h-screen py-36 flex items-center bg-orange-500/10 dark:bg-orange-500/20 bg-[url('../../assets/images/hero/bg-shape.html')] bg-center bg-no-repeat bg-cover">
+<section
+        class="md:h-screen py-36 flex items-center bg-orange-500/10 dark:bg-orange-500/20 bg-[url('../../assets/images/hero/bg-shape.html')] bg-center bg-no-repeat bg-cover">
     <div class="container relative">
         <div class="grid grid-cols-1">
             <div class="relative overflow-hidden rounded-md shadow dark:shadow-gray-700 bg-white dark:bg-slate-900">
                 <div class="grid md:grid-cols-2 grid-cols-1 items-center">
                     <div class="relative md:shrink-0">
-<<<<<<< HEAD
                         <img class="lg:h-full h-full w-full object-cover md:h-[34rem]" src="/images/login.jpg"
 <<<<<<< HEAD
                              alt="Login Image">
-=======
-                        <img class="lg:h-full h-full w-full object-cover md:h-[34rem]" src="/images/login.jpg" alt="Login Image">
->>>>>>> nv_vinh
                     </div>
                     <div class="p-8 lg:px-20">
-                        <div class="text-center mb-4">
+                        <div class="text-center">
                             <a href="#">
                                 <img src="/images/logo_xboy.png" class="h-[75px] mx-auto block" alt="Logo">
                             </a>
@@ -112,6 +89,7 @@
                             </p>
 >>>>>>> 7ad8ffbb5f6e88af3108c968d7cd0797e69ce7dd
                         </div>
+
                         <form class="text-start lg:py-20 py-8" th:action="@{/login}" method="post">
                             <div class="grid grid-cols-1">
                                 <div class="mb-4">
@@ -136,7 +114,8 @@
                                             Remember me
                                         </label>
                                     </div>
-                                    <p class="text-slate-400 mb-0"><a href="/forgot-password" class="text-slate-400">Forgot password?</a></p>
+                                    <p class="text-slate-400 mb-0"><a href="#"
+                                                                      class="text-slate-400">Forgot password?</a></p>
                                 </div>
 
                                 <div class="mb-4">
@@ -162,7 +141,6 @@
 <script src="/js/user/plugins.init.js"></script>
 <script src="/vendors/feather-icons/feather.min.js"></script>
 <script src="/js/user/app.js"></script>
-<<<<<<< HEAD
 </body>
 <<<<<<< HEAD
 </html>
@@ -256,30 +234,6 @@
 <script src="/js/user/plugins.init.js"></script>
 <script src="/vendors/feather-icons/feather.min.js"></script>
 <script src="/js/user/app.js"></script>
-=======
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('error')) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Invalid username or password.',
-                confirmButtonText: 'Ok'
-            });
-        }
-        if (urlParams.has('logout')) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Logged Out',
-                text: 'You have been logged out successfully.',
-                confirmButtonText: 'Ok'
-            });
-        }
-    });
-</script>
->>>>>>> nv_vinh
 </body>
 </html>
 =======
