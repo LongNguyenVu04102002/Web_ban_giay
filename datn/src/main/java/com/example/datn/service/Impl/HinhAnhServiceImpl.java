@@ -1,18 +1,6 @@
 package com.example.datn.service.Impl;
 
-<<<<<<< HEAD
-    import com.example.datn.entity.HinhAnh;
-    import com.example.datn.entity.SanPhamChiTiet;
-    import com.example.datn.repository.HinhAnhRepository;
-    import com.example.datn.service.HinhAnhService;
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.stereotype.Service;
-    import org.springframework.transaction.annotation.Transactional;
 
-    import java.io.IOException;
-    import java.util.ArrayList;
-    import java.util.List;
-=======
 import com.example.datn.entity.HinhAnh;
 import com.example.datn.repository.HinhAnhRepository;
 import com.example.datn.service.HinhAnhService;
@@ -20,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
->>>>>>> parent of f4e9d10 (update)
+
 
     @Service
     public class HinhAnhServiceImpl implements HinhAnhService {
@@ -28,7 +16,7 @@ import java.util.List;
         @Autowired
         private HinhAnhRepository hinhAnhRepository;
 
-<<<<<<< HEAD
+
         @Override
         public List<HinhAnh> getAll() {
             return hinhAnhRepository.findAll();
