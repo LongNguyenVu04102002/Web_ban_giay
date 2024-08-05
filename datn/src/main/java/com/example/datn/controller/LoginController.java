@@ -26,8 +26,15 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public String showLoginPage() {
-
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout,
+                                Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Invalid username or password.");
+        }
+        if (logout != null) {
+            model.addAttribute("logout", "You have been logged out successfully.");
+        }
         return "user/includes/content/login";
     }
 

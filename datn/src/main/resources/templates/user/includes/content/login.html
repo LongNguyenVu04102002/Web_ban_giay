@@ -5,6 +5,7 @@
     <title>Login</title>
     <link href="/css/tailwind.min.css" rel="stylesheet" type="text/css">
     <link href="/vendors/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         .alert {
             animation: slideIn 0.5s ease-out;
@@ -87,5 +88,27 @@
 <script src="/js/user/plugins.init.js"></script>
 <script src="/vendors/feather-icons/feather.min.js"></script>
 <script src="/js/user/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Invalid username or password.',
+                confirmButtonText: 'Ok'
+            });
+        }
+        if (urlParams.has('logout')) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Logged Out',
+                text: 'You have been logged out successfully.',
+                confirmButtonText: 'Ok'
+            });
+        }
+    });
+</script>
 </body>
 </html>
