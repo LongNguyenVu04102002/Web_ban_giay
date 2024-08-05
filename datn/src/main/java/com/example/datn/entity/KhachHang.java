@@ -66,6 +66,10 @@ public class KhachHang {
     @Column(name = "trangThai")
     private boolean trangThai;
 
+    @Column(name = "resetToken")
+    private String resetToken;
+
+
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<DiaChi> diaChiList;

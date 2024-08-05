@@ -1,6 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
+<<<<<<< HEAD
 import com.example.datn.entity.KichThuoc;
 import com.example.datn.entity.MauSac;
 import com.example.datn.entity.SanPham;
@@ -14,8 +15,16 @@ import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
 import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import jakarta.servlet.http.HttpSession;
+=======
+import com.example.datn.entity.KhachHang;
+import com.example.datn.model.response.ThanhToanResponse;
+import com.example.datn.service.Impl.HoaDonServiceImpl;
+import com.example.datn.service.Impl.KhachHangServiceImpl;
+>>>>>>> nv_vinh
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +42,9 @@ import java.util.stream.Collectors;
 @Controller
 @SessionAttributes("cartItems")
 public class BanHangOnlineController {
+
+    @Autowired
+    private KhachHangServiceImpl khachHangService;
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
@@ -56,6 +68,7 @@ public class BanHangOnlineController {
         return new ArrayList<>();
     }
 
+<<<<<<< HEAD
     @GetMapping("/home")
     public String home() {
         return "user/includes/content/home";
@@ -123,13 +136,34 @@ public class BanHangOnlineController {
     @GetMapping("/login")
     public String login() {
         return "user/includes/content/login";
+=======
+    private void addAuthenticationInfo(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName();
+            KhachHang khachHang = khachHangService.getAllByEmail(email);
+            if (khachHang != null) {
+                model.addAttribute("isAuthenticated", true);
+                model.addAttribute("username", khachHang.getHoTen());
+                model.addAttribute("email", khachHang.getEmail());
+            } else {
+                model.addAttribute("isAuthenticated", false);
+            }
+        } else {
+            model.addAttribute("isAuthenticated", false);
+        }
+>>>>>>> nv_vinh
     }
 
     @GetMapping("/cart")
     public String cart(Model model) {
+<<<<<<< HEAD
         if (!model.containsAttribute("pgg")) {
             model.addAttribute("pgg", new PhieuGiamGiaResponse());
         }
+=======
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        addAuthenticationInfo(model, authentication);
+>>>>>>> nv_vinh
         return "user/includes/content/cart";
     }
 
@@ -199,6 +233,7 @@ public class BanHangOnlineController {
     @PostMapping("/checkout/save")
     public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
+<<<<<<< HEAD
                              HttpSession session,
                              Model model) {
         PhieuGiamGiaResponse pgg = (PhieuGiamGiaResponse) session.getAttribute("pgg");
@@ -229,4 +264,21 @@ public class BanHangOnlineController {
         return "redirect:/cart";
     }
 
+=======
+                             Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName();
+            KhachHang khachHang = khachHangService.getAllByEmail(email);
+            if (khachHang != null) {
+                // Lưu thông tin đơn hàng
+                String maVanDon = hoaDonService.saveHoaDonOnline(thanhToanResponse, cartItems, khachHang);
+                cartItems.clear(); // Xóa giỏ hàng sau khi lưu đơn hàng
+                model.addAttribute("maVanDon", maVanDon);
+                return "user/includes/content/ordersuccess";
+            }
+        }
+        return "redirect:/login";
+    }
+>>>>>>> nv_vinh
 }
