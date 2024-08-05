@@ -34,4 +34,9 @@ public class CoGiayServiceImpl implements CoGiayService {
         coGiayRepository.deleteById(id);
     }
 
+    @Override
+    public List<CoGiay> getCoGiaysByTrangThai(boolean trangThai) {
+        return coGiayRepository.findByTrangThai(trangThai);
+    }
+
 }

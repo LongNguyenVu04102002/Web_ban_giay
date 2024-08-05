@@ -8,4 +8,6 @@ import java.util.List;
 public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 
     List<SanPham> findAllByThuongHieu_ThuongHieuId(Long id);
+
+    List<SanPham> findByTrangThai(boolean trangThai);
 }

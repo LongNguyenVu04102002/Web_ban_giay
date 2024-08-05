@@ -4,7 +4,7 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
@@ -17,8 +17,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<KhachHang> getAll() {
@@ -34,12 +34,12 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang save(KhachHang khachHang) {
 
-//        if (isSdtExist(khachHang.getSdt())) {
-//            throw new RuntimeException("Số điện thoại đã tồn tại");
-//        }
-//        if (isEmailExist(khachHang.getEmail())) {
-//            throw new RuntimeException("Email đã tồn tại");
-//        }
+        if (isSdtExist(khachHang.getSdt())) {
+            throw new RuntimeException("Số điện thoại đã tồn tại");
+        }
+        if (isEmailExist(khachHang.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
         return khachHangRepository.save(khachHang);
 
     }
@@ -93,7 +93,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
         KhachHang khachHang = new KhachHang();
         khachHang.setEmail(email);
-        khachHang.setMatKhau(passwordEncoder.encode(password));
+//        khachHang.setMatKhau(passwordEncoder.encode(password));
         khachHang.setHoTen(hoTen);
         khachHang.setSdt(sdt);
         khachHang.setNgaySinh(ngaySinh);
@@ -101,16 +101,5 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setTrangThai(trangThai);
 
         khachHangRepository.save(khachHang);
-    }
-
-
-    @Override
-    public KhachHang findByResetToken(String token) {
-        return khachHangRepository.findByResetToken(token);
-    }
-
-    @Override
-    public KhachHang findByEmailAndSdt(String email, String sdt) {
-        return khachHangRepository.findByEmailAndSdt(email,sdt);
     }
 }

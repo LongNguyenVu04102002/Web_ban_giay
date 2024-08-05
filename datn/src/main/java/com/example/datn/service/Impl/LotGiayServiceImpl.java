@@ -34,4 +34,9 @@ public class LotGiayServiceImpl implements LotGiayService {
         lotGiayRepository.deleteById(id);
     }
 
+    @Override
+    public List<LotGiay> getLotGiaysByTrangThai(boolean trangThai) {
+        return lotGiayRepository.findByTrangThai(trangThai);
+    }
+
 }

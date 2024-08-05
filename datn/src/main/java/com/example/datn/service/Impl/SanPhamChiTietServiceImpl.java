@@ -38,6 +38,15 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return sanPhamChiTietRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId) {
+        List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietRepository.findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(sanPhamId, kichThuocId, mauSacId);
+        if (sanPhamChiTiets.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
 //    @Override
 //    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
 //        for (SanPhamChiTiet spct : sanPhamChiTietList) {

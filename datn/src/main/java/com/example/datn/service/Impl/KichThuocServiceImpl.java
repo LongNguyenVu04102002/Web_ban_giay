@@ -34,4 +34,9 @@ public class KichThuocServiceImpl implements KichThuocService {
         kichThuocRepository.deleteById(id);
     }
 
+    @Override
+    public List<KichThuoc> getKichThuocsByTrangThai(boolean trangThai) {
+        return kichThuocRepository.findByTrangThai(trangThai);
+    }
+
 }

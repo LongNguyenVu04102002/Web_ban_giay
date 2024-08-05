@@ -117,7 +117,6 @@ public class KhachHangController {
             result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
         }
 
-
         // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/update";

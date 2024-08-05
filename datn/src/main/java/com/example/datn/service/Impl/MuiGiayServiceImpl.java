@@ -34,4 +34,9 @@ public class MuiGiayServiceImpl implements MuiGiayService {
         muiGiayRepository.deleteById(id);
     }
 
+    @Override
+    public List<MuiGiay> getMuiGiaysByTrangThai(boolean trangThai) {
+        return muiGiayRepository.findByTrangThai(trangThai);
+    }
+
 }

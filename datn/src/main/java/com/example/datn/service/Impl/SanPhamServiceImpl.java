@@ -40,4 +40,9 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
     }
 
+    @Override
+    public List<SanPham> getSanPhamsByTrangThai(boolean trangThai) {
+        return sanPhamRepository.findByTrangThai(trangThai);
+    }
+
 }

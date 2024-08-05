@@ -13,10 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 public class SanPhamChiTietResponse {
-
-    private SanPhamChiTiet sanPhamChiTiet;
-    private String dataImg;
-
     private List<SanPhamChiTiet> sanPhamChiTietList;
     private List<HinhAnhDTO> hinhAnhDTOList;
     private List<SanPhamChiTietDTO> sanPhamChiTietDTOList;
