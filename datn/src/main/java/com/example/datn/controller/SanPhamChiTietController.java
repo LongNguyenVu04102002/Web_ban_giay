@@ -32,12 +32,7 @@ public class SanPhamChiTietController {
 
     @Autowired
     private HinhAnhService hinhAnhService;
-<<<<<<< HEAD
-=======
 
-//    @Autowired
-//    private DotGiamGiaServiceImpl dotGiamGiaService;
->>>>>>> parent of f4e9d10 (update)
 
     @GetMapping("/bienthegiay")
     public String show(Model model) {
