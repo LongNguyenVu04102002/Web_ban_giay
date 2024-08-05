@@ -29,7 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "khachHang")
 public class KhachHang {
-
+//sadasadsdsdsdsd
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "khachHangId", nullable = false)
@@ -38,6 +38,7 @@ public class KhachHang {
     @NotBlank(message = "Họ tên không được để trống")
     @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
     @Pattern(regexp = "^[\\p{L} \\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
+
     @Column(name = "hoTen", length = 100)
     private String hoTen;
 
@@ -45,19 +46,28 @@ public class KhachHang {
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-//    @NotNull(message = "Không được để trống")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+    @NotNull(message = "Không được để trống")
     private LocalDate ngaySinh;
 
-//    @NotBlank(message = "Số điện thoại không được để trống")
-//    @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
-//    @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
+
+    @Pattern(regexp = "^\\d+$", message = "Số điện thoại chỉ chứa các chữ số")
+
+    @Pattern(regexp = "^0\\d{9,19}$", message = "Số điện thoại phải bắt đầu bằng số 0 và chỉ chứa các chữ số")
+
     @Column(name = "sdt", length = 20)
     private String sdt;
 
+
     @Column(name = "email")
-//    @NotNull(message = "Không được để trống")
+
+    @NotNull(message = "Không được để trống")
+
+    @NotBlank(message = "Không được để trống")
+
     private String email;
 
     @Column(name = "matKhau")
@@ -65,6 +75,10 @@ public class KhachHang {
 
     @Column(name = "trangThai")
     private boolean trangThai;
+
+    @Column(name = "resetToken")
+    private String resetToken;
+
 
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

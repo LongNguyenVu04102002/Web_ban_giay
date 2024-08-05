@@ -1,8 +1,6 @@
 package com.example.datn.service;
 
-import com.example.datn.dto.CartItem;
 import com.example.datn.entity.PhieuGiamGia;
-import com.example.datn.model.response.PhieuGiamGiaResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -19,6 +17,5 @@ public interface PhieuGiamGiaService {
 
     PhieuGiamGia tonggleTrangThaiGiamGia(Long id);
 
-    PhieuGiamGiaResponse apPhieu(String maGiamGia, List<CartItem> cartItem);
 
 }

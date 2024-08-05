@@ -1451,9 +1451,6 @@ video {
 .h-screen {
     height: 100vh !important
 }
-.ml-3{
-    margin-left: 0.75rem;
-}
 .mr-3{
     margin-right: 0.75rem;
 }
@@ -2601,7 +2598,6 @@ video {
     --tw-text-opacity: 1 !important;
     color: rgb(249 115 22 / var(--tw-text-opacity)) !important
 }
-
 
 .text-red-600 {
     --tw-text-opacity: 1 !important;

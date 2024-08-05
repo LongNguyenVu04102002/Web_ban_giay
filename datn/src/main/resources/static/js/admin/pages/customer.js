@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize form toggle handlers
-    handleToggleForm('toggleForm1', 'form-section-1', 'shipping1');
-    handleToggleForm('toggleForm2', 'form-section-2', 'shipping2');
-    handleToggleForm('toggleForm3', 'form-section-3', 'shipping3');
-    handleToggleForm('toggleForm4', 'form-section-4', 'shipping4');
-    handleToggleForm('toggleForm5', 'form-section-5', 'shipping5');
+    handleToggleForm('toggleForm1', 'form-section-1','shipping1');
+    handleToggleForm('toggleForm2', 'form-section-2','shipping2');
+    handleToggleForm('toggleForm3', 'form-section-3','shipping3');
+    handleToggleForm('toggleForm4', 'form-section-4','shipping4');
+    handleToggleForm('toggleForm5', 'form-section-5','shipping5');
 
     // Load saved customer data for each tab
     function loadCustomerData(tabId) {
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const customerEmailSpan = document.querySelector(`#customer-email-${tabId} .font-semibold`);
         const customerPhoneSpan = document.querySelector(`#customer-phone-${tabId} .font-semibold`);
         const customerIdInput = document.querySelector(`#customer-id-${tabId}`);
-        const khachLeButton = document.getElementById(`khach-le-${tabId}`);
 
         const savedCustomer = JSON.parse(localStorage.getItem(`selectedCustomer-${tabId}`));
         if (savedCustomer) {
@@ -38,13 +37,11 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector(`#customer-name-${tabId}`).style.display = 'flex';
             document.querySelector(`#customer-email-${tabId}`).style.display = 'flex';
             document.querySelector(`#customer-phone-${tabId}`).style.display = 'flex';
-            khachLeButton.style.display = 'none';
         } else {
             // Hide customer info sections if no customer is saved
             document.querySelector(`#customer-name-${tabId}`).style.display = 'none';
             document.querySelector(`#customer-email-${tabId}`).style.display = 'none';
             document.querySelector(`#customer-phone-${tabId}`).style.display = 'none';
-            khachLeButton.style.display = 'inline-block';
         }
     }
 
@@ -101,7 +98,6 @@ function clearSelectedCustomer(tabId) {
 
     // Define the customer info container based on the tabId
     const customerInfoContainer = document.getElementById(`customer-info-${tabId}`);
-    const khachLeButton = document.getElementById(`khach-le-${tabId}`);
 
     if (customerInfoContainer) {
         // Clear the content of spans
@@ -114,9 +110,6 @@ function clearSelectedCustomer(tabId) {
         customerInfoContainer.querySelector(`#customer-name-${tabId}`).style.display = 'none';
         customerInfoContainer.querySelector(`#customer-email-${tabId}`).style.display = 'none';
         customerInfoContainer.querySelector(`#customer-phone-${tabId}`).style.display = 'none';
-
-        // Show Khách Lẻ button
-        khachLeButton.style.display = 'inline-block';
     }
 }
 
@@ -128,7 +121,6 @@ function selectCustomer(button, tabId) {
 
     // Define the customer info container based on the tabId
     const customerInfoContainer = document.getElementById(`customer-info-${tabId}`);
-    const khachLeButton = document.getElementById(`khach-le-${tabId}`);
 
     if (customerInfoContainer) {
         // Update the content of spans
@@ -141,9 +133,6 @@ function selectCustomer(button, tabId) {
         customerInfoContainer.querySelector(`#customer-name-${tabId}`).style.display = 'flex';
         customerInfoContainer.querySelector(`#customer-email-${tabId}`).style.display = 'flex';
         customerInfoContainer.querySelector(`#customer-phone-${tabId}`).style.display = 'flex';
-
-        // Hide Khách Lẻ button
-        khachLeButton.style.display = 'none';
 
         // Save customer info to localStorage
         const customer = {id: customerId, name: hoTen, email: email, phone: sdt};

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,35 +81,28 @@ public class HoaDonController {
     @PostMapping("/hoadon/update")
     public String update(@RequestParam Long idHoaDon, @RequestParam Long idSanPhamChiTiet, RedirectAttributes redirectAttributes) {
         hoaDonService.update(idHoaDon, idSanPhamChiTiet);
-        redirectAttributes.addFlashAttribute("add", true);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/cartdetail/" + idHoaDon;
     }
 
     @PostMapping("/hoadon/update/stepdown")
     public String stepDown(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
         hoaDonService.stepDown(hoaDonId, hoaDonChiTietId);
-        redirectAttributes.addFlashAttribute("stepdown", true);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
     }
 
     @PostMapping("/hoadon/update/stepup")
     public String stepUp(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
         hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
-        redirectAttributes.addFlashAttribute("stepup", true);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
-    }
-
-    @PostMapping("/hoadon/update/thongtingiaohang")
-    public String updateThongTinGiaoHang(@ModelAttribute HoaDon hoaDon, RedirectAttributes redirectAttributes) {
-        hoaDonService.updateThongTinGiaoHang(hoaDon);
-        redirectAttributes.addFlashAttribute("update", true);
-        return "redirect:/admin/hoadon/detail/" + hoaDon.getHoaDonId();
     }
 
     @PostMapping("/hoadon/delete")
     public String delete(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
         hoaDonService.delete(hoaDonId, hoaDonChiTietId);
-        redirectAttributes.addFlashAttribute("deletes", true);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
     }
 
