@@ -23,14 +23,14 @@ public class CheckAPI {
         return sanPhamChiTietService.findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(sanPhamId, kichThuocId, mauSacId);
     }
 
-//    @GetMapping("/add-cl")
-//    public boolean checkAddChatLieu(@RequestParam String ten) {
-//        ten = ten.trim();
-//        return chatLieuService.isTenExists(ten);
-//    }
-//
-//    @GetMapping("/update-cl")
-//    public boolean checkUpdateChatLieu(@RequestParam Long id, @RequestParam String ten) {
-//        return chatLieuService.isTenExistsForUpdate(ten.trim(), id);
-//    }
+    @GetMapping("/add-cl")
+    public boolean checkAddChatLieu(@RequestParam String ten) {
+        ten = ten.trim();
+        return chatLieuService.isTenExists(ten);
+    }
+
+    @GetMapping("/update-cl")
+    public boolean checkUpdateChatLieu(@RequestParam Long id, @RequestParam String ten) {
+        return chatLieuService.isTenExistsForUpdate(ten.trim(), id);
+    }
 }

@@ -279,7 +279,7 @@
                 ordersThisMonth: '/admin/api/thong-ke/countHoaDonThisMonth?trangThai=6',
                 ordersLastMonth: '/admin/api/thong-ke/countHoaDonLastMonth?trangThai=6',
                 ordersCurrentWeek: '/admin/api/thong-ke/countHoaDonForCurrentWeek?trangThai=6',
-                ordersToday: '/admin/api/thong-ke/today',
+                ordersTodayList: '/admin/api/thong-ke/today',
                 apiEndpoint: '/admin/api/thong-ke/listThuongHieu',
                 listSanPhamByThuongHieu: '/admin/api/thong-ke/listSanPhamByThuongHieu?id=',
                 listMauSacBySanPham: '/admin/api/thong-ke/listMauSacBySanPham?id='
@@ -295,7 +295,7 @@
                         try {
                             const response = await fetch(apiEndpoints[key]);
                             const result = await response.json();
-                            if (key === 'ordersToday') {
+                            if (key === 'ordersTodayList') {
                                 orders = result; // Cập nhật dữ liệu đơn hàng từ API
                             } else {
                                 stats[key] = result;

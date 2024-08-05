@@ -4,7 +4,7 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Chất liệu</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -89,12 +89,12 @@
                     <div class="card card-layout-frame" role="presentation">
                         <div class="card-body">
                             <h5 class="mb-4 text-center justify-center">Chất Liệu</h5>
-                            <form th:action="@{/admin/sanpham/chatlieu/save}" method="post" class="p-6"
+                            <form id="chatLieuForm" th:action="@{/admin/sanpham/chatlieu/save}" method="post" class="p-6"
                                   th:object="${chatLieu}">
                                 <input type="hidden" th:field="*{chatLieuId}"/>
                                 <div class="mb-3 mt-3">
                                     <label class="form-label font-medium block text-gray-700">Tên Chất Liệu</label>
-                                    <input type="text" th:field="*{ten}"
+                                    <input type="text" id="tenChatLieu" th:field="*{ten}"
                                            class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                                 </div>
                                 <div class="mb-3">
@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
                                 <div class="space-x-2 flex justify-center items-center">
-                                    <button type="submit"
+                                    <button type="submit" id="submitBtn"
                                             class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800">
                                         <span th:text="${chatLieu.chatLieuId == null} ? 'Thêm' : 'Cập Nhập'"></span>
                                     </button>
