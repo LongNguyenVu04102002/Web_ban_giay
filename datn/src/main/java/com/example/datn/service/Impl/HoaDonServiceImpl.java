@@ -281,7 +281,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
     @Override
     @Transactional
+<<<<<<< HEAD
     public String saveHoaDonOnline(ThanhToanResponse thanhToanResponse, List<CartItem> cartItems, KhachHang khachHang) {
+=======
+    public String saveHoaDonOnline(ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
+>>>>>>> parent of f4e9d10 (update)
         HoaDon hoaDon = new HoaDon();
         hoaDon.setLoaiHoaDon(false);
         hoaDon.setThanhToan(false);
@@ -293,9 +297,12 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setSdtNhan(thanhToanResponse.getSdt());
         hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
 
+<<<<<<< HEAD
         // Lưu thông tin khách hàng
         hoaDon.setKhachHang(khachHang);
 
+=======
+>>>>>>> parent of f4e9d10 (update)
         BigDecimal tongTien = BigDecimal.ZERO;
 
         for (CartItem cartItem : cartItems) {
@@ -304,7 +311,16 @@ public class HoaDonServiceImpl implements HoaDonService {
             BigDecimal thanhTien = giaBan.multiply(soLuong);
             tongTien = tongTien.add(thanhTien);
 
+<<<<<<< HEAD
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(), cartItem.getKichThuoc(), cartItem.getMauSac());
+=======
+        }
+
+        hoaDon.setTongTien(tongTien);
+        hoaDonRepository.save(hoaDon);
+        for(CartItem cartItem : cartItems){
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
+>>>>>>> parent of f4e9d10 (update)
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setTrangThai(1);
             hoaDonChiTiet.setDonGia(giaBan);

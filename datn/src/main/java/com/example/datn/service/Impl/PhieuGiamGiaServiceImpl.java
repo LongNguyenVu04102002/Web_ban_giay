@@ -1,9 +1,7 @@
 package com.example.datn.service.Impl;
 
-import com.example.datn.dto.CartItem;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.entity.PhieuGiamGia;
-import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.repository.PhieuGiamGiaRepository;
 import com.example.datn.service.PhieuGiamGiaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Date;
@@ -88,43 +85,6 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
         return null;
     }
 
-    @Override
-    public PhieuGiamGiaResponse apPhieu(String maGiamGia, List<CartItem> cartItems) {
-        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(maGiamGia);
-
-        if (phieuGiamGia == null) {
-            return null;
-        }
-
-        if (phieuGiamGia.getTrangThai() != 1) {
-            return null;
-        }
-
-        BigDecimal tongTien = cartItems.stream()
-                .map(item -> item.getGia().multiply(new BigDecimal(item.getSoLuong())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal tienGiam = BigDecimal.ZERO;
-
-        if (tongTien.compareTo(phieuGiamGia.getGiaTriDonToiThieu()) >= 0) {
-            if (phieuGiamGia.isLoaiPhieu()) {
-                BigDecimal discountPercent = new BigDecimal(phieuGiamGia.getGiaTriGiam()).divide(new BigDecimal(100));
-                tienGiam = tongTien.multiply(discountPercent);
-
-                if (tienGiam.compareTo(phieuGiamGia.getGiaTriGiamToiDa()) > 0) {
-                    tienGiam = phieuGiamGia.getGiaTriGiamToiDa();
-                }
-            } else {
-                BigDecimal discountPercent = new BigDecimal(phieuGiamGia.getGiaTriGiam()).divide(new BigDecimal(100));
-                tienGiam = tongTien.multiply(discountPercent);
-
-                if (tienGiam.compareTo(phieuGiamGia.getGiaTriGiamToiDa()) > 0) {
-                    tienGiam = phieuGiamGia.getGiaTriGiamToiDa();
-                }
-            }
-        }
-        return new PhieuGiamGiaResponse(phieuGiamGia.getPhieuGiamGiaId(), maGiamGia, tienGiam);
-    }
 
     private String generateVoucherCode() {
         String prefix = "XBOY";

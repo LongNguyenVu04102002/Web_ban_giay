@@ -1,10 +1,25 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
+<<<<<<< HEAD
 import com.example.datn.entity.KhachHang;
 import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
+=======
+import com.example.datn.entity.KichThuoc;
+import com.example.datn.entity.MauSac;
+import com.example.datn.entity.SanPham;
+import com.example.datn.entity.SanPhamChiTiet;
+import com.example.datn.entity.ThuongHieu;
+import com.example.datn.model.response.ThanhToanResponse;
+import com.example.datn.service.Impl.HoaDonServiceImpl;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
+import com.example.datn.service.Impl.ThuongHieuServiceImpl;
+import jakarta.servlet.http.HttpSession;
+>>>>>>> parent of f4e9d10 (update)
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,6 +44,17 @@ public class BanHangOnlineController {
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
+<<<<<<< HEAD
+=======
+    @Autowired
+    private SanPhamServiceImpl sanPhamService;
+
+    @Autowired
+    private ThuongHieuServiceImpl thuongHieuService;
+
+    @Autowired
+    private KichThuocServiceImpl kichThuocService;
+>>>>>>> parent of f4e9d10 (update)
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -55,8 +81,11 @@ public class BanHangOnlineController {
 
     @GetMapping("/cart")
     public String cart(Model model) {
+<<<<<<< HEAD
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         addAuthenticationInfo(model, authentication);
+=======
+>>>>>>> parent of f4e9d10 (update)
         return "user/includes/content/cart";
     }
 
@@ -65,6 +94,7 @@ public class BanHangOnlineController {
         model.addAttribute("thanhToanResponse", new ThanhToanResponse());
         return "user/includes/content/checkout";
     }
+
 
     @PostMapping("/cart/add")
     public ResponseEntity<Map<String, Object>> addToCart(@RequestBody CartItem cartItem, @ModelAttribute("cartItems") List<CartItem> cartItems) {
@@ -123,6 +153,7 @@ public class BanHangOnlineController {
     public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
                              Model model) {
+<<<<<<< HEAD
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             String email = authentication.getName();
@@ -137,4 +168,12 @@ public class BanHangOnlineController {
         }
         return "redirect:/login";
     }
+=======
+        String maVanDon = hoaDonService.saveHoaDonOnline(thanhToanResponse, cartItems);
+        cartItems.clear();
+        model.addAttribute("maVanDon", maVanDon);
+        return "user/includes/content/ordersusses";
+    }
+
+>>>>>>> parent of f4e9d10 (update)
 }
