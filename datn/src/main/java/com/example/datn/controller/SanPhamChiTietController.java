@@ -2,14 +2,19 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
+import com.example.datn.model.response.request.HinhAnhDTO;
 import com.example.datn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/sanpham")
@@ -30,13 +35,19 @@ public class SanPhamChiTietController {
     @Autowired
     private HinhAnhService hinhAnhService;
 
-//    @Autowired
-//    private DotGiamGiaServiceImpl dotGiamGiaService;
-
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
-        model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+        List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
+
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
+            SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
+            sanPhamChiTietResponse.setSanPhamChiTiet(sanPhamChiTiet);
+            sanPhamChiTietResponse.setDataImg(Base64.getEncoder().encodeToString(hinhAnhService.getImageBySanPhamChiTietIdWithPriority(sanPhamChiTiet.getSanPhamChiTietId(), 1)));
+            sanPhamChiTietResponses.add(sanPhamChiTietResponse);
+        }
+
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
         return "admin/includes/content/sanpham/bienthegiay/home";
     }
 
@@ -51,23 +62,17 @@ public class SanPhamChiTietController {
     @GetMapping("/bienthegiay/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getById(id);
+        List<HinhAnh> hinhAnhList = hinhAnhService.getImagesBySanPhamChiTietId(id);
+        List<HinhAnhDTO> anhDTOS = hinhAnhList.stream()
+                .map(hinhAnh -> new HinhAnhDTO(hinhAnh.getHinhAnhId(), Base64.getEncoder().encodeToString(hinhAnh.getDataImg())))
+                .collect(Collectors.toList());
+        anhDTOS.forEach(dto -> System.out.println("Image ID: " + dto.getId()));
         model.addAttribute("spct", sanPhamChiTiet);
+        model.addAttribute("imageDTOs", anhDTOS);
         return getStringUpdate(model);
     }
 
-    @PostMapping("/bienthegiay/save")
-    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
-        List<HinhAnh> hinhAnhList = new ArrayList<>();
-        hinhAnhService.save(hinhAnhList);
-        sanPhamChiTietService.save(sanPhamChiTietList);
-        return "redirect:/admin/sanpham/bienthegiay";
-    }
-
     @PostMapping("/bienthegiay/save-update")
-<<<<<<< HEAD
-    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {
-=======
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
@@ -91,7 +96,6 @@ public class SanPhamChiTietController {
             }
         }
         hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
->>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
@@ -110,6 +114,7 @@ public class SanPhamChiTietController {
         return "admin/includes/content/sanpham/bienthegiay/form-update";
     }
 
+    //update trang thai
     @PostMapping("/bienthegiay/update/{id}")
     public String update(@PathVariable Long id) {
         sanPhamChiTietService.update(id);
