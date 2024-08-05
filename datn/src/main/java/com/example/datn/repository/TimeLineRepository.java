@@ -3,7 +3,9 @@ package com.example.datn.repository;
 import com.example.datn.entity.TimeLine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
@@ -11,11 +13,6 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query("select p from TimeLine p where p.hoaDon.hoaDonId = :hoaDonId")
     List<TimeLine> findByHoaDonId(Long hoaDonId);
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> parent of f4e9d10 (update)
     @Query("select count(distinct t.hoaDon.khachHang.khachHangId) from TimeLine t where t.ngayTao = :ngayTao and t.hoaDon.trangThai = :trangThai")
     Long countKhachHangByNgayTaoAndTrangThai(@Param("ngayTao") LocalDate ngayTao, @Param("trangThai") int trangThai);
 
@@ -33,5 +30,4 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     @Query("select t from TimeLine t where t.ngayTao = :ngayTao")
     List<TimeLine> findByNgayTao(@Param("ngayTao") LocalDate ngayTao);
->>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
 }
