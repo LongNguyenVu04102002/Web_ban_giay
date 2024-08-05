@@ -37,10 +37,6 @@ public class HinhAnh {
     @Column(name = "link")
     private String link;
 
-    @Lob
-    @Column(name = "data_img", columnDefinition = "LONGBLOB")
-    private byte[] dataImg;
-
     @Column(name = "uuTien")
     private Integer uuTien;
 

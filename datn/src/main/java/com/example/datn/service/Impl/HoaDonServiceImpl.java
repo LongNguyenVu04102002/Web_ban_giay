@@ -302,6 +302,14 @@ public class HoaDonServiceImpl implements HoaDonService {
             BigDecimal thanhTien = giaBan.multiply(soLuong);
             tongTien = tongTien.add(thanhTien);
 
+<<<<<<< HEAD
+=======
+        }
+
+        hoaDon.setTongTien(tongTien);
+        hoaDonRepository.save(hoaDon);
+        for(CartItem cartItem : cartItems){
+>>>>>>> parent of f4e9d10 (update)
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setTrangThai(1);
