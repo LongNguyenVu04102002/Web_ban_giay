@@ -108,19 +108,19 @@
                         required: true,
                         digits: true,
                         minlength: 10,
-                        maxlength: 11
+                        maxlength: 10
                     },
                     email: {
                         required: true,
                         email: true
                     },
-                    province: {
+                    thanhPho: {
                         required: true
                     },
-                    district: {
+                    huyen: {
                         required: true
                     },
-                    ward: {
+                    xa: {
                         required: true
                     },
                     diaChi: {
@@ -135,19 +135,19 @@
                         required: 'Vui lòng nhập số điện thoại',
                         digits: 'Số điện thoại phải là chữ số',
                         minlength: 'Số điện thoại phải có ít nhất 10 chữ số',
-                        maxlength: 'Số điện thoại không được quá 11 chữ số'
+                        maxlength: 'Số điện thoại không được quá 10 chữ số'
                     },
                     email: {
                         required: 'Vui lòng nhập email',
                         email: 'Email không đúng định dạng'
                     },
-                    province: {
+                    thanhPho: {
                         required: 'Vui lòng chọn thành phố'
                     },
-                    district: {
+                    huyen: {
                         required: 'Vui lòng chọn huyện'
                     },
-                    ward: {
+                    xa: {
                         required: 'Vui lòng chọn xã'
                     },
                     diaChi: {
@@ -211,30 +211,32 @@
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Thành Phố:</label>
-                                    <select id="province" name="province"
+                                    <select id="province" name="thanhPho"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                        <option value="">Chọn Thành Phố</option>
                                     </select>
+                                    <input type="hidden" id="provinceName" name="province">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Huyện:</label>
-                                    <select id="district" name="district"
+                                    <select id="district" name="huyen"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Huyện</option>
                                     </select>
+                                    <input type="hidden" id="districtName" name="district">
                                 </div>
                                 <div class="lg:col-span-4">
                                     <label class="font-semibold">Xã:</label>
-                                    <select id="ward" name="ward"
+                                    <select id="ward" name="xa"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Xã</option>
                                     </select>
+                                    <input type="hidden" id="wardName" name="ward">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Địa Chỉ : </label>
                                     <input type="text" th:field="*{diaChi}"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                           placeholder="Địa chỉ" name="diaChi">
+                                           placeholder="Địa chỉ" name="diaChi" value="">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <h3 class="text-xl leading-normal font-semibold mt-2">Phương Thức Thanh Toán</h3>
@@ -286,7 +288,8 @@
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
                                 <h5 class="font-semibold">Tiền Giảm</h5>
-                                <p class="text-slate-400 font-semibold">0 VNĐ</p>
+                                <span class="text-red-600"
+                                      th:text="${pgg != null ? #numbers.formatDecimal(pgg.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
                             </div>
                             <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
                                 <h5 class="font-semibold">Tiền Ship</h5>

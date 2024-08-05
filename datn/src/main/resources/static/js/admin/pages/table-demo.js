@@ -3,8 +3,8 @@ $(document).ready(function () {
         '#data-table-all', '#data-table-cancel', '#data-table-delivery',
         '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
         '#data-table-delivered', '#data-table-completed', '#data-table-cart',
-        '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1',
-        '#data-table-cart2','#data-table-cart3','#data-table-cart4','#data-table-cart5'
+        '#data-table-sp', '#data-table-pgg', '#data-table-account', '#data-table-cart1',
+        '#data-table-cart2', '#data-table-cart3', '#data-table-cart4', '#data-table-cart5'
     ];
 
     const initializeDataTable = (selector) => {
@@ -51,8 +51,25 @@ $(document).ready(function () {
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
     filterColumn('#trangThaiSpctFilter', 8, ['#data-table-sp']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
-    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
+
+    function applyFilters(columnBaseId, columnIndex) {
+        for (let i = 1; i <= 5; i++) {
+            const columnId = `${columnBaseId}${i}`;
+            const tableId = `#data-table-cart${i}`;
+            filterColumn(columnId, columnIndex, [tableId]);
+        }
+    }
+
+    applyFilters('#mauSac', 2);
+    applyFilters('#kichThuoc', 3);
+    applyFilters('#thuongHieu', 4);
+    applyFilters('#coGiay', 5);
+    applyFilters('#deGiay', 6);
+    applyFilters('#muiGiay', 7);
+    applyFilters('#lotGiay', 8);
+    applyFilters('#dayGiay', 9);
+    applyFilters('#chatLieu', 10);
 
     const filterDateRange = () => {
         const fromDate = $('#fromDate').val();
@@ -67,7 +84,7 @@ $(document).ready(function () {
     $('#fromDate, #toDate').on('change', filterDateRange);
 
     $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
+        function (settings, data) {
             if (settings.nTable.id === 'data-table-pgg') {
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
@@ -88,10 +105,7 @@ $(document).ready(function () {
                 }
                 return false;
 
-} else if (settings.nTable.id === 'data-table-account') {
             } else if (settings.nTable.id === 'data-table-account') {
-
-} else if (settings.nTable.id === 'data-table-account') {
 
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
@@ -108,7 +122,6 @@ $(document).ready(function () {
                 } else if (toDate) {
                     return dateStr <= toDate;
                 }
-
                 return true;
             }
             return true;

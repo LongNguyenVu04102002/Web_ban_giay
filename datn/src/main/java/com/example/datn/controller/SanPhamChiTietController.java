@@ -3,11 +3,18 @@ package com.example.datn.controller;
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
 import com.example.datn.service.*;
+import com.example.datn.service.Impl.HinhAnhServiceImpl;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +23,19 @@ import java.util.List;
 public class SanPhamChiTietController {
 
     @Autowired
-    private SanPhamChiTietService sanPhamChiTietService;
+    private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
     @Autowired
-    private SanPhamService sanPhamService;
+    private SanPhamServiceImpl sanPhamService;
 
     @Autowired
-    private KichThuocService kichThuocService;
+    private KichThuocServiceImpl kichThuocService;
 
     @Autowired
-    private MauSacService mauSacService;
+    private MauSacServiceImpl mauSacService;
 
     @Autowired
-    private HinhAnhService hinhAnhService;
+    private HinhAnhServiceImpl hinhAnhService;
 
 //    @Autowired
 //    private DotGiamGiaServiceImpl dotGiamGiaService;
@@ -65,9 +72,6 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("/bienthegiay/save-update")
-<<<<<<< HEAD
-    public String saveUpdate(SanPhamChiTiet sanPhamChiTiet) {
-=======
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
@@ -91,7 +95,6 @@ public class SanPhamChiTietController {
             }
         }
         hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
->>>>>>> 4b39c43c0139477d57559ecd982e34611c81893f
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }

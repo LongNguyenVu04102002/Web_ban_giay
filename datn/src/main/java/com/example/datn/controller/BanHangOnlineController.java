@@ -6,10 +6,11 @@ import com.example.datn.entity.MauSac;
 import com.example.datn.entity.SanPham;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.entity.ThuongHieu;
+import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
 import com.example.datn.service.Impl.KichThuocServiceImpl;
-import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
 import com.example.datn.service.Impl.SanPhamServiceImpl;
 import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class BanHangOnlineController {
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
+
     @Autowired
     private SanPhamServiceImpl sanPhamService;
 
@@ -42,6 +45,9 @@ public class BanHangOnlineController {
 
     @Autowired
     private KichThuocServiceImpl kichThuocService;
+
+    @Autowired
+    PhieuGiamGiaServiceImpl phieuGiamGiaService;
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -121,15 +127,21 @@ public class BanHangOnlineController {
 
     @GetMapping("/cart")
     public String cart(Model model) {
+        if (!model.containsAttribute("pgg")) {
+            model.addAttribute("pgg", new PhieuGiamGiaResponse());
+        }
         return "user/includes/content/cart";
     }
 
     @GetMapping("/checkout")
-    public String checkout(Model model) {
+    public String checkout(Model model, HttpSession session) {
+        PhieuGiamGiaResponse pgg = (PhieuGiamGiaResponse) session.getAttribute("pgg");
+        if (pgg != null) {
+            model.addAttribute("pgg", pgg);
+        }
         model.addAttribute("thanhToanResponse", new ThanhToanResponse());
         return "user/includes/content/checkout";
     }
-
 
     @PostMapping("/cart/add")
     public ResponseEntity<Map<String, Object>> addToCart(@RequestBody CartItem cartItem, @ModelAttribute("cartItems") List<CartItem> cartItems) {
@@ -187,11 +199,34 @@ public class BanHangOnlineController {
     @PostMapping("/checkout/save")
     public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
+                             HttpSession session,
                              Model model) {
-        String maVanDon = hoaDonService.saveHoaDonOnline(thanhToanResponse, cartItems);
+        PhieuGiamGiaResponse pgg = (PhieuGiamGiaResponse) session.getAttribute("pgg");
+        String maVanDon = hoaDonService.saveHoaDonOnline(pgg, thanhToanResponse, cartItems);
+        session.removeAttribute("pgg");
         cartItems.clear();
         model.addAttribute("maVanDon", maVanDon);
         return "user/includes/content/ordersusses";
+    }
+
+    @PostMapping("/apPhieuGiamGia")
+    public String apMaGiamGia(@RequestParam("maGiamGia") String maGiamGia,
+                              @ModelAttribute("cartItems") List<CartItem> cartItems,
+                              RedirectAttributes redirectAttributes,
+                              HttpSession session) {
+        PhieuGiamGiaResponse phieuGiamGiaResponse = phieuGiamGiaService.apPhieu(maGiamGia, cartItems);
+        if (phieuGiamGiaResponse != null) {
+            if (phieuGiamGiaResponse.getTienGiam().compareTo(BigDecimal.ZERO) > 0) {
+                session.setAttribute("pgg", phieuGiamGiaResponse);
+                redirectAttributes.addFlashAttribute("pgg", phieuGiamGiaResponse);
+                redirectAttributes.addFlashAttribute("thanhcong", true);
+            } else {
+                redirectAttributes.addFlashAttribute("thatbai", true);
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("thatbai", true);
+        }
+        return "redirect:/cart";
     }
 
 }

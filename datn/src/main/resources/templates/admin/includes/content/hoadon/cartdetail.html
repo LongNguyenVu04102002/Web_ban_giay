@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         const notificationTypeHtml = {
-            Success: `<div class="toast fade" id="notificationToastSuccess">
+            Add: `<div class="toast fade" id="notificationToastSuccess">
                         <div class="notification">
                             <div class="notification-content">
                                 <div class="mr-3">
@@ -21,7 +21,64 @@
                                 <div class="mr-4">
                                     <div class="notification-title">Success</div>
                                     <div class="notification-description">
-                                        Cập nhập hóa đơn thành công.
+                                        Thêm sản phẩm thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+            StepUp: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-emerald-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Success</div>
+                                    <div class="notification-description">
+                                        Tăng số lượng sản phẩm thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+            StepDown: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-emerald-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Success</div>
+                                    <div class="notification-description">
+                                        Giảm số lượng sản phẩm thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+            Delete: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-emerald-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Success</div>
+                                    <div class="notification-description">
+                                        Xóa sản phẩm thành công.
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +87,6 @@
         };
 
         function handleNotificationType(type) {
-            console.log('type', type)
             $('#notification-toast').append(notificationTypeHtml[type])
             $('#notification-toast .toast:last-child').toast('show');
             setTimeout(function(){
@@ -39,11 +95,30 @@
         }
 
         $(document).ready(function () {
-            // Convert Thymeleaf variable to JavaScript boolean safely
-            const success = JSON.parse([[${success}]]);
-            console.log('Success variable:', success); // Debugging line
-            if (success) {
-                handleNotificationType('Success');
+            const add = JSON.parse([[${add}]]);
+            if (add) {
+                handleNotificationType('Add');
+            }
+        });
+
+        $(document).ready(function () {
+            const stepup = JSON.parse([[${stepup}]]);
+            if (stepup) {
+                handleNotificationType('StepUp');
+            }
+        });
+
+        $(document).ready(function () {
+            const stepdown = JSON.parse([[${stepdown}]]);
+            if (stepdown) {
+                handleNotificationType('StepDown');
+            }
+        });
+
+        $(document).ready(function () {
+            const deletes = JSON.parse([[${deletes}]]);
+            if (deletes) {
+                handleNotificationType('Delete');
             }
         });
     </script>
