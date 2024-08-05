@@ -2,10 +2,20 @@ package com.example.datn.controller;
 
 import com.example.datn.dto.TabDataDTO;
 import com.example.datn.entity.GioHang;
+import com.example.datn.service.Impl.ChatLieuServiceImpl;
+import com.example.datn.service.Impl.CoGiayServiceImpl;
+import com.example.datn.service.Impl.DayGiayServiceImpl;
+import com.example.datn.service.Impl.DeGiayServiceImpl;
 import com.example.datn.service.Impl.GioHangServiceImpl;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.LotGiayServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.MuiGiayServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
+import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +40,33 @@ public class BanHangTaiQuayController {
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
+
+    @Autowired
+    private MauSacServiceImpl mauSacService;
+
+    @Autowired
+    private KichThuocServiceImpl kichThuocService;
+
+    @Autowired
+    private ChatLieuServiceImpl chatLieuService;
+
+    @Autowired
+    private CoGiayServiceImpl coGiayService;
+
+    @Autowired
+    private DayGiayServiceImpl dayGiayService;
+
+    @Autowired
+    private DeGiayServiceImpl deGiayService;
+
+    @Autowired
+    private LotGiayServiceImpl lotGiayService;
+
+    @Autowired
+    private MuiGiayServiceImpl muiGiayService;
+
+    @Autowired
+    private ThuongHieuServiceImpl thuongHieuService;
 
     @GetMapping("/banhang")
     private String view(Model model) {
@@ -58,6 +95,15 @@ public class BanHangTaiQuayController {
         model.addAttribute("tongTienGiam", tongTienGiam);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietService.getAll());
         model.addAttribute("khachHangList", khachHangService.getAll());
+        model.addAttribute("lstDeGiay", deGiayService.getAllDeGiay());
+        model.addAttribute("lstMauSac", mauSacService.getAll());
+        model.addAttribute("lstThuongHieu", thuongHieuService.getAll());
+        model.addAttribute("lstKichThuoc", kichThuocService.getAll());
+        model.addAttribute("lstCoGiay", coGiayService.getAllCoGiay());
+        model.addAttribute("lstLotGiay", lotGiayService.getAllLotGiay());
+        model.addAttribute("lstMuiGiay", muiGiayService.getAllMuiGiay());
+        model.addAttribute("lstChatLieu", chatLieuService.getAllChatLieu());
+        model.addAttribute("lstDayGiay", dayGiayService.getAllDayGiay());
 
         return "/admin/includes/content/banhang/home";
     }

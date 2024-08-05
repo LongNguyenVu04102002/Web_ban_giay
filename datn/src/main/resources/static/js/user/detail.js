@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
+                    location.reload();
                     handleNotificationType('Success');
                 } else {
                     console.error('Error:', data);

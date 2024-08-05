@@ -500,14 +500,17 @@
             padding: 0;
             background-color: #f8f9fa;
         }
+
         .container {
             padding: 20px;
         }
+
         .header {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
         }
+
         .card {
             background: #fff;
             border-radius: 8px;
@@ -517,28 +520,35 @@
             text-align: center;
             transition: transform 0.3s;
         }
+
         .card:hover {
             transform: translateY(-10px);
         }
+
         .card h2 {
             margin: 0;
             font-size: 3em;
             color: #007bff;
         }
+
         .card p {
             margin: 0;
             color: #6c757d;
         }
+
         .positive-change {
             color: green;
         }
+
         .negative-change {
             color: red;
         }
+
         .content {
             display: flex;
             justify-content: space-between;
         }
+
         .chart, .orders {
             background: #fff;
             border-radius: 8px;
@@ -548,22 +558,27 @@
             height: 400px;
             overflow-y: auto;
         }
+
         .orders ul {
             list-style: none;
             padding: 0;
         }
+
         .orders li {
             padding: 10px;
             border-bottom: 1px solid #dee2e6;
         }
+
         .orders li:last-child {
             border-bottom: none;
         }
+
         .pagination {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
         .pagination button {
             background: #007bff;
             color: #fff;
@@ -574,9 +589,11 @@
             cursor: pointer;
             transition: background 0.3s;
         }
+
         .pagination button:hover {
             background: #0056b3;
         }
+
         .tabs {
             display: flex;
             flex-direction: column;
@@ -586,6 +603,7 @@
             background-color: #f1f1f1;
             margin-right: 20px;
         }
+
         .tab {
             padding: 10px 20px;
             cursor: pointer;
@@ -594,16 +612,20 @@
             background-color: #fff;
             transition: background-color 0.3s;
         }
+
         .tab:last-child {
             border-bottom: none;
         }
+
         .tab.active {
             background-color: #4CAF50;
             color: white;
         }
+
         .tab:hover {
             background-color: #ddd;
         }
+
         .chart-container {
             flex: 1;
             display: none;
@@ -612,18 +634,22 @@
             border-radius: 10px;
             background-color: #fff;
         }
+
         .chart-container.active {
             display: block;
         }
+
         .input-container {
             margin-top: 20px;
             display: flex;
             justify-content: space-around;
             align-items: center;
         }
+
         .input-container label {
             margin-right: 10px;
         }
+
         .input-container select, .input-container input {
             padding: 5px;
             border: 1px solid #ccc;
@@ -631,9 +657,11 @@
             outline: none;
             transition: border-color 0.3s;
         }
+
         .input-container select:focus, .input-container input:focus {
             border-color: #4CAF50;
         }
+
         .input-container button {
             padding: 5px 15px;
             border: none;
@@ -643,6 +671,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .input-container button:hover {
             background-color: #45a049;
         }
@@ -724,7 +753,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const stats = {
                 customersToday: 0,
                 customersYesterday: 0,
@@ -960,7 +989,7 @@
                 }
             }
 
-            async function handleUpdateChart2(){
+            async function handleUpdateChart2() {
                 var startMonth = parseInt(document.getElementById('startMonth').value);
                 var endMonth = parseInt(document.getElementById('endMonth').value);
 
@@ -1035,14 +1064,14 @@
                 }
             }
 
-            document.getElementById("prevPage").addEventListener("click", function() {
+            document.getElementById("prevPage").addEventListener("click", function () {
                 if (currentPage > 1) {
                     currentPage--;
                     renderOrderList();
                 }
             });
 
-            document.getElementById("nextPage").addEventListener("click", function() {
+            document.getElementById("nextPage").addEventListener("click", function () {
                 if (currentPage * itemsPerPage < orders.length) {
                     currentPage++;
                     renderOrderList();
@@ -1220,8 +1249,8 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('.tab').click(function() {
+        $(document).ready(function () {
+            $('.tab').click(function () {
                 var tabId = $(this).attr('id');
                 $('.tab').removeClass('active');
                 $(this).addClass('active');

@@ -13,6 +13,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query("select p from TimeLine p where p.hoaDon.hoaDonId = :hoaDonId")
     List<TimeLine> findByHoaDonId(Long hoaDonId);
 
+
     @Query("select count(distinct t.hoaDon.khachHang.khachHangId) from TimeLine t where t.ngayTao = :ngayTao and t.hoaDon.trangThai = :trangThai")
     Long countKhachHangByNgayTaoAndTrangThai(@Param("ngayTao") LocalDate ngayTao, @Param("trangThai") int trangThai);
 

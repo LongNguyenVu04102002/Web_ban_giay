@@ -2,8 +2,12 @@ package com.example.datn.controller;
 
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
-import com.example.datn.model.response.request.HinhAnhDTO;
 import com.example.datn.service.*;
+import com.example.datn.service.Impl.HinhAnhServiceImpl;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
+import com.example.datn.service.Impl.MauSacServiceImpl;
+import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
+import com.example.datn.service.Impl.SanPhamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,42 +16,34 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/sanpham")
 public class SanPhamChiTietController {
 
     @Autowired
-    private SanPhamChiTietService sanPhamChiTietService;
+    private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
     @Autowired
-    private SanPhamService sanPhamService;
+    private SanPhamServiceImpl sanPhamService;
 
     @Autowired
-    private KichThuocService kichThuocService;
+    private KichThuocServiceImpl kichThuocService;
 
     @Autowired
-    private MauSacService mauSacService;
+    private MauSacServiceImpl mauSacService;
 
     @Autowired
-    private HinhAnhService hinhAnhService;
+    private HinhAnhServiceImpl hinhAnhService;
+
+//    @Autowired
+//    private DotGiamGiaServiceImpl dotGiamGiaService;
 
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
-        List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
-
-        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
-            SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
-            sanPhamChiTietResponse.setSanPhamChiTiet(sanPhamChiTiet);
-            sanPhamChiTietResponse.setDataImg(Base64.getEncoder().encodeToString(hinhAnhService.getImageBySanPhamChiTietIdWithPriority(sanPhamChiTiet.getSanPhamChiTietId(), 1)));
-            sanPhamChiTietResponses.add(sanPhamChiTietResponse);
-        }
-
-        model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/sanpham/bienthegiay/home";
     }
 
@@ -62,14 +58,17 @@ public class SanPhamChiTietController {
     @GetMapping("/bienthegiay/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.getById(id);
-        List<HinhAnh> hinhAnhList = hinhAnhService.getImagesBySanPhamChiTietId(id);
-        List<HinhAnhDTO> anhDTOS = hinhAnhList.stream()
-                .map(hinhAnh -> new HinhAnhDTO(hinhAnh.getHinhAnhId(), Base64.getEncoder().encodeToString(hinhAnh.getDataImg())))
-                .collect(Collectors.toList());
-        anhDTOS.forEach(dto -> System.out.println("Image ID: " + dto.getId()));
         model.addAttribute("spct", sanPhamChiTiet);
-        model.addAttribute("imageDTOs", anhDTOS);
         return getStringUpdate(model);
+    }
+
+    @PostMapping("/bienthegiay/save")
+    public String save(@ModelAttribute("sanPhamChiTietResponse") SanPhamChiTietResponse sanPhamChiTietResponse) {
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietResponse.getSanPhamChiTietList();
+        List<HinhAnh> hinhAnhList = new ArrayList<>();
+        hinhAnhService.save(hinhAnhList);
+        sanPhamChiTietService.save(sanPhamChiTietList);
+        return "redirect:/admin/sanpham/bienthegiay";
     }
 
     @PostMapping("/bienthegiay/save-update")
@@ -114,7 +113,6 @@ public class SanPhamChiTietController {
         return "admin/includes/content/sanpham/bienthegiay/form-update";
     }
 
-    //update trang thai
     @PostMapping("/bienthegiay/update/{id}")
     public String update(@PathVariable Long id) {
         sanPhamChiTietService.update(id);

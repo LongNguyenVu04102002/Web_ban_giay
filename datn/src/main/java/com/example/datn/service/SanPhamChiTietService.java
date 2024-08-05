@@ -17,9 +17,7 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet getById(Long id);
 
-//    void save(List<SanPhamChiTiet> sanPhamChiTietList);
-
-    void add(SanPhamChiTiet sanPhamChiTiet);
+    void save(List<SanPhamChiTiet> sanPhamChiTietList);
 
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 

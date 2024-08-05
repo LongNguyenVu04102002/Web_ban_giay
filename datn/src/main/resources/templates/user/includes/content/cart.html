@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>`,
-            Delete: `<div class="toast fade" id="notificationToastSuccess">
+            ThanhCong: `<div class="toast fade" id="notificationToastSuccess">
                         <div class="notification">
                             <div class="notification-content">
                                 <div class="mr-3">
@@ -41,7 +41,26 @@
                                 <div class="mr-4">
                                     <div class="notification-title">Success</div>
                                     <div class="notification-description">
-                                        Cập nhập giỏ hàng thành công.
+                                        Áp phiếu giảm giá thành công.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+            ThatBai:   `<div class="toast fade" id="notificationToastInfo">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-blue-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Sorry</div>
+                                    <div class="notification-description">
+                                        Phiếu giảm giá của bạn không có hiệu lực.
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +69,6 @@
         };
 
         function handleNotificationType(type) {
-            console.log('type', type)
             $('#notification-toast').append(notificationTypeHtml[type])
             $('#notification-toast .toast:last-child').toast('show');
             setTimeout(function () {
@@ -60,9 +78,20 @@
 
         $(document).ready(function () {
             const success = JSON.parse([[${success}]]);
-            console.log('Success variable:', success);
             if (success) {
                 handleNotificationType('Success');
+            }
+        });
+        $(document).ready(function () {
+            const thanhcong = JSON.parse([[${thanhcong}]]);
+            if (thanhcong) {
+                handleNotificationType('ThanhCong');
+            }
+        });
+        $(document).ready(function () {
+            const thatbai = JSON.parse([[${thatbai}]]);
+            if (thatbai) {
+                handleNotificationType('ThatBai');
             }
         });
     </script>
@@ -173,24 +202,25 @@
                     <div class="lg:col-span-3 md:order-2 order-1">
                         <ul class="list-none shadow dark:shadow-gray-800 rounded-md">
                             <li class="flex justify-between p-4">
-                                <span class="font-semibold text-lg">Tạm Tính :</span>
-                                <span class="font-semibold" th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></span>
-
+                                <span class="font-semibold text-lg">Tạm Tính:</span>
+                                <span class="font-semibold"
+                                      th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
                             </li>
                             <li class="flex justify-between p-4 border-t border-gray-100 dark:border-gray-800">
-                                <span class="font-semibold text-lg">Tiền Giảm :</span>
-                                <span class="text-red-600">0 VNĐ</span>
+                                <span class="font-semibold text-lg">Tiền Giảm:</span>
+                                <span class="text-red-600"
+                                      th:text="${pgg.tienGiam != null ? #numbers.formatDecimal(pgg.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
                             </li>
                             <li class="flex justify-between font-semibold p-4 border-t border-gray-200 dark:border-gray-600">
-                                <span class="font-semibold text-lg">Tổng Tiền :</span>
-                                <span class="font-semibold" th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></span>
+                                <span class="font-semibold text-lg">Tổng Tiền:</span>
+                                <span class="font-semibold"
+                                      th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]) - (pgg.tienGiam != null ? pgg.tienGiam : 0), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
                             </li>
                         </ul>
-
                         <div class="subcribe-form mt-6">
                             <form class="relative max-w-xl" th:action="@{/apPhieuGiamGia}"
                                   method="post">
-                                <input type="text"
+                                <input type="text" name="maGiamGia" th:value="${pgg != null ? pgg.maPhieu : ''}"
                                        class="py-4 pe-40 ps-6 w-full h-[50px] outline-none text-black dark:text-white rounded-full bg-white dark:bg-slate-900 shadow dark:shadow-gray-800">
                                 <button type="submit"
                                         class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center absolute top-[2px] end-[3px] h-[46px] bg-orange-500 text-white rounded-full">
