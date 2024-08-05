@@ -23,8 +23,6 @@ public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
 
-
-
     @GetMapping("/khachhang")
     public String show(Model model) {
         List<KhachHang> khachHangList = khachHangService.getAll();
@@ -65,6 +63,17 @@ public class KhachHangController {
             result.addError(new FieldError("khachHang", "email", "Email đã tồn tại"));
         }
 
+        String sdt = khachHang.getSdt();
+        if (sdt != null) {
+            if (sdt.length() < 10) {
+                result.addError(new FieldError("khachHang", "sdt", "Số điện thoại đang ít hơn 10 chữ số"));
+            }
+            if (sdt.length() > 10) {
+                result.addError(new FieldError("khachHang", "sdt", "Số điện thoại không được vượt quá 10 chữ số"));
+            }
+
+        }
+
         // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/form";
@@ -79,34 +88,8 @@ public class KhachHangController {
     }
 
 
-
     @PostMapping("/khachhang/update")
-    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
-        // Kiểm tra trùng lặp số điện thoại
-        if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
-            result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
-        }
-
-        // Kiểm tra trùng lặp email
-        if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
-            result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
-        }
-
-        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
-        if (result.hasErrors()) {
-            return "admin/includes/content/khachhang/update";
-        }
-
-        // Cập nhật thông tin khách hàng
-        redirectAttributes.addFlashAttribute("message", "Chỉnh sửa thông tin khách hàng thành công!");
-        khachHangService.update(khachHang);
-
-        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
-    }
-
-
-    @PostMapping("/khachhang/updateDiaChi")
-    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
+    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
             result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
@@ -139,7 +122,6 @@ public class KhachHangController {
         khachHang.setDiaChiList(validDiaChiList);
 
         // Cập nhật thông tin khách hàng
-        redirectAttributes.addFlashAttribute("message", "Thêm địa chỉ thành công!");
         khachHangService.update(khachHang);
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
@@ -147,20 +129,10 @@ public class KhachHangController {
 
 
 
-
     @GetMapping("/khachhang/{khachHangId}/toggle")
-    public String toggleTrangThai(@PathVariable Long khachHangId, RedirectAttributes redirectAttributes) {
-        KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
-        boolean isActive = khachHang.isTrangThai();
-        String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
-        String message = "Trạng thái của khách hàng có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
-        redirectAttributes.addFlashAttribute("message2", message);
-        redirectAttributes.addFlashAttribute("isActive", isActive);
+    public String toggleTrangThai(@PathVariable Long khachHangId) {
+        khachHangService.toggleTrangThai(khachHangId);
         return "redirect:/admin/taikhoan/khachhang";
     }
-
-
-
-
 
 }

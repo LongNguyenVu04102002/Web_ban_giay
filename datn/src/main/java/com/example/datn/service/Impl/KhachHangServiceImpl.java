@@ -4,11 +4,9 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +15,6 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<KhachHang> getAll() {
@@ -30,16 +26,15 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.findById(id).orElse(null);
     }
 
-
     @Override
     public KhachHang save(KhachHang khachHang) {
 
-//        if (isSdtExist(khachHang.getSdt())) {
-//            throw new RuntimeException("Số điện thoại đã tồn tại");
-//        }
-//        if (isEmailExist(khachHang.getEmail())) {
-//            throw new RuntimeException("Email đã tồn tại");
-//        }
+        if (isSdtExist(khachHang.getSdt())) {
+            throw new RuntimeException("Số điện thoại đã tồn tại");
+        }
+        if (isEmailExist(khachHang.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
         return khachHangRepository.save(khachHang);
 
     }
@@ -66,11 +61,6 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public KhachHang getAllByEmail(String email) {
-        return khachHangRepository.findByEmail(email);
-    }
-
-    @Override
     public boolean isEmailExist(String email) {
         return khachHangRepository.existsByEmail(email);
     }
@@ -83,34 +73,4 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
 
-    public void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) {
-        if (khachHangRepository.findByEmail(email) != null) {
-            throw new RuntimeException("Email đã tồn tại");
-        }
-        if (khachHangRepository.findBySdt(sdt) != null) {
-            throw new RuntimeException("Số điện thoại đã tồn tại");
-        }
-
-        KhachHang khachHang = new KhachHang();
-        khachHang.setEmail(email);
-        khachHang.setMatKhau(passwordEncoder.encode(password));
-        khachHang.setHoTen(hoTen);
-        khachHang.setSdt(sdt);
-        khachHang.setNgaySinh(ngaySinh);
-        khachHang.setGioiTinh(gioiTinh);
-        khachHang.setTrangThai(trangThai);
-
-        khachHangRepository.save(khachHang);
-    }
-
-
-    @Override
-    public KhachHang findByResetToken(String token) {
-        return khachHangRepository.findByResetToken(token);
-    }
-
-    @Override
-    public KhachHang findByEmailAndSdt(String email, String sdt) {
-        return khachHangRepository.findByEmailAndSdt(email,sdt);
-    }
 }
