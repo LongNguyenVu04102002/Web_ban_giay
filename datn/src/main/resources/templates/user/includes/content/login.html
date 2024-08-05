@@ -37,15 +37,6 @@
                                 <img src="/images/logo_xboy.png" class="h-[75px] mx-auto block" alt="Logo">
                             </a>
                         </div>
-
-                        <!-- Thông báo lỗi hoặc thành công -->
-                        <div th:if="${param.error != null}" class="alert bg-red-500 text-white p-4 rounded-lg mb-4 text-center shadow-md">
-                            <p th:text="${param.error}">Invalid username or password.</p>
-                        </div>
-                        <div th:if="${param.success != null}" class="alert bg-green-500 text-white p-4 rounded-lg mb-4 text-center shadow-md">
-                            <p th:text="${param.success}">Login successful!</p>
-                        </div>
-
                         <form class="text-start lg:py-20 py-8" th:action="@{/login}" method="post">
                             <div class="grid grid-cols-1">
                                 <div class="mb-4">

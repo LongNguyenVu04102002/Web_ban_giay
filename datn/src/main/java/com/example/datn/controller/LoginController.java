@@ -26,11 +26,8 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
-                                @RequestParam(value = "success", required = false) String success,
-                                Model model) {
-        model.addAttribute("error", error);
-        model.addAttribute("success", success);
+    public String showLoginPage() {
+
         return "user/includes/content/login";
     }
 

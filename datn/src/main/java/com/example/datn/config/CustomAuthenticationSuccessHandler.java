@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -32,9 +33,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response.sendRedirect("/admin/thongke");
         } else if (roles.contains("ROLE_NHANVIEN")) {
             response.sendRedirect("/admin/nhanvien");
-        }
-        else {
+        } else {
             response.sendRedirect("/home");
         }
     }
+
+
 }

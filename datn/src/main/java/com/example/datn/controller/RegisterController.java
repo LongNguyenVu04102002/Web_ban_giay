@@ -40,6 +40,7 @@ public class RegisterController {
                                    @RequestParam(required = false) Boolean trangThai,
                                    Model model) {
         // Thiết lập giá trị mặc định nếu các trường null
+
         if (ngaySinh == null) {
             ngaySinh = LocalDate.now().minusYears(1); // Ngày sinh mặc định là ngày hôm qua
         }
@@ -50,13 +51,31 @@ public class RegisterController {
             trangThai = true; // Trạng thái mặc định là true
         }
 
+        // Kiểm tra thông tin đầu vào (ví dụ: email đã tồn tại, mật khẩu quá yếu, v.v.)
+        if (hoTen == null || hoTen.isEmpty() || hoTen.equals( "^[\\p{L} \\s]*$")) {
+            model.addAttribute("error", "hoTen không được để trống.");
+            return "user/includes/content/register";
+        }
+        if (email == null || email.isEmpty()) {
+            model.addAttribute("error", "Email không được để trống.");
+            return "user/includes/content/register";
+        }
+        if (password == null || password.length() < 6) {
+            model.addAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự.");
+            return "user/includes/content/register";
+        } if (sdt == null || sdt.length() != 10) {
+            model.addAttribute("error", "sdt sdt chỉ dc 10 số.");
+            return "user/includes/content/register";
+        }
+
         try {
             khachHangService.registerNewKhachHang(email, password, hoTen, sdt, ngaySinh, gioiTinh, trangThai);
             return "redirect:/login?success";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
-            return "user/includes/content/login";
+            return "user/includes/content/register";
         }
     }
+
 
 }
