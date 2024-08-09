@@ -39,13 +39,30 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     }
 
     @Override
-    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
-        for (SanPhamChiTiet spct : sanPhamChiTietList) {
-            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
-                spct.setBarCode(generateBarCode());
-            }
+    public boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId) {
+        List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietRepository.findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(sanPhamId, kichThuocId, mauSacId);
+        if (sanPhamChiTiets.size() > 0){
+            return true;
         }
-        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+        return false;
+    }
+
+//    @Override
+//    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
+//        for (SanPhamChiTiet spct : sanPhamChiTietList) {
+//            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
+//                spct.setBarCode(generateBarCode());
+//            }
+//        }
+//        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+//    }
+
+    @Override
+    public void add(SanPhamChiTiet sanPhamChiTiet) {
+        if (sanPhamChiTiet.getBarCode() == null || sanPhamChiTiet.getBarCode().isEmpty()) {
+            sanPhamChiTiet.setBarCode(generateBarCode());
+        }
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
     }
 
     @Override

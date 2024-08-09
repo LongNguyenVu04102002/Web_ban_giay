@@ -1,13 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Thêm hoặc Cập Nhật Nhân Viên</title>
+    <title>Title</title>
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <style type="text/css">
+        .css_select_div{ text-align: center;}
+        .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
+    </style>
     <script>
+        $(document).ready(function() {
+            // Lấy tỉnh thành
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="'+val_tinh.id+'">'+val_tinh.full_name+'</option>');
+                    });
+                    $("#tinh").change(function() {
+                        var idtinh = $(this).val();
+                        // Lấy quận huyện
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/'+idtinh+'.htm', function(data_quan) {
+                            if (data_quan.error == 0) {
+                                $("#quan").html('<option value="0">Quận Huyện</option>');
+                                $("#phuong").html('<option value="0">Phường Xã</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#quan").append('<option value="'+val_quan.id+'">'+val_quan.full_name+'</option>');
+                                });
+                                // Lấy phường xã
+                                $("#quan").change(function() {
+                                    var idquan = $(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/'+idquan+'.htm', function(data_phuong) {
+                                        if (data_phuong.error == 0) {
+                                            $("#phuong").html('<option value="0">Phường Xã</option>');
+                                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                                $("#phuong").append('<option value="'+val_phuong.id+'">'+val_phuong.full_name+'</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+
+            // Update address field
+            $("#tinh, #quan, #phuong").change(function() {
+                var tinh = $("#tinh option:selected").text();
+                var quan = $("#quan option:selected").text();
+                var phuong = $("#phuong option:selected").text();
+
+                // Combine values and set to address field
+                $("#diachi").val(tinh + ", " + quan + ", " + phuong);
+            });
+        });
         function confirmSubmission() {
-            return confirm('Bạn có chắc chắn muốn thêm/cập nhật nhân viên này không?');
+            return confirm('Bạn có chắc chắn muốn thêm hoặc sửa nhân viên này không?');
         }
     </script>
 </head>
@@ -71,39 +120,32 @@
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Thành Phố:</label>
-                                <select id="province" th:field="*{thanhPho}" onchange="loadDistricts()"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option th:each="province : ${provinces}"
-                                            th:value="${province.provinceId}"
-                                            th:text="${province.provinceName}">
-                                    </option>
+                                <select id="tinh" th:field="*{thanhPho}" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option value="0">Chọn tỉnh/thành phố</option>
                                 </select>
-                                <div th:if="${#fields.hasErrors('thanhPho')}" th:errors="*{thanhPho}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
-                                <label class="font-semibold">Huyện:</label>
-                                <select id="district" th:field="*{huyen}" onchange="loadWards()"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
-                                    <option value="">Chọn huyện</option>
+                                <label class="font-semibold">Quận/Huyện:</label>
+                                <select id="quan" th:field="*{huyen}" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                    <option value="0">Chọn quận/huyện</option>
                                 </select>
-                                <div th:if="${#fields.hasErrors('huyen')}" th:errors="*{huyen}" class="text-red-500 text-sm"></div>
                             </div>
                             <div class="lg:col-span-4">
-                                <label class="font-semibold">Xã:</label>
-                                <select id="ward" th:field="*{xa}"
-                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
-                                    <option value="">Chọn xã</option>
+                                <label class="font-semibold">Phường/Xã:</label>
+                                <select id="phuong" th:field="*{xa}" class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
+                                    <option value="0">Chọn phường/xã</option>
                                 </select>
-                                <div th:if="${#fields.hasErrors('xa')}" th:errors="*{xa}" class="text-red-500 text-sm"></div>
                             </div>
+
                             <div class="lg:col-span-12">
-                                <label class="form-label font-semibold">Địa Chỉ: </label>
-                                <input type="text" th:field="*{diaChi}"
-                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
-                                       placeholder="Địa Chỉ">
+                                <label class="form-label font-semibold">địa chỉ: </label>
+                                <input type="text" id="diachi" th:field="*{diaChi}" class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0" readonly />
                                 <div th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}" class="text-red-500 text-sm"></div>
-                            </div>
-                        </div>
+
+                                </label>
+
+
+
                         <div class="mt-10 mb-10 flex justify-center space-x-4">
                             <a th:href="@{/admin/taikhoan/nhanvien}"
                                class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
@@ -118,11 +160,14 @@
                                 Xóa
                             </a>
                         </div>
+                        </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 </body>
 </html>

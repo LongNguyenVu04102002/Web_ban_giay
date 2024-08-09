@@ -4,14 +4,78 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Khách Hàng</title>
+    <title>Title</title>
+
+    <style>
+        .btn-container {
+            margin-left: auto; /* Đẩy nút về phía bên phải */
+        }
+
+        .custom-button {
+            display: inline-block;
+            padding: 8px 16px; /* Điều chỉnh kích thước padding */
+            font-size: 14px; /* Kích thước font nhỏ hơn */
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff; /* Màu nền xanh dương */
+            border: none;
+            border-radius: 8px; /* Bo tròn góc với bán kính lớn hơn */
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .custom-button:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+            transform: scale(1.05); /* Tăng kích thước khi hover */
+        }
+
+        .custom-button:active {
+            background-color: #004080; /* Màu nền khi nhấn */
+            transform: scale(0.98); /* Thu nhỏ kích thước khi nhấn */
+        }
+
+
+
+        .alert-success {
+            color: green;
+        }
+        .alert-danger {
+            color: red;
+        }
+
+
+    </style>
+
+    <script>
+        function confirmToggle() {
+            return confirm("Bạn có muốn chuyển trạng thái không?");
+        }
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
+    <a href="#" th:href="@{/api/export/khachhang}" class="btn btn-primary">Xuất Excel</a>
+    <div th:if="${message2}" th:classappend="${isActive ? 'alert-danger' : 'alert-success'}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message2}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Khách Hàng
         </h2>
+        <div class="btn-container">
+            <a th:href="@{/admin/taikhoan/khachhang}" class="custom-button">Refresh</a>
+        </div>
     </div>
     <div class="bg-white">
         <div class="flex items-center justify-between border-b border-stroke py-4 px-4">
@@ -54,14 +118,10 @@
                            placeholder="To date">
                 </label>
             </div>
-            <div class="space-x-2">
+            <div>
                 <a th:href="@{/admin/taikhoan/khachhang/form}"
                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
                     Thêm khách hàng
-                </a>
-                <a th:href="@{/api/export/khachhang}"
-                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
-                    Xuất Excel
                 </a>
             </div>
         </div>
@@ -92,31 +152,48 @@
                             <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
+
+                    <!--                    <td th:text="${nhanVien.diaChi + ', ' + nhanVien.xa + ', ' + nhanVien.huyen + ', ' + nhanVien.thanhPho}"></td>-->
                     <td>
                         <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
                             <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
-                        <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}"
-                              method="get" onsubmit="return confirmToggle()">
+                        <form th:action="@{/admin/taikhoan/khachhang/{khachHangId}/toggle(khachHangId=${kh.khachHangId})}" method="get" onsubmit="return confirmToggle()">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
                                        th:checked="${!kh.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
+
+
+
                         <a th:href="@{/admin/taikhoan/khachhang/update/{id}(id=${kh.khachHangId})}">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-6 h-6">
-                                <path fill-rule="evenodd" d="M20.599 1.5c-.376 0-.743.111-1.055.32l-5.08 3.385a18.747 18.747 0 00-3.471 2.987 10.04 10.04 0 014.815 4.815 18.748 18.748 0 002.987-3.472l3.386-5.079A1.902 1.902 0 0020.599 1.5zm-8.3 14.025a18.76 18.76 0 001.896-1.207 8.026 8.026 0 00-4.513-4.513A18.75 18.75 0 008.475 11.7l-.278.5a5.26 5.26 0 013.601 3.602l.502-.278zM6.75 13.5A3.75 3.75 0 003 17.25a1.5 1.5 0 01-1.601 1.497.75.75 0 00-.7 1.123 5.25 5.25 0 009.8-2.62 3.75 3.75 0 00-3.75-3.75z" clip-rule="evenodd"></path>
+                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                 height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M21.29 2.71a1 1 0 0 0-1.42 0l-2.13 2.13 2.12 2.12 2.13-2.13a1 1 0 0 0 0-1.42zM3 16.3V21h4.7l11-11-4.7-4.7L3 16.3z"/>
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
                         </a>
+
+
                         <a th:href="@{/admin/taikhoan/khachhang/detail/{id}(id=${kh.khachHangId})}">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-6 h-6">
-                                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
-                                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd"></path>
+                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                 height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
                         </a>
+
+
                     </td>
                 </tr>
                 </tbody>
