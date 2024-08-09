@@ -38,29 +38,19 @@ public class NhanVienController {
         model.addAttribute("nhanVien", new NhanVien());
         return "admin/includes/content/nhanvien/form";
     }
+
     @PostMapping("/nhanvien/save")
-    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model) {
-        boolean isNewEmployee = (nhanVien.getNhanVienId() == null);
-
-        if (isNewEmployee) {
-            // Kiểm tra trùng email và số điện thoại chỉ khi thêm mới nhân viên
-            if (nhanVienService.existsByEmail(nhanVien.getEmail())) {
-                bindingResult.rejectValue("email", "error.nhanVien", "Email đã tồn tại");
-            }
-            if (nhanVienService.existsBySdt(nhanVien.getSdt())) {
-                bindingResult.rejectValue("sdt", "error.nhanVien", "Số điện thoại đã tồn tại");
-            }
-        } else {
-            // Khi cập nhật, chỉ kiểm tra trùng email và số điện thoại nếu chúng đã thay đổi
-            NhanVien existingNhanVien = nhanVienService.getById(nhanVien.getNhanVienId());
-            if (!nhanVien.getEmail().equals(existingNhanVien.getEmail()) && nhanVienService.existsByEmail(nhanVien.getEmail())) {
-                bindingResult.rejectValue("email", "error.nhanVien", "Email đã tồn tại");
-            }
-            if (!nhanVien.getSdt().equals(existingNhanVien.getSdt()) && nhanVienService.existsBySdt(nhanVien.getSdt())) {
-                bindingResult.rejectValue("sdt", "error.nhanVien", "Số điện thoại đã tồn tại");
-            }
+    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model ) {
+        if (nhanVienService.existsByEmail(nhanVien.getEmail()) != null){
+//                ||nhanVienService.existsBySdt(nhanVien.getSdt())) {
+            bindingResult.rejectValue("email", "error.nhanVien", "email da ton tai");
+//            bindingResult.rejectValue("sdt", "error.nhanVien", "sdt da ton tai");
+            return "admin/includes/content/nhanvien/form";
         }
-
+        if (nhanVienService.existsBySdt(nhanVien.getSdt())) {
+            bindingResult.rejectValue("sdt", "error.nhanVien", "sdt da ton tai");
+            return "admin/includes/content/nhanvien/form";
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("nhanVien", nhanVien);
             return "admin/includes/content/nhanvien/form";

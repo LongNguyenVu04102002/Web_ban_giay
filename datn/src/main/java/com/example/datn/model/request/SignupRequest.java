@@ -8,10 +8,9 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Setter
 @Getter
+@Setter
 public class SignupRequest {
-
   @NotBlank
   @Size(min = 3, max = 20)
   private String username;

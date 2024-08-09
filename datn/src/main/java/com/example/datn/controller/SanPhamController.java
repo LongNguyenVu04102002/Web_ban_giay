@@ -61,13 +61,13 @@ public class SanPhamController {
     }
 
     private String getString(Model model) {
-        model.addAttribute("lstDeGiay", deGiayService.getDeGiaysByTrangThai(false));
-        model.addAttribute("lstThuongHieu", thuongHieuService.getThuongHieusByTrangThai(false));
-        model.addAttribute("lstCoGiay", coGiayService.getCoGiaysByTrangThai(false));
-        model.addAttribute("lstLotGiay", lotGiayService.getLotGiaysByTrangThai(false));
-        model.addAttribute("lstMuiGiay", muiGiayService.getMuiGiaysByTrangThai(false));
-        model.addAttribute("lstChatLieu", chatLieuService.getChatLieusByTrangThai(false));
-        model.addAttribute("lstDayGiay", dayGiayService.getDayGiaysByTrangThai(false));
+        model.addAttribute("lstDeGiay", deGiayService.getAllDeGiay());
+        model.addAttribute("lstThuongHieu", thuongHieuService.getAll());
+        model.addAttribute("lstCoGiay", coGiayService.getAllCoGiay());
+        model.addAttribute("lstLotGiay", lotGiayService.getAllLotGiay());
+        model.addAttribute("lstMuiGiay", muiGiayService.getAllMuiGiay());
+        model.addAttribute("lstChatLieu", chatLieuService.getAllChatLieu());
+        model.addAttribute("lstDayGiay", dayGiayService.getAllDayGiay());
         return "admin/includes/content/sanpham/giay/form";
     }
 

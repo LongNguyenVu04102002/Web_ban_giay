@@ -34,9 +34,4 @@ public class MauSacServiceImpl implements MauSacService {
         mauSacRepository.deleteById(id);
     }
 
-    @Override
-    public List<MauSac> getMauSacsByTrangThai(boolean trangThai) {
-        return mauSacRepository.findByTrangThai(trangThai);
-    }
-
 }

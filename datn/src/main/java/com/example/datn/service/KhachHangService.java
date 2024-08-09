@@ -1,7 +1,9 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.KhachHang;
+import com.example.datn.model.request.SignupRequest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface KhachHangService {
@@ -18,10 +20,17 @@ public interface KhachHangService {
 
     boolean isSdtExist(String sdt);
 
+
     boolean isEmailExist(String email);
 
     boolean isPhoneNumberDuplicate(String sdt, Long excludeId);
 
     boolean isEmailDuplicate(String email, Long excludeId);
+
+    void register(SignupRequest signupRequest);
+
+    KhachHang findByResetToken(String token);
+
+    KhachHang findByEmailAndSdt(String email, String sdt);
 
 }

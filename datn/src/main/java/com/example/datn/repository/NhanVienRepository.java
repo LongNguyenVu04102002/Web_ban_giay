@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     Optional<NhanVien> findBySdt(String sdt);
 
-    Optional<NhanVien> findByEmail(String email);
+    NhanVien findByEmail(String email);
 
     @Query("SELECT nv FROM NhanVien nv ORDER BY nv.nhanVienId DESC")
     List<NhanVien> findAll();

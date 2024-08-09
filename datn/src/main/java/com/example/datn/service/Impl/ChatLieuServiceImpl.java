@@ -34,20 +34,4 @@ public class ChatLieuServiceImpl implements ChatLieuService {
         chatLieuRepository.deleteById(id);
     }
 
-    @Override
-    public boolean isTenExists(String ten) {
-        return chatLieuRepository.findByTen(ten).isPresent();
-    }
-
-    @Override
-    public boolean isTenExistsForUpdate(String ten, Long id) {
-        List<ChatLieu> chatLieuList = chatLieuRepository.findAllByTenAndChatLieuIdNot(ten, id);
-        return !chatLieuList.isEmpty();
-    }
-
-    @Override
-    public List<ChatLieu> getChatLieusByTrangThai(boolean trangThai) {
-        return chatLieuRepository.findByTrangThai(trangThai);
-    }
-
 }

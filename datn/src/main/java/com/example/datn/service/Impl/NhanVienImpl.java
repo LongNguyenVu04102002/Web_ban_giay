@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NhanVienServiceImpl implements NhanVienService {
+public class NhanVienImpl implements NhanVienService {
+
 
     @Autowired
     private NhanVienRepository nhanVienRepository;
@@ -52,3 +53,6 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
 }
+
+
+

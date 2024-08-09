@@ -3,54 +3,54 @@ package com.example.datn.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
 	@Autowired
-	private AuthenticationSuccessHandler successHandler;
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+	@Autowired
+	private CustomAccessDeniedHandler customAccessDeniedHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/static/**").permitAll()
-						.requestMatchers("/admin/**").hasAuthority("ADMIN")
+				.authorizeHttpRequests((requests) -> requests
+						.requestMatchers("/", "/home", "/shop", "/register", "/forgot-password", "/reset-password", "/css/**", "/js/**", "/images/**").permitAll()
+						.requestMatchers("/admin/taikhoan/**").hasRole("ADMIN")
+						.requestMatchers("/admin/**").hasAnyRole("ADMIN", "NHANVIEN")
 						.anyRequest().permitAll()
 				)
-				.formLogin(form -> form
+				.formLogin((form) -> form
 						.loginPage("/login")
-						.successHandler(successHandler)
-						.failureUrl("/login?error=true")
+						.loginProcessingUrl("/login")
+						.successHandler(customAuthenticationSuccessHandler)
+						.failureUrl("/login?error") // Thêm tham số error vào URL khi đăng nhập thất bại
+						.permitAll()
 				)
-				.logout(logout -> logout
+				.logout((logout) -> logout
 						.logoutUrl("/logout")
-						.logoutSuccessUrl("/login?logout=true")
+						.logoutSuccessUrl("/login?logout") // Thêm tham số logout vào URL khi đăng xuất thành công
+						.invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID")
+						.permitAll()
 				)
-				.exceptionHandling(exceptionHandling -> exceptionHandling
-						.accessDeniedPage("/login?accessDenied=true")
+				.exceptionHandling((exceptionHandling) -> exceptionHandling
+						.accessDeniedHandler(customAccessDeniedHandler)
 				);
 
 		return http.build();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }

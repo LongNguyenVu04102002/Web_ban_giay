@@ -23,9 +23,9 @@
                     }
                 },
                 rules: {
-                    username: {
+                    email: {
                         required: true,
-                        minlength: 8
+                        email: true
                     },
                     password: {
                         required: true,
@@ -33,9 +33,9 @@
                     },
                 },
                 messages: {
-                    username: {
-                        required: 'Vui lòng nhập tên tên đăng nhập',
-                        minlength: 'Tên đăng nhập phải có ít nhất 8 ký tự'
+                    email: {
+                        required: 'Vui lòng nhập email',
+                        email: 'Email không đúng định dạng'
                     },
                     password: {
                         required: 'Vui lòng nhập mật khẩu',
@@ -70,7 +70,7 @@
                                            placeholder="name@example.com" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="font-semibold" for="LoginPassword">Password</label>
+                                    <label class="font-semibold" for="LoginPassword">Mật Khẩu</label>
                                     <input id="LoginPassword" type="password" name="password"
                                            class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
                                            placeholder="Password" required>

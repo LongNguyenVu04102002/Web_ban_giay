@@ -1,132 +1,144 @@
 package com.example.datn.controller;
 
-import com.example.datn.entity.ERole;
-import com.example.datn.entity.TaiKhoan;
-import com.example.datn.entity.VaiTro;
-import com.example.datn.model.request.LoginRequest;
+import com.example.datn.config.Utility;
+import com.example.datn.entity.KhachHang;
 import com.example.datn.model.request.SignupRequest;
-import com.example.datn.service.Impl.TaiKhoanServiceImpl;
-import com.example.datn.service.Impl.VaiTroServiceImpl;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import com.example.datn.service.Impl.EmailService;
+import com.example.datn.service.Impl.KhachHangServiceImpl;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
 @Controller
 public class LoginController {
 
     @Autowired
-    private TaiKhoanServiceImpl taiKhoanService;
+    private EmailService emailService;
 
     @Autowired
-    private VaiTroServiceImpl vaiTroService;
+    private KhachHangServiceImpl khachHangService;
 
     @Autowired
-    private PasswordEncoder encoder;
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public String showLogin(Model model) {
-        model.addAttribute("loginRequest", new LoginRequest());
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout,
+                                Model model) {
+
         return "authentication/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "logout", required = false) String logout,
+                        Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Invalid username or password.");
+        }
+        if (logout != null) {
+            model.addAttribute("logout", "You have been logged out successfully.");
+        }
+        return "authentication/login";
+    }
+
+    @GetMapping("/logout-success")
+    public String logoutSuccess() {
+        return "redirect:/login?logout";
+    }
+
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm(@RequestParam(value = "success", required = false) String success,
+                                         @RequestParam(value = "error", required = false) String error,
+                                         Model model) {
+        if (success != null) {
+            model.addAttribute("message", "Đã gửi liên kết đặt lại mật khẩu vào email của bạn.");
+        }
+        if (error != null) {
+            model.addAttribute("error", "Email không hợp lệ. Vui lòng thử lại.");
+        }
+        return "authentication/forgot";
+    }
+
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(HttpServletRequest request, @RequestParam("email") String email, @RequestParam("sdt") String sdt, Model model) {
+        KhachHang khachHang = khachHangService.findByEmailAndSdt(email, sdt);
+        if (khachHang != null) {
+            String token = UUID.randomUUID().toString();
+            khachHang.setResetToken(token);
+            khachHangService.save(khachHang);
+
+            String resetPasswordLink = Utility.getSiteURL(request) + "/reset-password?token=" + token;
+            try {
+                emailService.sendEmail(khachHang.getEmail(), "Reset Password",
+                        "Click the link to reset your password: " + resetPasswordLink);
+                model.addAttribute("message", "Đã gửi liên kết đặt lại mật khẩu vào email của bạn.");
+                return "authentication/forgot";
+            } catch (MessagingException e) {
+                model.addAttribute("error", "Có lỗi xảy ra khi gửi email. Vui lòng thử lại.");
+                return "authentication/forgot";
+            }
+        } else {
+            model.addAttribute("error", "Thông tin không chính xác. Vui lòng kiểm tra lại.");
+            return "authentication/forgot";
+        }
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        KhachHang khachHang = khachHangService.findByResetToken(token);
+        if (khachHang != null) {
+            model.addAttribute("token", token);
+        } else {
+            model.addAttribute("error", "Liên kết đặt lại mật khẩu không hợp lệ.");
+        }
+        return "authentication/reset";
+    }
+
+    @PostMapping("/reset-password")
+    public String processResetPassword(@RequestParam("token") String token,
+                                       @RequestParam("password") String password,
+                                       Model model) {
+        KhachHang khachHang = khachHangService.findByResetToken(token);
+        if (khachHang != null) {
+            khachHang.setPassword(passwordEncoder.encode(password));
+            khachHang.setResetToken(null); // Clear the token after successful password reset
+            khachHangService.save(khachHang);
+            model.addAttribute("message", "Mật khẩu đã được thay đổi thành công. Vui lòng đăng nhập.");
+            return "redirect:/login?resetSuccess";
+        } else {
+            model.addAttribute("error", "Liên kết đặt lại mật khẩu không hợp lệ.");
+            return "authentication/reset";
+        }
     }
 
     @GetMapping("/register")
-    public String showRegister(Model model) {
-        model.addAttribute("sigUpRequest", new SignupRequest());
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("signUpRequest", new SignupRequest());
         return "authentication/register";
     }
 
-    @GetMapping("/logout")
-    public String logOut(Model model, HttpSession session) {
-        session.invalidate();
-        model.addAttribute("loginRequest", new LoginRequest());
-        return "authentication/login";
-    }
-
-//    @PostMapping("/signin")
-//    public String login(@Valid @ModelAttribute LoginRequest loginRequest, Model model, HttpSession session) {
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//            session.setAttribute("userDetails", userDetails);
-//
-//            // Kiểm tra vai trò của người dùng và chuyển hướng
-//            if (userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"))) {
-//                return "redirect:/admin/thongke";
-//            } else if (userDetails.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"))) {
-//                return "redirect:/home";
-//            } else {
-//                // Nếu không có vai trò nào phù hợp, chuyển hướng về trang login với thông báo lỗi
-//                model.addAttribute("error", "User does not have a valid role");
-//                return "authentication/login";
-//            }
-//
-//        } catch (Exception e) {
-//            model.addAttribute("error", "Invalid username or password");
-//            return "authentication/login";
-//        }
-//    }
-
-
     @PostMapping("/signup")
-    public String registerUser(@Valid @ModelAttribute SignupRequest signUpRequest, Model model) {
-        if (taiKhoanService.existsByEmail(signUpRequest.getEmail())) {
-            model.addAttribute("error", "Error: Email is already in use!");
-            return "authentication/login";
+    public String registerEmployee(@ModelAttribute SignupRequest signupRequest,
+                                   Model model) {
+
+        try {
+            khachHangService.register(signupRequest);
+            return "redirect:/login?success";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "authentication/register";
         }
-
-        TaiKhoan taiKhoan = TaiKhoan.builder()
-                .email(signUpRequest.getEmail())
-                .password(encoder.encode(signUpRequest.getPassword()))
-                .build();
-
-        Set<String> strRoles = signUpRequest.getRole();
-        List<VaiTro> vaiTros = new ArrayList<>();
-
-        if (strRoles == null) {
-            VaiTro vaiTro = vaiTroService.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            vaiTros.add(vaiTro);
-        } else {
-            for (String role : strRoles) {
-                switch (role) {
-                    case "admin":
-                        VaiTro adminRole = vaiTroService.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        vaiTros.add(adminRole);
-                        break;
-                    case "mod":
-                        VaiTro modRole = vaiTroService.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        vaiTros.add(modRole);
-                        break;
-                    default:
-                        VaiTro userRole = vaiTroService.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        vaiTros.add(userRole);
-                }
-            }
-        }
-        taiKhoan.setNgayTao(LocalDate.now());
-        taiKhoan.setVaiTros(vaiTros);
-        taiKhoanService.save(taiKhoan);
-
-        model.addAttribute("message", "User registered successfully!");
-        return "redirect:/login";
     }
-
-
 }

@@ -1,7 +1,6 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.CoGiay;
-import com.example.datn.entity.KichThuoc;
 
 import java.util.List;
 
@@ -13,7 +12,5 @@ public interface CoGiayService {
     void saveCoGiay(CoGiay coGiay);
 
     void deleteCoGiay(Long id);
-
-    List<CoGiay> getCoGiaysByTrangThai(boolean trangThai);
 
 }

@@ -13,6 +13,4 @@ public interface MauSacRepository extends JpaRepository<MauSac, Long> {
 
     @Query("select spct.mauSac from SanPhamChiTiet spct where spct.sanPham.sanPhamId = :idSp")
     List<MauSac> getAllBySanPham(@Param("idSp") Long idSp);
-
-    List<MauSac> findByTrangThai(boolean trangThai);
 }

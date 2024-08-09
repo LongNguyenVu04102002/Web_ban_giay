@@ -76,6 +76,7 @@ public class SanPham {
     private DayGiay dayGiay;
 
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonManagedReference
     @JsonIgnore
     private List<SanPhamChiTiet> sanPhamChiTietList;
 

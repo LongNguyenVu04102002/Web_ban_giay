@@ -35,9 +35,4 @@ public class DeGiayServiceImpl implements DeGiayService {
         deGiayRepository.deleteById(id);
     }
 
-    @Override
-    public List<DeGiay> getDeGiaysByTrangThai(boolean trangThai) {
-        return deGiayRepository.findByTrangThai(trangThai);
-    }
-
 }

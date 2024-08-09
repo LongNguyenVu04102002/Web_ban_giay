@@ -24,16 +24,10 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
-    @Autowired
-    private HinhThucThanhToanRepository hinhThucThanhToanRepository;
-
-    @Autowired
-    private PhuongThucThanhToanRepository phuongThucThanhToanRepository;
-
     @Override
     public TimeLine xacNhanHoaDon(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(2);
             hoaDonRepository.save(hoaDon);
         }
@@ -48,7 +42,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimeLine choGiaoDonHang(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(3);
             hoaDonRepository.save(hoaDon);
         }
@@ -63,7 +57,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimeLine dangGiaoDonHang(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(4);
             hoaDonRepository.save(hoaDon);
         }
@@ -78,7 +72,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimeLine daGiaoDonHang(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(5);
             hoaDonRepository.save(hoaDon);
         }
@@ -93,18 +87,8 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimeLine hoanThanhDonHang(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(6);
-            if(!hoaDon.isThanhToan()){
-                Optional<PhuongThucThanhToan> phuongThucThanhToan = phuongThucThanhToanRepository.findById(1L);
-                if (phuongThucThanhToan.isPresent()) {
-                    HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
-                    hinhThucThanhToan.setPhuongThucThanhToan(phuongThucThanhToan.get());
-                    hinhThucThanhToan.setHoaDon(hoaDon);
-                    hinhThucThanhToan.setTienThanhToan(hoaDon.getTongTien());
-                    hinhThucThanhToanRepository.save(hinhThucThanhToan);
-                }
-            }
             hoaDon.setThanhToan(true);
             hoaDonRepository.save(hoaDon);
 
@@ -120,13 +104,14 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimeLine huyDonHang(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
-        if(hoaDon != null){
+        if (hoaDon != null) {
             hoaDon.setTrangThai(7);
             hoaDonRepository.save(hoaDon);
         }
         TimeLine timeLine = new TimeLine();
         timeLine.setNgayTao(LocalDate.now());
         timeLine.setHoaDon(hoaDon);
+        timeLine.setMoTa(mota);
         timeLine.setTrangThai(7);
         return timeLineRepository.save(timeLine);
     }
@@ -134,16 +119,20 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public void deleteTimeLine(Long id) {
         TimeLine timeLine = timeLineRepository.findById(id).orElse(null);
-        if(timeLine != null){
+        if (timeLine != null) {
             HoaDon hoaDon = hoaDonRepository.findById(timeLine.getHoaDon().getHoaDonId()).orElse(null);
-            if (hoaDon != null){
+            if (hoaDon != null) {
                 List<TimeLine> timeLines = timeLineRepository.findByHoaDonId(hoaDon.getHoaDonId());
                 if (!timeLines.isEmpty()) {
                     TimeLine lastTimeLine = timeLines.get(timeLines.size() - 2);
-                    System.out.println(lastTimeLine.getTrangThai());
                     hoaDon.setTrangThai(lastTimeLine.getTrangThai());
                     hoaDonRepository.save(hoaDon);
-                    timeLineRepository.delete(timeLine);
+
+                    TimeLine tl = new TimeLine();
+                    tl.setNgayTao(LocalDate.now());
+                    tl.setHoaDon(hoaDon);
+                    tl.setTrangThai(lastTimeLine.getTrangThai());
+                    timeLineRepository.save(tl);
                 }
             }
         }

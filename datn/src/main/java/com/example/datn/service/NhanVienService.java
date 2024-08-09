@@ -11,7 +11,8 @@ public interface NhanVienService {
 
     void save(NhanVien nhanVien);
     boolean existsBySdt(String sdt);
-    boolean existsByEmail(String email);
+    NhanVien existsByEmail(String email);
+
     NhanVien toggleTrangThai(Long nhanVienId);
 
 }

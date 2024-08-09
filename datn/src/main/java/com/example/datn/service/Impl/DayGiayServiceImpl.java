@@ -34,9 +34,4 @@ public class DayGiayServiceImpl implements DayGiayService {
         dayGiayRepository.deleteById(id);
     }
 
-    @Override
-    public List<DayGiay> getDayGiaysByTrangThai(boolean trangThai) {
-        return dayGiayRepository.findByTrangThai(trangThai);
-    }
-
 }

@@ -8,8 +8,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,8 +16,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -29,7 +32,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "nhanVien")
-public class NhanVien {
+public class NhanVien implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,35 +40,26 @@ public class NhanVien {
     private Long nhanVienId;
 
     @Column(name = "maNhanVien", length = 100)
-
     private String maNhanVien;
 
     @Column(name = "hoTen", length = 100)
-    @NotBlank(message = "Họ tên không được để trống")
     private String hoTen;
 
     @Column(name = "gioiTinh")
     private boolean gioiTinh;
 
     @Column(name = "ngaySinh")
-    @NotNull(message = "Ngày sinh không được để trống")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^\\d{10}$", message = "Số điện thoại phải có 10 chữ số")
     private String sdt;
 
     @Column(name = "email", length = 50)
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không hợp lệ")
     private String email;
 
-    @Column(name = "matKhau")
-
-    private String matKhau;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "trangThai")
     private boolean trangThai;
@@ -82,12 +76,47 @@ public class NhanVien {
     @Column(name = "thanhPho", length = 20)
     private String thanhPho;
 
+    @Column(name = "role")
+    private String role;
+
     @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hoaDon")
     private List<HoaDon> hoaDonList;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "taiKhoanId")
-    private TaiKhoan taiKhoan;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton((GrantedAuthority) () -> role.toUpperCase());
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return trangThai;
+    }
+
 
 }

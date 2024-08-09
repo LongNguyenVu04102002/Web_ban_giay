@@ -1,21 +1,19 @@
 package com.example.datn.model.response;
 
+import com.example.datn.dto.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CartResponse {
-    private Long sanPhamId;
-    private Long sanPhamChiTietId;
-    private String ten;
-    private String mauSac;
-    private String kichThuoc;
-    private int gia;
-    private String image;
-    private int soLuong;
+    private List<CartItem> cartItems;
+    private PhieuGiamGiaResponse phieuGiamGiaResponse;
+    private ThanhToanResponse thanhToanResponse;
 }

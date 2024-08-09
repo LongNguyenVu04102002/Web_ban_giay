@@ -89,6 +89,7 @@ public class BanHangOnlineController {
 
         model.addAttribute("uniqueSizes", uniqueSizes);
 
+        // Lấy danh sách màu sắc duy nhất cho sản phẩm
         List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
