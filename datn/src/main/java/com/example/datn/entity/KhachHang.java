@@ -63,10 +63,10 @@ public class KhachHang {
 
     @Column(name = "email")
 
-    @NotNull(message = "Không được để trống")
-
+    @Size(max = 30, message = "Email không được vượt quá 30 ký tự")
+    @Email(message = "Email không hợp lệ")
     @NotBlank(message = "Không được để trống")
-
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", message = "Email không hợp lệ")
     private String email;
 
     @Column(name = "matKhau")
