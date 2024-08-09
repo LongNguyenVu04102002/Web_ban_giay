@@ -89,7 +89,6 @@ public class BanHangOnlineController {
 
         model.addAttribute("uniqueSizes", uniqueSizes);
 
-        // Lấy danh sách màu sắc duy nhất cho sản phẩm
         List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
@@ -118,11 +117,6 @@ public class BanHangOnlineController {
     @GetMapping("/success")
     public String success() {
         return "user/includes/content/ordersusses";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "user/includes/content/login";
     }
 
     @GetMapping("/cart")
