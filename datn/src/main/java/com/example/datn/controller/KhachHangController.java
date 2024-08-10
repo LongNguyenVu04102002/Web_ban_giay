@@ -106,6 +106,33 @@ public class KhachHangController {
             return "admin/includes/content/khachhang/update";
         }
 
+
+
+        // Cập nhật thông tin khách hàng
+        khachHangService.update(khachHang);
+
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
+    }
+
+
+    @PostMapping("/khachhang/updateDiaChi")
+    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+        // Kiểm tra trùng lặp số điện thoại
+        if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
+            result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
+        }
+
+        // Kiểm tra trùng lặp email
+        if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
+            result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
+        }
+
+
+        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
+        if (result.hasErrors()) {
+            return "admin/includes/content/khachhang/update";
+        }
+
         // Loại bỏ các địa chỉ không hợp lệ
         List<DiaChi> validDiaChiList = new ArrayList<>();
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
