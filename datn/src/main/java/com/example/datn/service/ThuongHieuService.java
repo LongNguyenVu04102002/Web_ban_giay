@@ -1,5 +1,6 @@
 package com.example.datn.service;
 
+import com.example.datn.entity.CoGiay;
 import com.example.datn.entity.ThuongHieu;
 
 import java.util.List;
@@ -13,5 +14,11 @@ public interface ThuongHieuService {
     void save(ThuongHieu thuongHieu);
 
     void delete(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<ThuongHieu> getThuongHieusByTrangThai(boolean trangThai);
     
 }

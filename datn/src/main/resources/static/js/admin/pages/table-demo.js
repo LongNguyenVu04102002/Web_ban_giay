@@ -22,6 +22,31 @@ $(document).ready(function () {
 
     tables.forEach(initializeDataTable);
 
+    const filterPriceRange = () => {
+        const minPrice = parseFloat($('#minPrice').val()) || 0;
+        const maxPrice = parseFloat($('#maxPrice').val()) || Infinity;
+
+        tables.forEach(selector => {
+            $(selector).DataTable().draw();
+        });
+    };
+
+    $('#minPrice, #maxPrice').on('input', filterPriceRange);
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id === 'data-table-sp') {
+                const price = parseFloat(data[4]) || 0; // Cột giá bán
+
+                const minPrice = parseFloat($('#minPrice').val()) || 0;
+                const maxPrice = parseFloat($('#maxPrice').val()) || Infinity;
+
+                return price >= minPrice && price <= maxPrice;
+            }
+            return true;
+        }
+    );
+
     const applyGlobalSearch = (event) => {
         const keyword = $(event.target).val().toLowerCase();
         tables.forEach(selector => {
@@ -51,7 +76,13 @@ $(document).ready(function () {
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
     filterColumn('#trangThaiSpctFilter', 8, ['#data-table-sp']);
     filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+<<<<<<< HEAD
     filterColumn('#trangThaiSpFilter', 10, ['#data-table-sp']);
+=======
+    filterColumn('#trangThaiAccFilter', 6, ['#data-table-account']);
+    filterColumn('#kichThuocFilter', 6, ['#data-table-sp']);
+    filterColumn('#mauSacFilter', 7, ['#data-table-sp']);
+>>>>>>> hieu_sp
 
     function applyFilters(columnBaseId, columnIndex) {
         for (let i = 1; i <= 5; i++) {

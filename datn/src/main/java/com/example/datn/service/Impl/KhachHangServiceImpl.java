@@ -4,6 +4,10 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+=======
+//import org.springframework.security.crypto.password.PasswordEncoder;
+>>>>>>> hieu_sp
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
@@ -15,6 +19,11 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+<<<<<<< HEAD
+=======
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+>>>>>>> hieu_sp
 
     @Override
     public List<KhachHang> getAll() {
@@ -73,4 +82,26 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
 
+<<<<<<< HEAD
+=======
+    public void registerNewKhachHang(String email, String password, String hoTen, String sdt, LocalDate ngaySinh, boolean gioiTinh, boolean trangThai) {
+        if (khachHangRepository.findByEmail(email) != null) {
+            throw new RuntimeException("Email đã tồn tại");
+        }
+        if (khachHangRepository.findBySdt(sdt) != null) {
+            throw new RuntimeException("Số điện thoại đã tồn tại");
+        }
+
+        KhachHang khachHang = new KhachHang();
+        khachHang.setEmail(email);
+//        khachHang.setMatKhau(passwordEncoder.encode(password));
+        khachHang.setHoTen(hoTen);
+        khachHang.setSdt(sdt);
+        khachHang.setNgaySinh(ngaySinh);
+        khachHang.setGioiTinh(gioiTinh);
+        khachHang.setTrangThai(trangThai);
+
+        khachHangRepository.save(khachHang);
+    }
+>>>>>>> hieu_sp
 }

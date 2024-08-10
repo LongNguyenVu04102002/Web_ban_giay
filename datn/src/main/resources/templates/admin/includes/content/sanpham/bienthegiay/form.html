@@ -6,7 +6,52 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
+<<<<<<< HEAD
     <title>Thêm Biến Thể Giầy></title>
+=======
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
+
+    <title>Thêm Biến Thể Giầy</title>
+
+    <style>
+        .imagePreview {
+            display: flex;
+            overflow-x: auto;
+            max-width: 400px;
+            white-space: nowrap;
+        }
+
+        .file-input-container {
+            position: relative;
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .file-input-label {
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background-color: #e0e0e0; /* Thay đổi màu nền khi hover để người dùng thấy có phản hồi */
+        }
+    </style>
+>>>>>>> hieu_sp
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -117,6 +162,7 @@
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
 
+<<<<<<< HEAD
             const sanPhamChiTietList = Array.from(rows).map((row, index) => {
                 const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
                 const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
@@ -141,6 +187,86 @@
             setTimeout(function() {
                 window.location.href = '/admin/sanpham/bienthegiay';
             }, 300);
+=======
+            const sanPhamChiTietRequestList = [];
+            const errorMessages = [];
+            const uniqueEntries = new Set();
+
+            Array.from(rows).forEach((row, index) => {
+                const sanPhamIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`);
+                const kichThuocIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`);
+                const mauSacIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`);
+                const giaBanElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`);
+                const soLuongElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`);
+                const imageDataElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].imageData"]`);
+
+                // if (!sanPhamIdElement || !kichThuocIdElement || !mauSacIdElement || !giaBanElement || !soLuongElement || !imageDataElement) {
+                //     errorMessages.push(`Hàng ${index + 1} có trường không tồn tại.`);
+                //     return;
+                // }
+
+                const sanPhamId = sanPhamIdElement.value;
+                const kichThuocId = kichThuocIdElement.value;
+                const mauSacId = mauSacIdElement.value;
+                const giaBan = giaBanElement.value;
+                const soLuong = soLuongElement.value;
+                const imageData = imageDataElement.value;
+
+                if (!sanPhamId || !kichThuocId || !mauSacId || !giaBan || !soLuong || !imageData) {
+                    errorMessages.push(`Hàng ${index + 1} có trường bị bỏ trống.`);
+                    return;
+                }
+
+                const entryKey = `${sanPhamId}-${kichThuocId}-${mauSacId}`;
+                if (uniqueEntries.has(entryKey)) {
+                    errorMessages.push(`Hàng ${index + 1} bị trùng lặp với hàng khác.`);
+                    return;
+                }
+
+                uniqueEntries.add(entryKey);
+
+                sanPhamChiTietRequestList.push({
+                    sanPhamChiTiet: {
+                        sanPham: {sanPhamId: sanPhamId},
+                        kichThuoc: {kichThuocId: kichThuocId},
+                        mauSac: {mauSacId: mauSacId},
+                        giaBan: giaBan,
+                        soLuong: soLuong
+                    },
+                    hinhAnhs: imageData.split(';')
+                        .map((base64Image, imgIndex) => {
+                            const dataImg = base64Image.split(',')[1];
+                            if (dataImg) {
+                                return {
+                                    link: '',
+                                    dataImg: dataImg,
+                                    uuTien: imgIndex
+                                };
+                            }
+                        })
+                        .filter(item => item !== undefined)
+                        .sort((a, b) => a.uuTien - b.uuTien)
+                        .map((item, index) => ({
+                            ...item,
+                            uuTien: index + 1
+                        }))
+                });
+            });
+
+            if (errorMessages.length > 0) {
+                Swal.fire({
+                    title: 'Có lỗi!',
+                    text: 'Có lỗi ở các hàng sau:\n' + errorMessages.join('\n'),
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    position: 'center'
+                });
+            } else if (sanPhamChiTietRequestList.length > 0) {
+                saveSanPhamChiTiet(sanPhamChiTietRequestList);
+            }
+>>>>>>> hieu_sp
         });
 
         const selectColor = new TomSelect('#color', {
@@ -156,7 +282,7 @@
 
         let rowCount = 1;
 
-        function addToTable() {
+        async function addToTable() {
             const tableBody = document.getElementById('table-body');
             const sanPhamId = document.querySelector('select[name="sanPham"]').value;
             const sanPhamTen = document.querySelector('select[name="sanPham"] option:checked').innerText;
@@ -179,7 +305,9 @@
             console.log('So Luong:', soLuong);
 
             const sanPhamChiTietList = [];
+            const duplicatedItems = [];
 
+<<<<<<< HEAD
             selectedColors.forEach(color => {
                 selectedSizes.forEach(size => {
                     const sanPhamChiTiet = {
@@ -191,13 +319,60 @@
                     };
                     sanPhamChiTietList.push(sanPhamChiTiet);
                     appendToTable(sanPhamChiTiet);
+=======
+            for (const color of selectedColors) {
+                for (const size of selectedSizes) {
+                    const exists = await checkTonTai(sanPhamId, size.id, color.id);
+                    if (!exists) {
+                        const sanPhamChiTiet = {
+                            sanPham: {sanPhamId: sanPhamId, ten: sanPhamTen},
+                            kichThuoc: {kichThuocId: size.id, ten: size.ten},
+                            mauSac: {mauSacId: color.id, ten: color.ten},
+                            giaBan: giaBan,
+                            soLuong: soLuong,
+                        };
+                        sanPhamChiTietList.push(sanPhamChiTiet);
+                        appendToTable(sanPhamChiTiet);
+                    } else {
+                        duplicatedItems.push({ sanPhamTen, size, color });
+                    }
+                }
+            }
+
+            if (duplicatedItems.length > 0) {
+
+                Swal.fire({
+                    title: 'Có lỗi!',
+                    text: "Những sản phẩm sau đã tồn tại: " + duplicatedItems.map(item => `${item.sanPhamTen} - ${item.size.ten} - ${item.color.ten}`).join(", "),
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    position: 'center'
+>>>>>>> hieu_sp
                 });
-            });
+            }
+            updateRowIndexes();
+        }
+
+        async function checkTonTai(sanPhamId, kichThuocId, mauSacId) {
+            try {
+                const response = await fetch(`/check/add-spct?sanPhamId=${sanPhamId}&kichThuocId=${kichThuocId}&mauSacId=${mauSacId}`, {});
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
         }
 
         function appendToTable(sanPhamChiTiet) {
             const tableBody = document.getElementById('table-body');
             const row = `<tr>
+<<<<<<< HEAD
                <td>${rowCount}</td>
                <td>${sanPhamChiTiet.sanPham.ten}</td>
                <td>${sanPhamChiTiet.mauSac.ten}</td>
@@ -209,12 +384,125 @@
                <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
                <td><input type="file" name=""></td>
            </tr>`;
+=======
+                <td>${rowCount + 1}</td>
+                <td>${sanPhamChiTiet.sanPham.ten}</td>
+                <td>${sanPhamChiTiet.mauSac.ten}</td>
+                <td>${sanPhamChiTiet.kichThuoc.ten}</td>
+                <td><input type="number" min="1000" name="sanPhamChiTietList[${rowCount}].giaBan" value="${sanPhamChiTiet.giaBan}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
+                <td><input type="number" min="1" name="sanPhamChiTietList[${rowCount}].soLuong" value="${sanPhamChiTiet.soLuong}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
+                <input type="hidden" name="sanPhamChiTietList[${rowCount}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
+                <td>
+                    <div class="file-input-container">
+                        <label for="imageInput-${rowCount}" class="file-input-label">Chọn hình ảnh</label>
+                        <input type="file" id="imageInput-${rowCount}" name="imageInput-${rowCount}" multiple onchange="previewImages(${rowCount})">
+                    </div>
+                    <input type="hidden" id="imageData-${rowCount}" name="sanPhamChiTietList[${rowCount}].imageData">
+                    <div id="imagePreview-${rowCount}" class="flex imagePreview"></div>
+                </td>
+                <td class="flex items-center justify-center space-x-2">
+                    <button type="button" onclick="removeRow(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" aria-hidden="true"
+                             class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.25-1.014-2.25-2.25-2.25H6.75c-1.236 0-2.25 1-2.25 2.25v.915"></path>
+                        </svg>
+                    </button>
+                </td>
+            </tr>`;
+>>>>>>> hieu_sp
             tableBody.innerHTML += row;
             rowCount++;
         }
 
+<<<<<<< HEAD
         function saveSanPhamChiTiet(sanPhamChiTietList) {
             fetch('http://localhost:8080/sanphamchitiet/bienthegiay/save', {
+=======
+        function removeRow(button) {
+            var row = button.closest('tr');
+            row.remove();
+            updateRowIndexes();
+        }
+
+        function updateRowIndexes() {
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach((row, index) => {
+                row.querySelector('td:first-child').innerText = index + 1;
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    input.name = name.replace(/\[\d+\]/, `[${index}]`);
+                });
+            });
+        }
+
+        function previewImages(rowCount) {
+            var preview = document.getElementById('imagePreview-' + rowCount);
+
+            var fileInput = document.getElementById('imageInput-' + rowCount);
+            var fileInputData = document.getElementById('imageData-' + rowCount);
+            var files = fileInput.files;
+
+            var fileReaders = [];
+            base64Images[rowCount - 1] = [];
+
+            for (var i = 0; i < files.length; i++) {
+                let fileReader = new FileReader();
+                fileReaders.push(fileReader);
+
+                fileReader.onload = function (event) {
+                    var base64Image = event.target.result;
+                    base64Images[rowCount - 1].push(base64Image);
+                    fileInputData.value = base64Images[rowCount - 1].join(';');
+
+                    var imgContainer = document.createElement('div');
+                    imgContainer.style.position = 'relative';
+                    imgContainer.style.display = 'inline-block';
+
+                    var imgElement = document.createElement('img');
+                    imgElement.src = base64Image;
+                    imgElement.style.width = '45px';
+                    imgElement.style.height = '45px';
+
+                    var removeButton = document.createElement('button');
+                    removeButton.textContent = 'X';
+                    removeButton.style.position = 'absolute';
+                    removeButton.style.top = '0';
+                    removeButton.style.right = '0';
+                    removeButton.style.background = 'red';
+                    removeButton.style.color = 'white';
+                    removeButton.style.border = 'none';
+                    removeButton.style.borderRadius = '50%';
+                    removeButton.style.cursor = 'pointer';
+                    removeButton.onclick = function () {
+                        removeImage(base64Image, rowCount, imgContainer);
+                    };
+
+                    imgContainer.appendChild(imgElement);
+                    imgContainer.appendChild(removeButton);
+                    preview.appendChild(imgContainer);
+                };
+
+                fileReader.readAsDataURL(files[i]);
+            }
+        }
+
+        function removeImage(imageToRemove, rowCount, imgContainer) {
+            base64Images[rowCount - 1] = base64Images[rowCount - 1].filter(image => image !== imageToRemove);
+
+            document.getElementById('imageData-' + rowCount).value = base64Images[rowCount - 1].join(';');
+
+            imgContainer.remove();
+        }
+
+        function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
+            console.log("sanPhamChiTietRequestList" + sanPhamChiTietRequestList);
+            fetch('/sanphamchitiet/bienthegiay/save', {
+>>>>>>> hieu_sp
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -225,8 +513,22 @@
                 .then(data => {
                     console.log('Success:', data);
                 })
+<<<<<<< HEAD
                 .catch(error => {
                     console.error('Error:', error);
+=======
+                .catch((error) => {
+                    Swal.fire({
+                        position: 'top-end',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        width: '300px',
+                        text: 'Đã xảy ra lỗi khi lưu biến thể giày',
+                        timerProgressBar: true,
+                        icon: 'error',
+                    });
+>>>>>>> hieu_sp
                 });
         }
     </script>

@@ -19,7 +19,14 @@ public class SanPhamChiTietApi {
     private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
     @Autowired
+<<<<<<< HEAD
     private RestTemplate restTemplate;
+=======
+    private HinhAnhServiceImpl hinhAnhService;
+
+//    @Autowired
+//    private RestTemplate restTemplate;
+>>>>>>> hieu_sp
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllSanPhamChiTiet() {

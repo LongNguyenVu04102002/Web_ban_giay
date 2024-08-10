@@ -43,7 +43,24 @@ public class SanPhamChiTietController {
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
+<<<<<<< HEAD
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+=======
+        List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
+        List<KichThuoc> kichThuocList = kichThuocService.getAll();
+        List<MauSac> mauSacList = mauSacService.getAll();
+
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
+            SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
+            sanPhamChiTietResponse.setSanPhamChiTiet(sanPhamChiTiet);
+            sanPhamChiTietResponse.setDataImg(Base64.getEncoder().encodeToString(hinhAnhService.getImageBySanPhamChiTietIdWithPriority(sanPhamChiTiet.getSanPhamChiTietId(), 1)));
+            sanPhamChiTietResponses.add(sanPhamChiTietResponse);
+        }
+
+        model.addAttribute("mauSac", mauSacList);
+        model.addAttribute("kichThuoc", kichThuocList);
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
+>>>>>>> hieu_sp
         return "admin/includes/content/sanpham/bienthegiay/home";
     }
 
@@ -100,16 +117,16 @@ public class SanPhamChiTietController {
     }
 
     private String getString(Model model) {
-        model.addAttribute("lstKichThuoc", kichThuocService.getAll());
-        model.addAttribute("lsMauSac", mauSacService.getAll());
-        model.addAttribute("lstSanPham", sanPhamService.getAll());
+        model.addAttribute("lstKichThuoc", kichThuocService.getKichThuocsByTrangThai(false));
+        model.addAttribute("lsMauSac", mauSacService.getMauSacsByTrangThai(false));
+        model.addAttribute("lstSanPham", sanPhamService.getSanPhamsByTrangThai(false));
         return "admin/includes/content/sanpham/bienthegiay/form";
     }
 
     private String getStringUpdate(Model model) {
-        model.addAttribute("lstKichThuoc", kichThuocService.getAll());
-        model.addAttribute("lsMauSac", mauSacService.getAll());
-        model.addAttribute("lstSanPham", sanPhamService.getAll());
+        model.addAttribute("lstKichThuoc", kichThuocService.getKichThuocsByTrangThai(false));
+        model.addAttribute("lsMauSac", mauSacService.getMauSacsByTrangThai(false));
+        model.addAttribute("lstSanPham", sanPhamService.getSanPhamsByTrangThai(false));
         return "admin/includes/content/sanpham/bienthegiay/form-update";
     }
 

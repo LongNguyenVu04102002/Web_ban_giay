@@ -1,6 +1,7 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.MauSac;
+import com.example.datn.entity.SanPham;
 
 import java.util.List;
 
@@ -13,5 +14,11 @@ public interface MauSacService {
     void save(MauSac mauSac);
 
     void delete(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<MauSac> getMauSacsByTrangThai(boolean trangThai);
     
 }

@@ -33,11 +33,25 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public void update(Long id) {
         Optional<SanPham> sanPham = sanPhamRepository.findById(id);
-        if(sanPham.isPresent()){
+        if (sanPham.isPresent()) {
             SanPham sp = sanPham.get();
             sp.setTrangThai(!sp.isTrangThai());
             sanPhamRepository.save(sp);
         }
+    }
+
+    @Override
+    public List<SanPham> getSanPhamsByTrangThai(boolean trangThai) {
+        return sanPhamRepository.findByTrangThai(trangThai);
+    }
+
+    @Override
+    public boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId) {
+        List<SanPham> sanPhamList = sanPhamRepository.findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(ten, chatLieuId, coGiayId, dayGiayId, deGiayId, lotGiayId, muiGiayId, thuongHieuId);
+        if (sanPhamList.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
 }

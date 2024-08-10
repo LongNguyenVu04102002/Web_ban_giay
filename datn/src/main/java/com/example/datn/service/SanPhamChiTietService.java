@@ -17,12 +17,22 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet getById(Long id);
 
+<<<<<<< HEAD
     void save(List<SanPhamChiTiet> sanPhamChiTietList);
+=======
+    boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
+
+//    void save(List<SanPhamChiTiet> sanPhamChiTietList);
+
+    void add(SanPhamChiTiet sanPhamChiTiet);
+>>>>>>> hieu_sp
 
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 
     void update(Long id);
 
     BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId);
+
+    boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
 
 }
