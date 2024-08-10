@@ -1,6 +1,6 @@
 package com.example.datn.controller;
 
-import com.example.datn.dto.HinhAnhDTO;
+
 import com.example.datn.entity.*;
 import com.example.datn.model.response.SanPhamChiTietResponse;
 import com.example.datn.model.response.request.HinhAnhDTO;
