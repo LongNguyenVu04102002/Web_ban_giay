@@ -38,8 +38,7 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return sanPhamChiTietRepository.findById(id).orElse(null);
     }
 
-<<<<<<< HEAD
-=======
+
     @Override
     public boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId) {
         List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietRepository.findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(sanPhamId, kichThuocId, mauSacId);
@@ -59,7 +58,7 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
 //        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
 //    }
 
->>>>>>> hieu_sp
+
     @Override
     public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
         for (SanPhamChiTiet spct : sanPhamChiTietList) {

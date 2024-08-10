@@ -17,15 +17,15 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet getById(Long id);
 
-<<<<<<< HEAD
+
     void save(List<SanPhamChiTiet> sanPhamChiTietList);
-=======
+
     boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
 
 //    void save(List<SanPhamChiTiet> sanPhamChiTietList);
 
-    void add(SanPhamChiTiet sanPhamChiTiet);
->>>>>>> hieu_sp
+//    void add(SanPhamChiTiet sanPhamChiTiet);
+
 
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 
