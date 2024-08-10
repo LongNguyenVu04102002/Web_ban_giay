@@ -18,13 +18,13 @@ public interface SanPhamChiTietService {
     SanPhamChiTiet getById(Long id);
 
 
-    void save(List<SanPhamChiTiet> sanPhamChiTietList);
+//    void save(List<SanPhamChiTiet> sanPhamChiTietList);
 
     boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
 
 //    void save(List<SanPhamChiTiet> sanPhamChiTietList);
 
-//    void add(SanPhamChiTiet sanPhamChiTiet);
+    void add(SanPhamChiTiet sanPhamChiTiet);
 
 
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
