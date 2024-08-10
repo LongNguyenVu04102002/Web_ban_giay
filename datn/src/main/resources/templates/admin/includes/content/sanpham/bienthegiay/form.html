@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
 
-    <title>Thêm Biến Thể Giầy></title>
-
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
@@ -51,7 +48,6 @@
             background-color: #e0e0e0; /* Thay đổi màu nền khi hover để người dùng thấy có phản hồi */
         }
     </style>
-
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -68,7 +64,7 @@
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{sanPhamChiTietId}"/>
                             <div class="lg:col-span-12">
-                                <label class="font-semibold">Tên Giầy:</label>
+                                <label class="font-semibold">Tên Giầy</label>
                                 <select th:field="*{sanPham}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="sp : ${lstSanPham}" th:value="${sp.sanPhamId}"
@@ -76,7 +72,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Kích Thước:</label>
+                                <label class="font-semibold">Kích Thước</label>
                                 <select id="size" multiple
                                         class="form-select form-input mt-2 w-full h-10">
                                     <option th:each="kt : ${lstKichThuoc}" th:value="${kt.kichThuocId}"
@@ -84,7 +80,7 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6 mb-4">
-                                <label class="font-semibold">Màu Sắc:</label>
+                                <label class="font-semibold">Màu Sắc</label>
                                 <select id="color" multiple
                                         class="form-select form-input mt-2 w-full h-10">
                                     <option th:each="ms : ${lsMauSac}" th:value="${ms.mauSacId}"
@@ -92,14 +88,14 @@
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Giá Bán:</label>
-                                <input type="text" name="giaBan"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                <label class="font-semibold">Giá Bán</label>
+                                <input type="text" name="giaBan" min="1000" required
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-6">
-                                <label class="font-semibold">Số Lượng:</label>
-                                <input type="text" name="soLuong"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                <label class="font-semibold">Số Lượng</label>
+                                <input type="text" name="soLuong" min="1" required
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
@@ -130,7 +126,7 @@
         </div>
     </section>
     <form id="saveForm" method="post" th:action="@{/admin/sanpham/bienthegiay/save}"
-          th:object="${sanPhamChiTietResponse}">
+          th:object="${sanPhamChiTietResponse}" enctype="multipart/form-data">
         <table class="table-default table-hover data-table px-4 mt-6 bg-white">
             <thead>
             <tr>
@@ -141,6 +137,7 @@
                 <th>Giá bán</th>
                 <th>Số lượng</th>
                 <th>Hình ảnh</th>
+                <th>Hành động</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -161,32 +158,6 @@
 
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
-
-
-            const sanPhamChiTietList = Array.from(rows).map((row, index) => {
-                const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
-                const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
-                const mauSacId = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`).value;
-                const giaBan = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`).value;
-                const soLuong = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`).value;
-
-                return {
-                    sanPham: {sanPhamId: sanPhamId},
-                    kichThuoc: {kichThuocId: kichThuocId},
-                    mauSac: {mauSacId: mauSacId},
-                    giaBan: giaBan,
-                    soLuong: soLuong
-                };
-            });
-
-            console.log('San Pham Chi Tiet List:', sanPhamChiTietList);
-
-            // Gọi API lưu data
-            saveSanPhamChiTiet(sanPhamChiTietList);
-
-            setTimeout(function() {
-                window.location.href = '/admin/sanpham/bienthegiay';
-            }, 300);
 
             const sanPhamChiTietRequestList = [];
             const errorMessages = [];
@@ -266,21 +237,22 @@
             } else if (sanPhamChiTietRequestList.length > 0) {
                 saveSanPhamChiTiet(sanPhamChiTietRequestList);
             }
-
         });
 
         const selectColor = new TomSelect('#color', {
             plugins: ['remove_button'],
-            create: true,
+            create: false,
             placeholder: 'Chọn màu sắc'
         });
+
         const selectSize = new TomSelect('#size', {
             plugins: ['remove_button'],
-            create: true,
+            create: false,
             placeholder: 'Chọn kích thước'
         });
 
-        let rowCount = 1;
+        var rowCount = 0;
+        var base64Images = [];
 
         async function addToTable() {
             const tableBody = document.getElementById('table-body');
@@ -297,28 +269,41 @@
             const giaBan = document.querySelector('input[name="giaBan"]').value;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
 
-            console.log('San Pham ID:', sanPhamId);
-            console.log('San Pham Ten:', sanPhamTen);
-            console.log('Selected Sizes:', selectedSizes);
-            console.log('Selected Colors:', selectedColors);
-            console.log('Gia Ban:', giaBan);
-            console.log('So Luong:', soLuong);
+            if (giaBan < 1000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Giá bán phải lớn hơn hoặc bằng 1000.',
+                });
+                return;
+            }
+            if (soLuong < 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Số lượng phải lớn hơn hoặc bằng 1.',
+                });
+                return;
+            }
+            if (selectedSizes.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn ít nhất một kích thước.',
+                });
+                return;
+            }
+            if (selectedColors.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn ít nhất một màu sắc.',
+                });
+                return;
+            }
 
             const sanPhamChiTietList = [];
             const duplicatedItems = [];
-
-
-            selectedColors.forEach(color => {
-                selectedSizes.forEach(size => {
-                    const sanPhamChiTiet = {
-                        sanPham: {sanPhamId: sanPhamId, ten: sanPhamTen},
-                        kichThuoc: {kichThuocId: size.id, ten: size.ten},
-                        mauSac: {mauSacId: color.id, ten: color.ten},
-                        giaBan: giaBan,
-                        soLuong: soLuong,
-                    };
-                    sanPhamChiTietList.push(sanPhamChiTiet);
-                    appendToTable(sanPhamChiTiet);
 
             for (const color of selectedColors) {
                 for (const size of selectedSizes) {
@@ -349,7 +334,6 @@
                     timer: 2000,
                     timerProgressBar: true,
                     position: 'center'
-
                 });
             }
             updateRowIndexes();
@@ -372,19 +356,6 @@
         function appendToTable(sanPhamChiTiet) {
             const tableBody = document.getElementById('table-body');
             const row = `<tr>
-
-               <td>${rowCount}</td>
-               <td>${sanPhamChiTiet.sanPham.ten}</td>
-               <td>${sanPhamChiTiet.mauSac.ten}</td>
-               <td>${sanPhamChiTiet.kichThuoc.ten}</td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].giaBan" value="${sanPhamChiTiet.giaBan}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <td><input type="text" name="sanPhamChiTietList[${rowCount - 1}].soLuong" value="${sanPhamChiTiet.soLuong}" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
-               <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
-               <td><input type="file" name=""></td>
-           </tr>`;
-
                 <td>${rowCount + 1}</td>
                 <td>${sanPhamChiTiet.sanPham.ten}</td>
                 <td>${sanPhamChiTiet.mauSac.ten}</td>
@@ -413,14 +384,9 @@
                     </button>
                 </td>
             </tr>`;
-
             tableBody.innerHTML += row;
             rowCount++;
         }
-
-
-        function saveSanPhamChiTiet(sanPhamChiTietList) {
-            fetch('http://localhost:8080/sanphamchitiet/bienthegiay/save', {
 
         function removeRow(button) {
             var row = button.closest('tr');
@@ -502,21 +468,34 @@
         function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
             console.log("sanPhamChiTietRequestList" + sanPhamChiTietRequestList);
             fetch('/sanphamchitiet/bienthegiay/save', {
-
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({sanPhamChiTietList})
+                body: JSON.stringify(sanPhamChiTietRequestList),
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     console.log('Success:', data);
+                    Swal.fire({
+                        position: 'top-end', // Vị trí của thông báo
+                        toast: true, // Thiết lập kiểu thông báo là "toast"
+                        showConfirmButton: false, // Không hiển thị nút xác nhận
+                        timer: 1000, // Thời gian hiển thị (đơn vị là milliseconds)
+                        width: '300px', // Đặt chiều rộng của thông báo
+                        text: 'Cập nhật thành công!',
+                        icon: 'success',
+                    });
+
+                    setTimeout(function () {
+                        window.location.href = '/admin/sanpham/bienthegiay';
+                    }, 1000);
                 })
-
-                .catch(error => {
-                    console.error('Error:', error);
-
                 .catch((error) => {
                     Swal.fire({
                         position: 'top-end',
@@ -528,11 +507,9 @@
                         timerProgressBar: true,
                         icon: 'error',
                     });
-
                 });
         }
     </script>
-
 </div>
 </body>
 </html>
