@@ -43,9 +43,9 @@ public class SanPhamChiTietController {
     @GetMapping("/bienthegiay")
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
-<<<<<<< HEAD
+
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
-=======
+
         List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
         List<KichThuoc> kichThuocList = kichThuocService.getAll();
         List<MauSac> mauSacList = mauSacService.getAll();
@@ -60,7 +60,7 @@ public class SanPhamChiTietController {
         model.addAttribute("mauSac", mauSacList);
         model.addAttribute("kichThuoc", kichThuocList);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
->>>>>>> hieu_sp
+
         return "admin/includes/content/sanpham/bienthegiay/home";
     }
 

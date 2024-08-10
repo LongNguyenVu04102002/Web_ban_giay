@@ -2,6 +2,7 @@ package com.example.datn.api;
 
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.model.response.SanPhamChiTietResponse;
+import com.example.datn.service.Impl.HinhAnhServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class SanPhamChiTietApi {
     private SanPhamChiTietServiceImpl sanPhamChiTietService;
 
     @Autowired
-<<<<<<< HEAD
+
     private RestTemplate restTemplate;
-=======
+
     private HinhAnhServiceImpl hinhAnhService;
 
 //    @Autowired
 //    private RestTemplate restTemplate;
->>>>>>> hieu_sp
+
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllSanPhamChiTiet() {
