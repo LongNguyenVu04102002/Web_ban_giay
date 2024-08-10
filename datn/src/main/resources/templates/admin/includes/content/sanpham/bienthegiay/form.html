@@ -6,9 +6,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>
-<<<<<<< HEAD
+
     <title>Thêm Biến Thể Giầy></title>
-=======
+
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -51,7 +51,7 @@
             background-color: #e0e0e0; /* Thay đổi màu nền khi hover để người dùng thấy có phản hồi */
         }
     </style>
->>>>>>> hieu_sp
+
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -162,7 +162,7 @@
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
 
-<<<<<<< HEAD
+
             const sanPhamChiTietList = Array.from(rows).map((row, index) => {
                 const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
                 const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
@@ -187,7 +187,7 @@
             setTimeout(function() {
                 window.location.href = '/admin/sanpham/bienthegiay';
             }, 300);
-=======
+
             const sanPhamChiTietRequestList = [];
             const errorMessages = [];
             const uniqueEntries = new Set();
@@ -266,7 +266,7 @@
             } else if (sanPhamChiTietRequestList.length > 0) {
                 saveSanPhamChiTiet(sanPhamChiTietRequestList);
             }
->>>>>>> hieu_sp
+
         });
 
         const selectColor = new TomSelect('#color', {
@@ -307,7 +307,7 @@
             const sanPhamChiTietList = [];
             const duplicatedItems = [];
 
-<<<<<<< HEAD
+
             selectedColors.forEach(color => {
                 selectedSizes.forEach(size => {
                     const sanPhamChiTiet = {
@@ -319,7 +319,7 @@
                     };
                     sanPhamChiTietList.push(sanPhamChiTiet);
                     appendToTable(sanPhamChiTiet);
-=======
+
             for (const color of selectedColors) {
                 for (const size of selectedSizes) {
                     const exists = await checkTonTai(sanPhamId, size.id, color.id);
@@ -349,7 +349,7 @@
                     timer: 2000,
                     timerProgressBar: true,
                     position: 'center'
->>>>>>> hieu_sp
+
                 });
             }
             updateRowIndexes();
@@ -372,7 +372,7 @@
         function appendToTable(sanPhamChiTiet) {
             const tableBody = document.getElementById('table-body');
             const row = `<tr>
-<<<<<<< HEAD
+
                <td>${rowCount}</td>
                <td>${sanPhamChiTiet.sanPham.ten}</td>
                <td>${sanPhamChiTiet.mauSac.ten}</td>
@@ -384,7 +384,7 @@
                <input type="hidden" name="sanPhamChiTietList[${rowCount - 1}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
                <td><input type="file" name=""></td>
            </tr>`;
-=======
+
                 <td>${rowCount + 1}</td>
                 <td>${sanPhamChiTiet.sanPham.ten}</td>
                 <td>${sanPhamChiTiet.mauSac.ten}</td>
@@ -413,15 +413,15 @@
                     </button>
                 </td>
             </tr>`;
->>>>>>> hieu_sp
+
             tableBody.innerHTML += row;
             rowCount++;
         }
 
-<<<<<<< HEAD
+
         function saveSanPhamChiTiet(sanPhamChiTietList) {
             fetch('http://localhost:8080/sanphamchitiet/bienthegiay/save', {
-=======
+
         function removeRow(button) {
             var row = button.closest('tr');
             row.remove();
@@ -502,7 +502,7 @@
         function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
             console.log("sanPhamChiTietRequestList" + sanPhamChiTietRequestList);
             fetch('/sanphamchitiet/bienthegiay/save', {
->>>>>>> hieu_sp
+
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -513,10 +513,10 @@
                 .then(data => {
                     console.log('Success:', data);
                 })
-<<<<<<< HEAD
+
                 .catch(error => {
                     console.error('Error:', error);
-=======
+
                 .catch((error) => {
                     Swal.fire({
                         position: 'top-end',
@@ -528,7 +528,7 @@
                         timerProgressBar: true,
                         icon: 'error',
                     });
->>>>>>> hieu_sp
+
                 });
         }
     </script>
