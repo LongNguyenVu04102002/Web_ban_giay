@@ -31,6 +31,37 @@
                         </select>
                     </label>
                 </div>
+                <div class="sticky">
+                    <label>
+                        <select id="kichThuocFilter" name="kichThuoc"
+                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                            <option value="">Kích thước</option>
+                            <option th:each="kichThuoc : ${kichThuoc}"
+                                    th:value="${kichThuoc.ten}" th:text="${kichThuoc.ten}">
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div class="sticky">
+                    <label>
+                        <select id="mauSacFilter" name="mauSac"
+                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                            <option value="">Màu sắc</option>
+                            <option th:each="mauSac : ${mauSac}"
+                                    th:value="${mauSac.ten}" th:text="${mauSac.ten}">
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div class="flex items-center gap-4">
+                    <label>
+                        Giá bán từ: <input type="number" id="minPrice" class="w-12 rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                    </label>
+                    <label>
+                        đến: <input type="number" id="maxPrice" class="w-12 rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                    </label>
+                </div>
+
             </div>
             <div>
                 <a th:href="@{/admin/sanpham/bienthegiay/form}"

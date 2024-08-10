@@ -35,6 +35,17 @@ public class MuiGiayServiceImpl implements MuiGiayService {
     }
 
     @Override
+    public boolean isTenExists(String ten) {
+        return muiGiayRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<MuiGiay> muiGiayList = muiGiayRepository.findAllByTenAndMuiGiayIdNot(ten, id);
+        return !muiGiayList.isEmpty();
+    }
+
+    @Override
     public List<MuiGiay> getMuiGiaysByTrangThai(boolean trangThai) {
         return muiGiayRepository.findByTrangThai(trangThai);
     }

@@ -4,6 +4,7 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -43,9 +44,9 @@
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/sanpham/bienthegiay/save-update}" th:object="${spct}" method="post" enctype="multipart/form-data">
+                    <form id="updateForm" th:action="@{/admin/sanpham/bienthegiay/save-update}" th:object="${spct}" method="post" enctype="multipart/form-data">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
-                            <input type="hidden" th:field="*{sanPhamChiTietId}"/>
+                            <input id="sanPhamChiTietId" type="hidden" th:field="*{sanPhamChiTietId}"/>
                             <input type="hidden" th:field="*{barCode}"/>
                             <input type="hidden" name="imageId" value="" />
                             <div class="lg:col-span-12">
@@ -60,7 +61,7 @@
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="font-semibold">Tên Giầy</label>
-                                <select th:field="*{sanPham}"
+                                <select id="sanPhamSelect" th:field="*{sanPham}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="sp : ${lstSanPham}" th:value="${sp.sanPhamId}"
                                             th:text="${sp.ten}"></option>
@@ -68,7 +69,7 @@
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Kích Thước</label>
-                                <select th:field="*{kichThuoc}"
+                                <select id="kichThuocSelect" th:field="*{kichThuoc}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="kt : ${lstKichThuoc}" th:value="${kt.kichThuocId}"
                                             th:text="${kt.ten}"></option>
@@ -76,7 +77,7 @@
                             </div>
                             <div class="lg:col-span-6 mb-4">
                                 <label class="font-semibold">Màu Sắc</label>
-                                <select th:field="*{mauSac}"
+                                <select id="mauSacSelect" th:field="*{mauSac}"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="ms : ${lsMauSac}" th:value="${ms.mauSacId}"
                                             th:text="${ms.ten}"></option>
@@ -114,7 +115,7 @@
                                class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                 Quay lại
                             </a>
-                            <button type="submit"
+                            <button type="submit" id="submitButton"
                                     class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
                                 <span th:text="${spct.sanPhamChiTietId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>
                             </button>
@@ -167,6 +168,60 @@
                     };
                     reader.readAsDataURL(file);
                 });
+            });
+        });
+
+        function checkDuplicateAndSubmit() {
+            const sanPhamId = $('#sanPhamSelect').val();
+            const kichThuocId = $('#kichThuocSelect').val();
+            const mauSacId = $('#mauSacSelect').val();
+            const sanPhamChiTietId = $('#sanPhamChiTietId').val();
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn cập nhật?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/check/update-spct',
+                        type: 'GET',
+                        data: {
+                            sanPhamId: sanPhamId,
+                            kichThuocId: kichThuocId,
+                            mauSacId: mauSacId,
+                            sanPhamChiTietId: sanPhamChiTietId
+                        },
+                        success: function(response) {
+                            if (response) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Sản phẩm này đã tồn tại. Không thể cập nhật!',
+                                });
+                            } else {
+                                $('#updateForm').submit();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công',
+                                    text: "Cập nhật thành công"
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            console.error('Error checking duplicate:', error);
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('#submitButton').on('click', function(event) {
+                event.preventDefault(); // Ngăn chặn việc submit form mặc định
+                checkDuplicateAndSubmit();
             });
         });
     </script>

@@ -27,60 +27,11 @@ public class ThongKeApi {
         return thongKeService.getHoaDonToday();
     }
 
-    //dem khach hang hom nay
-    @GetMapping("/countKhachHangToday")
-    public Long countKhachHangToday(@RequestParam("trangThai") int trangThai) {
-        LocalDate today = LocalDate.now();
-        return thongKeService.countHoaDonByNgayTaoAndTrangThai(today, trangThai);
-    }
-
-    //dem khanh hang hom qua
-    @GetMapping("/countKhachHangYesterday")
-    public Long countKhachHangYesterday(@RequestParam("trangThai") int trangThai) {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        return thongKeService.countKhachHangByNgayTaoAndTrangThai(yesterday, trangThai);
-    }
-
     //dem hoa don hom nay
     @GetMapping("/countHoaDonToday")
     public Long countHoaDonToday(@RequestParam("trangThai") int trangThai) {
         LocalDate today = LocalDate.now();
         return thongKeService.countHoaDonByNgayTaoAndTrangThai(today, trangThai);
-    }
-
-    //dem hoa don hom qua
-    @GetMapping("/countHoaDonYesterday")
-    public Long countHoaDonYesterday(@RequestParam("trangThai") int trangThai) {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        return thongKeService.countHoaDonByNgayTaoAndTrangThai(yesterday, trangThai);
-    }
-
-    //dem khach hang thang nay
-    @GetMapping("/countKhachHangThisMonth")
-    public Long countKhachHangThisMonth(@RequestParam("trangThai") int trangThai) {
-        YearMonth currentMonth = YearMonth.now();
-        return thongKeService.countKhachHangByYearMonthAndTrangThai(currentMonth.getYear(), currentMonth.getMonthValue(), trangThai);
-    }
-
-    //dem khang khang thang truoc
-    @GetMapping("/countKhachHangLastMonth")
-    public Long countKhachHangLastMonth(@RequestParam("trangThai") int trangThai) {
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        return thongKeService.countKhachHangByYearMonthAndTrangThai(lastMonth.getYear(), lastMonth.getMonthValue(), trangThai);
-    }
-
-    //dem hoa don thang nay
-    @GetMapping("/countHoaDonThisMonth")
-    public Long countHoaDonThisMonth(@RequestParam("trangThai") int trangThai) {
-        YearMonth currentMonth = YearMonth.now();
-        return thongKeService.countHoaDonByYearMonthAndTrangThai(currentMonth.getYear(), currentMonth.getMonthValue(), trangThai);
-    }
-
-    //dem hoa don thang truoc
-    @GetMapping("/countHoaDonLastMonth")
-    public Long countHoaDonLastMonth(@RequestParam("trangThai") int trangThai) {
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        return thongKeService.countHoaDonByYearMonthAndTrangThai(lastMonth.getYear(), lastMonth.getMonthValue(), trangThai);
     }
 
     //dem hoa don tuan nay
@@ -137,6 +88,11 @@ public class ThongKeApi {
     @GetMapping("/sumDonHangByMonth")
     public List<Integer> sumDonHangByMonth(@RequestParam("start") Integer start, @RequestParam("end") Integer end, @RequestParam("trangThai") int trangThai) {
         return thongKeService.sumDonHangByMonth(start, end, trangThai);
+    }
+
+    @GetMapping("/sumDonHangByDay")
+    public Integer sumDonHangByDay(@RequestParam("trangThai") int trangThai){
+        return thongKeService.sumDonHangByDay(trangThai);
     }
 
     @GetMapping("/getNumbersInRange")

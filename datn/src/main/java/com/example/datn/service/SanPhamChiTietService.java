@@ -29,4 +29,6 @@ public interface SanPhamChiTietService {
 
     BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId);
 
+    boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
+
 }

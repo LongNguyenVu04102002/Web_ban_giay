@@ -39,6 +39,8 @@ public class SanPhamChiTietController {
     public String show(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
         List<SanPhamChiTietResponse> sanPhamChiTietResponses = new ArrayList<>();
+        List<KichThuoc> kichThuocList = kichThuocService.getAll();
+        List<MauSac> mauSacList = mauSacService.getAll();
 
         for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
             SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
@@ -47,6 +49,8 @@ public class SanPhamChiTietController {
             sanPhamChiTietResponses.add(sanPhamChiTietResponse);
         }
 
+        model.addAttribute("mauSac", mauSacList);
+        model.addAttribute("kichThuoc", kichThuocList);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietResponses);
         return "admin/includes/content/sanpham/bienthegiay/home";
     }

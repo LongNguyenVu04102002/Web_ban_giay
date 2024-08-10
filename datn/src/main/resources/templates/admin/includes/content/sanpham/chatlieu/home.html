@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <title>Chất liệu</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -137,39 +142,53 @@
     </div>
     <script>
         $(document).ready(function () {
-            $('#tenChatLieu').on('input', function () {
-                var tenChatLieu = $(this).val().trim();
+            $('#chatLieuForm').on('submit', function (event) {
+                var tenChatLieu = $('#tenChatLieu').val().trim();
+
+                if (!tenChatLieu) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên chất liệu không được để trống.',
+                    });
+                    return;
+                }
+
                 var chatLieuId = $('#chatLieuId').val();
 
                 if (chatLieuId) {
                     $.ajax({
                         url: `/check/update-cl?id=${chatLieuId}&ten=${tenChatLieu}`,
                         method: 'GET',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
                         success: function (response) {
-                            if (!response) {
-                                $('#submitBtn').prop('disabled', false);
-                            } else {
-                                $('#submitBtn').prop('disabled', true);
+                            if (response) {
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                });
                             }
-                        },
-                        error: function () {
-                            $('#submitBtn').prop('disabled', false);
                         }
                     });
                 } else {
                     $.ajax({
                         url: `/check/add-cl?ten=${tenChatLieu}`,
                         method: 'GET',
-                        contentType: 'application/json',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
                         success: function (response) {
                             if (response) {
-                                $('#submitBtn').prop('disabled', true);
-                            } else {
-                                $('#submitBtn').prop('disabled', false);
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                }).then(function () {
+                                    $('#chatLieuForm')[0].reset();
+                                });
                             }
-                        },
-                        error: function () {
-                            $('#submitBtn').prop('disabled', false);
                         }
                     });
                 }

@@ -31,7 +31,18 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
 
     @Override
     public void delete(Long id) {
-       thuongHieuRepository.deleteById(id);
+        thuongHieuRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isTenExists(String ten) {
+        return thuongHieuRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<ThuongHieu> thuongHieuList = thuongHieuRepository.findAllByTenAndThuongHieuIdNot(ten, id);
+        return !thuongHieuList.isEmpty();
     }
 
     @Override

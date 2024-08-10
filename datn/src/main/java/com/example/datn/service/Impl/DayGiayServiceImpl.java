@@ -35,6 +35,17 @@ public class DayGiayServiceImpl implements DayGiayService {
     }
 
     @Override
+    public boolean isTenExists(String ten) {
+        return dayGiayRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<DayGiay> dayGiayList = dayGiayRepository.findAllByTenAndDayGiayIdNot(ten, id);
+        return !dayGiayList.isEmpty();
+    }
+
+    @Override
     public List<DayGiay> getDayGiaysByTrangThai(boolean trangThai) {
         return dayGiayRepository.findByTrangThai(trangThai);
     }

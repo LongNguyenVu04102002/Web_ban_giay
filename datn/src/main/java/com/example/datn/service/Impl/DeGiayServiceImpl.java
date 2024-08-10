@@ -36,6 +36,17 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public boolean isTenExists(String ten) {
+        return deGiayRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<DeGiay> deGiayList = deGiayRepository.findAllByTenAndDeGiayIdNot(ten, id);
+        return !deGiayList.isEmpty();
+    }
+
+    @Override
     public List<DeGiay> getDeGiaysByTrangThai(boolean trangThai) {
         return deGiayRepository.findByTrangThai(trangThai);
     }

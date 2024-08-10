@@ -15,6 +15,10 @@ public interface DayGiayService {
 
     void deleteDayGiay(Long id);
 
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
     List<DayGiay> getDayGiaysByTrangThai(boolean trangThai);
 
 }

@@ -35,6 +35,17 @@ public class KichThuocServiceImpl implements KichThuocService {
     }
 
     @Override
+    public boolean isTenExists(String ten) {
+        return kichThuocRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<KichThuoc> kichThuocList = kichThuocRepository.findAllByTenAndKichThuocIdNot(ten, id);
+        return !kichThuocList.isEmpty();
+    }
+
+    @Override
     public List<KichThuoc> getKichThuocsByTrangThai(boolean trangThai) {
         return kichThuocRepository.findByTrangThai(trangThai);
     }

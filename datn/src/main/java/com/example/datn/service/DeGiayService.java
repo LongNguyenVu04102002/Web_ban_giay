@@ -14,5 +14,9 @@ public interface DeGiayService {
 
     void deleteDeGiay(Long id);
 
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
     List<DeGiay> getDeGiaysByTrangThai(boolean trangThai);
 }

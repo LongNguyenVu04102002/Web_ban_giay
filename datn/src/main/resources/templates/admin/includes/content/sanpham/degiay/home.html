@@ -4,7 +4,13 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Đế giày</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -81,12 +87,12 @@
                     <div class="card card-layout-frame" role="presentation">
                         <div class="card-body">
                             <h5 class="mb-4 text-center justify-center">Đế Giầy</h5>
-                            <form th:action="@{/admin/sanpham/degiay/save}" method="post" class="p-6"
+                            <form id="deGiayForm" th:action="@{/admin/sanpham/degiay/save}" method="post" class="p-6"
                                   th:object="${deGiay}">
                                 <input type="hidden" th:field="*{deGiayId}" />
                                 <div class="mb-3 mt-3">
                                     <label class="form-label font-medium block text-gray-700">Tên Đế Giầy</label>
-                                    <input type="text" th:field="*{ten}"
+                                    <input type="text" id="tenDeGiay" th:field="*{ten}"
                                            class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                                 </div>
                                 <div class="mb-3">
@@ -110,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="space-x-2 flex justify-center items-center">
-                                    <button type="submit" class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800">
+                                    <button type="submit" id="submitBtn" class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800">
                                         <span th:text="${deGiay.deGiayId == null} ? 'Thêm' : 'Cập Nhập'"></span>
                                     </button>
                                     <a th:href="@{/admin/sanpham/degiay}"
@@ -125,6 +131,61 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#deGiayForm').on('submit', function (event) {
+                var tenDeGiay = $('#tenDeGiay').val().trim();
+
+                if (!tenDeGiay) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên đế giày không được để trống.',
+                    });
+                    return;
+                }
+
+                var deGiayId = $('#deGiayId').val();
+
+                if (deGiayId) {
+                    $.ajax({
+                        url: `/check/update-de-giay?id=${deGiayId}&ten=${tenDeGiay}`,
+                        method: 'GET',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
+                        success: function (response) {
+                            if (response) {
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: `/check/add-de-giay?ten=${tenDeGiay}`,
+                        method: 'GET',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
+                        success: function (response) {
+                            if (response) {
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                }).then(function () {
+                                    $('#deGiayForm')[0].reset();
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

@@ -217,6 +217,15 @@ public class ThongKeServiceImpl implements ThongKeService {
     }
 
     @Override
+    public Integer sumDonHangByDay(Integer trangThai) {
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+        int day = today.getDayOfMonth();
+        return timeLineRepository.sumHoaDonByYearMonthDayAndTrangThai(year, month, day, trangThai);
+    }
+
+    @Override
     public List<Integer> getNumbersInRange(int start, int end) {
         List<Integer> numbers = new ArrayList<>();
         for (int i = start; i <= end; i++) {

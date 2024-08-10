@@ -22,4 +22,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<SanPhamChiTiet> findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
 
     List<SanPhamChiTiet> findAllBySanPham_SanPhamIdAndMauSac_MauSacIdOrderBySanPhamChiTietId(Long idSp, Long idMs);
+
+    @Query("SELECT sp FROM SanPhamChiTiet sp WHERE sp.sanPham.sanPhamId = :sanPhamId AND sp.kichThuoc.kichThuocId = :kichThuocId AND sp.mauSac.mauSacId = :mauSacId AND sp.sanPhamChiTietId <> :sanPhamChiTietId")
+    List<SanPhamChiTiet> findDuplicateExceptCurrent(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
 }

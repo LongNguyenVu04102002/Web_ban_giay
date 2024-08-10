@@ -85,6 +85,12 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return sanPhamChiTietRepository.findPriceBySizeAndColor(sanPhamId,sizeId,colorId);
     }
 
+    @Override
+    public boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId) {
+        List<SanPhamChiTiet> duplicates = sanPhamChiTietRepository.findDuplicateExceptCurrent(sanPhamId, kichThuocId, mauSacId, sanPhamChiTietId);
+        return !duplicates.isEmpty();
+    }
+
     private String generateBarCode() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
     }

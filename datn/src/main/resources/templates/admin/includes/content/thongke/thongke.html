@@ -182,24 +182,38 @@
 <div class="container" layout:fragment="admincontent">
     <div class="header">
         <div class="card">
-            <h2 id="customers-today">0</h2>
-            <p>Khách hàng hôm nay</p>
-            <p id="customers-change-today">+0% so với hôm qua</p>
+            <h2 id="cho-xac-nhan">0</h2>
+            <p>Đơn chờ xác nhận hôm nay</p>
         </div>
         <div class="card">
-            <h2 id="orders-today">0</h2>
-            <p>Đơn hàng hôm nay</p>
-            <p id="orders-change-today">+0% so với hôm qua</p>
+            <h2 id="da-xac-nhan">0</h2>
+            <p>Đơn đã xác nhận hôm nay</p>
         </div>
         <div class="card">
-            <h2 id="customers-month">0</h2>
-            <p>Khách hàng tháng này</p>
-            <p id="customers-change-month">+0% so với tháng trước</p>
+            <h2 id="cho-giao-hang">0</h2>
+            <p>Đơn chờ giao hàng hôm nay</p>
         </div>
         <div class="card">
-            <h2 id="orders-month">0</h2>
-            <p>Đơn hàng tháng này</p>
-            <p id="orders-change-month">+0% so với tháng trước</p>
+            <h2 id="dang-giao-hang">0</h2>
+            <p>Đơn đang giao hàng hôm nay</p>
+        </div>
+    </div>
+    <div class="header">
+        <div class="card">
+            <h2 id="da-giao-hang">0</h2>
+            <p>Đơn đã giao hàng hôm nay</p>
+        </div>
+        <div class="card">
+            <h2 id="hoan-thanh">0</h2>
+            <p>Đơn hoàn thành hôm nay</p>
+        </div>
+        <div class="card">
+            <h2 id="da-huy">0</h2>
+            <p>Đơn hủy hôm nay</p>
+        </div>
+        <div class="card">
+            <h2 id="doanh-thu">0</h2>
+            <p>Doanh thu hoàn thành hôm nay</p>
         </div>
     </div>
     <div class="content">
@@ -259,25 +273,25 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const stats = {
-                customersToday: 0,
-                customersYesterday: 0,
-                ordersToday: 0,
-                ordersYesterday: 0,
-                customersThisMonth: 0,
-                customersLastMonth: 0,
-                ordersThisMonth: 0,
-                ordersLastMonth: 0
+                choXacNhan: 0,
+                daXacNhan: 0,
+                choGiaoHang: 0,
+                dangGiaoHang: 0,
+                daGiaoHang: 0,
+                hoanThanh: 0,
+                daHuy: 0,
+                doanhThu: 0
             };
 
             const apiEndpoints = {
-                customersToday: '/admin/api/thong-ke/countKhachHangToday?trangThai=6',
-                customersYesterday: '/admin/api/thong-ke/countKhachHangYesterday?trangThai=6',
-                ordersToday: '/admin/api/thong-ke/countHoaDonToday?trangThai=6',
-                ordersYesterday: '/admin/api/thong-ke/countHoaDonYesterday?trangThai=6',
-                customersThisMonth: '/admin/api/thong-ke/countKhachHangThisMonth?trangThai=6',
-                customersLastMonth: '/admin/api/thong-ke/countKhachHangLastMonth?trangThai=6',
-                ordersThisMonth: '/admin/api/thong-ke/countHoaDonThisMonth?trangThai=6',
-                ordersLastMonth: '/admin/api/thong-ke/countHoaDonLastMonth?trangThai=6',
+                choXacNhan: '/admin/api/thong-ke/countHoaDonToday?trangThai=1',
+                daXacNhan: '/admin/api/thong-ke/countHoaDonToday?trangThai=2',
+                choGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=3',
+                dangGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=4',
+                daGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=5',
+                hoanThanh: '/admin/api/thong-ke/countHoaDonToday?trangThai=6',
+                daHuy: '/admin/api/thong-ke/countHoaDonToday?trangThai=7',
+                doanhThu: '/admin/api/thong-ke/sumDonHangByDay?trangThai=6',
                 ordersCurrentWeek: '/admin/api/thong-ke/countHoaDonForCurrentWeek?trangThai=6',
                 ordersTodayList: '/admin/api/thong-ke/today',
                 apiEndpoint: '/admin/api/thong-ke/listThuongHieu',
@@ -312,39 +326,23 @@
                 renderOrderList(); // Hiển thị danh sách đơn hàng sau khi lấy dữ liệu
             }
 
-            function calculatePercentageChange(newVal, oldVal) {
-                if (oldVal === 0) {
-                    return newVal > 0 ? '100' : '0';
-                }
-                return ((newVal - oldVal) / oldVal * 100).toFixed(2);
-            }
-
             function updateStats() {
-                const customersYesterday = stats.customersYesterday || 1;
-                const ordersYesterday = stats.ordersYesterday || 1;
-                const customersLastMonth = stats.customersLastMonth || 1;
-                const ordersLastMonth = stats.ordersLastMonth || 1;
 
-                const customersTodayChange = ((stats.customersToday - customersYesterday) / customersYesterday * 100).toFixed(2);
-                const ordersTodayChange = ((stats.ordersToday - ordersYesterday) / ordersYesterday * 100).toFixed(2);
-                const customersMonthChange = ((stats.customersThisMonth - customersLastMonth) / customersLastMonth * 100).toFixed(2);
-                const ordersMonthChange = ((stats.ordersThisMonth - ordersLastMonth) / ordersLastMonth * 100).toFixed(2);
+                const formatter = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                });
 
-                document.getElementById("customers-today").innerText = stats.customersToday;
-                document.getElementById("customers-change-today").innerText = `${customersTodayChange}% so với hôm qua`;
-                document.getElementById("customers-change-today").className = customersTodayChange >= 0 ? 'positive-change' : 'negative-change';
+                const formattedDoanhThu = formatter.format(stats.doanhThu);
 
-                document.getElementById("orders-today").innerText = stats.ordersToday;
-                document.getElementById("orders-change-today").innerText = `${ordersTodayChange}% so với hôm qua`;
-                document.getElementById("orders-change-today").className = ordersTodayChange >= 0 ? 'positive-change' : 'negative-change';
-
-                document.getElementById("customers-month").innerText = stats.customersThisMonth;
-                document.getElementById("customers-change-month").innerText = `${customersMonthChange}% so với tháng trước`;
-                document.getElementById("customers-change-month").className = customersMonthChange >= 0 ? 'positive-change' : 'negative-change';
-
-                document.getElementById("orders-month").innerText = stats.ordersThisMonth;
-                document.getElementById("orders-change-month").innerText = `${ordersMonthChange}% so với tháng trước`;
-                document.getElementById("orders-change-month").className = ordersMonthChange >= 0 ? 'positive-change' : 'negative-change';
+                document.getElementById("cho-xac-nhan").innerText = stats.choXacNhan;
+                document.getElementById("da-xac-nhan").innerText = stats.daXacNhan;
+                document.getElementById("cho-giao-hang").innerText = stats.choGiaoHang;
+                document.getElementById("dang-giao-hang").innerText = stats.daGiaoHang;
+                document.getElementById("da-giao-hang").innerText = stats.daGiaoHang;
+                document.getElementById("hoan-thanh").innerText = stats.hoanThanh;
+                document.getElementById("da-huy").innerText = stats.daHuy;
+                document.getElementById("doanh-thu").innerText = formattedDoanhThu;
             }
 
             // api lấy ra combobox

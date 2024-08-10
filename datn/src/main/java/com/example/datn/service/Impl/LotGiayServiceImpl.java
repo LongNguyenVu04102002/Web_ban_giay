@@ -35,6 +35,17 @@ public class LotGiayServiceImpl implements LotGiayService {
     }
 
     @Override
+    public boolean isTenExists(String ten) {
+        return lotGiayRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<LotGiay> lotGiayList = lotGiayRepository.findAllByTenAndLotGiayIdNot(ten, id);
+        return !lotGiayList.isEmpty();
+    }
+
+    @Override
     public List<LotGiay> getLotGiaysByTrangThai(boolean trangThai) {
         return lotGiayRepository.findByTrangThai(trangThai);
     }
