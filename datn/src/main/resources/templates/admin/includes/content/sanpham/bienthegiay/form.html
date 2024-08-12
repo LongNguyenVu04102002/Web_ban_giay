@@ -89,7 +89,7 @@
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Giá Bán</label>
-                                <input type="text" name="giaBan" min="1000" required
+                                <input type="text" name="giaBan"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-6">
@@ -266,14 +266,14 @@
                 id: option.value,
                 ten: option.innerText
             }));
-            const giaBan = document.querySelector('input[name="giaBan"]').value;
+            const giaBan = document.querySelector('input[name="giaBan"]').value || null;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
 
-            if (giaBan < 1000) {
+            if (giaBan < 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Giá bán phải lớn hơn hoặc bằng 1000.',
+                    text: 'Giá bán không được âm.',
                 });
                 return;
             }
