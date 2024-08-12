@@ -80,11 +80,6 @@ public class ThongKeServiceImpl implements ThongKeService {
     }
 
     @Override
-    public Long countKhachHangByNgayTaoAndTrangThai(LocalDate ngayTao, int trangThai) {
-        return timeLineRepository.countKhachHangByNgayTaoAndTrangThai(ngayTao, trangThai);
-    }
-
-    @Override
     public Long countKhachHangByYearMonthAndTrangThai(int year, int month, int trangThai) {
         return timeLineRepository.countKhachHangByYearMonthAndTrangThai(year, month, trangThai);
     }
@@ -113,7 +108,7 @@ public class ThongKeServiceImpl implements ThongKeService {
 
         List<Long> hoaDonCounts = new ArrayList<>();
         for (LocalDate date : weekDays) {
-            Long count = countKhachHangByNgayTaoAndTrangThai(date, trangThai);
+            Long count = countHoaDonByNgayTaoAndTrangThai(date, trangThai);
             hoaDonCounts.add(count);
         }
         return hoaDonCounts;

@@ -89,7 +89,7 @@
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Giá Bán</label>
-                                <input type="text" name="giaBan" min="1000" required
+                                <input type="text" name="giaBan"
                                        class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-6">
@@ -251,8 +251,8 @@
             placeholder: 'Chọn kích thước'
         });
 
-        const rowCount = 0;
-        const base64Images = [];
+        var rowCount = 0;
+        var base64Images = [];
 
         async function addToTable() {
             const tableBody = document.getElementById('table-body');
@@ -266,14 +266,14 @@
                 id: option.value,
                 ten: option.innerText
             }));
-            const giaBan = document.querySelector('input[name="giaBan"]').value;
+            const giaBan = document.querySelector('input[name="giaBan"]').value || null;
             const soLuong = document.querySelector('input[name="soLuong"]').value;
 
-            if (giaBan < 1000) {
+            if (giaBan < 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Giá bán phải lớn hơn hoặc bằng 1000.',
+                    text: 'Giá bán không được âm.',
                 });
                 return;
             }
@@ -389,7 +389,7 @@
         }
 
         function removeRow(button) {
-            const row = button.closest('tr');
+            var row = button.closest('tr');
             row.remove();
             updateRowIndexes();
         }
@@ -407,34 +407,34 @@
         }
 
         function previewImages(rowCount) {
-            const preview = document.getElementById('imagePreview-' + rowCount);
+            var preview = document.getElementById('imagePreview-' + rowCount);
 
-            const fileInput = document.getElementById('imageInput-' + rowCount);
-            const fileInputData = document.getElementById('imageData-' + rowCount);
-            const files = fileInput.files;
+            var fileInput = document.getElementById('imageInput-' + rowCount);
+            var fileInputData = document.getElementById('imageData-' + rowCount);
+            var files = fileInput.files;
 
-            const fileReaders = [];
+            var fileReaders = [];
             base64Images[rowCount - 1] = [];
 
-            for (const i = 0; i < files.length; i++) {
+            for (var i = 0; i < files.length; i++) {
                 let fileReader = new FileReader();
                 fileReaders.push(fileReader);
 
                 fileReader.onload = function (event) {
-                    const base64Image = event.target.result;
+                    var base64Image = event.target.result;
                     base64Images[rowCount - 1].push(base64Image);
                     fileInputData.value = base64Images[rowCount - 1].join(';');
 
-                    const imgContainer = document.createElement('div');
+                    var imgContainer = document.createElement('div');
                     imgContainer.style.position = 'relative';
                     imgContainer.style.display = 'inline-block';
 
-                    const imgElement = document.createElement('img');
+                    var imgElement = document.createElement('img');
                     imgElement.src = base64Image;
                     imgElement.style.width = '45px';
                     imgElement.style.height = '45px';
 
-                    const removeButton = document.createElement('button');
+                    var removeButton = document.createElement('button');
                     removeButton.textContent = 'X';
                     removeButton.style.position = 'absolute';
                     removeButton.style.top = '0';
