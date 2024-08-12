@@ -16,6 +16,10 @@ public interface HinhAnhService {
 
     void add(HinhAnh hinhAnh);
 
+    byte[] getImageBySanPhamChiTietIdWithPriority(Long sanPhamChiTietId, Integer priority);
+
+    List<HinhAnh> getImagesBySanPhamChiTietId(Long sanPhamChiTietId);
+
     void saveOrUpdateImages(SanPhamChiTiet spct, List<byte[]> imageDatas, Long[] imageIds) throws IOException;
 
 }

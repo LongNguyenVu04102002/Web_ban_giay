@@ -13,5 +13,11 @@ public interface MauSacService {
     void save(MauSac mauSac);
 
     void delete(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<MauSac> getMauSacsByTrangThai(boolean trangThai);
     
 }

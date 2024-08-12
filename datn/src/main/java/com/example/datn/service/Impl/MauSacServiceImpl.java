@@ -34,4 +34,21 @@ public class MauSacServiceImpl implements MauSacService {
         mauSacRepository.deleteById(id);
     }
 
+    @Override
+    public boolean isTenExists(String ten) {
+        return mauSacRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<MauSac> mauSacList = mauSacRepository.findAllByTenAndMauSacIdNot(ten, id);
+        return !mauSacList.isEmpty();
+    }
+
+    @Override
+    public List<MauSac> getMauSacsByTrangThai(boolean trangThai) {
+        return mauSacRepository.findByTrangThai(trangThai);
+    }
+
+
 }

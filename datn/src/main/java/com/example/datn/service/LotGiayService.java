@@ -13,5 +13,11 @@ public interface LotGiayService {
     void saveLotGiay(LotGiay lotGiay);
 
     void deleteLotGiay(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<LotGiay> getLotGiaysByTrangThai(boolean trangThai);
     
 }

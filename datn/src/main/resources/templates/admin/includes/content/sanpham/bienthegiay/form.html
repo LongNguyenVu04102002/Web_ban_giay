@@ -18,14 +18,34 @@
         .imagePreview {
             display: flex;
             overflow-x: auto;
-            max-width: 300px;
+            max-width: 400px;
             white-space: nowrap;
         }
-        .imagePreview img {
-            width: 45px;
-            height: 55px;
-            margin-right: 5px;
+
+        .file-input-container {
+            position: relative;
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .file-input-label {
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f9f9f9;
             display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background-color: #e0e0e0; /* Thay đổi màu nền khi hover để người dùng thấy có phản hồi */
         }
     </style>
 </head>
@@ -139,19 +159,48 @@
             const tableBody = document.getElementById('table-body');
             const rows = tableBody.querySelectorAll('tr');
 
-            const sanPhamChiTietRequestList = Array.from(rows).map((row, index) => {
-                const sanPhamId = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`).value;
-                const kichThuocId = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`).value;
-                const mauSacId = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`).value;
-                const giaBan = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`).value;
-                const soLuong = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`).value;
-                const imageData = row.querySelector(`input[name="sanPhamChiTietList[${index}].imageData"]`).value;
+            const sanPhamChiTietRequestList = [];
+            const errorMessages = [];
+            const uniqueEntries = new Set();
 
-                return {
+            Array.from(rows).forEach((row, index) => {
+                const sanPhamIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].sanPham.sanPhamId"]`);
+                const kichThuocIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].kichThuoc.kichThuocId"]`);
+                const mauSacIdElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].mauSac.mauSacId"]`);
+                const giaBanElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].giaBan"]`);
+                const soLuongElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].soLuong"]`);
+                const imageDataElement = row.querySelector(`input[name="sanPhamChiTietList[${index}].imageData"]`);
+
+                // if (!sanPhamIdElement || !kichThuocIdElement || !mauSacIdElement || !giaBanElement || !soLuongElement || !imageDataElement) {
+                //     errorMessages.push(`Hàng ${index + 1} có trường không tồn tại.`);
+                //     return;
+                // }
+
+                const sanPhamId = sanPhamIdElement.value;
+                const kichThuocId = kichThuocIdElement.value;
+                const mauSacId = mauSacIdElement.value;
+                const giaBan = giaBanElement.value;
+                const soLuong = soLuongElement.value;
+                const imageData = imageDataElement.value;
+
+                if (!sanPhamId || !kichThuocId || !mauSacId || !giaBan || !soLuong || !imageData) {
+                    errorMessages.push(`Hàng ${index + 1} có trường bị bỏ trống.`);
+                    return;
+                }
+
+                const entryKey = `${sanPhamId}-${kichThuocId}-${mauSacId}`;
+                if (uniqueEntries.has(entryKey)) {
+                    errorMessages.push(`Hàng ${index + 1} bị trùng lặp với hàng khác.`);
+                    return;
+                }
+
+                uniqueEntries.add(entryKey);
+
+                sanPhamChiTietRequestList.push({
                     sanPhamChiTiet: {
-                        sanPham: { sanPhamId: sanPhamId },
-                        kichThuoc: { kichThuocId: kichThuocId },
-                        mauSac: { mauSacId: mauSacId },
+                        sanPham: {sanPhamId: sanPhamId},
+                        kichThuoc: {kichThuocId: kichThuocId},
+                        mauSac: {mauSacId: mauSacId},
                         giaBan: giaBan,
                         soLuong: soLuong
                     },
@@ -172,12 +221,22 @@
                             ...item,
                             uuTien: index + 1
                         }))
-                };
+                });
             });
 
-            console.log('San Pham Chi Tiet Request List:', sanPhamChiTietRequestList);
-
-            saveSanPhamChiTiet(sanPhamChiTietRequestList);
+            if (errorMessages.length > 0) {
+                Swal.fire({
+                    title: 'Có lỗi!',
+                    text: 'Có lỗi ở các hàng sau:\n' + errorMessages.join('\n'),
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    position: 'center'
+                });
+            } else if (sanPhamChiTietRequestList.length > 0) {
+                saveSanPhamChiTiet(sanPhamChiTietRequestList);
+            }
         });
 
         const selectColor = new TomSelect('#color', {
@@ -192,10 +251,10 @@
             placeholder: 'Chọn kích thước'
         });
 
-        var rowCount = 0;
-        var base64Images = [];
+        const rowCount = 0;
+        const base64Images = [];
 
-        function addToTable() {
+        async function addToTable() {
             const tableBody = document.getElementById('table-body');
             const sanPhamId = document.querySelector('select[name="sanPham"]').value;
             const sanPhamTen = document.querySelector('select[name="sanPham"] option:checked').innerText;
@@ -244,20 +303,54 @@
             }
 
             const sanPhamChiTietList = [];
+            const duplicatedItems = [];
 
-            selectedColors.forEach(color => {
-                selectedSizes.forEach(size => {
-                    const sanPhamChiTiet = {
-                        sanPham: { sanPhamId: sanPhamId, ten: sanPhamTen },
-                        kichThuoc: { kichThuocId: size.id, ten: size.ten },
-                        mauSac: { mauSacId: color.id, ten: color.ten },
-                        giaBan: giaBan,
-                        soLuong: soLuong,
-                    };
-                    sanPhamChiTietList.push(sanPhamChiTiet);
-                    appendToTable(sanPhamChiTiet);
+            for (const color of selectedColors) {
+                for (const size of selectedSizes) {
+                    const exists = await checkTonTai(sanPhamId, size.id, color.id);
+                    if (!exists) {
+                        const sanPhamChiTiet = {
+                            sanPham: {sanPhamId: sanPhamId, ten: sanPhamTen},
+                            kichThuoc: {kichThuocId: size.id, ten: size.ten},
+                            mauSac: {mauSacId: color.id, ten: color.ten},
+                            giaBan: giaBan,
+                            soLuong: soLuong,
+                        };
+                        sanPhamChiTietList.push(sanPhamChiTiet);
+                        appendToTable(sanPhamChiTiet);
+                    } else {
+                        duplicatedItems.push({ sanPhamTen, size, color });
+                    }
+                }
+            }
+
+            if (duplicatedItems.length > 0) {
+
+                Swal.fire({
+                    title: 'Có lỗi!',
+                    text: "Những sản phẩm sau đã tồn tại: " + duplicatedItems.map(item => `${item.sanPhamTen} - ${item.size.ten} - ${item.color.ten}`).join(", "),
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    position: 'center'
                 });
-            });
+            }
+            updateRowIndexes();
+        }
+
+        async function checkTonTai(sanPhamId, kichThuocId, mauSacId) {
+            try {
+                const response = await fetch(`/check/add-spct?sanPhamId=${sanPhamId}&kichThuocId=${kichThuocId}&mauSacId=${mauSacId}`, {});
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
         }
 
         function appendToTable(sanPhamChiTiet) {
@@ -273,7 +366,10 @@
                 <input type="hidden" name="sanPhamChiTietList[${rowCount}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">
                 <input type="hidden" name="sanPhamChiTietList[${rowCount}].mauSac.mauSacId" value="${sanPhamChiTiet.mauSac.mauSacId}">
                 <td>
-                    <input type="file" id="imageInput-${rowCount}" name="imageInput-${rowCount}" multiple onchange="previewImages(${rowCount})" required>
+                    <div class="file-input-container">
+                        <label for="imageInput-${rowCount}" class="file-input-label">Chọn hình ảnh</label>
+                        <input type="file" id="imageInput-${rowCount}" name="imageInput-${rowCount}" multiple onchange="previewImages(${rowCount})">
+                    </div>
                     <input type="hidden" id="imageData-${rowCount}" name="sanPhamChiTietList[${rowCount}].imageData">
                     <div id="imagePreview-${rowCount}" class="flex imagePreview"></div>
                 </td>
@@ -293,9 +389,8 @@
         }
 
         function removeRow(button) {
-            var row = button.closest('tr');
+            const row = button.closest('tr');
             row.remove();
-            // Cập nhật lại chỉ số dòng sau khi xóa
             updateRowIndexes();
         }
 
@@ -312,35 +407,66 @@
         }
 
         function previewImages(rowCount) {
-            var preview = document.getElementById('imagePreview-' + rowCount);
-            preview.innerHTML = '';
+            const preview = document.getElementById('imagePreview-' + rowCount);
 
-            var fileInput = document.getElementById('imageInput-' + rowCount);
-            var fileInputData = document.getElementById('imageData-' + rowCount);
-            var files = fileInput.files;
+            const fileInput = document.getElementById('imageInput-' + rowCount);
+            const fileInputData = document.getElementById('imageData-' + rowCount);
+            const files = fileInput.files;
 
-            var fileReaders = [];
+            const fileReaders = [];
             base64Images[rowCount - 1] = [];
 
-            for (var i = 0; i < files.length; i++) {
+            for (const i = 0; i < files.length; i++) {
                 let fileReader = new FileReader();
                 fileReaders.push(fileReader);
 
                 fileReader.onload = function (event) {
-                    var base64Image = event.target.result;
+                    const base64Image = event.target.result;
                     base64Images[rowCount - 1].push(base64Image);
                     fileInputData.value = base64Images[rowCount - 1].join(';');
 
-                    var imgElement = document.createElement('img');
+                    const imgContainer = document.createElement('div');
+                    imgContainer.style.position = 'relative';
+                    imgContainer.style.display = 'inline-block';
+
+                    const imgElement = document.createElement('img');
                     imgElement.src = base64Image;
-                    preview.appendChild(imgElement);
+                    imgElement.style.width = '45px';
+                    imgElement.style.height = '45px';
+
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'X';
+                    removeButton.style.position = 'absolute';
+                    removeButton.style.top = '0';
+                    removeButton.style.right = '0';
+                    removeButton.style.background = 'red';
+                    removeButton.style.color = 'white';
+                    removeButton.style.border = 'none';
+                    removeButton.style.borderRadius = '50%';
+                    removeButton.style.cursor = 'pointer';
+                    removeButton.onclick = function () {
+                        removeImage(base64Image, rowCount, imgContainer);
+                    };
+
+                    imgContainer.appendChild(imgElement);
+                    imgContainer.appendChild(removeButton);
+                    preview.appendChild(imgContainer);
                 };
 
                 fileReader.readAsDataURL(files[i]);
             }
         }
 
+        function removeImage(imageToRemove, rowCount, imgContainer) {
+            base64Images[rowCount - 1] = base64Images[rowCount - 1].filter(image => image !== imageToRemove);
+
+            document.getElementById('imageData-' + rowCount).value = base64Images[rowCount - 1].join(';');
+
+            imgContainer.remove();
+        }
+
         function saveSanPhamChiTiet(sanPhamChiTietRequestList) {
+            console.log("sanPhamChiTietRequestList" + sanPhamChiTietRequestList);
             fetch('/sanphamchitiet/bienthegiay/save', {
                 method: 'POST',
                 headers: {
@@ -371,8 +497,16 @@
                     }, 1000);
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Đã xảy ra lỗi khi lưu biến thể giày');
+                    Swal.fire({
+                        position: 'top-end',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        width: '300px',
+                        text: 'Đã xảy ra lỗi khi lưu biến thể giày',
+                        timerProgressBar: true,
+                        icon: 'error',
+                    });
                 });
         }
     </script>

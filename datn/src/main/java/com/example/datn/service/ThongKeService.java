@@ -40,5 +40,8 @@ public interface ThongKeService {
 
     List<Integer> sumDonHangByMonth(Integer start, Integer end, Integer trangThai);
 
+    Integer sumDonHangByDay(Integer trangThai);
+
     List<Integer> getNumbersInRange(int start, int end);
+
 }

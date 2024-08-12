@@ -4,7 +4,13 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Thương hiệu</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -88,12 +94,12 @@
                     <div class="card card-layout-frame" role="presentation">
                         <div class="card-body">
                             <h5 class="mb-4 text-center justify-center">Thương Hiệu</h5>
-                            <form th:action="@{/admin/sanpham/thuonghieu/save}" method="post" class="p-6"
+                            <form id="thuongHieuForm" th:action="@{/admin/sanpham/thuonghieu/save}" method="post" class="p-6"
                                   th:object="${thuongHieu}">
                                 <input type="hidden" th:field="*{thuongHieuId}"/>
                                 <div class="mb-3 mt-3">
                                     <label class="form-label font-medium block text-gray-700">Tên Thương Hiệu</label>
-                                    <input type="text" th:field="*{ten}"
+                                    <input type="text" id="tenThuongHieu" th:field="*{ten}"
                                            class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                                 </div>
                                 <div class="mb-3">
@@ -118,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div class="space-x-2 flex justify-center items-center">
-                                    <button type="submit"
+                                    <button type="submit" id="submitBtn"
                                             class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800">
                                         <span th:text="${thuongHieu.thuongHieuId == null} ? 'Thêm' : 'Cập Nhập'"></span>
                                     </button>
@@ -134,6 +140,61 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#thuongHieuForm').on('submit', function (event) {
+                var tenThuongHieu = $('#tenThuongHieu').val().trim();
+
+                if (!tenThuongHieu) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên thương hiệu không được để trống.',
+                    });
+                    return;
+                }
+
+                var thuongHieuId = $('#thuongHieuId').val();
+
+                if (thuongHieuId) {
+                    $.ajax({
+                        url: `/check/update-th?id=${thuongHieuId}&ten=${tenThuongHieu}`,
+                        method: 'GET',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
+                        success: function (response) {
+                            if (response) {
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: `/check/add-th?ten=${tenThuongHieu}`,
+                        method: 'GET',
+                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
+                        success: function (response) {
+                            if (response) {
+                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                }).then(function () {
+                                    $('#thuongHieuForm')[0].reset();
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

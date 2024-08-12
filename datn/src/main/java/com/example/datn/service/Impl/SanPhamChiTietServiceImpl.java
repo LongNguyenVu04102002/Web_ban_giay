@@ -39,13 +39,20 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     }
 
     @Override
-    public void save(List<SanPhamChiTiet> sanPhamChiTietList) {
-        for (SanPhamChiTiet spct : sanPhamChiTietList) {
-            if (spct.getBarCode() == null || spct.getBarCode().isEmpty()) {
-                spct.setBarCode(generateBarCode());
-            }
+    public boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId) {
+        List<SanPhamChiTiet> sanPhamChiTiets = sanPhamChiTietRepository.findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(sanPhamId, kichThuocId, mauSacId);
+        if (!sanPhamChiTiets.isEmpty()){
+            return true;
         }
-        sanPhamChiTietRepository.saveAll(sanPhamChiTietList);
+        return false;
+    }
+
+    @Override
+    public void add(SanPhamChiTiet sanPhamChiTiet) {
+        if (sanPhamChiTiet.getBarCode() == null || sanPhamChiTiet.getBarCode().isEmpty()) {
+            sanPhamChiTiet.setBarCode(generateBarCode());
+        }
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
     }
 
     @Override
@@ -66,6 +73,12 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     @Override
     public BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId) {
         return sanPhamChiTietRepository.findPriceBySizeAndColor(sanPhamId,sizeId,colorId);
+    }
+
+    @Override
+    public boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId) {
+        List<SanPhamChiTiet> duplicates = sanPhamChiTietRepository.findDuplicateExceptCurrent(sanPhamId, kichThuocId, mauSacId, sanPhamChiTietId);
+        return !duplicates.isEmpty();
     }
 
     private String generateBarCode() {

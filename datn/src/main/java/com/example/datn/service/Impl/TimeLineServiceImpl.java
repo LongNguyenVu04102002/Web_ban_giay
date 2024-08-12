@@ -1,15 +1,20 @@
 package com.example.datn.service.Impl;
 
+import com.example.datn.dto.MyUserDetail;
 import com.example.datn.entity.HinhThucThanhToan;
 import com.example.datn.entity.HoaDon;
+import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.PhuongThucThanhToan;
 import com.example.datn.entity.TimeLine;
 import com.example.datn.repository.HinhThucThanhToanRepository;
 import com.example.datn.repository.HoaDonRepository;
+import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.repository.PhuongThucThanhToanRepository;
 import com.example.datn.repository.TimeLineRepository;
 import com.example.datn.service.TimeLineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +29,8 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
+    @Autowired
+    private NhanVienRepository nhanVienRepository;
     @Override
     public TimeLine xacNhanHoaDon(Long id, String mota) {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
@@ -31,11 +38,26 @@ public class TimeLineServiceImpl implements TimeLineService {
             hoaDon.setTrangThai(2);
             hoaDonRepository.save(hoaDon);
         }
+
         TimeLine timeLine = new TimeLine();
         timeLine.setNgayTao(LocalDate.now());
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(2);
+        return getTimeLine(timeLine);
+    }
+
+    private TimeLine getTimeLine(TimeLine timeLine) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof MyUserDetail) {
+                Long nhanVienId = ((MyUserDetail) principal).getId();
+                Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
+                nhanVien.ifPresent(vien -> timeLine.setNguoiThucHien(vien.getMaNhanVien()));
+            }
+        }
+
         return timeLineRepository.save(timeLine);
     }
 
@@ -51,7 +73,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(3);
-        return timeLineRepository.save(timeLine);
+        return getTimeLine(timeLine);
     }
 
     @Override
@@ -66,7 +88,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(4);
-        return timeLineRepository.save(timeLine);
+        return getTimeLine(timeLine);
     }
 
     @Override
@@ -81,7 +103,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(5);
-        return timeLineRepository.save(timeLine);
+        return getTimeLine(timeLine);
     }
 
     @Override
@@ -98,7 +120,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(6);
-        return timeLineRepository.save(timeLine);
+        return getTimeLine(timeLine);
     }
 
     @Override
@@ -113,7 +135,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setMoTa(mota);
         timeLine.setTrangThai(7);
-        return timeLineRepository.save(timeLine);
+        return getTimeLine(timeLine);
     }
 
     @Override
@@ -132,6 +154,15 @@ public class TimeLineServiceImpl implements TimeLineService {
                     tl.setNgayTao(LocalDate.now());
                     tl.setHoaDon(hoaDon);
                     tl.setTrangThai(lastTimeLine.getTrangThai());
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    if (authentication != null && authentication.isAuthenticated()) {
+                        Object principal = authentication.getPrincipal();
+                        if (principal instanceof MyUserDetail) {
+                            Long nhanVienId = ((MyUserDetail) principal).getId();
+                            Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
+                            nhanVien.ifPresent(vien -> timeLine.setNguoiThucHien(vien.getMaNhanVien()));
+                        }
+                    }
                     timeLineRepository.save(tl);
                 }
             }

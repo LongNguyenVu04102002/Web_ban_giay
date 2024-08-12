@@ -1,7 +1,9 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.NhanVien;
+import com.example.datn.service.Impl.EmailService;
 import com.example.datn.service.Impl.NhanVienServiceImpl;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ public class NhanVienController {
 
     @Autowired
     NhanVienServiceImpl nhanVienService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/nhanvien")
     public String show(Model model) {
@@ -40,7 +45,7 @@ public class NhanVienController {
     }
 
     @PostMapping("/nhanvien/save")
-    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model ) {
+    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model ) throws MessagingException {
         if (nhanVienService.existsByEmail(nhanVien.getEmail()) != null){
 //                ||nhanVienService.existsBySdt(nhanVien.getSdt())) {
             bindingResult.rejectValue("email", "error.nhanVien", "email da ton tai");
@@ -56,6 +61,8 @@ public class NhanVienController {
             return "admin/includes/content/nhanvien/form";
         } else {
             nhanVienService.save(nhanVien);
+            emailService.sendEmail(nhanVien.getEmail(),"You have successfully registered an account.",
+                    "Your password is: " + nhanVien.getSdt());
             return "redirect:/admin/taikhoan/nhanvien";
         }
     }

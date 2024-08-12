@@ -1,6 +1,5 @@
 package com.example.datn.service;
 
-import com.example.datn.entity.SanPham;
 import com.example.datn.entity.SanPhamChiTiet;
 import org.springframework.http.ResponseEntity;
 
@@ -17,12 +16,16 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet getById(Long id);
 
-    void save(List<SanPhamChiTiet> sanPhamChiTietList);
+    boolean findBySanPham_SanPhamIdAndKichThuoc_KichThuocIdAndMauSac_MauSacId(Long sanPhamId, Long kichThuocId, Long mauSacId);
+
+    void add(SanPhamChiTiet sanPhamChiTiet);
 
     void saveOfUpdate(SanPhamChiTiet sanPhamChiTiet);
 
     void update(Long id);
 
     BigDecimal getPrice(Long sanPhamId, Long sizeId, Long colorId);
+
+    boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
 
 }

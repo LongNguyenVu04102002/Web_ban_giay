@@ -1,316 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
-<!--      layout:decorate="~{admin/layout.html}">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css">-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/tom-select"></script>-->
-<!--    <title>Thống kê</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div layout:fragment="admincontent">-->
-
-<!--    <div class="grid grid-cols-1 xl:grid-cols-11 gap-4 mt-4">-->
-<!--        <div class="card card-layout-frame 2xl:col-span-8 xl:col-span-7">-->
-<!--            <div class="card-body">-->
-<!--                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">-->
-<!--                    <div>-->
-<!--                        <p>Portfolio Balance</p>-->
-<!--                        <h4 class="font-bold">-->
-<!--                            <span>$45,966.12</span>-->
-<!--                        </h4>-->
-<!--                    </div>-->
-<!--                    <div class="segment segment-sm">-->
-<!--                        <button class="segment-item">Week</button>-->
-<!--                        <button class="segment-item segment-item-active">Month</button>-->
-<!--                        <button class="segment-item">Year</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div id="portfolio-perfomance-chart"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="card card-layout-frame 2xl:col-span-3 xl:col-span-4">-->
-<!--            <div class="card card-layout-frame">-->
-<!--                <div class="card-body">-->
-<!--                    <h4>Categories</h4>-->
-<!--                    <div class="mt-6">-->
-<!--                        <div id="categories-chart"></div>-->
-<!--                    </div>-->
-<!--                    <div class="mt-6 grid grid-cols-2 gap-4 max-w-[180px] mx-auto">-->
-<!--                        <div class="flex items-center gap-1">-->
-<!--                            <span class="badge-dot" style="background-color: rgb(79, 70, 229);"></span>-->
-<!--                            <span class="font-semibold">Devices</span>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center gap-1">-->
-<!--                            <span class="badge-dot" style="background-color: rgb(59, 130, 246);"></span>-->
-<!--                            <span class="font-semibold">Watches</span>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center gap-1">-->
-<!--                            <span class="badge-dot" style="background-color: rgb(16, 185, 129);"></span>-->
-<!--                            <span class="font-semibold">Bags</span>-->
-<!--                        </div>-->
-<!--                        <div class="flex items-center gap-1">-->
-<!--                            <span class="badge-dot" style="background-color: rgb(245, 158, 11);"></span>-->
-<!--                            <span class="font-semibold">Shoes</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="grid grid-cols-1 xl:grid-cols-11 gap-4 mt-4">-->
-<!--        <div class="card card-layout-frame 2xl:col-span-8 xl:col-span-7">-->
-<!--            <div class="card-body">-->
-<!--                <div class="flex items-center justify-between mb-6">-->
-<!--                    <h4>Latest Orders</h4>-->
-<!--                    <button class="btn btn-sm btn-default">View Orders</button>-->
-<!--                </div>-->
-<!--                <div class="overflow-x-auto">-->
-<!--                    <table class="table-default table-hover">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th>Order</th>-->
-<!--                            <th>Status</th>-->
-<!--                            <th>Date</th>-->
-<!--                            <th>Customer</th>-->
-<!--                            <th>Profile Progress</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#95954</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-emerald-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-emerald-500">Paid</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>10/08/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Ron Vargas</td>-->
-<!--                            <td>-->
-<!--                                <span>$168.00</span-->
-<!--                                ></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#95423</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-emerald-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-emerald-500">Paid</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>30/07/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Carolyn Hanso</td>-->
-<!--                            <td>-->
-<!--                                <span>$523.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#92903</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-amber-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-amber-500">Pending</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>18/07/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Gabriella May</td>-->
-<!--                            <td>-->
-<!--                                <span>$81.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#92627</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-red-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-red-500">Failed</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>09/07/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Tara Fletcher</td>-->
-<!--                            <td>-->
-<!--                                <span>$279.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#89332</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-emerald-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-emerald-500">Paid</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>02/06/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Eileen Horton</td>-->
-<!--                            <td>-->
-<!--                                <span>$597.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#86497</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-red-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-red-500">Failed</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>19/03/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Lloyd Obrien</td>-->
-<!--                            <td>-->
-<!--                                <span>$189.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <span class="cursor-pointer select-none font-semibold hover:text-indigo-600">#86212</span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center">-->
-<!--                                    <span class="badge-dot bg-emerald-500"></span>-->
-<!--                                    <span class="ml-2 rtl:mr-2 capitalize font-semibold text-emerald-500">Paid</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <span>09/03/2022</span>-->
-<!--                            </td>-->
-<!--                            <td>Tara Fletcher</td>-->
-<!--                            <td>-->
-<!--                                <span>$672.00</span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="card card-layout-frame 2xl:col-span-3 xl:col-span-4">-->
-<!--            <div class="card-body">-->
-<!--                <div class="flex items-center justify-between mb-4">-->
-<!--                    <h4>Top Selling</h4>-->
-<!--                    <button class="btn btn-sm btn-default">View Products</button>-->
-<!--                </div>-->
-<!--                <div class="overflow-x-auto">-->
-<!--                    <table class="table-default table-hover">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th>Product</th>-->
-<!--                            <th>Sold</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center gap-2">-->
-<!--                                    <span class="avatar avatar-rounded avatar-md">-->
-<!--                                        <img-->
-<!--                                                class="avatar-img avatar-rounded"-->
-<!--                                                src="img/products/product-1.jpg"-->
-<!--                                                loading="lazy"-->
-<!--                                        />-->
-<!--                                    </span>-->
-<!--                                    <span class="font-semibold"-->
-<!--                                    >Luminaire Giotto Headphones</span-->
-<!--                                    >-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>252</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center gap-2">-->
-<!--                                    <span class="avatar avatar-rounded avatar-md">-->
-<!--                                        <img-->
-<!--                                                class="avatar-img avatar-rounded"-->
-<!--                                                src="img/products/product-3.jpg"-->
-<!--                                                loading="lazy"-->
-<!--                                        />-->
-<!--                                    </span>-->
-<!--                                    <span class="font-semibold">Black Sneaker</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>186</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center gap-2">-->
-<!--                                    <span class="avatar avatar-rounded avatar-md">-->
-<!--                                        <img-->
-<!--                                                class="avatar-img avatar-rounded"-->
-<!--                                                src="img/products/product-4.jpg"-->
-<!--                                                loading="lazy"-->
-<!--                                        />-->
-<!--                                    </span>-->
-<!--                                    <span class="font-semibold">Gray Hoodies</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>166</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center gap-2">-->
-<!--                                    <span class="avatar avatar-rounded avatar-md">-->
-<!--                                        <img-->
-<!--                                                class="avatar-img avatar-rounded"-->
-<!--                                                src="img/products/product-5.jpg"-->
-<!--                                                loading="lazy"-->
-<!--                                        />-->
-<!--                                    </span>-->
-<!--                                    <span class="font-semibold">Blue Backpack</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>93</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <div class="flex items-center gap-2">-->
-<!--                                    <span class="avatar avatar-rounded avatar-md">-->
-<!--                                        <img-->
-<!--                                                class="avatar-img avatar-rounded"-->
-<!--                                                src="img/products/product-7.jpg"-->
-<!--                                                loading="lazy"-->
-<!--                                        />-->
-<!--                                    </span>-->
-<!--                                    <span class="font-semibold">Strip Analog Watch</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>81</td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -325,166 +12,88 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
-
     <title>Trang Thống Kê</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f8f9fa;
-            }
+    <style>
+        .div-tong {
+            width: 100%;
+            margin-top: 25px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .tabs {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #fff;
+            color : #007bff;
+            border: 1px solid #dddddd;
+            border-radius: 5px 5px 0 0;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .tab.active {
+            color : #fff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-bottom: none;
+        }
+        .tab:hover {
+            background-color: #0056b3;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #007bff;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .input-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .input-container label {
+            margin-right: 10px;
+        }
+        .input-container select, .input-container input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-container select:focus, .input-container input:focus {
+            border-color: #4CAF50;
+        }
+        .input-container button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
 
-            .container {
-                padding: 20px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-around;
-                margin-bottom: 20px;
-            }
-
-            .positive-change {
-                color: green;
-            }
-
-            .negative-change {
-                color: red;
-            }
-
-            .content {
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .chart, .orders {
-                background: #fff;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                width: 48%;
-                height: 400px;
-                overflow-y: auto;
-            }
-
-            .orders ul {
-                list-style: none;
-                padding: 0;
-            }
-
-            .orders li {
-                padding: 10px;
-                border-bottom: 1px solid #dee2e6;
-            }
-
-            .orders li:last-child {
-                border-bottom: none;
-            }
-
-            .pagination {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-            }
-
-            .pagination button {
-                background: #007bff;
-                color: #fff;
-                border: none;
-                padding: 10px 20px;
-                margin: 0 5px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-
-            .pagination button:hover {
-                background: #0056b3;
-            }
-
-            .tabs {
-                display: flex;
-                flex-direction: column;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                overflow: hidden;
-                background-color: #f1f1f1;
-                margin-right: 20px;
-            }
-
-            .tab {
-                padding: 10px 20px;
-                cursor: pointer;
-                border-bottom: 1px solid #ccc;
-                text-align: center;
-                background-color: #fff;
-                transition: background-color 0.3s;
-            }
-
-            .tab:last-child {
-                border-bottom: none;
-            }
-
-            .tab.active {
-                background-color: #4CAF50;
-                color: white;
-            }
-
-            .tab:hover {
-                background-color: #ddd;
-            }
-
-            .chart-container {
-                flex: 1;
-                display: none;
-                padding: 20px;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                background-color: #fff;
-            }
-
-            .chart-container.active {
-                display: block;
-            }
-
-            .input-container {
-                margin-top: 20px;
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-            }
-
-            .input-container label {
-                margin-right: 10px;
-            }
-
-            .input-container select, .input-container input {
-                padding: 5px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                outline: none;
-                transition: border-color 0.3s;
-            }
-
-            .input-container select:focus, .input-container input:focus {
-                border-color: #4CAF50;
-            }
-
-            .input-container button {
-                padding: 5px 15px;
-                border: none;
-                border-radius: 5px;
-                background-color: #4CAF50;
-                color: white;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .input-container button:hover {
-                background-color: #45a049;
-            }
-        </style>
 </head>
 <body>
 <div class="container" layout:fragment="admincontent">
@@ -508,8 +117,8 @@
                         </span>
                         <div>
                             <div class="flex gap-1.5 items-end mb-2">
-                                <h2 id="customers-today">0</h2>
-                                <p>Khách hàng hôm nay</p>
+                                <h3 class="font-bold leading-none" id="cho-xac-nhan">0</h3>
+                                <p class="font-semibold">Đơn chờ xác nhận hôm nay</p>
                             </div>
                             <p class="flex items-center gap-1">
                                 <span class="flex items-center rounded-full gap-1">
@@ -523,9 +132,9 @@
                                                   d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                         </svg>
                                     </span>
-                                    <span id="customers-change-today">+0% </span>
+                                    <span class="font-bold leading-none">+0%</span>
                                 </span>
-                                <span>so với hôm qua</span>
+                                <span class="font-semibold">so với hôm qua</span>
                             </p>
                         </div>
                     </div>
@@ -537,19 +146,192 @@
                         <span class="avatar avatar-rounded bg-cyan-100 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-100 avatar-lg text-3xl"
                               data-avatar-size="55">
                             <span class="avatar-icon">
+                                <span class="avatar-icon">
+                                    <svg stroke="currentColor" fill="currentColor"
+                                         stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </span>
+                        </span>
+                        <div>
+                            <div class="flex gap-1.5 items-end mb-2">
+                                <h3 class="font-bold leading-none" id="da-xac-nhan">0</h3>
+                                <p class="font-semibold">Đơn đã xác nhận hôm nay</p>
+                            </div>
+                            <p class="flex items-center gap-1">
+                                <span class="flex items-center rounded-full gap-1">
+                                    <span class="rounded-full p-1 bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-100">
+                                        <svg stroke="currentColor" fill="none"
+                                             stroke-width="2" viewBox="0 0 24 24"
+                                             aria-hidden="true" height="1em" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="font-semibold text-emerald-600">+ 0%</span>
+                                </span>
+                                <span>so với hôm qua</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-layout-frame">
+                <div class="card-body">
+                    <div class="flex items-center gap-4">
+                        <span class="avatar avatar-rounded bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-100 avatar-lg text-3xl"
+                              data-avatar-size="55">
+                            <span class="avatar-icon">
                                 <svg stroke="currentColor" fill="currentColor"
                                      stroke-width="0" viewBox="0 0 20 20"
                                      aria-hidden="true" height="1em" width="1em"
                                      xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                    <path fill-rule="evenodd"
+                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                          clip-rule="evenodd"></path>
                                 </svg>
                             </span>
                         </span>
                         <div>
                             <div class="flex gap-1.5 items-end mb-2">
-                                <h3 class="font-bold leading-none" id="orders-today">0</h3>
-                                <p class="font-semibold">Đơn hàng hôm nay</p>
+                                <h3 class="font-bold leading-none" id="cho-giao-hang">0</h3>
+                                <p class="font-semibold">Đơn chờ giao hàng hôm nay</p>
+                            </div>
+                            <p class="flex items-center gap-1">
+                                <span class="flex items-center rounded-full gap-1">
+                                    <span class="rounded-full p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-500/20">
+                                        <svg stroke="currentColor" fill="none"
+                                             stroke-width="2" viewBox="0 0 24 24"
+                                             aria-hidden="true" height="1em" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="font-semibold text-red-600">+ 0%</span>
+                                </span>
+                                <span>so với hôm qua</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-layout-frame">
+                <div class="card-body">
+                    <div class="flex items-center gap-4">
+                            <span class="avatar avatar-rounded bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-100 avatar-lg text-3xl"
+                                  data-avatar-size="55">
+                                <span class="avatar-icon">
+                                    <svg stroke="currentColor" fill="currentColor"
+                                         stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </span>
+                        <div>
+                            <div class="flex gap-1.5 items-end mb-2">
+                                <h3 class="font-bold leading-none" id="dang-giao-hang">0</h3>
+                                <p class="font-semibold">Đơn đang giao hàng hôm nay</p>
+                            </div>
+                            <p class="flex items-center gap-1">
+                                <span class="flex items-center rounded-full gap-1">
+                                    <span class="rounded-full p-1 bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-100">
+                                        <svg stroke="currentColor" fill="none"
+                                             stroke-width="2" viewBox="0 0 24 24"
+                                             aria-hidden="true" height="1em" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="font-semibold text-emerald-600">+ 0%</span>
+                                </span>
+                                <span>so với hôm qua</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-4 mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="card card-layout-frame">
+                <div class="card-body">
+                    <div class="flex items-center gap-4">
+                        <span class="avatar avatar-rounded bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100 avatar-lg text-3xl"
+                              data-avatar-size="55">
+                            <span class="avatar-icon">
+                                <svg stroke="currentColor" fill="currentColor"
+                                     stroke-width="0" viewBox="0 0 20 20"
+                                     aria-hidden="true" height="1em" width="1em"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                        </span>
+                        <div>
+                            <div class="flex gap-1.5 items-end mb-2">
+                                <h3 class="font-bold leading-none" id="da-giao-hang">0</h3>
+                                <p class="font-semibold">Đơn đã giao hàng hôm nay</p>
+                            </div>
+                            <p class="flex items-center gap-1">
+                                <span class="flex items-center rounded-full gap-1">
+                                    <span class="rounded-full p-1 bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-100">
+                                        <svg stroke="currentColor" fill="none"
+                                             stroke-width="2" viewBox="0 0 24 24"
+                                             aria-hidden="true" height="1em" width="1em"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="font-bold leading-none">+0% </span>
+                                </span>
+                                <span class="font-semibold">so với hôm qua</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-layout-frame">
+                <div class="card-body">
+                    <div class="flex items-center gap-4">
+                        <span class="avatar avatar-rounded bg-cyan-100 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-100 avatar-lg text-3xl"
+                              data-avatar-size="55">
+                            <span class="avatar-icon">
+                                <span class="avatar-icon">
+                                    <svg stroke="currentColor" fill="currentColor"
+                                         stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </span>
+                        </span>
+                        <div>
+                            <div class="flex gap-1.5 items-end mb-2">
+                                <h3 class="font-bold leading-none" id="hoan-thanh">0</h3>
+                                <p class="font-semibold">Đơn hoàn thành hôm nay</p>
                             </div>
                             <p class="flex items-center gap-1">
                                 <span class="flex items-center rounded-full gap-1">
@@ -582,15 +364,15 @@
                                      aria-hidden="true" height="1em" width="1em"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
-                                          d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
                                           clip-rule="evenodd"></path>
                                 </svg>
                             </span>
                         </span>
                         <div>
                             <div class="flex gap-1.5 items-end mb-2">
-                                <h3 class="font-bold leading-none" id="customers-month">0</h3>
-                                <p class="font-semibold">Khách hàng tháng này</p>
+                                <h3 class="font-bold leading-none" id="da-huy">0</h3>
+                                <p class="font-semibold">Đơn hủy hôm nay</p>
                             </div>
                             <p class="flex items-center gap-1">
                                 <span class="flex items-center rounded-full gap-1">
@@ -604,9 +386,9 @@
                                                   d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
                                         </svg>
                                     </span>
-                                    <span class="font-semibold text-red-600" id="customers-change-month">+ 0%</span>
+                                    <span class="font-semibold text-red-600">+ 0%</span>
                                 </span>
-                                <span>so với tháng trước</span>
+                                <span>so với hôm qua</span>
                             </p>
                         </div>
                     </div>
@@ -630,8 +412,8 @@
                             </span>
                         <div>
                             <div class="flex gap-1.5 items-end mb-2">
-                                <h3 class="font-bold leading-none" id="orders-month">0</h3>
-                                <p class="font-semibold">Đơn hàng tháng này</p>
+                                <h3 class="font-bold leading-none" id="doanh-thu">0</h3>
+                                <p class="font-semibold">Doanh thu hôm nay</p>
                             </div>
                             <p class="flex items-center gap-1">
                                 <span class="flex items-center rounded-full gap-1">
@@ -645,9 +427,9 @@
                                                   d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                                         </svg>
                                     </span>
-                                    <span class="font-semibold text-emerald-600" id="orders-change-month">+ 0% </span>
+                                    <span class="font-semibold text-emerald-600">+ 0% </span>
                                 </span>
-                                <span>so với tháng trước</span>
+                                <span>so với hôm qua</span>
                             </p>
                         </div>
                     </div>
@@ -655,51 +437,61 @@
             </div>
         </div>
     </div>
-    <div class="content">
-        <div class="chart">
-            <canvas id="orderChart"></canvas>
-        </div>
-        <div class="orders">
-            <h3>Danh sách đơn hàng hôm nay</h3>
-            <ul id="orderList">
-                <!-- Orders will be inserted here -->
-            </ul>
-            <div class="pagination">
-                <button id="prevPage">Trước</button>
-                <button id="nextPage">Sau</button>
+    <div class="flex flex-col gap-4 mb-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+            <div class="card card-layout-frame">
+                <div class="card-body content">
+                    <div class="chart">
+                        <canvas id="orderChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-layout-frame">
+                <div class="card-body">
+                    <h3 >Danh sách đơn hàng hôm nay</h3>
+                    <ul id="orderList">
+                    </ul>
+                    <div class="pagination">
+                        <button id="prevPage">Trước</button>
+                        <button id="nextPage">Sau</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="tabs">
-            <div class="tab" id="tab1">Sản phẩm</div>
-            <div class="tab" id="tab2">Đơn hàng</div>
-        </div>
 
-        <div class="chart-container" id="chart1">
-            <canvas id="myChart1"></canvas>
-            <div class="input-container">
-                <label for="product1">Thương hiệu:</label>
-                <select id="product1">
-                </select>
-                <label for="product2">Sản phẩm:</label>
-                <select id="product2">
-                </select>
-                <label for="product3">Màu sắc:</label>
-                <select id="product3">
-                </select>
-                <button id="updateChart1">Thống kê</button>
+    <div class="div-tong">
+        <div class="tabs">
+            <div class="tab active" onclick="openTab(event, 'tab1')">Sản phẩm</div>
+            <div class="tab" onclick="openTab(event, 'tab2')">Đơn hàng</div>
+        </div>
+        <div id="tab1" class="tab-content active">
+            <div class="chart-container" id="chart1">
+                <canvas id="myChart1"></canvas>
+                <div class="input-container">
+                    <label for="product1">Thương hiệu:</label>
+                    <select id="product1">
+                    </select>
+                    <label for="product2">Sản phẩm:</label>
+                    <select id="product2">
+                    </select>
+                    <label for="product3">Màu sắc:</label>
+                    <select id="product3">
+                    </select>
+                    <button id="updateChart1">Thống kê</button>
+                </div>
             </div>
         </div>
-
-        <div class="chart-container" id="chart2">
-            <canvas id="myChart2"></canvas>
-            <div class="input-container">
-                <label for="startMonth">Tháng bắt đầu:</label>
-                <input type="number" id="startMonth" min="1" max="12" value="1">
-                <label for="endMonth">Tháng kết thúc:</label>
-                <input type="number" id="endMonth" min="1" max="12" value="12">
-                <button id="updateChart2">Chọn</button>
+        <div id="tab2" class="tab-content">
+            <div class="chart-container" id="chart2">
+                <canvas id="myChart2"></canvas>
+                <div class="input-container">
+                    <label for="startMonth">Tháng bắt đầu:</label>
+                    <input type="number" id="startMonth" min="1" max="12" value="1">
+                    <label for="endMonth">Tháng kết thúc:</label>
+                    <input type="number" id="endMonth" min="1" max="12" value="12">
+                    <button id="updateChart2">Chọn</button>
+                </div>
             </div>
         </div>
     </div>
@@ -709,27 +501,27 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const stats = {
-                customersToday: 0,
-                customersYesterday: 0,
-                ordersToday: 0,
-                ordersYesterday: 0,
-                customersThisMonth: 0,
-                customersLastMonth: 0,
-                ordersThisMonth: 0,
-                ordersLastMonth: 0
+                choXacNhan: 0,
+                daXacNhan: 0,
+                choGiaoHang: 0,
+                dangGiaoHang: 0,
+                daGiaoHang: 0,
+                hoanThanh: 0,
+                daHuy: 0,
+                doanhThu: 0
             };
 
             const apiEndpoints = {
-                customersToday: '/admin/api/thong-ke/countKhachHangToday?trangThai=6',
-                customersYesterday: '/admin/api/thong-ke/countKhachHangYesterday?trangThai=6',
-                ordersToday: '/admin/api/thong-ke/countHoaDonToday?trangThai=6',
-                ordersYesterday: '/admin/api/thong-ke/countHoaDonYesterday?trangThai=6',
-                customersThisMonth: '/admin/api/thong-ke/countKhachHangThisMonth?trangThai=6',
-                customersLastMonth: '/admin/api/thong-ke/countKhachHangLastMonth?trangThai=6',
-                ordersThisMonth: '/admin/api/thong-ke/countHoaDonThisMonth?trangThai=6',
-                ordersLastMonth: '/admin/api/thong-ke/countHoaDonLastMonth?trangThai=6',
+                choXacNhan: '/admin/api/thong-ke/countHoaDonToday?trangThai=1',
+                daXacNhan: '/admin/api/thong-ke/countHoaDonToday?trangThai=2',
+                choGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=3',
+                dangGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=4',
+                daGiaoHang: '/admin/api/thong-ke/countHoaDonToday?trangThai=5',
+                hoanThanh: '/admin/api/thong-ke/countHoaDonToday?trangThai=6',
+                daHuy: '/admin/api/thong-ke/countHoaDonToday?trangThai=7',
+                doanhThu: '/admin/api/thong-ke/sumDonHangByDay?trangThai=6',
                 ordersCurrentWeek: '/admin/api/thong-ke/countHoaDonForCurrentWeek?trangThai=6',
-                ordersToday: '/admin/api/thong-ke/today',
+                ordersTodayList: '/admin/api/thong-ke/today',
                 apiEndpoint: '/admin/api/thong-ke/listThuongHieu',
                 listSanPhamByThuongHieu: '/admin/api/thong-ke/listSanPhamByThuongHieu?id=',
                 listMauSacBySanPham: '/admin/api/thong-ke/listMauSacBySanPham?id='
@@ -745,7 +537,7 @@
                         try {
                             const response = await fetch(apiEndpoints[key]);
                             const result = await response.json();
-                            if (key === 'ordersToday') {
+                            if (key === 'ordersTodayList') {
                                 orders = result; // Cập nhật dữ liệu đơn hàng từ API
                             } else {
                                 stats[key] = result;
@@ -762,39 +554,23 @@
                 renderOrderList(); // Hiển thị danh sách đơn hàng sau khi lấy dữ liệu
             }
 
-            function calculatePercentageChange(newVal, oldVal) {
-                if (oldVal === 0) {
-                    return newVal > 0 ? '100' : '0';
-                }
-                return ((newVal - oldVal) / oldVal * 100).toFixed(2);
-            }
-
             function updateStats() {
-                const customersYesterday = stats.customersYesterday || 1;
-                const ordersYesterday = stats.ordersYesterday || 1;
-                const customersLastMonth = stats.customersLastMonth || 1;
-                const ordersLastMonth = stats.ordersLastMonth || 1;
 
-                const customersTodayChange = ((stats.customersToday - customersYesterday) / customersYesterday * 100).toFixed(2);
-                const ordersTodayChange = ((stats.ordersToday - ordersYesterday) / ordersYesterday * 100).toFixed(2);
-                const customersMonthChange = ((stats.customersThisMonth - customersLastMonth) / customersLastMonth * 100).toFixed(2);
-                const ordersMonthChange = ((stats.ordersThisMonth - ordersLastMonth) / ordersLastMonth * 100).toFixed(2);
+                const formatter = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                });
 
-                document.getElementById("customers-today").innerText = stats.customersToday;
-                document.getElementById("customers-change-today").innerText = `${customersTodayChange}%`;
-                document.getElementById("customers-change-today").className = customersTodayChange >= 0 ? 'positive-change' : 'negative-change';
+                const formattedDoanhThu = formatter.format(stats.doanhThu);
 
-                document.getElementById("orders-today").innerText = stats.ordersToday;
-                document.getElementById("orders-change-today").innerText = `${ordersTodayChange}%`;
-                document.getElementById("orders-change-today").className = ordersTodayChange >= 0 ? 'positive-change' : 'negative-change';
-
-                document.getElementById("customers-month").innerText = stats.customersThisMonth;
-                document.getElementById("customers-change-month").innerText = `${customersMonthChange}%`;
-                document.getElementById("customers-change-month").className = customersMonthChange >= 0 ? 'positive-change' : 'negative-change';
-
-                document.getElementById("orders-month").innerText = stats.ordersThisMonth;
-                document.getElementById("orders-change-month").innerText = `${ordersMonthChange}%`;
-                document.getElementById("orders-change-month").className = ordersMonthChange >= 0 ? 'positive-change' : 'negative-change';
+                document.getElementById("cho-xac-nhan").innerText = stats.choXacNhan;
+                document.getElementById("da-xac-nhan").innerText = stats.daXacNhan;
+                document.getElementById("cho-giao-hang").innerText = stats.choGiaoHang;
+                document.getElementById("dang-giao-hang").innerText = stats.daGiaoHang;
+                document.getElementById("da-giao-hang").innerText = stats.daGiaoHang;
+                document.getElementById("hoan-thanh").innerText = stats.hoanThanh;
+                document.getElementById("da-huy").innerText = stats.daHuy;
+                document.getElementById("doanh-thu").innerText = formattedDoanhThu;
             }
 
             // api lấy ra combobox
@@ -1063,14 +839,20 @@
                 }
             }
 
+            let myChart1;
+
             function updateChart1(nameSpData, giaBanOfSanPhamChiTietData, countSoLuongTonData, countSoLuongBanData) {
                 var ctx1 = document.getElementById('myChart1').getContext('2d');
-                var myChart1 = new Chart(ctx1, {
+
+                if (myChart1) {
+                    myChart1.destroy();
+                }
+                myChart1 = new Chart(ctx1, {
                     type: 'bar',
                     data: {
                         labels: nameSpData,
                         datasets: [{
-                            label: 'Tổng tiền',
+                            label: 'Đơn giá',
                             type: 'bar',
                             data: giaBanOfSanPhamChiTietData,
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -1078,7 +860,7 @@
                             borderWidth: 1,
                             yAxisID: 'y-axis-1'
                         }, {
-                            label: 'Số đơn hoàn thành',
+                            label: 'Số sẩn phẩm tồn',
                             type: 'line',
                             data: countSoLuongTonData,
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -1087,7 +869,7 @@
                             fill: false,
                             yAxisID: 'y-axis-2'
                         }, {
-                            label: 'Số đơn hủy',
+                            label: 'Số sản phẩm đã bán',
                             type: 'line',
                             data: countSoLuongBanData,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -1196,23 +978,26 @@
                 });
             }
 
+
             fetchStats();
             updateProductSelects();
         });
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('.tab').click(function () {
-                var tabId = $(this).attr('id');
-                $('.tab').removeClass('active');
-                $(this).addClass('active');
-                $('.chart-container').removeClass('active');
-                $('#chart' + tabId.slice(-1)).addClass('active');
-            });
-
-            $('#tab1').click();
-        });
+        function openTab(event, tabId) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
     </script>
 
 </div>

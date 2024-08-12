@@ -13,4 +13,10 @@ public interface CoGiayService {
 
     void deleteCoGiay(Long id);
 
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<CoGiay> getCoGiaysByTrangThai(boolean trangThai);
+
 }

@@ -13,5 +13,11 @@ public interface MuiGiayService {
     void saveMuiGiay(MuiGiay muiGiay);
 
     void deleteMuiGiay(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<MuiGiay> getMuiGiaysByTrangThai(boolean trangThai);
     
 }

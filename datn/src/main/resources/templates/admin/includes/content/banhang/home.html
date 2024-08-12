@@ -181,13 +181,115 @@
                  tabindex="0">
                 <div class="modal fade" th:id="'dialogSanPham' + ${index.id}" tabindex="-1"
                      aria-hidden="true">
-                    <div class="modal-dialog dialog md:max-w-[960px]">
-                        <div class="dialog-content">
-                            <label>
-                                <input type="text" id="search1"
-                                       class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                                       placeholder="Search...">
-                            </label>
+                    <div class="modal-dialog">
+                        <div class="dialog-product">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label class="flex-grow">
+                                    <input type="text" id="search"
+                                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
+                                           placeholder="Search...">
+                                </label>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="mauSac"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option>Màu sắc</option>
+                                            <option th:each="mauSac : ${lstMauSac}"
+                                                    th:value="${mauSac.ten}" th:text="${mauSac.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="kichThuoc"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Kích thước</option>
+                                            <option th:each="kichThuoc : ${lstKichThuoc}"
+                                                    th:value="${kichThuoc.ten}" th:text="${kichThuoc.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="thuongHieu"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Thương Hiệu</option>
+                                            <option th:each="thuongHieu : ${lstThuongHieu}"
+                                                    th:value="${thuongHieu.ten}" th:text="${thuongHieu.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="coGiay"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Cổ Giầy</option>
+                                            <option th:each="coGiay : ${lstCoGiay}"
+                                                    th:value="${coGiay.ten}" th:text="${coGiay.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="deGiay"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Đế Giầy</option>
+                                            <option th:each="deGiay : ${lstDeGiay}"
+                                                    th:value="${deGiay.ten}" th:text="${deGiay.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="muiGiay"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Mũi Giầy</option>
+                                            <option th:each="muiGiay : ${lstMuiGiay}"
+                                                    th:value="${muiGiay.ten}" th:text="${muiGiay.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="lotGiay"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Lót Giầy</option>
+                                            <option th:each="lotGiay : ${lstLotGiay}"
+                                                    th:value="${lotGiay.ten}" th:text="${lotGiay.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="dayGiay"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Dây Giầy</option>
+                                            <option th:each="dayGiay : ${lstDayGiay}"
+                                                    th:value="${dayGiay.ten}" th:text="${dayGiay.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <label>
+                                        <select id="chatLieu"
+                                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                                            <option value="0">Chất Liệu</option>
+                                            <option th:each="chatLieu : ${lstChatLieu}"
+                                                    th:value="${chatLieu.ten}" th:text="${chatLieu.ten}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+
+                            </div>
                             <div id="DataTableCart1">
                                 <table id="data-table-cart1"
                                        class="table-default table-hover data-table">
@@ -197,6 +299,13 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Màu sắc</th>
                                         <th>Kích thước</th>
+                                        <th>Thương Hiệu</th>
+                                        <th>Cổ Giầy</th>
+                                        <th>Đế Giầy</th>
+                                        <th>Mũi Giầy</th>
+                                        <th>Lót Giầy</th>
+                                        <th>Dây Giầy</th>
+                                        <th>Chất Liệu</th>
                                         <th>Giá</th>
                                         <th>Hành động</th>
                                     </tr>
@@ -204,9 +313,16 @@
                                     <tbody>
                                     <tr th:each="spct, rowStat : ${sanPhamChiTietList}">
                                         <td th:text="${rowStat.index + 1}"></td>
-                                        <td th:text="${spct.getSanPham().getTen()}"></td>
-                                        <td th:text="${spct.getMauSac().getTen()}"></td>
-                                        <td th:text="${spct.getKichThuoc().getTen()}"></td>
+                                        <td th:text="${spct.sanPham.ten}"></td>
+                                        <td th:text="${spct.mauSac.ten}"></td>
+                                        <td th:text="${spct.kichThuoc.ten}"></td>
+                                        <td th:text="${spct.sanPham.thuongHieu.ten}"></td>
+                                        <td th:text="${spct.sanPham.coGiay.ten}"></td>
+                                        <td th:text="${spct.sanPham.deGiay.ten}"></td>
+                                        <td th:text="${spct.sanPham.muiGiay.ten}"></td>
+                                        <td th:text="${spct.sanPham.lotGiay.ten}"></td>
+                                        <td th:text="${spct.sanPham.dayGiay.ten}"></td>
+                                        <td th:text="${spct.sanPham.chatLieu.ten}"></td>
                                         <td th:text="${#numbers.formatDecimal(spct.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                                         <td>
                                             <form th:action="@{/admin/banhang/addToCart}" method="post">
@@ -387,7 +503,7 @@
                                             class="btn btn-sm bg-green-50 hover:bg-green-100 text-green-800 mr-2">
                                         Khách Lẻ
                                     </button>
-                                    <input th:id="'customer-id-' + ${index.id}" type="text" class="hidden" name="customerId"/>
+                                    <input th:id="'customer-id-' + ${index.id}" type="hidden" name="customerId"/>
                                     <span th:id="'customer-name-' + ${index.id}"
                                           class="flex items-center gap-2 mb-4 mt-2"
                                           style="display:none;">

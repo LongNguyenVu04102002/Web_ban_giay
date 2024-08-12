@@ -16,8 +16,8 @@ public class TimeLineController {
     private TimeLineServiceImpl timeLineService;
 
     @PostMapping("/xacnhan/{id}")
-    public String xacNhanHoaDon(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.xacNhanHoaDon(id, inputRequired);
+    public String xacNhanHoaDon(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.xacNhanHoaDon(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }

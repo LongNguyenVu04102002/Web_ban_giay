@@ -13,5 +13,11 @@ public interface ChatLieuService {
     void saveChatLieu(ChatLieu chatLieu);
 
     void deleteChatLieu(Long id);
+
+    boolean isTenExists(String ten);
+
+    boolean isTenExistsForUpdate(String ten, Long id);
+
+    List<ChatLieu> getChatLieusByTrangThai(boolean trangThai);
     
 }

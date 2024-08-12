@@ -4,9 +4,9 @@ import com.example.datn.entity.HinhAnh;
 import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.repository.HinhAnhRepository;
 import com.example.datn.service.HinhAnhService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,7 +39,19 @@ public class HinhAnhServiceImpl implements HinhAnhService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
+    public byte[] getImageBySanPhamChiTietIdWithPriority(Long sanPhamChiTietId, Integer priority) {
+        HinhAnh hinhAnh = hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietIdAndUuTien(sanPhamChiTietId, priority)
+                .orElseThrow(() -> new RuntimeException("Image not found with priority " + priority));
+        return hinhAnh.getDataImg();
+    }
+
+    @Override
+    public List<HinhAnh> getImagesBySanPhamChiTietId(Long sanPhamChiTietId) {
+        return hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietId(sanPhamChiTietId);
+    }
+
+    @Override
     public void saveOrUpdateImages(SanPhamChiTiet sanPhamChiTiet, List<byte[]> imageDatas, Long[] imageIds) throws IOException {
         List<HinhAnh> existingImages = hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietId(sanPhamChiTiet.getSanPhamChiTietId());
 
@@ -85,4 +97,5 @@ public class HinhAnhServiceImpl implements HinhAnhService {
             }
         }
     }
+
 }

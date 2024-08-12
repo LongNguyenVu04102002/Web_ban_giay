@@ -17,6 +17,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -33,15 +34,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang save(KhachHang khachHang) {
-
-//        if (isSdtExist(khachHang.getSdt())) {
-//            throw new RuntimeException("Số điện thoại đã tồn tại");
-//        }
-//        if (isEmailExist(khachHang.getEmail())) {
-//            throw new RuntimeException("Email đã tồn tại");
-//        }
+        khachHang.setPassword(passwordEncoder.encode(khachHang.getSdt()));
         return khachHangRepository.save(khachHang);
-
     }
 
     @Override
@@ -96,6 +90,6 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang findByEmailAndSdt(String email, String sdt) {
-        return khachHangRepository.findByEmailAndSdt(email,sdt);
+        return khachHangRepository.findByEmailAndSdt(email, sdt);
     }
 }

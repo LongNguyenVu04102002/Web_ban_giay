@@ -1,6 +1,7 @@
 package com.example.datn.service.Impl;
 
 import com.example.datn.dto.CartItem;
+import com.example.datn.dto.MyUserDetail;
 import com.example.datn.entity.GioHang;
 import com.example.datn.entity.GioHangChiTiet;
 import com.example.datn.entity.HinhThucThanhToan;
@@ -28,6 +29,8 @@ import com.example.datn.repository.TimeLineRepository;
 import com.example.datn.service.HoaDonService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -257,10 +260,9 @@ public class HoaDonServiceImpl implements HoaDonService {
     public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan) {
         HoaDon hoaDon = new HoaDon();
         Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
-        Optional<NhanVien> nhanVien = nhanVienRepository.findById(1L);
+
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
         khachHang.ifPresent(hoaDon::setKhachHang);
-        nhanVien.ifPresent(hoaDon::setNhanVien);
         hoaDon.setPhieuGiamGia(phieuGiamGia);
         hoaDon.setLoaiHoaDon(true);
         hoaDon.setThanhToan(true);
@@ -270,6 +272,26 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setTongTien(totalAmount);
         hoaDon.setTienGiam(discountAmount);
         hoaDon.setMaVanDon(generateInvoiceCode());
+
+        TimeLine timeLine = new TimeLine();
+        timeLine.setNgayTao(LocalDate.now());
+        timeLine.setHoaDon(hoaDon);
+        timeLine.setTrangThai(6);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof MyUserDetail) {
+               Long nhanVienId = ((MyUserDetail) principal).getId();
+               Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
+               if(nhanVien.isPresent()){
+                   hoaDon.setNhanVien(nhanVien.get());
+                   timeLine.setNguoiThucHien(nhanVien.get().getMaNhanVien());
+               }
+            }
+        }
+        timeLine.setMoTa("Tạo hóa đơn thành công");
+        timeLineRepository.save(timeLine);
         hoaDonRepository.save(hoaDon);
 
         Optional<PhuongThucThanhToan> phuongThucThanhToan = phuongThucThanhToanRepository.findById(thanhToan);
@@ -293,11 +315,7 @@ public class HoaDonServiceImpl implements HoaDonService {
             gioHangChiTietRepository.deleteAll(gioHangChiTietList);
         }
 
-        TimeLine timeLine = new TimeLine();
-        timeLine.setNgayTao(LocalDate.now());
-        timeLine.setHoaDon(hoaDon);
-        timeLine.setTrangThai(6);
-        timeLineRepository.save(timeLine);
+
 
     }
 

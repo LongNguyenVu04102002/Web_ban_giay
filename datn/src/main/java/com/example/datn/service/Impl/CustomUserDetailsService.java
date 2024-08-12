@@ -28,7 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // First try to load as KhachHang
         MyUserDetail myUserDetail = null;
         List<GrantedAuthority> authorities = new ArrayList<>();
         KhachHang khachHang = khachHangRepository.findByEmail(email);
@@ -40,7 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             myUserDetail.setEmail(khachHang.getEmail());
         }
 
-        // If not found, try to load as NhanVien
         NhanVien nhanVien = nhanVienRepository.findByEmail(email);
         if (nhanVien != null) {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+nhanVien.getRole()));

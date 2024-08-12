@@ -14,6 +14,7 @@ public class CoGiayServiceImpl implements CoGiayService {
 
     @Autowired
     private CoGiayRepository coGiayRepository;
+
     @Override
     public List<CoGiay> getAllCoGiay() {
         return coGiayRepository.findAll();
@@ -32,6 +33,22 @@ public class CoGiayServiceImpl implements CoGiayService {
     @Override
     public void deleteCoGiay(Long id) {
         coGiayRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isTenExists(String ten) {
+        return coGiayRepository.findByTen(ten).isPresent();
+    }
+
+    @Override
+    public boolean isTenExistsForUpdate(String ten, Long id) {
+        List<CoGiay> coGiayList = coGiayRepository.findAllByTenAndCoGiayIdNot(ten, id);
+        return !coGiayList.isEmpty();
+    }
+
+    @Override
+    public List<CoGiay> getCoGiaysByTrangThai(boolean trangThai) {
+        return coGiayRepository.findByTrangThai(trangThai);
     }
 
 }

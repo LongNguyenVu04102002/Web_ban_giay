@@ -7,10 +7,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MauSacRepository extends JpaRepository<MauSac, Long> {
 
     @Query("select spct.mauSac from SanPhamChiTiet spct where spct.sanPham.sanPhamId = :idSp")
     List<MauSac> getAllBySanPham(@Param("idSp") Long idSp);
+
+    Optional<Object> findByTen(String ten);
+
+    List<MauSac> findAllByTenAndMauSacIdNot(String ten, Long id);
+
+    List<MauSac> findByTrangThai(boolean trangThai);
 }

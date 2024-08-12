@@ -4,7 +4,13 @@
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Form giày</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -17,7 +23,7 @@
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/sanpham/giay/save}" th:object="${sanPham}" method="post">
+                    <form id="sanPhamForm" th:action="@{/admin/sanpham/giay/save}" th:object="${sanPham}" method="post">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{sanPhamId}"/>
                             <div class="lg:col-span-6">
@@ -116,6 +122,60 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function () {
+            $('#sanPhamForm').on('submit', function (event) {
+                var tenSanPham = $('input[name="ten"]').val().trim();
+                var chatLieuId = $('select[name="chatLieu"]').val();
+                var coGiayId = $('select[name="coGiay"]').val();
+                var dayGiayId = $('select[name="dayGiay"]').val();
+                var deGiayId = $('select[name="deGiay"]').val();
+                var lotGiayId = $('select[name="lotGiay"]').val();
+                var muiGiayId = $('select[name="muiGiay"]').val();
+                var thuongHieuId = $('select[name="thuongHieu"]').val();
+                var sanPhamId = $('input[name="sanPhamId"]').val();
+
+                // Kiểm tra trống tên sản phẩm
+                if (!tenSanPham) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên sản phẩm không được để trống.',
+                    });
+                    return;
+                }
+
+                // Kiểm tra trùng tên sản phẩm và các thuộc tính khác
+                $.ajax({
+                    url: '/check/addAndUpdate-sp',
+                    method: 'GET',
+                    data: {
+                        ten: tenSanPham,
+                        chatLieuId: chatLieuId,
+                        coGiayId: coGiayId,
+                        dayGiayId: dayGiayId,
+                        deGiayId: deGiayId,
+                        lotGiayId: lotGiayId,
+                        muiGiayId: muiGiayId,
+                        thuongHieuId: thuongHieuId,
+                        id: sanPhamId
+                    },
+                    async: false,
+                    success: function (response) {
+                        if (response) {
+                            event.preventDefault(); // Ngăn chặn form submit
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Tên sản phẩm này đã tồn tại với các thuộc tính bạn chọn. Vui lòng chọn tên hoặc thuộc tính khác.',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 </body>
 </html>
