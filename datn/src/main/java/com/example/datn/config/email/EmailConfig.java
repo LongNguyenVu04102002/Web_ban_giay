@@ -1,4 +1,4 @@
-package com.example.datn.config;
+package com.example.datn.config.email;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

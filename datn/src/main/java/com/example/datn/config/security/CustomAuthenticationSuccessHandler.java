@@ -1,4 +1,4 @@
-package com.example.datn.config;
+package com.example.datn.config.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/thongke");
-        } else if (roles.contains("ROLE_NHANVIEN")) {
+        } else if (roles.contains("ROLE_STAFF")) {
             response.sendRedirect("/admin/sanpham/giay");
         } else {
             response.sendRedirect("/home");

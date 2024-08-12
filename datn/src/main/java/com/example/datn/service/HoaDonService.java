@@ -1,6 +1,5 @@
 package com.example.datn.service;
 
-import com.example.datn.controller.HoaDonController;
 import com.example.datn.dto.CartItem;
 import com.example.datn.entity.HoaDon;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
@@ -27,10 +26,13 @@ public interface HoaDonService {
 
     List<HoaDon> getHoaDonHuy();
 
+    List<HoaDon> getHoaDonKhachHang(Long idKhachHang);
+
     HoaDon getHoaDonById(Long id);
 
     void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan);
-    String saveHoaDonOnline(PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
+
+    String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
 
     void update(Long idHoaDon, Long idSanPhamChiTiet);
 

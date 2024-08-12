@@ -1,4 +1,4 @@
-package com.example.datn.config;
+package com.example.datn.config.teamplate;
 
 import jakarta.servlet.http.HttpServletRequest;
 

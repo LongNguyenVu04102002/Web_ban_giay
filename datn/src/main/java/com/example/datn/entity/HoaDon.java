@@ -22,6 +22,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -78,6 +79,9 @@ public class HoaDon {
     @Size(max = 100)
     @Column(name = "diaChiNhan", length = 100)
     private String diaChiNhan;
+
+    @Column(name = "ngayTao")
+    private LocalDate ngayTao;
 
     @ManyToOne
     @JoinColumn(name = "khachHangId")

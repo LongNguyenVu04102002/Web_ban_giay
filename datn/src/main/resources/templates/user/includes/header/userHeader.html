@@ -1,3 +1,4 @@
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav class="defaultscroll is-sticky tagline-height" id="topnav">
     <div class="container relative flex justify-center text-center">
         <a class="logo" href="#">
@@ -16,9 +17,12 @@
                 <li>
                     <a class="sub-menu-item" th:href="@{/blog}">Blog</a>
                 </li>
-                <li><a class="sub-menu-item" th:href="@{/about}">About Us</a></li>
-
-                <li><a class="sub-menu-item" th:href="@{/contact}">Contact</a></li>
+                <li>
+                    <a class="sub-menu-item" th:href="@{/about}">About Us</a>
+                </li>
+                <li>
+                    <a class="sub-menu-item" th:href="@{/contact}">Contact</a>
+                </li>
             </ul>
         </div>
         <ul class="buy-button list-none mb-0">
@@ -33,29 +37,36 @@
                     <ul class="py-3 text-start" aria-labelledby="dropdownDefault">
                         <li th:each="item : ${cartItems}" class="flex items-center justify-between py-1.5 px-4">
                         <span class="flex items-center">
-                            <img th:src="@{/images/shop/mens-jecket-3.jpg}" class="w-9 h-9 rounded shadow" th:alt="${item.tenSanPham}">
+                            <img th:src="@{/images/shop/mens-jecket-3.jpg}" class="w-9 h-9 rounded shadow"
+                                 th:alt="${item.tenSanPham}">
                             <span class="ml-3">
                                 <span class="block font-semibold" th:text="${item.tenSanPham}"></span>
-                                <span class="block text-sm text-slate-400" th:text="${item.gia} + ' X ' + ${item.soLuong}"></span>
-                                <span class="block text-sm text-slate-400" th:text="'Kích Thước: ' + ${item.kichThuoc} + ' || Màu Sắc: ' + ${item.mauSac}"></span>
+                                <span class="block text-sm text-slate-400"
+                                      th:text="${item.gia} + ' X ' + ${item.soLuong}"></span>
+                                <span class="block text-sm text-slate-400"
+                                      th:text="'Kích Thước: ' + ${item.kichThuoc} + ' || Màu Sắc: ' + ${item.mauSac}"></span>
                             </span>
                         </span>
-                        <span class="font-semibold" th:text="${#numbers.formatDecimal(item.gia * item.soLuong, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span>
+                            <span class="font-semibold"
+                                  th:text="${#numbers.formatDecimal(item.gia * item.soLuong, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span>
                         </li>
                         <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
                         <li class="flex items-center justify-between py-1.5 px-4">
                             <h6 class="font-semibold mb-0">Tạm Tính:</h6>
-                            <h6 class="font-semibold mb-0" th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></h6>
+                            <h6 class="font-semibold mb-0"
+                                th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></h6>
                         </li>
                         <li class="py-1.5 px-4">
-            <span class="text-center block">
-                <a th:href="@{/cart}" class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">View Cart</a>
-                <a th:href="@{/checkout}" class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">Checkout</a>
-            </span>
+                            <span class="text-center block">
+                                <a th:href="@{/cart}"
+                                   class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">View Cart</a>
+                                <a th:href="@{/checkout}"
+                                   class="py-[5px] px-4 inline-block font-semibold tracking-wide align-middle duration-500 text-sm text-center rounded-md bg-orange-500 border border-orange-500 text-white">Checkout</a>
+                            </span>
                         </li>
                     </ul>
                 </div>
-
+            </li>
             <li class="inline-block ps-0.5">
                 <a class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-orange-500 text-white"
                    href="javascript:void(0)">
@@ -67,29 +78,37 @@
                     <span class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full border border-orange-500 bg-orange-500 text-white"><img
                             alt="" class="rounded-full" src="/images/client/16.jpg"></span>
                 </button>
-                <div th:if="${isAuthenticated}" class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden"
+                <div sec:authorize="isAuthenticated()"
+                     class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-56 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden"
                      onclick="event.stopPropagation();">
                     <ul class="py-2 text-start">
                         <li>
                             <a class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"
-                               href="user-account.html"><i
-                                    class="h-4 w-4 me-2" data-feather="user"></i>Account</a>
+                               th:href="@{/account}"><i
+                                    class="h-4 w-4 me-2" data-feather="user"></i>
+                                <span th:text="${@securityUtils.getPrincipal().fullName}"></span>
+                            </a>
                         </li>
                         <li class="border-t border-gray-100 dark:border-gray-800 my-2"></li>
                         <li>
                             <a class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"
                                th:href="@{/logout}"><i
-                                    class="h-4 w-4 me-2" data-feather="log-out"></i>Logout</a>
+                                    class="h-4 w-4 me-2" data-feather="log-out"></i>
+                                Logout
+                            </a>
                         </li>
                     </ul>
                 </div>
-                <div th:unless="${isAuthenticated}" class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden"
+                <div sec:authorize="isAnonymous()"
+                     class="dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-700 hidden"
                      onclick="event.stopPropagation();">
                     <ul class="py-2 text-start">
                         <li>
                             <a class="flex items-center font-medium py-2 px-4 dark:text-white/70 hover:text-orange-500 dark:hover:text-white"
                                th:href="@{/login}"><i
-                                    class="h-4 w-4 me-2" data-feather="log-out"></i>Login</a>
+                                    class="h-4 w-4 me-2" data-feather="log-out"></i>
+                                Login
+                            </a>
                         </li>
                     </ul>
                 </div>

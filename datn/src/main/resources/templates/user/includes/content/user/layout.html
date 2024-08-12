@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div layout:fragment="usercontent">
+    <section
+            class="relative table w-full items-center py-36 bg-[url('../../images/hero/pages.html')] bg-top bg-no-repeat bg-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900"></div>
+        <div class="container relative">
+            <div class="grid grid-cols-1 pb-8 text-center mt-10">
+                <h3 class="text-4xl leading-normal tracking-wider font-semibold text-white">Account</h3>
+            </div>
+        </div>
+
+        <div class="absolute text-center z-10 bottom-5 start-0 end-0 mx-3">
+            <ul class="tracking-[0.5px] mb-0 inline-block">
+                <li
+                        class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white/50 hover:text-white">
+                    <a th:href="@{/home}">XBoy</a></li>
+                <li class="inline-block text-base text-white/50 mx-0.5 ltr:rotate-0 rtl:rotate-180"><i
+                        class="mdi mdi-chevron-right"></i></li>
+                <li class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white"
+                    aria-current="page">Account
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section class="relative lg:pb-24 pb-16">
+        <div class="container mt-16">
+            <div class="md:flex">
+                <div class="lg:w-1/5 md:w-1/5 md:px-3 md:mt-0">
+                    <div class="relative">
+                        <div class="p-6 rounded-md shadow dark:shadow-gray-800 bg-white dark:bg-slate-900">
+                            <div class="profile-pic text-center mb-5">
+                                <div>
+                                    <div class="relative h-28 w-28 mx-auto">
+                                        <img src="/images/client/16.jpg"
+                                             class="rounded-full shadow dark:shadow-gray-800 ring-4 ring-slate-50 dark:ring-slate-800"
+                                             id="profile-image" alt="">
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <span class="text-lg font-semibold"
+                                              th:text="${@securityUtils.getPrincipal().fullName}"></span>
+                                        <p class="text-slate-400" th:text="${@securityUtils.getPrincipal().email}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 dark:border-gray-700">
+                                <ul class="list-none sidebar-nav mb-0 pb-0" id="navmenu-nav">
+                                    <li class="navbar-item account-menu">
+                                        <a th:href="@{/account}"
+                                           class="navbar-link text-slate-400 flex items-center py-2 rounded">
+                                            <span class="me-2 mb-0"><i data-feather="airplay" class="size-4"></i></span>
+                                            <h6 class="mb-0 font-medium">Account</h6>
+                                        </a>
+                                    </li>
+                                    <li class="navbar-item account-menu">
+                                        <a th:href="@{/invoice}"
+                                           class="navbar-link text-slate-400 flex items-center py-2 rounded">
+                                            <span class="me-2 mb-0"><i data-feather="file-text"
+                                                                       class="size-4"></i></span>
+                                            <h6 class="mb-0 font-medium">Invoice</h6>
+                                        </a>
+                                    </li>
+                                    <li class="navbar-item account-menu">
+                                        <a th:href="@{/login}"
+                                           class="navbar-link text-slate-400 flex items-center py-2 rounded">
+                                            <span class="me-2 mb-0"><i data-feather="log-out" class="size-4"></i></span>
+                                            <h6 class="mb-0 font-medium">Sign Out</h6>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-4/5 md:w-4/5 md:px-3 mt-6 md:mt-0" layout:fragment="content"></div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

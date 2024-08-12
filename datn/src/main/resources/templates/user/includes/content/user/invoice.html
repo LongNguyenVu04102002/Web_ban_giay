@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/includes/content/user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="relative overflow-x-auto shadow dark:shadow-gray-800 rounded-md">
+        <table class="table-default">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Mã Hóa Đơn</th>
+                <th>Ngày Tạo</th>
+                <th>Trạng Thái</th>
+                <th>Tổng tiền</th>
+                <th>Hành Động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="hoaDon, rowStat : ${hoaDonList}"
+                class="bg-white dark:bg-slate-900">
+                <td th:text="${rowStat.index + 1}"></td>
+                <td th:text="${hoaDon.maVanDon}"></td>
+                <td th:text="${hoaDon.ngayTao}"></td>
+                <td>
+                    <button th:class="${hoaDon.thanhToan ? 'btn btn-sm bg-sky-50 text-sky-800 rounded-full' : 'btn btn-sm bg-rose-50 text-rose-600 rounded-full'}">
+                        <span th:text="${hoaDon.thanhToan ? 'Đã thanh toán' : 'Chưa thanh toán'}"></span>
+                    </button>
+                </td>
+                <td th:text="${#numbers.formatDecimal(hoaDon.tongTien, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                <td class="flex justify-center text-center items-center">
+                    <a th:href="@{/user/invoice/detail/{id}(id=${hoaDon.hoaDonId})}"
+                       class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center bg-red-600/5 hover:bg-red-600 text-red-600 hover:text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-6 h-6">
+                            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
+                            <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

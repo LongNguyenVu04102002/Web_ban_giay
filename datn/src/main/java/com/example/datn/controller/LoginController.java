@@ -1,6 +1,6 @@
 package com.example.datn.controller;
 
-import com.example.datn.config.Utility;
+import com.example.datn.config.teamplate.Utility;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.model.request.SignupRequest;
 import com.example.datn.service.Impl.EmailService;
@@ -8,7 +8,6 @@ import com.example.datn.service.Impl.KhachHangServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Controller

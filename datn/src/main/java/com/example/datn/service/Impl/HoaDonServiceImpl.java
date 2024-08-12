@@ -84,6 +84,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public List<HoaDon> getHoaDonKhachHang(Long idKhachHang) {
+        return hoaDonRepository.getHoaDonKhachHang(idKhachHang);
+    }
+
+    @Override
     public List<HoaDon> getHoaDonChoXacNhan() {
         return hoaDonRepository.getHoaDonChoXacNhan();
     }
@@ -260,6 +265,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setLoaiHoaDon(true);
         hoaDon.setThanhToan(true);
         hoaDon.setTrangThai(6);
+        hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setPhiShip(BigDecimal.ZERO);
         hoaDon.setTongTien(totalAmount);
         hoaDon.setTienGiam(discountAmount);
@@ -297,7 +303,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     @Transactional
-    public String saveHoaDonOnline(PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
+    public String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setLoaiHoaDon(false);
         hoaDon.setThanhToan(false);
@@ -306,6 +312,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setMaVanDon(generateInvoiceCode());
         hoaDon.setTenNguoiNhan(thanhToanResponse.getTenNguoiNhan());
         hoaDon.setEmail(thanhToanResponse.getEmail());
+        hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setSdtNhan(thanhToanResponse.getSdt());
         hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
 
@@ -324,8 +331,11 @@ public class HoaDonServiceImpl implements HoaDonService {
 
         }
 
+        Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
+        khachHang.ifPresent(hoaDon::setKhachHang);
         hoaDon.setTongTien(tongTien.subtract(phieuGiamGiaResponse.getTienGiam()));
         hoaDonRepository.save(hoaDon);
+
         for(CartItem cartItem : cartItems){
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();

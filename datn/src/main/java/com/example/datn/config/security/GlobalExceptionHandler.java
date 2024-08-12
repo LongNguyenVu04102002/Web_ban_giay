@@ -1,4 +1,4 @@
-package com.example.datn.config;
+package com.example.datn.config.security;
 
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;

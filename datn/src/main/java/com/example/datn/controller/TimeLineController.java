@@ -23,42 +23,42 @@ public class TimeLineController {
     }
 
     @PostMapping("/chogiao/{id}")
-    public String choGiaoDonHang(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.choGiaoDonHang(id, inputRequired);
+    public String choGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.choGiaoDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/danggiao/{id}")
-    public String dangGiaoDonHang(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.dangGiaoDonHang(id, inputRequired);
+    public String dangGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.dangGiaoDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/dagiao/{id}")
-    public String daGiaoDonHang(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.daGiaoDonHang(id, inputRequired);
+    public String daGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.daGiaoDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/hoanthanh/{id}")
-    public String hoanThanhDonHang(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.hoanThanhDonHang(id, inputRequired);
+    public String hoanThanhDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.hoanThanhDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/huydon/{id}")
-    public String huyDonHang(@PathVariable Long id, @RequestParam String inputRequired, RedirectAttributes redirectAttributes) {
-        timeLineService.huyDonHang(id, inputRequired);
+    public String huyDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+        timeLineService.huyDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteTimeLine(@PathVariable Long id,RedirectAttributes redirectAttributes) {
+    public String deleteTimeLing(@PathVariable Long id,RedirectAttributes redirectAttributes) {
         Long hoaDonId = timeLineService.getTimeLineById(id).getHoaDon().getHoaDonId();
         timeLineService.deleteTimeLine(id);
         redirectAttributes.addFlashAttribute("success", true);

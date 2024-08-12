@@ -36,4 +36,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     @Query("select t.hoaDon from TimeLine t where t.ngayTao = :ngayTao")
     List<HoaDon> findByHoaDonIdIn(@Param("ngayTao") LocalDate ngayTao);
+
+    @Query("select p from HoaDon p where p.khachHang.khachHangId =:idKhachHang order by p.hoaDonId desc")
+    List<HoaDon> getHoaDonKhachHang(Long idKhachHang);
+
 }
