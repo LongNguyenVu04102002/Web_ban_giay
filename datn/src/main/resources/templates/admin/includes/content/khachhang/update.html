@@ -209,6 +209,14 @@
                                        placeholder="Số Điện Thoại">
                                 <div th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <div class="lg:col-span-6" style="display: none;">
+                                <label class="form-label font-semibold">MatKhau</label>
+                                <input type="text" th:field="*{password}"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="password">
+                            </div>
+
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Email: </label>
                                 <input type="email" th:field="*{email}"
