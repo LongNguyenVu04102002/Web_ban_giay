@@ -91,17 +91,7 @@ public class KhachHangController {
         if (result.hasErrors()) {
             return "admin/includes/content/khachhang/update";
         }
-        List<DiaChi> validDiaChiList = new ArrayList<>();
-        for (DiaChi diaChi : khachHang.getDiaChiList()) {
-            if (diaChi.getThanhPho() != null && !diaChi.getThanhPho().isEmpty() &&
-                    diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
-                    diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
-                    diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
-                diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
-                validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
-            }
-        }
-        khachHang.setDiaChiList(validDiaChiList);
+
         khachHangService.update(khachHang);
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
