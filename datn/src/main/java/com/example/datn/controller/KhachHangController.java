@@ -108,6 +108,34 @@ public class KhachHangController {
     }
 
 
+    @PostMapping("/khachhang/updateDiaChi")
+    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model) {
+        if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
+            result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
+        }
+        if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
+            result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
+        }
+        if (result.hasErrors()) {
+            return "admin/includes/content/khachhang/update";
+        }
+        List<DiaChi> validDiaChiList = new ArrayList<>();
+        for (DiaChi diaChi : khachHang.getDiaChiList()) {
+            if (diaChi.getThanhPho() != null && !diaChi.getThanhPho().isEmpty() &&
+                    diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
+                    diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
+                    diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
+                diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
+                validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
+            }
+        }
+        khachHang.setDiaChiList(validDiaChiList);
+        khachHangService.update(khachHang);
+
+        return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
+    }
+
+
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId) {
