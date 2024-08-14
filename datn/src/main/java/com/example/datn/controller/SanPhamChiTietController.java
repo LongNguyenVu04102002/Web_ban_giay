@@ -42,7 +42,7 @@ public class SanPhamChiTietController {
         List<KichThuoc> kichThuocList = kichThuocService.getAll();
         List<MauSac> mauSacList = mauSacService.getAll();
 
-        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList){
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
             SanPhamChiTietResponse sanPhamChiTietResponse = new SanPhamChiTietResponse();
             sanPhamChiTietResponse.setSanPhamChiTiet(sanPhamChiTiet);
             sanPhamChiTietResponse.setDataImg(Base64.getEncoder().encodeToString(hinhAnhService.getImageBySanPhamChiTietIdWithPriority(sanPhamChiTiet.getSanPhamChiTietId(), 1)));
@@ -80,7 +80,8 @@ public class SanPhamChiTietController {
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
-                             @RequestParam("imageChanged") String imageChanged) throws IOException {
+                             @RequestParam("imageChanged") String imageChanged,
+                             @RequestParam(value = "deletedImageIds", required = false) String deletedImageIds) throws IOException {
 
         System.out.println("Received Image IDs:");
         if (imageIds != null) {
@@ -91,15 +92,23 @@ public class SanPhamChiTietController {
             System.out.println("No Image IDs received");
         }
 
-        if (imageChanged.equals("true")) {
-        List<byte[]> imageDatas = new ArrayList<>();
-        for (MultipartFile image : images) {
-            if (!image.isEmpty()) {
-                byte[] imageData = image.getBytes();
-                imageDatas.add(imageData);
+        if (deletedImageIds != null && !deletedImageIds.isEmpty()) {
+            String[] idsToDelete = deletedImageIds.split(",");
+            for (String id : idsToDelete) {
+                hinhAnhService.deleteImageById(Long.parseLong(id));
             }
         }
-        hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
+
+        if (imageChanged.equals("true")) {
+            List<byte[]> imageDatas = new ArrayList<>();
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    byte[] imageData = image.getBytes();
+                    imageDatas.add(imageData);
+                }
+            }
+            hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);
+        }
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }

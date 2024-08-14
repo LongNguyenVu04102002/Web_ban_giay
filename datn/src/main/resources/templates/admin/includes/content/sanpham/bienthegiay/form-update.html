@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 
@@ -54,6 +54,8 @@
                                 <div class="image-container">
                                     <div th:each="imageDTO : ${imageDTOs}" class="image-item">
                                         <img th:src="'data:image/png;base64,' + ${imageDTO.dataImg}" alt="Ảnh từ Base64"/>
+                                        <button type="button" th:onclick="'removeImage(this, ' + ${imageDTO.id} + ')'">Xóa</button>
+                                        <input type="hidden" name="existingImageIds" th:value="${imageDTO.id}" />
                                     </div>
                                 </div>
                                 <input type="file" id="imageUpload" name="image" accept="image/*" multiple onchange="handleFiles(this)">
@@ -133,11 +135,21 @@
         document.addEventListener("DOMContentLoaded", function() {
             const imageUpload = document.getElementById('imageUpload');
             const imageChanged = document.getElementById('imageChanged');
+            const imageContainer = document.querySelector('.image-container');
+
+            // Đọc và hiển thị các ảnh hiện có trên form
+            function loadExistingImages() {
+                const imageItems = imageContainer.querySelectorAll('.image-item');
+                if (imageItems.length > 0) {
+                    imageChanged.value = "false"; // Đặt giá trị imageChanged nếu đã có ảnh
+                }
+            }
+
+            loadExistingImages(); // Gọi hàm để hiển thị các ảnh hiện có khi tải trang
 
             imageUpload.addEventListener('change', function(event) {
                 imageChanged.value = "true";
                 const files = event.target.files;
-                const imageContainer = document.querySelector('.image-container');
 
                 // Clear existing images
                 imageContainer.innerHTML = '';
@@ -171,7 +183,44 @@
             });
         });
 
+        function removeImage(button, imageId) {
+            const imageItem = button.closest('.image-item');
+            if (imageItem) {
+                imageItem.remove();
+            }
+
+            // Tìm hoặc tạo trường hidden để lưu trữ ID của các ảnh đã bị xóa
+            let deletedImages = document.getElementById('deletedImages');
+            if (!deletedImages) {
+                deletedImages = document.createElement('input');
+                deletedImages.type = 'hidden';
+                deletedImages.id = 'deletedImages';
+                deletedImages.name = 'deletedImageIds';
+                document.getElementById('updateForm').appendChild(deletedImages);
+            }
+
+            // Cập nhật giá trị của trường hidden với ID của ảnh đã xóa
+            if (deletedImages.value) {
+                deletedImages.value += ',' + imageId;
+            } else {
+                deletedImages.value = imageId;
+            }
+        }
+
         function checkDuplicateAndSubmit() {
+            const imageUpload = document.getElementById('imageUpload');
+            const imageFiles = imageUpload.files;
+
+            // Check if no images are selected
+            if (imageFiles.length === 0 && document.querySelectorAll('.image-item').length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Vui lòng chọn ít nhất một ảnh!',
+                });
+                return; // Stop the function if no image is selected
+            }
+
             const sanPhamId = $('#sanPhamSelect').val();
             const kichThuocId = $('#kichThuocSelect').val();
             const mauSacId = $('#mauSacSelect').val();

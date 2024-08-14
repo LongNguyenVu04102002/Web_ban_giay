@@ -26,4 +26,6 @@ public interface HinhAnhService {
 
     void deleteImages(List<Long> imageIds);
 
+    void deleteImageById(Long id);
+
 }
