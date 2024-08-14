@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
     <style type="text/css">
         .css_select_div{ text-align: center;}
         .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
@@ -66,7 +68,67 @@
     }
 
     </script>
-
+    <script>
+        $(document).ready(function() {
+          $("form").validate({
+            rules: {
+              'diaChiList[0].thanhPho': {
+                required: true
+              },
+              'diaChiList[0].huyen': {
+                required: true
+              },
+              'diaChiList[0].xa': {
+                required: true
+              },
+              'diaChiList[0].diaChi': {
+                required: true,
+                minlength: 5
+              },
+              'diaChiList[0].ten': {
+                required: true,
+                minlength: 2
+              },
+              'diaChiList[0].sdt': {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 15
+              }
+            },
+            messages: {
+              'diaChiList[0].thanhPho': {
+                required: "Vui lòng chọn thành phố."
+              },
+              'diaChiList[0].huyen': {
+                required: "Vui lòng chọn huyện."
+              },
+              'diaChiList[0].xa': {
+                required: "Vui lòng chọn xã."
+              },
+              'diaChiList[0].diaChi': {
+                required: "Vui lòng nhập địa chỉ.",
+                minlength: "Địa chỉ phải có ít nhất 5 ký tự."
+              },
+              'diaChiList[0].ten': {
+                required: "Vui lòng nhập tên người nhận.",
+                minlength: "Tên người nhận phải có ít nhất 2 ký tự."
+              },
+              'diaChiList[0].sdt': {
+                required: "Vui lòng nhập số điện thoại.",
+                digits: "Số điện thoại chỉ chứa các ký tự số.",
+                minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+              }
+            },
+            errorElement: "div",
+            errorPlacement: function(error, element) {
+              error.addClass("text-red-500 text-sm mt-1");
+              error.insertAfter(element);
+            }
+          });
+        });
+    </script>
 
 </head>
 <body>
@@ -151,18 +213,24 @@
 
                             <div class="grid lg:grid-cols-12 grid-cols-1 gap-5 css_select_div">
                                 <div class="lg:col-span-4">
-                                    <select id="tinh" th:field="*{diaChiList[0].thanhPho}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                        <option value="0">Tỉnh Thành</option>
+                               
+                                    <select id="tinh" name="diaChiList[0].thanhPho"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Tỉnh Thành</option>
                                     </select>
                                 </div>
                                 <div class="lg:col-span-4">
-                                    <select id="quan" th:field="*{diaChiList[0].huyen}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                        <option value="0">Quận Huyện</option>
+
+                                    <select id="quan" name="diaChiList[0].huyen"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Quận Huyện</option>
                                     </select>
                                 </div>
                                 <div class="lg:col-span-4">
-                                    <select id="phuong" th:field="*{diaChiList[0].xa}" class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
-                                        <option value="0">Phường Xã</option>
+
+                                    <select id="phuong" name="diaChiList[0].xa"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Phường Xã</option>
                                     </select>
                                 </div>
                             </div>
