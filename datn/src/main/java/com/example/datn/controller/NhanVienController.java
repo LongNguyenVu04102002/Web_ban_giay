@@ -45,11 +45,9 @@ public class NhanVienController {
     }
 
     @PostMapping("/nhanvien/save")
-    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model ) throws MessagingException {
-        if (nhanVienService.existsByEmail(nhanVien.getEmail()) != null){
-//                ||nhanVienService.existsBySdt(nhanVien.getSdt())) {
+    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model) throws MessagingException {
+        if (nhanVienService.existsByEmail(nhanVien.getEmail()) != null) {
             bindingResult.rejectValue("email", "error.nhanVien", "email da ton tai");
-//            bindingResult.rejectValue("sdt", "error.nhanVien", "sdt da ton tai");
             return "admin/includes/content/nhanvien/form";
         }
         if (nhanVienService.existsBySdt(nhanVien.getSdt())) {
@@ -61,11 +59,12 @@ public class NhanVienController {
             return "admin/includes/content/nhanvien/form";
         } else {
             nhanVienService.save(nhanVien);
-            emailService.sendEmail(nhanVien.getEmail(),"You have successfully registered an account.",
+            emailService.sendEmail(nhanVien.getEmail(), "You have successfully registered an account.",
                     "Your password is: " + nhanVien.getSdt());
             return "redirect:/admin/taikhoan/nhanvien";
         }
     }
+
     @GetMapping("/nhanvien/{nhanVienId}/toggle")
     public String toggleTrangThai(@PathVariable Long nhanVienId) {
         nhanVienService.toggleTrangThai(nhanVienId);

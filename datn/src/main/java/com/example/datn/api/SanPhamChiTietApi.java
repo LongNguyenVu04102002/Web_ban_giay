@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sanphamchitiet")
@@ -104,7 +106,7 @@ public class SanPhamChiTietApi {
     public ResponseEntity<BigDecimal> getPrice(@RequestParam("sanPhamId") Long sanPhamId,
                                                @RequestParam("sizeId") Long sizeId,
                                                @RequestParam("colorId") Long colorId) {
-        BigDecimal price = sanPhamChiTietService.getPrice(sanPhamId,sizeId,colorId);
+        BigDecimal price = sanPhamChiTietService.getPrice(sanPhamId, sizeId, colorId);
         if (price != null) {
             return ResponseEntity.ok(price);
         } else {
@@ -112,4 +114,25 @@ public class SanPhamChiTietApi {
         }
     }
 
+    @GetMapping("/check-quantity")
+    public ResponseEntity<Map<String, Object>> checkQuantity(
+            @RequestParam("sanPhamId") Long sanPhamId,
+            @RequestParam("sizeId") Long sizeId,
+            @RequestParam("colorId") Long colorId,
+            @RequestParam("soLuong") Integer soLuong) {
+
+
+        boolean isAvailable;
+        Map<String, Object> response = new HashMap<>();
+        isAvailable = sanPhamChiTietService.checkQuantity(sanPhamId, sizeId, colorId, soLuong);
+
+        if (!isAvailable) {
+            response.put("status", "quantity");
+        }else{
+            response.put("status", "available");
+        }
+        return ResponseEntity.ok(response);
+
+    }
 }
+

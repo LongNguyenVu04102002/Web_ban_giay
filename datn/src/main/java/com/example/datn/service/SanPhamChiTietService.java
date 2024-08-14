@@ -28,4 +28,8 @@ public interface SanPhamChiTietService {
 
     boolean isDuplicate(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
 
+    boolean checkQuantity(Long sanPhamId, Long kichThuocId, Long mauSacId, int soLuong);
+
+    SanPhamChiTiet findByNameAndSizeAndColor(String tenSanPham, String kichThuocId, String mauSacId);
+
 }
