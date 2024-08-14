@@ -27,7 +27,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     @Query("select sum(t.hoaDon.tongTien - coalesce(t.hoaDon.tienGiam, 0)) from TimeLine t " +
             "where year(t.ngayTao) = :year and month(t.ngayTao) = :month and day(t.ngayTao) = :day " +
-            "and t.hoaDon.trangThai = :trangThai")
+            "and t.trangThai = :trangThai")
     Integer sumHoaDonByYearMonthDayAndTrangThai(@Param("year") int year,
                                                 @Param("month") int month,
                                                 @Param("day") int day,
