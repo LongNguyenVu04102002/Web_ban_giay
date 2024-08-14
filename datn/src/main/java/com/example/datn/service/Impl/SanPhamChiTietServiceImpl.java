@@ -81,6 +81,17 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return !duplicates.isEmpty();
     }
 
+    @Override
+    public boolean checkQuantity(Long sanPhamId, Long kichThuocId, Long mauSacId, int soLuong) {
+        int soLuongKho = sanPhamChiTietRepository.findQuantityBySizeAndColor(sanPhamId,kichThuocId,mauSacId);
+        return soLuongKho >= soLuong;
+    }
+
+    @Override
+    public SanPhamChiTiet findByNameAndSizeAndColor(String tenSanPham, String kichThuocId, String mauSacId) {
+        return sanPhamChiTietRepository.findByNameSizeAndColor(tenSanPham,kichThuocId,mauSacId);
+    }
+
     private String generateBarCode() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
     }

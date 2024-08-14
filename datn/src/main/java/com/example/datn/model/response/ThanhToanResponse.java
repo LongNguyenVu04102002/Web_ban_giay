@@ -20,4 +20,7 @@ public class ThanhToanResponse {
     private String ward;
     private String diaChi;
     private Long paymentMethod;
+    private BigDecimal tienShip;
+    private BigDecimal tienGiam;
+    private BigDecimal tongTien;
 }

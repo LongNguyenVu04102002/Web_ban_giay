@@ -5,7 +5,6 @@ import com.example.datn.entity.HoaDon;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -30,9 +29,9 @@ public interface HoaDonService {
 
     HoaDon getHoaDonById(Long id);
 
-    void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, BigDecimal discountAmount, BigDecimal totalAmount, Long thanhToan);
+    void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse);
 
-    String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
+    String saveHoaDonOnline(PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
 
     void update(Long idHoaDon, Long idSanPhamChiTiet);
 

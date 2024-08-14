@@ -19,6 +19,7 @@ import com.example.datn.service.Impl.ThuongHieuServiceImpl;
 import com.example.datn.service.Impl.TimeLineServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -94,7 +95,6 @@ public class HomeController {
         }
         model.addAttribute("sanPham", sanPham);
 
-        // Lấy danh sách kích thước duy nhất cho sản phẩm
         List<KichThuoc> uniqueSizes = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getKichThuoc)
                 .distinct()
@@ -103,7 +103,6 @@ public class HomeController {
 
         model.addAttribute("uniqueSizes", uniqueSizes);
 
-        // Lấy danh sách màu sắc duy nhất cho sản phẩm
         List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
@@ -225,35 +224,66 @@ public class HomeController {
 
     @PostMapping("/cart/add")
     public ResponseEntity<Map<String, Object>> addToCart(@RequestBody CartItem cartItem, @ModelAttribute("cartItems") List<CartItem> cartItems) {
-        boolean itemExists = false;
-        for (CartItem item : cartItems) {
-            if (item.getTenSanPham().equals(cartItem.getTenSanPham())
-                    && item.getMauSac().equals(cartItem.getMauSac())
-                    && item.getKichThuoc().equals(cartItem.getKichThuoc())) {
-                item.setSoLuong(item.getSoLuong() + cartItem.getSoLuong());
-                itemExists = true;
-                break;
-            }
-        }
-        if (!itemExists) {
-            cartItem.setId(counter.incrementAndGet());
-            cartItems.add(cartItem);
-        }
-
         Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        return ResponseEntity.ok(response);
+        boolean itemExists = false;
+
+        try {
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findByNameAndSizeAndColor(cartItem.getTenSanPham(), cartItem.getKichThuoc(), cartItem.getMauSac());
+            int maxQuantity = sanPhamChiTiet.getSoLuong();
+
+            for (CartItem item : cartItems) {
+                if (item.getTenSanPham().equals(cartItem.getTenSanPham())
+                        && item.getMauSac().equals(cartItem.getMauSac())
+                        && item.getKichThuoc().equals(cartItem.getKichThuoc())) {
+                    int newQuantity = item.getSoLuong() + cartItem.getSoLuong();
+                    if (newQuantity > maxQuantity) {
+                        response.put("status", "error");
+                        return ResponseEntity.badRequest().body(response);
+                    }
+                    item.setSoLuong(newQuantity);
+                    itemExists = true;
+                    break;
+                }
+            }
+
+            if (!itemExists) {
+                if (cartItem.getSoLuong() > maxQuantity) {
+                    response.put("status", "error");
+                    return ResponseEntity.badRequest().body(response);
+                }
+                cartItem.setId(counter.incrementAndGet());
+                cartItems.add(cartItem);
+            }
+
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
+        }
     }
 
     @PostMapping("/cart/update/stepup")
     public String stepUp(@RequestParam("id") Long id, @ModelAttribute("cartItems") List<CartItem> cartItems, RedirectAttributes redirectAttributes) {
+        boolean updated = false;
+
         for (CartItem item : cartItems) {
             if (item.getId().equals(id)) {
-                item.setSoLuong(item.getSoLuong() + 1);
+                SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findByNameAndSizeAndColor(item.getTenSanPham(), item.getKichThuoc(), item.getMauSac());
+                if (sanPhamChiTiet.getSoLuong() > item.getSoLuong()) {
+                    item.setSoLuong(item.getSoLuong() + 1);
+                    updated = true;
+                } else {
+                    redirectAttributes.addFlashAttribute("quantity", true);
+                    return "redirect:/cart";
+                }
                 break;
             }
         }
-        redirectAttributes.addFlashAttribute("success", true);
+
+        if (updated) {
+            redirectAttributes.addFlashAttribute("stepup", true);
+        }
         return "redirect:/cart";
     }
 
@@ -265,14 +295,14 @@ public class HomeController {
                 break;
             }
         }
-        redirectAttributes.addFlashAttribute("success", true);
+        redirectAttributes.addFlashAttribute("stepdown", true);
         return "redirect:/cart";
     }
 
     @GetMapping("/cart/remove/{id}")
     public String removeCartItem(@PathVariable("id") Long id, @ModelAttribute("cartItems") List<CartItem> cartItems, RedirectAttributes redirectAttributes) {
         cartItems.removeIf(item -> item.getId().equals(id));
-        redirectAttributes.addFlashAttribute("success", true);
+        redirectAttributes.addFlashAttribute("remote", true);
         return "redirect:/cart";
     }
 
@@ -298,17 +328,7 @@ public class HomeController {
             pgg.setTienGiam(BigDecimal.ZERO);
         }
 
-        Long khachHangId = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof MyUserDetail) {
-                khachHangId = ((MyUserDetail) principal).getId();
-            }
-        }
-
-        String maVanDon = hoaDonService.saveHoaDonOnline(khachHangId, pgg, thanhToanResponse, cartItems);
-
+        String maVanDon = hoaDonService.saveHoaDonOnline(pgg, thanhToanResponse, cartItems);
         session.removeAttribute("pgg");
         cartItems.clear();
         model.addAttribute("maVanDon", maVanDon);
