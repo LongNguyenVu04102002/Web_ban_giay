@@ -144,65 +144,87 @@
 
     <script>
         $(document).ready(function() {
-          $("form").validate({
-            rules: {
-              'diaChiList[0].thanhPho': {
-                required: true
-              },
-              'diaChiList[0].huyen': {
-                required: true
-              },
-              'diaChiList[0].xa': {
-                required: true
-              },
-              'diaChiList[0].diaChi': {
-                required: true,
-                minlength: 5
-              },
-              'diaChiList[0].ten': {
-                required: true,
-                minlength: 2
-              },
-              'diaChiList[0].sdt': {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 15
-              }
-            },
-            messages: {
-              'diaChiList[0].thanhPho': {
-                required: "Vui lòng chọn thành phố."
-              },
-              'diaChiList[0].huyen': {
-                required: "Vui lòng chọn huyện."
-              },
-              'diaChiList[0].xa': {
-                required: "Vui lòng chọn xã."
-              },
-              'diaChiList[0].diaChi': {
-                required: "Vui lòng nhập địa chỉ.",
-                minlength: "Địa chỉ phải có ít nhất 5 ký tự."
-              },
-              'diaChiList[0].ten': {
-                required: "Vui lòng nhập tên người nhận.",
-                minlength: "Tên người nhận phải có ít nhất 2 ký tự."
-              },
-              'diaChiList[0].sdt': {
-                required: "Vui lòng nhập số điện thoại.",
-                digits: "Số điện thoại chỉ chứa các ký tự số.",
-                minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
-                maxlength: "Số điện thoại không được vượt quá 15 ký tự."
-              }
-            },
-            errorElement: "div",
-            errorPlacement: function(error, element) {
-              error.addClass("text-red-500 text-sm mt-1");
-              error.insertAfter(element);
-            }
-          });
+            // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
+            $.validator.addMethod("noWhitespace", function(value, element) {
+                // Kiểm tra khoảng trắng ở đầu và cuối
+                var trimmedValue = $.trim(value);
+                // Kiểm tra khoảng trắng liên tiếp
+                var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
+                return trimmedValue === value && noConsecutiveSpaces;
+            }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
+
+            $.validator.addMethod("noSpecialChars", function(value, element) {
+                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
+            }, "Không được chứa ký tự đặc biệt.");
+
+            $("form").validate({
+                rules: {
+                    'diaChiList[0].thanhPho': {
+                        required: true
+                    },
+                    'diaChiList[0].huyen': {
+                        required: true
+                    },
+                    'diaChiList[0].xa': {
+                        required: true
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: true,
+                        minlength: 5,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].ten': {
+                        required: true,
+                        minlength: 2,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].sdt': {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 15
+                    }
+                },
+                messages: {
+                    'diaChiList[0].thanhPho': {
+                        required: "Vui lòng chọn thành phố."
+                    },
+                    'diaChiList[0].huyen': {
+                        required: "Vui lòng chọn huyện."
+                    },
+                    'diaChiList[0].xa': {
+                        required: "Vui lòng chọn xã."
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: "Vui lòng nhập địa chỉ.",
+                        minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
+                        noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Địa chỉ không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].ten': {
+                        required: "Vui lòng nhập tên người nhận.",
+                        minlength: "Tên người nhận phải có ít nhất 2 ký tự.",
+                        noWhitespace: "Tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Tên không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].sdt': {
+                        required: "Vui lòng nhập số điện thoại.",
+                        digits: "Số điện thoại chỉ chứa các ký tự số.",
+                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("text-red-500 text-sm mt-1");
+                    error.insertAfter(element);
+                }
+            });
         });
     </script>
+
 
 
 </head>
