@@ -147,45 +147,16 @@
 
     </script>
 
-    <style>
-        .btn-container {
-            margin-left: auto; /* Đẩy nút về phía bên phải */
-        }
 
-        .custom-button {
-            display: inline-block;
-            padding: 8px 16px; /* Điều chỉnh kích thước padding */
-            font-size: 14px; /* Kích thước font nhỏ hơn */
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff; /* Màu nền xanh dương */
-            border: none;
-            border-radius: 8px; /* Bo tròn góc với bán kính lớn hơn */
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .custom-button:hover {
-            background-color: #0056b3; /* Màu nền khi hover */
-            transform: scale(1.05); /* Tăng kích thước khi hover */
-        }
-
-        .custom-button:active {
-            background-color: #004080; /* Màu nền khi nhấn */
-            transform: scale(0.98); /* Thu nhỏ kích thước khi nhấn */
-        }
-    </style>
 </head>
 <body>
 <div layout:fragment="admincontent">
-    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 class="text-title-md2 font-semibold text-black dark:text-white"
-            th:text="${khachHang.khachHangId == null} ? 'Thêm Khách Hàng' : 'Cập Nhập Khách Hàng'">
-        </h2>
-        <div class="btn-container">
-            <a th:href="@{/admin/taikhoan/khachhang}" class="custom-button">Quay lại danh sách khách hàng</a>
+    <div class="mb-6 flex justify-between text-center gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h3 class="text-title-md2 font-semibold text-black dark:text-white"
+            th:text="${khachHang.khachHangId == null} ? 'Thêm Khách Hàng' : 'Chi Tiết Khách Hàng'">
+        </h3>
+        <div class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
+            <a th:href="@{/admin/taikhoan/khachhang}" class="custom-button">Quay lại</a>
         </div>
     </div>
     <section class="relative md:py-10 bg-white px-25">
