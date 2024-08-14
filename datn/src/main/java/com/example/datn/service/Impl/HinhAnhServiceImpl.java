@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HinhAnhServiceImpl implements HinhAnhService {
@@ -44,6 +45,11 @@ public class HinhAnhServiceImpl implements HinhAnhService {
         HinhAnh hinhAnh = hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietIdAndUuTien(sanPhamChiTietId, priority)
                 .orElseThrow(() -> new RuntimeException("Image not found with priority " + priority));
         return hinhAnh.getDataImg();
+    }
+
+    @Override
+    public void saveAndUpdateOne(HinhAnh hinhAnh) {
+        hinhAnhRepository.save(hinhAnh);
     }
 
     @Override
@@ -98,4 +104,45 @@ public class HinhAnhServiceImpl implements HinhAnhService {
         }
     }
 
+    @Override
+    public void deleteImages(List<Long> imageIds) {
+        for (Long imageId : imageIds) {
+            hinhAnhRepository.deleteById(imageId);
+        }
+    }
+
+    @Override
+    public void deleteImageById(Long id) {
+        Optional<HinhAnh> imageOptional = hinhAnhRepository.findById(id);
+
+        if (imageOptional.isPresent()) {
+            HinhAnh imageToDelete = imageOptional.get();
+            int uuTienToDelete = imageToDelete.getUuTien();
+
+            // Xóa ảnh
+            hinhAnhRepository.deleteById(id);
+
+            // Nếu ảnh bị xóa có uuTien khác 1, không cần cập nhật lại thứ tự uuTien
+            if (uuTienToDelete == 1) {
+                // Cập nhật uuTien cho ảnh tiếp theo thành 1
+                List<HinhAnh> remainingImages = hinhAnhRepository.findBySanPhamChiTietSanPhamChiTietIdAndUuTienGreaterThan(
+                        imageToDelete.getSanPhamChiTiet().getSanPhamChiTietId(), uuTienToDelete);
+
+                if (!remainingImages.isEmpty()) {
+                    HinhAnh firstImage = remainingImages.get(0);
+                    firstImage.setUuTien(1);
+                    hinhAnhRepository.save(firstImage);
+                }
+
+                // Cập nhật lại uuTien cho các ảnh còn lại, nếu cần
+                for (int i = 1; i < remainingImages.size(); i++) {
+                    HinhAnh img = remainingImages.get(i);
+                    img.setUuTien(i + 1);
+                    hinhAnhRepository.save(img);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Image with ID " + id + " does not exist.");
+        }
+    }
 }

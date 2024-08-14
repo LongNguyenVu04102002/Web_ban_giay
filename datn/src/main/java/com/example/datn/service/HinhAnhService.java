@@ -18,8 +18,13 @@ public interface HinhAnhService {
 
     byte[] getImageBySanPhamChiTietIdWithPriority(Long sanPhamChiTietId, Integer priority);
 
+    void saveAndUpdateOne(HinhAnh hinhAnh);
+
     List<HinhAnh> getImagesBySanPhamChiTietId(Long sanPhamChiTietId);
 
     void saveOrUpdateImages(SanPhamChiTiet spct, List<byte[]> imageDatas, Long[] imageIds) throws IOException;
 
+    void deleteImages(List<Long> imageIds);
+
+    void deleteImageById(Long id);
 }
