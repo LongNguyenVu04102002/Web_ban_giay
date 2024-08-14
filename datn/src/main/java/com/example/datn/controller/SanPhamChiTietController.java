@@ -82,7 +82,8 @@ public class SanPhamChiTietController {
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
-                             @RequestParam("imageChanged") String imageChanged) throws IOException {
+                             @RequestParam("imageChanged") String imageChanged,
+                             @RequestParam(value = "deletedImageIds", required = false) String deletedImageIds) throws IOException {
 
         System.out.println("Received Image IDs:");
         if (imageIds != null) {
@@ -93,6 +94,13 @@ public class SanPhamChiTietController {
             System.out.println("No Image IDs received");
         }
 
+        if (deletedImageIds != null && !deletedImageIds.isEmpty()) {
+            String[] idsToDelete = deletedImageIds.split(",");
+            for (String id : idsToDelete) {
+                hinhAnhService.deleteImageById(Long.parseLong(id));
+            }
+        }
+
         if (imageChanged.equals("true")) {
             List<byte[]> imageDatas = new ArrayList<>();
             for (MultipartFile image : images) {
@@ -101,7 +109,8 @@ public class SanPhamChiTietController {
                     imageDatas.add(imageData);
                 }
             }
-            hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);}
+            hinhAnhService.saveOrUpdateImages(sanPhamChiTiet, imageDatas, imageIds);
+        }
         sanPhamChiTietService.saveOfUpdate(sanPhamChiTiet);
         return "redirect:/admin/sanpham/bienthegiay";
     }
