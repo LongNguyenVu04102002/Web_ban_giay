@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shop</title>
+    <!-- Include CSS and JavaScript files -->
+</head>
+<body>
+<h1>Shop</h1>
+
+<form action="#" th:action="@{/shop}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm sản phẩm" />
+    <select name="thuongHieuId">
+        <option value="">Tất cả hãng</option>
+        <!-- Add options for thuongHieuId -->
+    </select>
+    <select name="kichThuocId">
+        <option value="">Tất cả kích thước</option>
+        <!-- Add options for kichThuocId -->
+    </select>
+    <select name="mauSacId">
+        <option value="">Tất cả màu sắc</option>
+        <!-- Add options for mauSacId -->
+    </select>
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<div>
+    <ul>
+        <li th:each="product : ${products}">
+            <h3 th:text="${product.ten}">Tên sản phẩm</h3>
+            <img th:src="${product.anhDauTien}" alt="Ảnh sản phẩm" />
+            <p th:text="${product.giaThapNhat}">Giá sản phẩm</p>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:if="${page.hasPrevious()}">
+                <a class="page-link" th:href="@{/shop(page=${page.number - 1}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+                <a class="page-link" th:href="@{/shop(page=${i}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:if="${page.hasNext()}">
+                <a class="page-link" th:href="@{/shop(page=${page.number + 1}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
 import com.example.datn.dto.MyUserDetail;
+import com.example.datn.dto.SanPhamHomeDTO;
 import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.KichThuoc;
 import com.example.datn.entity.MauSac;
@@ -10,15 +11,15 @@ import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.entity.ThuongHieu;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
-import com.example.datn.service.Impl.HoaDonServiceImpl;
-import com.example.datn.service.Impl.KichThuocServiceImpl;
-import com.example.datn.service.Impl.PhieuGiamGiaServiceImpl;
-import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
-import com.example.datn.service.Impl.SanPhamServiceImpl;
-import com.example.datn.service.Impl.ThuongHieuServiceImpl;
-import com.example.datn.service.Impl.TimeLineServiceImpl;
+import com.example.datn.repository.SanPhamRepository;
+import com.example.datn.service.Impl.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,8 @@ public class HomeController {
 
     @Autowired
     private HoaDonServiceImpl hoaDonService;
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @Autowired
     private SanPhamServiceImpl sanPhamService;
@@ -62,6 +65,8 @@ public class HomeController {
     private TimeLineServiceImpl timeLineService;
 
     private final AtomicLong counter = new AtomicLong();
+    @Autowired
+    private MauSacServiceImpl mauSacServiceImpl;
 
     @ModelAttribute("cartItems")
     public List<CartItem> cartItems() {
@@ -70,19 +75,63 @@ public class HomeController {
 
     // Home
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) {
+        Page<SanPhamHomeDTO> sanPhams = sanPhamService.getSanPhamForHomePage(PageRequest.of(0, 8));
+        model.addAttribute("sanPhams", sanPhams);
+
         return "user/includes/content/home";
+    }
+
+    @GetMapping("/home/detail/{id}")
+    public String detailhome(@PathVariable Long id, Model model) {
+        SanPham sanPham = sanPhamService.getSanPhamById(id);
+        if (sanPham == null) {
+            return "redirect:/error";
+        }
+        model.addAttribute("sanPham", sanPham);
+
+        // Lấy danh sách kích thước duy nhất cho sản phẩm
+        List<KichThuoc> uniqueSizes = sanPham.getSanPhamChiTietList().stream()
+                .map(SanPhamChiTiet::getKichThuoc)
+                .distinct()
+                .sorted(Comparator.comparingInt(kt -> Integer.parseInt(kt.getTen())))
+                .collect(Collectors.toList());
+
+        model.addAttribute("uniqueSizes", uniqueSizes);
+
+        // Lấy danh sách màu sắc duy nhất cho sản phẩm
+        List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
+                .map(SanPhamChiTiet::getMauSac)
+                .distinct()
+                .collect(Collectors.toList());
+
+        model.addAttribute("uniqueColors", uniqueColors);
+
+        return "user/includes/content/detail";
     }
 
     // Shop
     @GetMapping("/shop")
-    public String shop(Model model) {
-        List<SanPham> sanPhamList = sanPhamService.getAll();
-        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
-        List<KichThuoc> kichThuocList = kichThuocService.getAll();
-        model.addAttribute("sanPhamList", sanPhamList);
-        model.addAttribute("thuongHieuList", thuongHieuList);
-        model.addAttribute("kichThuocList", kichThuocList);
+    public String getShopPage(
+            @RequestParam(required = false) Long thuongHieuId,
+            @RequestParam(required = false) Long kichThuocId,
+            @RequestParam(required = false) Long mauSacId,
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 10, sort = "ten", direction = Sort.Direction.ASC) Pageable pageable,
+            Model model) {
+
+        Page<SanPhamHomeDTO> page = sanPhamService.getSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
+
+        model.addAttribute("products", page.getContent());
+        model.addAttribute("page", page);
+        model.addAttribute("thuongHieuId", thuongHieuId);
+        model.addAttribute("kichThuocId", kichThuocId);
+        model.addAttribute("mauSacId", mauSacId);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("kichThuocList", kichThuocService.getAll());
+        model.addAttribute("mauSacList", mauSacServiceImpl.getAll());
+        model.addAttribute("thuongHieuList", thuongHieuService.getAll());
+
         return "user/includes/content/shop";
     }
 
