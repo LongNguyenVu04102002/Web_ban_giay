@@ -7,6 +7,23 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.2.4/tailwind.min.css">
     <style>
+
+        .img-container {
+            width: 100%;
+            height: 200px; /* Hoặc kích thước khác mà bạn muốn */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto; /* Hoặc sử dụng `height: 100%;` nếu muốn ảnh tự động điều chỉnh chiều cao */
+            object-fit: cover; /* Hoặc `contain` tùy thuộc vào cách bạn muốn ảnh hiển thị */
+        }
+
+
         .product-image {
             object-fit: cover;
             width: 100%;
@@ -92,15 +109,18 @@
                                     <input type="text" name="keyword" class="h-9 pe-10 rounded px-3" th:value="${keyword}" placeholder="Search...">
                                 </div>
                             </div>
+                            <div class="mt-4">
+                                <h5 class="font-medium">Màu sắc:</h5>
+                                <select name="mauSacId" class="form-select mt-2">
+                                    <option th:value="${null}" th:text="'-- Chọn màu sắc --'" th:selected="${mauSacId == null}"></option>
+                                    <option th:each="mauSac : ${mauSacList}"
+                                            th:value="${mauSac.mauSacId}"
+                                            th:text="${mauSac.ten}"
+                                            th:selected="${mauSac.mauSacId == mauSacId}">
+                                    </option>
+                                </select>
+                            </div>
 
-<!--                            <div class="mt-4">-->
-<!--                                <h5 class="font-medium">Màu sắc:</h5>-->
-<!--                                <ul class="list-none mt-2">-->
-<!--                                    <li class="inline" th:each="mauSac : ${mauSacList}">-->
-<!--                                        <a href="#" th:class="'size-6 rounded-full ring-2 ring-gray-200 dark:ring-slate-800 inline-flex align-middle' + ' bg-' + ${mauSac.ten.toLowerCase()} + '-600'" th:title="${mauSac.ten}"></a>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
 
                             <div class="mt-4">
                                 <h5 class="font-medium">Thương hiệu:</h5>
