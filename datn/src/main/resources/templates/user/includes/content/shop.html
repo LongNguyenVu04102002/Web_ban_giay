@@ -93,27 +93,27 @@
                                 </div>
                             </div>
 
-                            <div class="mt-4">
-                                <h5 class="font-medium">Màu sắc:</h5>
-                                <ul class="list-none mt-2">
-                                    <li class="inline" th:each="mauSac : ${mauSacList}">
-                                        <a href="#" th:class="'size-6 rounded-full ring-2 ring-gray-200 dark:ring-slate-800 inline-flex align-middle' + ' bg-' + ${mauSac.ten.toLowerCase()} + '-600'" th:title="${mauSac.ten}"></a>
-                                    </li>
-                                </ul>
-                            </div>
+<!--                            <div class="mt-4">-->
+<!--                                <h5 class="font-medium">Màu sắc:</h5>-->
+<!--                                <ul class="list-none mt-2">-->
+<!--                                    <li class="inline" th:each="mauSac : ${mauSacList}">-->
+<!--                                        <a href="#" th:class="'size-6 rounded-full ring-2 ring-gray-200 dark:ring-slate-800 inline-flex align-middle' + ' bg-' + ${mauSac.ten.toLowerCase()} + '-600'" th:title="${mauSac.ten}"></a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
 
                             <div class="mt-4">
                                 <h5 class="font-medium">Thương hiệu:</h5>
-                                <ul class="list-none mt-2" th:each="thuonghieu : ${thuongHieuList}">
-                                    <li>
-                                        <input type="radio" th:id="'thuongHieu_' + ${thuonghieu.thuongHieuId}" name="thuongHieuId" th:value="${thuonghieu.thuongHieuId}" th:checked="${thuonghieu.thuongHieuId == thuongHieuId}">
-                                        <label th:for="'thuongHieu_' + ${thuonghieu.thuongHieuId}" class="text-slate-400 dark:text-gray-100">
-                                            <i class="mdi mdi-shopping-outline text-orange-500 me-2"></i>
-                                            <span th:text="${thuonghieu.ten}"></span>
-                                        </label>
-                                    </li>
-                                </ul>
+                                <select name="thuongHieuId" class="form-select mt-2">
+                                    <option th:value="${null}" th:text="'-- Chọn thương hiệu --'" th:selected="${thuongHieuId == null}"></option>
+                                    <option th:each="thuonghieu : ${thuongHieuList}"
+                                            th:value="${thuonghieu.thuongHieuId}"
+                                            th:text="${thuonghieu.ten}"
+                                            th:selected="${thuonghieu.thuongHieuId == thuongHieuId}">
+                                    </option>
+                                </select>
                             </div>
+
 
                             <div class="mt-4">
                                 <h5 class="font-medium">Kích cỡ:</h5>
@@ -165,29 +165,24 @@
                         </div><!-- Kết thúc lặp sản phẩm -->
                     </div><!--end grid-->
 
-                    <!-- Phân trang -->
-                    <div class="mt-6">
-                        <ul class="pagination flex justify-center items-center space-x-2">
-                            <!-- Previous Page Link -->
-                            <li th:if="${page.hasPrevious()}" class="page-item">
-                                <a th:href="@{${page.previousPageUrl()}}" class="page-link text-gray-500 bg-white border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700">
-                                    &laquo; Previous
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item" th:classappend="${page.hasPrevious()} ? '': 'disabled'">
+                                <a class="page-link" th:href="@{/shop(page=${page.number - 1}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-
-                            <!-- Page Number Links -->
-                            <li th:each="i : ${page.numberList}" class="page-item">
-                                <a th:href="@{${page.url(i)}}" th:text="${i}" class="page-link text-gray-500 bg-white border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700"></a>
+                            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, page.totalPages - 1)}">
+                                <a class="page-link" th:href="@{/shop(page=${pageNum}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" th:text="${pageNum + 1}">1</a>
                             </li>
-
-                            <!-- Next Page Link -->
-                            <li th:if="${page.hasNext()}" class="page-item">
-                                <a th:href="@{${page.nextPageUrl()}}" class="page-link text-gray-500 bg-white border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700">
-                                    Next &raquo;
+                            <li class="page-item" th:classappend="${page.hasNext()} ? '': 'disabled'">
+                                <a class="page-link" th:href="@{/shop(page=${page.number + 1}, thuongHieuId=${thuongHieuId}, kichThuocId=${kichThuocId}, mauSacId=${mauSacId}, keyword=${keyword})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
-                    </div><!--end pagination-->
+                    </nav>
+
                 </div><!--end col-->
             </div><!--end grid-->
         </div><!--end container-->

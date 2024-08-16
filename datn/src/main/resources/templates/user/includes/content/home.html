@@ -5,6 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .img-container {
+            width: 100%;
+            height: 200px; /* Hoặc kích thước khác mà bạn muốn */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto; /* Hoặc sử dụng `height: 100%;` nếu muốn ảnh tự động điều chỉnh chiều cao */
+            object-fit: cover; /* Hoặc `contain` tùy thuộc vào cách bạn muốn ảnh hiển thị */
+        }
+
+    </style>
 </head>
 
 <body>
@@ -80,10 +97,12 @@
                 <div th:each="sanPham : ${sanPhams}" class="group">
                     <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
                         <!-- Hiển thị hình ảnh sản phẩm -->
-                        <img th:src="@{${sanPham.anhDauTien}}" class="group-hover:scale-110 duration-500" alt="">
+                        <div class="img-container">
+                            <img th:src="@{${sanPham.anhDauTien}}" class="group-hover:scale-110 duration-500" alt="">
+                        </div>
 
                         <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a  th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
+                            <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
                                class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add to Cart</a>
                         </div>
 
@@ -109,7 +128,7 @@
 
                     <div class="mt-4">
                         <!-- Hiển thị tên sản phẩm và liên kết chi tiết sản phẩm -->
-                        <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"class="hover:text-orange-500 text-lg font-medium"
+                        <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}" class="hover:text-orange-500 text-lg font-medium"
                            th:text="${sanPham.ten}">Product Name</a>
                         <div class="flex justify-between items-center mt-1">
                             <!-- Hiển thị giá sản phẩm -->
@@ -124,21 +143,13 @@
                                 <li class="inline"><i class="mdi mdi-star"></i></li>
                                 <li class="inline"><i class="mdi mdi-star"></i></li>
                             </ul>
-                            <!-- Hiển thị đánh giá sản phẩm -->
-<!--                            <ul class="font-medium text-amber-400 list-none">-->
-<!--                                <li class="inline" th:each="i : ${sanPham.()}">-->
-<!--                                <li class="inline" th:each="i : ${sanPham.getMauSac()}">-->
-<!--                                </li>-->
-<!--                            </ul>-->
                         </div>
                     </div>
                 </div><!--end content-->
-
-
             </div><!--end grid-->
-        </div><!--end container-->
+        </div>
 
-        <div class="container-fluid relative md:mt-24 mt-16">
+            <div class="container-fluid relative md:mt-24 mt-16">
             <div class="grid grid-cols-1">
                 <div
                         class="relative overflow-hidden py-24 px-4 md:px-10 bg-orange-600 bg-[url('../..//images/hero/bg3.html')] bg-center bg-no-repeat bg-cover">
