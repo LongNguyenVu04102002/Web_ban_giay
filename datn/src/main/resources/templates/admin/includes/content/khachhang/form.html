@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
+<<<<<<< HEAD
+=======
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+    <style type="text/css">
+        .css_select_div{ text-align: center;}
+        .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
+    </style>
+>>>>>>> b9c54d5d79765b30597f3a5957fb4b49b84e5316
     <script>
         $(document).ready(function () {
             function getProvinces() {
@@ -134,6 +143,94 @@
             }
         }
     </script>
+<<<<<<< HEAD
+=======
+    <script>
+        $(document).ready(function() {
+            // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
+            $.validator.addMethod("noWhitespace", function(value, element) {
+                // Kiểm tra khoảng trắng ở đầu và cuối
+                var trimmedValue = $.trim(value);
+                // Kiểm tra khoảng trắng liên tiếp
+                var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
+                return trimmedValue === value && noConsecutiveSpaces;
+            }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
+
+            $.validator.addMethod("noSpecialChars", function(value, element) {
+                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
+            }, "Không được chứa ký tự đặc biệt.");
+
+            $("form").validate({
+                rules: {
+                    'diaChiList[0].thanhPho': {
+                        required: true
+                    },
+                    'diaChiList[0].huyen': {
+                        required: true
+                    },
+                    'diaChiList[0].xa': {
+                        required: true
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: true,
+                        minlength: 5,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].ten': {
+                        required: true,
+                        minlength: 2,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].sdt': {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 15
+                    }
+                },
+                messages: {
+                    'diaChiList[0].thanhPho': {
+                        required: "Vui lòng chọn thành phố."
+                    },
+                    'diaChiList[0].huyen': {
+                        required: "Vui lòng chọn huyện."
+                    },
+                    'diaChiList[0].xa': {
+                        required: "Vui lòng chọn xã."
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: "Vui lòng nhập địa chỉ.",
+                        minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
+                        noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Địa chỉ không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].ten': {
+                        required: "Vui lòng nhập tên người nhận.",
+                        minlength: "Tên người nhận phải có ít nhất 2 ký tự.",
+                        noWhitespace: "Tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Tên không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].sdt': {
+                        required: "Vui lòng nhập số điện thoại.",
+                        digits: "Số điện thoại chỉ chứa các ký tự số.",
+                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("text-red-500 text-sm mt-1");
+                    error.insertAfter(element);
+                }
+            });
+        });
+    </script>
+
+
+
+>>>>>>> b9c54d5d79765b30597f3a5957fb4b49b84e5316
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -219,6 +316,7 @@
                                     class="py-2 px-4 bg-red-500 text-white rounded mb-4">Đóng
                             </button>
 
+<<<<<<< HEAD
                             <div class="grid lg:grid-cols-12 grid-cols-1 gap-5">
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Tên Người Nhận: </label>
@@ -237,14 +335,36 @@
                                     <label class="font-semibold">Thành Phố:</label>
                                     <select id="province" name="thanhPho"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+=======
+                            <div class="grid lg:grid-cols-12 grid-cols-1 gap-5 css_select_div">
+                                <div class="lg:col-span-4">
+
+                                    <select id="tinh" name="diaChiList[0].thanhPho"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Tỉnh Thành</option>
+                                    </select>
+                                </div>
+                                <div class="lg:col-span-4">
+
+                                    <select id="quan" name="diaChiList[0].huyen"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Quận Huyện</option>
+>>>>>>> b9c54d5d79765b30597f3a5957fb4b49b84e5316
                                     </select>
                                     <input type="hidden" id="provinceName" name="province">
                                 </div>
                                 <div class="lg:col-span-4">
+<<<<<<< HEAD
                                     <label class="font-semibold">Huyện:</label>
                                     <select id="district" name="huyen"
                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                         <option value="">Chọn Huyện</option>
+=======
+
+                                    <select id="phuong" name="diaChiList[0].xa"
+                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
+                                        <option value="">Phường Xã</option>
+>>>>>>> b9c54d5d79765b30597f3a5957fb4b49b84e5316
                                     </select>
                                     <input type="hidden" id="districtName" name="district">
                                 </div>
