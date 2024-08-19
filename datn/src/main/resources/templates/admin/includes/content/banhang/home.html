@@ -618,7 +618,7 @@
                                     <div class="lg:col-span-4">
                                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                             <div class="lg:col-span-6">
-                                                <input type="text"
+                                                <input type="text" name="discountCode"
                                                        th:value="${index != null ? index.maPhieu : ''}"
                                                        class="w-full py-2 px-3 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"
                                                        placeholder="Nhập mã giảm giá"/>
@@ -656,9 +656,8 @@
                                                     <span th:id="'discount' + ${index.id}"
                                                           th:text="${gioHangList.get(index.id  - 1).tienGiam != null ? #numbers.formatDecimal(gioHangList.get(index.id  - 1).tienGiam, 1, 'POINT', 0, 'COMMA') + ' VNĐ' : '0 VNĐ'}">
                                                     </span>
-                                                    <input type="hidden"
-                                                           th:value="${gioHangList.get(index.id  - 1).tienGiam}"
-                                                           th:field="*{tienGiam}">
+                                                    <input type="hidden" name="tienGiamGia"
+                                                           th:value="${gioHangList.get(index.id  - 1).tienGiam}"/>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
@@ -684,7 +683,7 @@
                                                 </label>
                                                 <label class="radio-label inline-flex">
                                                     <input type="radio" class="radio" th:field="*{paymentMethod}"
-                                                           value="2">
+                                                           value="3">
                                                     <span class="font-semibold">Thanh toán khi nhận hàng</span>
                                                 </label>
                                             </div>

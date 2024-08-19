@@ -219,7 +219,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Transactional
     public void updateThongTinGiaoHang(HoaDon hoaDon) {
         Optional<HoaDon> hd = hoaDonRepository.findById(hoaDon.getHoaDonId());
-        if(hd.isPresent()){
+        if (hd.isPresent()) {
             hd.get().setTenNguoiNhan(hoaDon.getTenNguoiNhan());
             hd.get().setEmail(hoaDon.getEmail());
             hd.get().setSdtNhan(hoaDon.getSdtNhan());
@@ -257,25 +257,29 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Transactional
     @Override
-    public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode,ThanhToanResponse thanhToanResponse) {
+    public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
         HoaDon hoaDon = new HoaDon();
 
         Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
-        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
-
         khachHang.ifPresent(hoaDon::setKhachHang);
-        hoaDon.setPhieuGiamGia(phieuGiamGia);
+
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
+        if (phieuGiamGia != null) {
+            hoaDon.setPhieuGiamGia(phieuGiamGia);
+        }
+
         hoaDon.setLoaiHoaDon(true);
         hoaDon.setMaVanDon(generateInvoiceCode());
         hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setTongTien(thanhToanResponse.getTongTien());
-        hoaDon.setTienGiam(thanhToanResponse.getTienGiam());
+        hoaDon.setTienGiam(thanhToanResponse.getTienGiamGia());
 
         TimeLine timeLine = new TimeLine();
         timeLine.setNgayTao(LocalDate.now());
         timeLine.setHoaDon(hoaDon);
 
-        if(thanhToanResponse.getTenNguoiNhan() != null){
+        if (thanhToanResponse.getTienShip() != null && thanhToanResponse.getTienShip().compareTo(BigDecimal.ZERO) > 0) {
+            System.out.println(thanhToanResponse.getTenNguoiNhan());
             hoaDon.setTenNguoiNhan(thanhToanResponse.getTenNguoiNhan());
             hoaDon.setEmail(thanhToanResponse.getEmail());
             hoaDon.setSdtNhan(thanhToanResponse.getSdt());
@@ -283,7 +287,12 @@ public class HoaDonServiceImpl implements HoaDonService {
             hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
             hoaDon.setTrangThai(1);
             timeLine.setTrangThai(1);
-        }else {
+        } else {
+            hoaDon.setTenNguoiNhan(null);
+            hoaDon.setEmail(null);
+            hoaDon.setSdtNhan(null);
+            hoaDon.setPhiShip(BigDecimal.ZERO);
+            hoaDon.setDiaChiNhan(null);
             hoaDon.setTrangThai(6);
             timeLine.setTrangThai(6);
         }
@@ -292,14 +301,16 @@ public class HoaDonServiceImpl implements HoaDonService {
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof MyUserDetail) {
-               Long nhanVienId = ((MyUserDetail) principal).getId();
-               Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
-               if(nhanVien.isPresent()){
-                   hoaDon.setNhanVien(nhanVien.get());
-                   timeLine.setNguoiThucHien(nhanVien.get().getMaNhanVien());
-               }
+                Long nhanVienId = ((MyUserDetail) principal).getId();
+                Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
+                if (nhanVien.isPresent()) {
+                    hoaDon.setNhanVien(nhanVien.get());
+                    timeLine.setNguoiThucHien(nhanVien.get().getMaNhanVien());
+                }
             }
         }
+
+        // Lưu TimeLine và Hóa Đơn
         timeLine.setMoTa("Tạo hóa đơn thành công");
         timeLineRepository.save(timeLine);
         hoaDonRepository.save(hoaDon);
@@ -324,7 +335,6 @@ public class HoaDonServiceImpl implements HoaDonService {
             gioHangChiTietRepository.saveAll(gioHangChiTietList);
             gioHangChiTietRepository.deleteAll(gioHangChiTietList);
         }
-
     }
 
     @Override
@@ -343,13 +353,13 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
 
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(phieuGiamGiaResponse.getMaPhieu());
-        if (phieuGiamGia != null){
+        if (phieuGiamGia != null) {
             hoaDon.setTienGiam(phieuGiamGiaResponse.getTienGiam());
             hoaDon.setPhieuGiamGia(phieuGiamGia);
         }
         BigDecimal tongTien = BigDecimal.ZERO;
 
-        for (CartItem cartItem : cartItems){
+        for (CartItem cartItem : cartItems) {
             BigDecimal giaBan = cartItem.getGia();
             BigDecimal soLuong = new BigDecimal(cartItem.getSoLuong());
             BigDecimal thanhTien = giaBan.multiply(soLuong);
@@ -367,7 +377,7 @@ public class HoaDonServiceImpl implements HoaDonService {
             if (principal instanceof MyUserDetail) {
                 Long khachHangId = ((MyUserDetail) principal).getId();
                 Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
-                if(khachHang.isPresent()){
+                if (khachHang.isPresent()) {
                     hoaDon.setKhachHang(khachHang.get());
                     timeLine.setNguoiThucHien(khachHang.get().getHoTen());
                 }
@@ -378,8 +388,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         hoaDon.setTongTien(tongTien.add(thanhToanResponse.getTienShip()));
         hoaDonRepository.save(hoaDon);
 
-        for(CartItem cartItem : cartItems){
-            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(),cartItem.getKichThuoc(),cartItem.getMauSac());
+        for (CartItem cartItem : cartItems) {
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findByName(cartItem.getTenSanPham(), cartItem.getKichThuoc(), cartItem.getMauSac());
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             hoaDonChiTiet.setTrangThai(1);
             hoaDonChiTiet.setDonGia(cartItem.getGia());

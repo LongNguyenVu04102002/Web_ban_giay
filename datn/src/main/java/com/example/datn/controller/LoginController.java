@@ -35,7 +35,7 @@ public class LoginController {
                                 @RequestParam(value = "logout", required = false) String logout,
                                 Model model) {
 
-        return "authentication/login";
+        return "authentication/userlogin";
     }
 
     @PostMapping("/login")
@@ -48,7 +48,7 @@ public class LoginController {
         if (logout != null) {
             model.addAttribute("logout", "You have been logged out successfully.");
         }
-        return "authentication/login";
+        return "authentication/userlogin";
     }
 
     @GetMapping("/logout-success")
