@@ -26,6 +26,7 @@ public class CoGiayController {
 
     @PostMapping("/cogiay/save")
     public String add(CoGiay coGiay) {
+        coGiay.setTen(coGiay.getTen().trim());
         coGiayService.saveCoGiay(coGiay);
         return "redirect:/admin/sanpham/cogiay";
     }

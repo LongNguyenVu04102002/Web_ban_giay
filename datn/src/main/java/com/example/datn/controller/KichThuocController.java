@@ -26,6 +26,7 @@ public class KichThuocController {
 
     @PostMapping("/kichthuoc/save")
     public String save(KichThuoc kichThuoc) {
+        kichThuoc.setTen(kichThuoc.getTen().trim());
         kichThuocService.save(kichThuoc);
         return "redirect:/admin/sanpham/kichthuoc";
     }

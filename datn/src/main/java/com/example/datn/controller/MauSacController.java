@@ -25,6 +25,7 @@ public class MauSacController {
 
     @PostMapping("/mausac/save")
     public String save(MauSac mauSac) {
+        mauSac.setTen(mauSac.getTen().trim());
         mauSacService.save(mauSac);
         return "redirect:/admin/sanpham/mausac";
     }
