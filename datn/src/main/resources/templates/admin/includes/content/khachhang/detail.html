@@ -237,6 +237,10 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+
+    <div th:if="${messageError}" class="alert alert-danger">
+        <p th:text="${messageError}"></p>
+    </div>
     <div class="mb-6 flex justify-between text-center gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h3 class="text-title-md2 font-semibold text-black dark:text-white"
             th:text="${khachHang.khachHangId == null} ? 'Thêm Khách Hàng' : 'Chi Tiết Khách Hàng'">
