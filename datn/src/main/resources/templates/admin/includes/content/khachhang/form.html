@@ -55,7 +55,9 @@
         $(document).ready(function() {
             // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
             $.validator.addMethod("noWhitespace", function(value, element) {
+                // Kiểm tra khoảng trắng ở đầu và cuối
                 var trimmedValue = $.trim(value);
+                // Kiểm tra khoảng trắng liên tiếp
                 var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
                 return trimmedValue === value && noConsecutiveSpaces;
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");

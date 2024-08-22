@@ -141,7 +141,6 @@
             }
         });
     </script>
-
     <script>
         $(document).ready(function() {
             // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
@@ -159,6 +158,27 @@
 
             $("form").validate({
                 rules: {
+                    'hoTen': {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 100,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'sdt': {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 15
+                    },
+                    'email': {
+                        required: true,
+                        email: true
+                    },
+                    'ngaySinh': {
+                        required: true,
+                        dateISO: true // Định dạng ngày là yyyy-mm-dd
+                    },
                     'diaChiList[0].thanhPho': {
                         required: true
                     },
@@ -188,6 +208,27 @@
                     }
                 },
                 messages: {
+                    'hoTen': {
+                        required: "Vui lòng nhập họ tên.",
+                        minlength: "Họ tên phải có ít nhất 2 ký tự.",
+                        maxlength: "Họ tên không được vượt quá 100 ký tự.",
+                        noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
+                    },
+                    'sdt': {
+                        required: "Vui lòng nhập số điện thoại.",
+                        digits: "Số điện thoại chỉ chứa các ký tự số.",
+                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    },
+                    'email': {
+                        required: "Vui lòng nhập email.",
+                        email: "Vui lòng nhập địa chỉ email hợp lệ."
+                    },
+                    'ngaySinh': {
+                        required: "Vui lòng nhập ngày sinh.",
+                        dateISO: "Vui lòng nhập ngày sinh hợp lệ (định dạng yyyy-mm-dd)."
+                    },
                     'diaChiList[0].thanhPho': {
                         required: "Vui lòng chọn thành phố."
                     },
