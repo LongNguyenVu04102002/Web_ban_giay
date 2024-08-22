@@ -14,7 +14,18 @@
     }
 
     </style>
-
+    <script>
+        function confirmToggle(checkbox) {
+            var form = checkbox.form;
+            var message = checkbox.checked ? "Bạn có muốn thay đổi trạng thái?" : "Bạn có muốn thay đổi trạng thái?";
+            if (confirm(message)) {
+                form.submit();
+            } else {
+                // Hoàn tác thay đổi trạng thái của checkbox nếu người dùng nhấn "Cancel"
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+    </script>
 
 </head>
 <body>
@@ -123,7 +134,7 @@
                               method="get" onsubmit="return confirmToggle()">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!kh.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${!kh.trangThai}" onchange="confirmToggle(this)">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
