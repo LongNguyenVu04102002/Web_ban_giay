@@ -5,161 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Check Out</title>
-    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="/js/admin/vendors.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function getProvinces() {
-                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (response) {
-                    if (response.error === 0) {
-                        $("#province").append('<option value="">Chọn Thành Phố</option>');
-                        $.each(response.data, function (key, value) {
-                            $("#province").append('<option value="' + value.id + '">' + value.full_name + '</option>');
-                        });
-                    } else {
-                        console.error('Error fetching provinces:', response.message);
-                    }
-                });
-            }
-
-            function getDistricts(provinceId) {
-                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function (response) {
-                    if (response.error === 0) {
-                        $("#district").html('<option value="">Chọn Huyện</option>');
-                        $("#ward").html('<option value="">Chọn Xã</option>');
-                        $.each(response.data, function (key, value) {
-                            $("#district").append('<option value="' + value.id + '">' + value.full_name + '</option>');
-                        });
-                    } else {
-                        console.error('Error fetching districts:', response.message);
-                    }
-                });
-            }
-
-            function getWards(districtId) {
-                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function (response) {
-                    if (response.error === 0) {
-                        $("#ward").html('<option value="">Chọn Xã</option>');
-                        $.each(response.data, function (key, value) {
-                            $("#ward").append('<option value="' + value.id + '">' + value.full_name + '</option>');
-                        });
-                    } else {
-                        console.error('Error fetching wards:', response.message);
-                    }
-                });
-            }
-
-            getProvinces();
-
-            $("#province").on('change', function () {
-                const provinceId = $(this).val();
-                const provinceName = $("#province option:selected").text();
-                if (provinceId) {
-                    getDistricts(provinceId);
-                    $("#provinceName").val(provinceName);
-                } else {
-                    $("#district").html('<option value="">Chọn Huyện</option>');
-                    $("#ward").html('<option value="">Chọn Xã</option>');
-                    $("#provinceName").val('');
-                }
-            });
-
-            $("#district").on('change', function () {
-                const districtId = $(this).val();
-                const districtName = $("#district option:selected").text();
-                if (districtId) {
-                    getWards(districtId);
-                    $("#districtName").val(districtName);
-                } else {
-                    $("#ward").html('<option value="">Chọn Xã</option>');
-                    $("#districtName").val('');
-                }
-            });
-
-            $("#ward").on('change', function () {
-                const wardId = $(this).val();
-                const wardName = $("#ward option:selected").text();
-                $("#wardName").val(wardName);
-            });
-        });
-
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#form-validation').validate({
-                ignore: ':hidden:not(:checkbox)',
-                errorElement: 'div',
-                errorClass: 'input-invalid',
-                validClass: 'input-valid',
-                errorPlacement: function (error, element) {
-                    error.addClass('text-red-600 mt-1');
-                    if (element.prop('type') === 'checkbox') {
-                        error.insertAfter(element.parent('label'));
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                rules: {
-                    tenNguoiNhan: {
-                        required: true
-                    },
-                    sdt: {
-                        required: true,
-                        digits: true,
-                        minlength: 10,
-                        maxlength: 10
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    thanhPho: {
-                        required: true
-                    },
-                    huyen: {
-                        required: true
-                    },
-                    xa: {
-                        required: true
-                    },
-                    diaChi: {
-                        required: true
-                    }
-                },
-                messages: {
-                    tenNguoiNhan: {
-                        required: 'Vui lòng nhập tên khách hàng'
-                    },
-                    sdt: {
-                        required: 'Vui lòng nhập số điện thoại',
-                        digits: 'Số điện thoại phải là chữ số',
-                        minlength: 'Số điện thoại phải có ít nhất 10 chữ số',
-                        maxlength: 'Số điện thoại không được quá 10 chữ số'
-                    },
-                    email: {
-                        required: 'Vui lòng nhập email',
-                        email: 'Email không đúng định dạng'
-                    },
-                    thanhPho: {
-                        required: 'Vui lòng chọn thành phố'
-                    },
-                    huyen: {
-                        required: 'Vui lòng chọn huyện'
-                    },
-                    xa: {
-                        required: 'Vui lòng chọn xã'
-                    },
-                    diaChi: {
-                        required: 'Vui lòng nhập địa chỉ'
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="/js/user/checkout.js"></script>
 </head>
 <body>
 <div layout:fragment="usercontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <section class="relative table w-full py-20 lg:py-24 bg-gray-50 dark:bg-slate-800">
         <div class="container relative">
             <div class="grid grid-cols-1 mt-14">
@@ -184,12 +37,11 @@
     </section>
     <section class="relative md:py-24 py-16">
         <div class="container relative">
-            <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6">
-                <div class="lg:col-span-8">
-                    <div class="p-6 rounded-md shadow dark:shadow-gray-800">
-                        <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
-                        <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post"
-                              id="form-validation">
+            <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post" id="form-validation">
+                <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6">
+                    <div class="lg:col-span-8">
+                        <div class="p-6 rounded-md shadow dark:shadow-gray-800">
+                            <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Tên Khách Hàng : </label>
@@ -257,53 +109,53 @@
                                 </div>
                             </div>
                             <div class="mt-10">
-                                <button type="submit"
+                                <button type="submit" onclick="return checkCartItems()"
                                         class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
                                     Continue to checkout
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="lg:col-span-4">
-                    <div class="p-6 rounded-md shadow dark:shadow-gray-800">
-                        <div class="flex justify-between items-center">
-                            <h5 class="text-lg font-semibold">Giỏ hàng</h5>
                         </div>
-                        <div class="mt-4 rounded-md shadow dark:shadow-gray-800">
-                            <div th:each="item : ${cartItems}"
-                                 class="p-3 flex justify-between items-center">
-                                <div>
-                                    <h5 class="font-semibold"
-                                        th:text="${item.tenSanPham} + ' x ' + ${item.soLuong}"></h5>
-                                    <p class="text-sm text-slate-400"
-                                       th:text="'Kích Thước: ' + ${item.kichThuoc} + ' || Màu Sắc: ' + ${item.mauSac}"></p>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <div class="p-6 rounded-md shadow dark:shadow-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-lg font-semibold">Giỏ hàng</h5>
+                            </div>
+                            <div class="mt-4 rounded-md shadow dark:shadow-gray-800">
+                                <div th:each="item : ${cartItems}"
+                                     class="p-3 flex justify-between items-center cart-item">
+                                    <div>
+                                        <h5 class="font-semibold"
+                                            th:text="${item.tenSanPham} + ' x ' + ${item.soLuong}"></h5>
+                                        <p class="text-sm text-slate-400"
+                                           th:text="'Kích Thước: ' + ${item.kichThuoc} + ' || Màu Sắc: ' + ${item.mauSac}"></p>
+                                    </div>
+                                    <p class="text-slate-400 font-semibold"></p>
                                 </div>
-                                <p class="text-slate-400 font-semibold"></p>
-                            </div>
-                            <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
-                                <h5 class="font-semibold">Tạm Tính</h5>
-                                <p class="text-slate-400 font-semibold"
-                                   th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></p>
-                            </div>
-                            <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
-                                <h5 class="font-semibold">Tiền Giảm</h5>
-                                <span class="text-red-600"
-                                      th:text="${pgg != null ? #numbers.formatDecimal(pgg.tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
-                            </div>
-                            <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
-                                <h5 class="font-semibold">Tiền Ship</h5>
-                                <p class="text-slate-400 font-semibold">0 VNĐ</p>
-                            </div>
-                            <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800">
-                                <h5 class="font-semibold">Tổng</h5>
-                                <p class="font-semibold"
-                                   th:text="${#numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'COMMA', 0, 'POINT') + ' VNĐ'}"></p>
+                                <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
+                                    <h5 class="font-semibold">Tạm Tính</h5>
+                                    <p class="text-slate-400 font-semibold" id="subtotal"
+                                       th:text="${!cartItems.isEmpty() ? #numbers.formatDecimal(#aggregates.sum(cartItems.![soLuong * gia]), 1, 'POINT', 0, 'COMMA') + ' VNĐ' : '0 VNĐ'}"></p>
+                                </div>
+                                <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
+                                    <h5 class="font-semibold">Tiền Giảm</h5>
+                                    <span class="text-red-600" id="discount"
+                                          th:text="${pgg != null ? #numbers.formatDecimal(pgg.tienGiam, 1, 'POINT', 0, 'COMMA') + ' VNĐ' : '0 VNĐ'}"></span>
+                                </div>
+                                <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800 text-green-600">
+                                    <h5 class="font-semibold">Tiền Ship</h5>
+                                    <p class="text-slate-400 font-semibold" id="shippingFee" >0 VNĐ</p>
+                                    <input type="hidden" th:field="*{tienShip}" id="hiddenShippingFee" value="0">
+                                </div>
+                                <div class="p-3 flex justify-between items-center border border-gray-100 dark:border-gray-800">
+                                    <h5 class="font-semibold">Tổng</h5>
+                                    <span class="font-semibold" id="total">0 VNĐ</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </section>
 </div>

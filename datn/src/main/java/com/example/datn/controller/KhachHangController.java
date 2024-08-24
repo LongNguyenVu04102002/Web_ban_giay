@@ -82,8 +82,6 @@ public class KhachHangController {
         return "redirect:/admin/taikhoan/khachhang";
     }
 
-
-
     @PostMapping("/khachhang/update")
     public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
@@ -147,8 +145,6 @@ public class KhachHangController {
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
-
-
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId, RedirectAttributes redirectAttributes) {

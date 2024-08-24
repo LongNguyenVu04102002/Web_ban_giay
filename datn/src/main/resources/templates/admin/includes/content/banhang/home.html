@@ -323,7 +323,7 @@
                                         <td th:text="${spct.sanPham.lotGiay.ten}"></td>
                                         <td th:text="${spct.sanPham.dayGiay.ten}"></td>
                                         <td th:text="${spct.sanPham.chatLieu.ten}"></td>
-                                        <td th:text="${#numbers.formatDecimal(spct.giaBan, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                        <td th:text="${#numbers.formatDecimal(spct.giaBan, 1, 'POINT', 0, 'COMMA')} + ' VND'"></td>
                                         <td>
                                             <form th:action="@{/admin/banhang/addToCart}" method="post">
                                                 <input type="hidden" name="gioHangId"
@@ -343,7 +343,7 @@
                         </div>
                     </div>
                 </div>
-                <form th:action="@{/admin/banhang/save}" method="post">
+                <form th:action="@{/admin/banhang/save}" method="post" th:object="${thanhToanResponse}">
                     <div class="xl:flex gap-4 mt-4">
                         <div class="w-full">
                             <div class="card adaptable-card">
@@ -400,7 +400,7 @@
                                             <td th:text="${ghct.sanPhamChiTiet.mauSac.ten}"></td>
                                             <td th:text="${ghct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                             <td>
-                                                <span th:text="${#numbers.formatDecimal(ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                <span th:text="${#numbers.formatDecimal(ghct.sanPhamChiTiet.giaBan, 1, 'POINT', 0, 'COMMA')}"></span>
                                                 VNĐ
                                             </td>
                                             <td>
@@ -419,7 +419,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <span th:text="${#numbers.formatDecimal(ghct.soLuong * ghct.sanPhamChiTiet.giaBan, 1, 'COMMA', 0, 'POINT')}"></span>
+                                                <span th:text="${#numbers.formatDecimal(ghct.soLuong * ghct.sanPhamChiTiet.giaBan, 1, 'POINT', 0, 'COMMA')}"></span>
                                                 VNĐ
                                             </td>
                                         </tr>
@@ -440,7 +440,7 @@
                                     <h3 class="mb-4">Thông Tin Khách Hàng</h3>
                                     <div class="flex">
                                         <button type="button" data-bs-toggle="modal"
-                                                th:data-bs-target="'#dialogCustomer'  + ${index.id}"
+                                                th:data-bs-target="'#dialogCustomer' + ${index.id}"
                                                 class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                             Chọn khách hàng
                                         </button>
@@ -555,19 +555,17 @@
                                         <div class="p-6 rounded-md">
                                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                                 <div class="lg:col-span-6">
-                                                    <label class="form-label font-semibold">Tên Khách
-                                                        Hàng: </label>
+                                                    <label class="form-label font-semibold">Tên Khách Hàng: </label>
                                                     <label>
-                                                        <input type="text"
+                                                        <input type="text" th:field="*{tenNguoiNhan}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Tên Khách Hàng">
                                                     </label>
                                                 </div>
                                                 <div class="lg:col-span-6">
-                                                    <label class="form-label font-semibold">Số Điện
-                                                        Thoại:</label>
+                                                    <label class="form-label font-semibold">Số Điện Thoại:</label>
                                                     <label>
-                                                        <input type="text"
+                                                        <input type="text" th:field="*{sdt}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Số Điện Thoại">
                                                     </label>
@@ -575,7 +573,7 @@
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Email: </label>
                                                     <label>
-                                                        <input type="email"
+                                                        <input type="email" th:field="*{email}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Email">
                                                     </label>
@@ -586,6 +584,8 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Thành Phố</option>
                                                     </select>
+                                                    <input type="hidden" th:id="'provinceName' + ${index.id}"
+                                                           th:field="*{province}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Huyện:</label>
@@ -593,6 +593,8 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Huyện</option>
                                                     </select>
+                                                    <input type="hidden" th:id="'districtName' + ${index.id}"
+                                                           th:field="*{district}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Xã:</label>
@@ -600,10 +602,12 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
                                                         <option value="">Chọn Xã</option>
                                                     </select>
+                                                    <input type="hidden" th:id="'wardName' + ${index.id}"
+                                                           th:field="*{ward}">
                                                 </div>
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Địa Chỉ: </label>
-                                                    <input type="text"
+                                                    <input type="text" th:field="*{diaChi}"
                                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                            placeholder="Địa Chỉ">
                                                 </div>
@@ -634,52 +638,60 @@
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Tạm Tính: </label>
-                                                <label
-                                                        th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
-                                                        class="form-label font-semibold">
+                                                <label class="form-label font-semibold" th:id="'subtotal' + ${index.id}"
+                                                       th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'POINT', 0, 'COMMA') + ' VNĐ' : '0 VNĐ'}">
                                                 </label>
                                             </div>
                                             <div th:id="'shipping' + ${index.id}"
                                                  class="lg:col-span-12 flex items-center justify-between hidden">
                                                 <label class="form-label font-semibold">Phí Ship: </label>
-                                                <label class="form-label font-semibold">0 VNĐ</label>
+                                                <label class="form-label font-semibold"
+                                                       th:id="'shippingFee' + ${index.id}">0 VNĐ</label>
+                                                <input type="hidden" th:field="*{tienShip}"
+                                                       th:id="'hiddenShippingFee' + ${index.id}" value="0">
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
-                                                <label class="form-label font-semibold">Giảm Giá: </label>
+                                                <label class="form-label font-semibold">Tiền Giảm: </label>
                                                 <label class="form-label font-semibold">
-                                                            <span
-                                                                    th:text="${gioHangList.get(index.id  - 1).tienGiam != null ? #numbers.formatDecimal(gioHangList.get(index.id  - 1).tienGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"></span>
+                                                    <span th:id="'discount' + ${index.id}"
+                                                          th:text="${gioHangList.get(index.id  - 1).tienGiam != null ? #numbers.formatDecimal(gioHangList.get(index.id  - 1).tienGiam, 1, 'POINT', 0, 'COMMA') + ' VNĐ' : '0 VNĐ'}">
+                                                    </span>
+                                                    <input type="hidden"
+                                                           th:value="${gioHangList.get(index.id  - 1).tienGiam}"
+                                                           th:field="*{tienGiam}">
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Tổng Tiền: </label>
-                                                <label
-                                                        th:text="${!gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ? #numbers.formatDecimal(#aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]), 1, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}"
-                                                        class="form-label font-semibold">
+                                                <label class="form-label font-semibold" th:id="'total' + ${index.id}">
+                                                    0 VNĐ
                                                 </label>
-                                                <input name="totalAmount"
-                                                       th:value="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id  - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ?
-                                                                #aggregates.sum(gioHangList.get(index.id  - 1).getGioHangChiTietList().![soLuong * sanPhamChiTiet.giaBan]) : 0}"
-                                                       class="hidden"/>
+                                                <input type="hidden" th:id="'hiddenTotalAmount' + ${index.id}"
+                                                       th:field="*{tongTien}">
                                             </div>
                                             <div class="lg:col-span-12 flex flex-col gap-4">
                                                 <h4 class="font-semibold mt-2">Phương Thức Thanh Toán</h4>
                                                 <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" name="thanhToan" value="1"
+                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
+                                                           value="1"
                                                            checked>
                                                     <span class="font-semibold">Tiền Mặt</span>
                                                 </label>
                                                 <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" name="thanhToan"
+                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
                                                            value="2">
                                                     <span class="font-semibold">Thanh toán qua VNPAY</span>
+                                                </label>
+                                                <label class="radio-label inline-flex">
+                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
+                                                           value="2">
+                                                    <span class="font-semibold">Thanh toán khi nhận hàng</span>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12">
                                                 <div class="mt-10">
-                                                    <button th:type="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id  - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id  - 1).getGioHangChiTietList().isEmpty() ?
-                                                                'submit' : 'button'}"
-                                                            th:onclick="'clearSelectedCustomer(' + ${index.id} + ')'"
+                                                    <button
+                                                            th:type="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id - 1).getGioHangChiTietList().isEmpty() ? 'submit' : 'button'}"
                                                             class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
                                                         Thanh Toán
                                                     </button>

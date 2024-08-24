@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+
     <script>
 
         $(document).ready(function () {
@@ -138,6 +141,92 @@
             }
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
+            $.validator.addMethod("noWhitespace", function(value, element) {
+                // Kiểm tra khoảng trắng ở đầu và cuối
+                var trimmedValue = $.trim(value);
+                // Kiểm tra khoảng trắng liên tiếp
+                var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
+                return trimmedValue === value && noConsecutiveSpaces;
+            }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
+
+            $.validator.addMethod("noSpecialChars", function(value, element) {
+                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
+            }, "Không được chứa ký tự đặc biệt.");
+
+            $("form").validate({
+                rules: {
+                    'diaChiList[0].thanhPho': {
+                        required: true
+                    },
+                    'diaChiList[0].huyen': {
+                        required: true
+                    },
+                    'diaChiList[0].xa': {
+                        required: true
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: true,
+                        minlength: 5,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].ten': {
+                        required: true,
+                        minlength: 2,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'diaChiList[0].sdt': {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 15
+                    }
+                },
+                messages: {
+                    'diaChiList[0].thanhPho': {
+                        required: "Vui lòng chọn thành phố."
+                    },
+                    'diaChiList[0].huyen': {
+                        required: "Vui lòng chọn huyện."
+                    },
+                    'diaChiList[0].xa': {
+                        required: "Vui lòng chọn xã."
+                    },
+                    'diaChiList[0].diaChi': {
+                        required: "Vui lòng nhập địa chỉ.",
+                        minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
+                        noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Địa chỉ không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].ten': {
+                        required: "Vui lòng nhập tên người nhận.",
+                        minlength: "Tên người nhận phải có ít nhất 2 ký tự.",
+                        noWhitespace: "Tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Tên không được chứa ký tự đặc biệt."
+                    },
+                    'diaChiList[0].sdt': {
+                        required: "Vui lòng nhập số điện thoại.",
+                        digits: "Số điện thoại chỉ chứa các ký tự số.",
+                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("text-red-500 text-sm mt-1");
+                    error.insertAfter(element);
+                }
+            });
+        });
+    </script>
+
+
+
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -222,46 +311,45 @@
                                     </label>
                                 </div>
                             </div>
-
                         </div>
                         <h3 class="text-title-md2 font-semibold mt-12"> Thêm Địa Chỉ</h3>
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Thành Phố:</label>
-                                <select id="tinh" th:field="*{diaChiList[0].thanhPho}"
+                                <select id="tinh" name="diaChiList[0].thanhPho"
                                         class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="">Tỉnh Thành</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Huyện:</label>
-                                <select id="quan" th:field="*{diaChiList[0].huyen}"
+                                <select id="quan" name="diaChiList[0].huyen"
                                         class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="">Quận Huyện</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-4">
                                 <label class="font-semibold">Xã:</label>
-                                <select id="phuong" th:field="*{diaChiList[0].xa}"
+                                <select id="phuong" name="diaChiList[0].xa"
                                         class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2">
                                     <option value="">Phường Xã</option>
                                 </select>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Địa Chỉ: </label>
-                                <input type="text" th:field="*{diaChiList[0].diaChi}"
+                                <input type="text" name="diaChiList[0].diaChi"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Địa Chỉ">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Tên Người Nhận: </label>
-                                <input type="text" th:field="*{diaChiList[0].ten}"
+                                <input type="text" name="diaChiList[0].ten"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Tên Người Nhận">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Số điện thoại: </label>
-                                <input type="text" th:field="*{diaChiList[0].sdt}"
+                                <input type="text" name="diaChiList[0].sdt"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số điện thoại người nhận">
                             </div>
@@ -269,7 +357,6 @@
                                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Lưu</button>
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>

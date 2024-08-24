@@ -2,6 +2,7 @@ package com.example.datn.controller;
 
 import com.example.datn.dto.TabDataDTO;
 import com.example.datn.entity.GioHang;
+import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.ChatLieuServiceImpl;
 import com.example.datn.service.Impl.CoGiayServiceImpl;
 import com.example.datn.service.Impl.DayGiayServiceImpl;
@@ -89,10 +90,8 @@ public class BanHangTaiQuayController {
             tabDataList.add(tabDataDTO);
         }
 
-        BigDecimal tongTienGiam = (BigDecimal) model.asMap().getOrDefault("tongTienGiam", BigDecimal.ZERO);
         model.addAttribute("tabDataList", tabDataList);
         model.addAttribute("gioHangList", gioHangList);
-        model.addAttribute("tongTienGiam", tongTienGiam);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietService.getAll());
         model.addAttribute("khachHangList", khachHangService.getAll());
         model.addAttribute("lstDeGiay", deGiayService.getAllDeGiay());
@@ -104,6 +103,7 @@ public class BanHangTaiQuayController {
         model.addAttribute("lstMuiGiay", muiGiayService.getAllMuiGiay());
         model.addAttribute("lstChatLieu", chatLieuService.getAllChatLieu());
         model.addAttribute("lstDayGiay", dayGiayService.getAllDayGiay());
+        model.addAttribute("thanhToanResponse", new ThanhToanResponse());
 
         return "/admin/includes/content/banhang/home";
     }
@@ -146,10 +146,8 @@ public class BanHangTaiQuayController {
     public String save(@RequestParam Long gioHangId,
                        @RequestParam(defaultValue = "0") Long customerId,
                        @RequestParam(defaultValue = "") String discountCode,
-                       @RequestParam(defaultValue = "0") BigDecimal discountAmount,
-                       @RequestParam(defaultValue = "0") BigDecimal totalAmount,
-                       @RequestParam Long thanhToan) {
-        hoaDonService.saveHoaDonTaiQuay(gioHangId, customerId, discountCode, discountAmount, totalAmount, thanhToan);
+                       @ModelAttribute ThanhToanResponse thanhToanResponse) {
+        hoaDonService.saveHoaDonTaiQuay(gioHangId, customerId, discountCode, thanhToanResponse);
         return "redirect:/admin/hoadon";
     }
 
