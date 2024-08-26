@@ -77,6 +77,7 @@ public class KhachHangController {
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             diaChi.setKhachHang(khachHang);
         }
+//        khachHang.setHoTen(khachHang.getHoTen()+"hello");
         khachHangService.save(khachHang);
         redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
         return "redirect:/admin/taikhoan/khachhang";
