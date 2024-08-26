@@ -26,6 +26,7 @@ public class ThuongHieuController {
 
     @PostMapping("/thuonghieu/save")
     public String save(ThuongHieu thuongHieu) {
+        thuongHieu.setTen(thuongHieu.getTen().trim());
         thuongHieuService.save(thuongHieu);
         return "redirect:/admin/sanpham/thuonghieu";
     }

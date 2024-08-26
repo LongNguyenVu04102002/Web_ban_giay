@@ -26,6 +26,7 @@ public class LotGiayController {
 
     @PostMapping("/lotgiay/save")
     public String save(LotGiay lotGiay) {
+        lotGiay.setTen(lotGiay.getTen().trim());
         lotGiayService.saveLotGiay(lotGiay);
         return "redirect:/admin/sanpham/lotgiay";
     }
