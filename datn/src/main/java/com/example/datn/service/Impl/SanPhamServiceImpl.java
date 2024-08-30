@@ -1,9 +1,13 @@
 package com.example.datn.service.Impl;
 
+import com.example.datn.dto.SanPhamHomeDTO;
 import com.example.datn.entity.SanPham;
 import com.example.datn.repository.SanPhamRepository;
 import com.example.datn.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,5 +57,16 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
         return false;
     }
+
+    @Override
+    public Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable) {
+        return sanPhamRepository.getSanPhamForHomePage(PageRequest.of(0, 8));
+    }
+
+    @Override
+    public Page<SanPhamHomeDTO> getSanPhamForShopPage(Long thuongHieuId, Long kichThuocId, Long mauSacId, String keyword, Pageable pageable) {
+        return sanPhamRepository.findSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
+    }
+
 
 }

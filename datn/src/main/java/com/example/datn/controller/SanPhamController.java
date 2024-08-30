@@ -80,6 +80,7 @@ public class SanPhamController {
 
     @PostMapping("/giay/save")
     public String save(SanPham sanPham) {
+        sanPham.setTen(sanPham.getTen().trim());
         sanPhamService.save(sanPham);
         return "redirect:/admin/sanpham/giay";
     }

@@ -5,9 +5,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .img-container {
+            width: 100%;
+            height: 200px; /* Hoặc kích thước khác mà bạn muốn */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto; /* Hoặc sử dụng `height: 100%;` nếu muốn ảnh tự động điều chỉnh chiều cao */
+            object-fit: cover; /* Hoặc `contain` tùy thuộc vào cách bạn muốn ảnh hiển thị */
+        }
+        .custom-iframe {
+            width: 100%; /* Đặt chiều rộng của iframe bằng với chiều rộng của phần tử chứa */
+            height: 450px; /* Đặt chiều cao của iframe */
+            border-radius: 8px; /* Bo góc cho iframe */
+            overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Thêm hiệu ứng đổ bóng */
+        }
+
+
+    </style>
 </head>
+
 <body>
 <div layout:fragment="usercontent">
+
     <section
             class="relative md:flex table w-full items-center md:h-screen py-36 bg-emerald-500/5 bg-[url('../..//images/hero/bg3.html')] md:bg-top bg-center bg-no-repeat bg-cover">
         <div class="container relative">
@@ -18,14 +45,32 @@
                     <p class="text-lg">Our latest collection of essential basics.</p>
 
                     <div class="mt-6">
-                        <a href="#"
-                           class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-center bg-slate-900 dark:bg-orange-500 text-white rounded-md">Shop
-                            Now <i class="mdi mdi-arrow-right"></i></a>
+                        <a href="shop"
+                           class="py-2 px-5 inline-block font-semibold tracking-wide align-middle text-center bg-slate-900 dark:bg-orange-500 text-white rounded-md">
+                            Shop Now <i class="mdi mdi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Thêm iframe vào đây -->
+                    <div class="mt-8">
+                        <iframe
+                                class="custom-iframe"
+                                width="100%"
+                                height="450"
+                                src="https://www.youtube.com/embed/iNNGleF3Eks?si=nI4lfj29eAl9wDVe&autoplay=1"
+                                title="YouTube video player"
+                                frameborder="0"
+
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen>
+                        </iframe>
                     </div>
                 </div>
             </div><!--end grid-->
         </div><!--end container-->
     </section>
+
     <section class="relative md:py-24 py-16">
         <div class="container relative">
             <div class="grid grid-cols-1 justify-center text-center mb-6">
@@ -68,90 +113,30 @@
 
         <div class="container relative md:mt-24 mt-16">
             <div class="grid grid-cols-1 justify-center text-center mb-6">
-                <h5 class="font-semibold text-3xl leading-normal mb-4">New Arrival Products</h5>
+                <h5 class="font-semibold text-3xl leading-normal mb-4">TOP  SẢN PHẨM MỚI NHẤT CỦA SHOP</h5>
                 <p class="text-slate-400 max-w-xl mx-auto">Shop the latest products from the most popular collections
                 </p>
             </div><!--end grid-->
 
             <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 pt-6 gap-6">
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/black-print-t-shirt.jpg"
-                             class="group-hover:scale-110 duration-500" alt="">
+                <!-- Sử dụng th:each để lặp qua danh sách sản phẩm -->
+                <div th:each="sanPham : ${sanPhams}" class="group">
+                    <div class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
+                        <!-- Hiển thị hình ảnh sản phẩm -->
+                        <div class="img-container">
+                            <img th:src="@{${sanPham.anhDauTien}}" class="group-hover:scale-110 duration-500" alt="">
+                        </div>
 
                         <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
+                            <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add to Cart</a>
                         </div>
 
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li>
-                                <a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
-                                    <i class="mdi mdi-heart size-4"></i>
-                                </a>
-                            </li>
-                            <li class="mt-1">
-                                <a href="#"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
-                                    <i class="mdi mdi-eye size-4"></i>
-                                </a>
-                            </li>
-                            <li class="mt-1">
-                                <a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow">
-                                    <i class="mdi mdi-bookmark size-4"></i>
-                                </a>
-                            </li>
-                        </ul>
-
-
-                        <ul class="list-none absolute top-[10px] start-4">
-                            <li><a href="javascript:void(0)"
-                                   class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">-40%
-                                Off</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Black Print
-                            T-Shirt</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/fashion-shoes-sneaker.jpg"
-                             class="group-hover:scale-110 duration-500" alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
+                        <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
                             <li><a href="javascript:void(0)"
                                    class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
                                     data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
+                            <li class="mt-1"><a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
                                                 class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
                                     data-feather="eye" class="size-4"></i></a></li>
                             <li class="mt-1"><a href="javascript:void(0)"
@@ -159,6 +144,7 @@
                                     data-feather="bookmark" class="size-4"></i></a></li>
                         </ul>
 
+                        <!-- Hiển thị nhãn sản phẩm -->
                         <ul class="list-none absolute top-[10px] start-4">
                             <li><a href="javascript:void(0)"
                                    class="bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">New</a>
@@ -167,473 +153,14 @@
                     </div>
 
                     <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Fashion
-                            Shoes Sneaker</a>
+                        <!-- Hiển thị tên sản phẩm và liên kết chi tiết sản phẩm -->
+                        <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}" class="hover:text-orange-500 text-lg font-medium"
+                           th:text="${sanPham.ten}">Product Name</a>
                         <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/men-white-espadrilles-slip-shoes.jpg"
-                             class="group-hover:scale-110 duration-500" alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Mens White
-                            Slip Shoes</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/luxurious-bag.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Ladies
-                            Luxurious Bag</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/ladies-1.jpg" class="group-hover:scale-110 duration-500" alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Ladies Green
-                            Top</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/ladies-2.jpg" class="group-hover:scale-110 duration-500" alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Ladies
-                            Onepiece Wear</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/mens-jecket.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-
-                        <ul class="list-none absolute top-[10px] start-4">
-                            <li><a href="javascript:void(0)"
-                                   class="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">Featured</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Mens Brown
-                            Jecket</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/sweater-t-shirt.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Sweater
-                            T-Shirt</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/trendy-t-shirt2.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Trendy
-                            T-shirt</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/men-sun-glasses.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-
-                        <ul class="list-none absolute top-[10px] start-4">
-                            <li><a href="javascript:void(0)"
-                                   class="bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">New</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Men Sun
-                            Glasses</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/women-s-white-low-heel-shoes.jpg"
-                             class="group-hover:scale-110 duration-500" alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-
-                        <ul class="list-none absolute top-[10px] start-4">
-                            <li><a href="javascript:void(0)"
-                                   class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">-25%
-                                Off</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Women White
-                            Low Heel Shoes</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
-                            </p>
-                            <ul class="font-medium text-amber-400 list-none">
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                                <li class="inline"><i class="mdi mdi-star"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--end content-->
-
-                <div class="group">
-                    <div
-                            class="relative overflow-hidden shadow dark:shadow-gray-800 group-hover:shadow-lg group-hover:dark:shadow-gray-800 rounded-md duration-500">
-                        <img src="/images/shop/casual-men-shorts.jpg" class="group-hover:scale-110 duration-500"
-                             alt="">
-
-                        <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                            <a href="shop-cart.html"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
-                                to Cart</a>
-                        </div>
-
-                        <ul
-                                class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                            <li><a href="javascript:void(0)"
-                                   class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="heart" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="shop-item-detail.html"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="eye" class="size-4"></i></a></li>
-                            <li class="mt-1"><a href="javascript:void(0)"
-                                                class="size-10 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center rounded-full bg-white text-slate-900 hover:bg-slate-900 hover:text-white shadow"><i
-                                    data-feather="bookmark" class="size-4"></i></a></li>
-                        </ul>
-
-                        <ul class="list-none absolute top-[10px] start-4">
-                            <li><a href="javascript:void(0)"
-                                   class="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">Featured</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="product-detail-one.html" class="hover:text-orange-500 text-lg font-medium">Black Print
-                            T-Shirt</a>
-                        <div class="flex justify-between items-center mt-1">
-                            <p>$16.00
-                                <del class="text-slate-400">$21.00</del>
+                            <!-- Hiển thị giá sản phẩm -->
+                            <p>
+                                <span th:text="${sanPham.giaThapNhat}">$16.00</span>
+                                <del class="text-slate-400" th:text="${sanPham.giaThapNhat * 1.2}">$21.00</del> <!-- Giả sử giá gốc là 20% cao hơn giá bán hiện tại -->
                             </p>
                             <ul class="font-medium text-amber-400 list-none">
                                 <li class="inline"><i class="mdi mdi-star"></i></li>
@@ -646,7 +173,7 @@
                     </div>
                 </div><!--end content-->
             </div><!--end grid-->
-        </div><!--end container-->
+        </div>
 
         <div class="container-fluid relative md:mt-24 mt-16">
             <div class="grid grid-cols-1">
