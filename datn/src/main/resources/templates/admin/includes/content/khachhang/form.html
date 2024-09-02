@@ -55,9 +55,7 @@
         $(document).ready(function() {
             // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
             $.validator.addMethod("noWhitespace", function(value, element) {
-                // Kiểm tra khoảng trắng ở đầu và cuối
                 var trimmedValue = $.trim(value);
-                // Kiểm tra khoảng trắng liên tiếp
                 var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
                 return trimmedValue === value && noConsecutiveSpaces;
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
@@ -65,6 +63,11 @@
             $.validator.addMethod("noSpecialChars", function(value, element) {
                 return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
             }, "Không được chứa ký tự đặc biệt.");
+
+            // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
+            $.validator.addMethod("validSelection", function(value, element) {
+                return value !== "0"; // Không cho phép giá trị "0"
+            }, "Vui lòng chọn một giá trị hợp lệ.");
 
             $("form").validate({
                 rules: {
@@ -90,13 +93,16 @@
                         dateISO: true // Định dạng ngày là yyyy-mm-dd
                     },
                     'diaChiList[0].thanhPho': {
-                        required: true
+                        required: true,
+                        validSelection: true // Kiểm tra giá trị hợp lệ
                     },
                     'diaChiList[0].huyen': {
-                        required: true
+                        required: true,
+                        validSelection: true
                     },
                     'diaChiList[0].xa': {
-                        required: true
+                        required: true,
+                        validSelection: true
                     },
                     'diaChiList[0].diaChi': {
                         required: true,
@@ -140,13 +146,16 @@
                         dateISO: "Vui lòng nhập ngày sinh hợp lệ (định dạng yyyy-mm-dd)."
                     },
                     'diaChiList[0].thanhPho': {
-                        required: "Vui lòng chọn thành phố."
+                        required: "Vui lòng chọn thành phố.",
+                        validSelection: "Vui lòng chọn thành phố hợp lệ."
                     },
                     'diaChiList[0].huyen': {
-                        required: "Vui lòng chọn huyện."
+                        required: "Vui lòng chọn huyện.",
+                        validSelection: "Vui lòng chọn huyện hợp lệ."
                     },
                     'diaChiList[0].xa': {
-                        required: "Vui lòng chọn xã."
+                        required: "Vui lòng chọn xã.",
+                        validSelection: "Vui lòng chọn xã hợp lệ."
                     },
                     'diaChiList[0].diaChi': {
                         required: "Vui lòng nhập địa chỉ.",
@@ -175,6 +184,7 @@
             });
         });
     </script>
+
 
 
 
