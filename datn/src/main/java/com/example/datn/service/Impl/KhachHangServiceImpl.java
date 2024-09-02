@@ -4,10 +4,12 @@ import com.example.datn.entity.KhachHang;
 import com.example.datn.model.request.SignupRequest;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +52,28 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public KhachHang update(KhachHang khachHang) {
-        return khachHangRepository.save(khachHang);
+    @Transactional
+    public KhachHang update(KhachHang khachHang, BindingResult result) {
+        // Tìm khách hàng hiện tại từ cơ sở dữ liệu
+        KhachHang existingKhachHang = khachHangRepository.findById(khachHang.getKhachHangId()).orElseThrow();
+
+        // Kiểm tra nếu khách hàng đã có 3 địa chỉ
+        if (existingKhachHang.getDiaChiList().size() >= 3) {
+            result.rejectValue("diaChiList", "error.khachHang", "Khách hàng đã có tối đa 3 địa chỉ. Không thể cập nhật thêm.");
+            return existingKhachHang;
+        }
+
+        // Xóa tất cả các địa chỉ cũ
+        existingKhachHang.getDiaChiList().clear();
+
+        // Thêm lại các địa chỉ hợp lệ mới
+        existingKhachHang.getDiaChiList().addAll(khachHang.getDiaChiList());
+
+        // Lưu khách hàng với danh sách địa chỉ đã được cập nhật
+        return khachHangRepository.save(existingKhachHang);
     }
+
+
 
     @Override
     public boolean isSdtExist(String sdt) {
