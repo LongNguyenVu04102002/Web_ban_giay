@@ -163,7 +163,7 @@ public class KhachHangController {
         KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
         boolean isActive = khachHang.isTrangThai();
         String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
-        String message = "Trạng thái của khách hàng có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
+        String message = "Trạng thái của khách hàng " +khachHang.getHoTen()+ " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
         redirectAttributes.addFlashAttribute("message2", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";
