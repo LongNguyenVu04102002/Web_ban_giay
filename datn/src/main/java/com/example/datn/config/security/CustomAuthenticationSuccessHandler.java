@@ -30,5 +30,4 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
     }
 
-
 }

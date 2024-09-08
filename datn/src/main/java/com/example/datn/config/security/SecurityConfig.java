@@ -1,6 +1,6 @@
 package com.example.datn.config.security;
 
-import com.example.datn.service.Impl.CustomUserDetailsService;
+import com.example.datn.service.Impl.CustomAdminDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,55 +16,53 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
+    private CustomAdminDetailsService customAdminDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/shop", "/register", "/forgot-password", "/reset-password", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/admin/taikhoan/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "STAFF")
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .successHandler(customAuthenticationSuccessHandler)
-                        .failureUrl("/login?error")
+                .formLogin(form -> form
+                        .loginPage("/loginAdmin")
+                        .loginProcessingUrl("/loginAdmin")
+                        .defaultSuccessUrl("/admin/thongke")
+                        .failureUrl("/loginAdmin?error")
                         .permitAll()
                 )
-                .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                .logout(logout -> logout
+                        .logoutUrl("/logoutAdmin")
+                        .logoutSuccessUrl("/loginAdmin?logout")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("ADMINSESSIONID")
                         .permitAll()
                 )
-                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(customAccessDeniedHandler)
                 );
 
         return http.build();
     }
 
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(customAdminDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
+
 }
+
+

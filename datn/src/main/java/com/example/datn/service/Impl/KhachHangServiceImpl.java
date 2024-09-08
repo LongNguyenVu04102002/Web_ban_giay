@@ -92,4 +92,17 @@ public class KhachHangServiceImpl implements KhachHangService {
     public KhachHang findByEmailAndSdt(String email, String sdt) {
         return khachHangRepository.findByEmailAndSdt(email, sdt);
     }
+
+    @Override
+    public KhachHang login(String email, String password) {
+        KhachHang khachHang = khachHangRepository.findKhachHangByEmailAndPassword(email, password);
+        if(khachHang != null) {
+            if (khachHang.isTrangThai()) {
+                return null;
+            }
+            return khachHang;
+        }
+        return null;
+    }
+
 }

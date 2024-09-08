@@ -339,7 +339,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     @Transactional
-    public String saveHoaDonOnline(PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
+    public String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setLoaiHoaDon(false);
         hoaDon.setThanhToan(false);
@@ -371,18 +371,15 @@ public class HoaDonServiceImpl implements HoaDonService {
         timeLine.setHoaDon(hoaDon);
         timeLine.setTrangThai(1);
         timeLine.setMoTa("Tạo hóa đơn thành công");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof MyUserDetail) {
-                Long khachHangId = ((MyUserDetail) principal).getId();
-                Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
-                if (khachHang.isPresent()) {
-                    hoaDon.setKhachHang(khachHang.get());
-                    timeLine.setNguoiThucHien(khachHang.get().getHoTen());
-                }
+
+        if (khachHangId != null) {
+            Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
+            if (khachHang.isPresent()) {
+                hoaDon.setKhachHang(khachHang.get());
+                timeLine.setNguoiThucHien(khachHang.get().getHoTen());
             }
         }
+
         timeLineRepository.save(timeLine);
         tongTien = tongTien.subtract(phieuGiamGiaResponse.getTienGiam());
         hoaDon.setTongTien(tongTien.add(thanhToanResponse.getTienShip()));

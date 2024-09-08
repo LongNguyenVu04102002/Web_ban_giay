@@ -318,7 +318,8 @@ public class HomeController {
     }
 
     @PostMapping("/checkout/save")
-    public String saveHoaDon(@ModelAttribute ThanhToanResponse thanhToanResponse,
+    public String saveHoaDon(@RequestParam Long khachHangId,
+                             @ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
                              HttpSession session,
                              Model model) {
@@ -328,7 +329,7 @@ public class HomeController {
             pgg.setTienGiam(BigDecimal.ZERO);
         }
 
-        String maVanDon = hoaDonService.saveHoaDonOnline(pgg, thanhToanResponse, cartItems);
+        String maVanDon = hoaDonService.saveHoaDonOnline(khachHangId, pgg, thanhToanResponse, cartItems);
         session.removeAttribute("pgg");
         cartItems.clear();
         model.addAttribute("maVanDon", maVanDon);
