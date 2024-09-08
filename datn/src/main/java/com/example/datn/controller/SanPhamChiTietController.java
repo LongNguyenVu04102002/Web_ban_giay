@@ -61,7 +61,9 @@ public class SanPhamChiTietController {
     @GetMapping("/bienthegiay/form")
     public String form(Model model) {
         List<SanPhamChiTiet> sanPhamChiTietList = new ArrayList<>();
-        model.addAttribute("spct", new SanPhamChiTiet());
+        SanPhamChiTiet spct = new SanPhamChiTiet();
+        spct.setTrangThai(true);
+        model.addAttribute("spct", spct);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return getString(model);
     }

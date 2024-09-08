@@ -105,8 +105,8 @@
                     <td th:text="${sp.sanPhamChiTiet.kichThuoc.ten}"></td>
                     <td th:text="${sp.sanPhamChiTiet.mauSac.ten}"></td>
                     <td>
-                        <button th:class="${sp.sanPhamChiTiet.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.sanPhamChiTiet.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${sp.sanPhamChiTiet.trangThai ? 'btn btn-sm bg-emerald-50 text-emerald-600' : 'btn btn-sm bg-orange-50 text-orange-600'}">
+                            <span th:text="${sp.sanPhamChiTiet.trangThai ? 'Đang Hoạt Động' : 'Ngừng Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
@@ -114,7 +114,7 @@
                               method="post">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!sp.sanPhamChiTiet.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${sp.sanPhamChiTiet.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>

@@ -24,6 +24,7 @@ public class ChatLieuController {
     }
     @PostMapping("/chatlieu/save")
     public String save(ChatLieu chatLieu) {
+        chatLieu.setTen(chatLieu.getTen().trim());
         chatLieuService.saveChatLieu(chatLieu);
         return "redirect:/admin/sanpham/chatlieu";
     }
