@@ -38,6 +38,7 @@
     <section class="relative md:py-24 py-16">
         <div class="container relative">
             <form th:action="@{/checkout/save}" th:object="${thanhToanResponse}" method="post" id="form-validation">
+                <input type="text" class="hidden" name="khachHangId" th:value="${session.khachHang != null ? session.khachHang.khachHangId : 0 }">
                 <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6">
                     <div class="lg:col-span-8">
                         <div class="p-6 rounded-md shadow dark:shadow-gray-800">

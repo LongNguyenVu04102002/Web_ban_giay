@@ -15,7 +15,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        // Chuyển hướng đến trang đăng nhập khi bị từ chối truy cập
         response.sendRedirect("/login?error");
     }
 }

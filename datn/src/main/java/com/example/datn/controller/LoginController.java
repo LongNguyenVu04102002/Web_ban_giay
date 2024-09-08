@@ -7,6 +7,7 @@ import com.example.datn.service.Impl.EmailService;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,30 +31,53 @@ public class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/login")
-    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+    @GetMapping("/loginUser")
+    public String showLoginUserPage(@RequestParam(value = "error", required = false) String error,
                                 @RequestParam(value = "logout", required = false) String logout,
                                 Model model) {
 
-        return "authentication/login";
+        return "authentication/userlogin";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout,
-                        Model model) {
+    @PostMapping("/loginUser")
+    public String login(Model model, @RequestParam String email, @RequestParam String password, HttpServletRequest request) {
+        KhachHang khachHang = khachHangService.login(email, password);
+        if (khachHang != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("khachHang", khachHang);
+            return "redirect:home";
+        }
+        model.addAttribute("message", "Đăng nhập thất bại! Vui lòng thử lại.");
+        model.addAttribute("email", email);
+        return "authentication/userlogin";
+    }
+
+
+    @GetMapping("/loginAdmin")
+    public String showLoginAdminPage(@RequestParam(value = "error", required = false) String error,
+                                     @RequestParam(value = "logout", required = false) String logout,
+                                     Model model) {
+
+        return "authentication/adminlogin";
+    }
+
+    @PostMapping("/loginAdmin")
+    public String loginAdmin(@RequestParam(value = "error", required = false) String error,
+                             @RequestParam(value = "logout", required = false) String logout,
+                             Model model) {
         if (error != null) {
             model.addAttribute("error", "Invalid username or password.");
         }
         if (logout != null) {
             model.addAttribute("logout", "You have been logged out successfully.");
         }
-        return "authentication/login";
+        return "authentication/adminlogin";
     }
 
-    @GetMapping("/logout-success")
-    public String logoutSuccess() {
-        return "redirect:/login?logout";
+    @GetMapping("/logoutUser")
+    public String logoutSuccess( HttpSession session) {
+        session.removeAttribute("khachHang");
+        return "redirect:/loginUser";
     }
 
     @GetMapping("/forgot-password")

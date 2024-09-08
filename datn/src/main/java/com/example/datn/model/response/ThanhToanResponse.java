@@ -21,6 +21,6 @@ public class ThanhToanResponse {
     private String diaChi;
     private Long paymentMethod;
     private BigDecimal tienShip;
-    private BigDecimal tienGiam;
+    private BigDecimal tienGiamGia;
     private BigDecimal tongTien;
 }

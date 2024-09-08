@@ -31,7 +31,7 @@ public interface HoaDonService {
 
     void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse);
 
-    String saveHoaDonOnline(PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
+    String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
 
     void update(Long idHoaDon, Long idSanPhamChiTiet);
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="root">
+    <div class="app-layout-blank flex flex-auto flex-col h-[100vh]">
+        <main class="h-full">
+            <div class="page-container relative h-full flex flex-auto flex-col">
+                <div class="h-full">
+                    <div class="container mx-auto flex flex-col flex-auto items-center justify-center min-w-0 h-full">
+                        <div class="card min-w-[320px] md:min-w-[450px] card-shadow" role="presentation">
+                            <div class="card-body md:p-10">
+                                <div class="text-center">
+                                    <div class="mb-4">
+                                        <h3 class="mb-1">Welcome back!</h3>
+                                        <p>Please enter your credentials to sign in!</p>
+                                    </div>
+                                    <div>
+                                        <form th:action="@{/loginAdmin}" method="post">
+                                            <div class="form-container vertical">
+                                                <div class="form-item vertical">
+                                                    <label class="form-label mb-2">Email</label>
+                                                    <div>
+                                                        <input class="input" type="text" name="username"
+                                                               autocomplete="off" placeholder="Email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-item vertical">
+                                                    <label class="form-label mb-2">Password</label>
+                                                    <div>
+                                                        <span class="input-wrapper">
+                                                            <input class="input pr-8" type="password"
+                                                                   name="password"
+                                                                   autocomplete="off"
+                                                                   placeholder="Password"
+                                                                   value=""
+                                                            >
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-solid w-full" type="submit">Sign In</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

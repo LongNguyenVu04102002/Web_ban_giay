@@ -61,11 +61,11 @@
                                 <img src="/images/logo_xboy.png" class="h-[75px] mx-auto block" alt="Logo">
                             </a>
                         </div>
-                        <form class="text-start lg:py-20 py-8" th:action="@{/login}" method="POST" id="form-validation">
+                        <form class="text-start lg:py-20 py-8" th:action="@{/loginUser}" method="post" id="form-validation">
                             <div class="grid grid-cols-1">
                                 <div class="mb-4">
                                     <label class="font-semibold" for="LoginEmail">Email</label>
-                                    <input id="LoginEmail" type="email" name="username"
+                                    <input id="LoginEmail" type="email" name="email"
                                            class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
                                            placeholder="name@example.com" required>
                                 </div>

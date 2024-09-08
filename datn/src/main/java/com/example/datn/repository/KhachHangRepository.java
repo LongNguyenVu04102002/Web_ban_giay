@@ -33,4 +33,6 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
 
     KhachHang findByResetToken(String token);
 
+    KhachHang findKhachHangByEmailAndPassword(String email, String password);
+
 }

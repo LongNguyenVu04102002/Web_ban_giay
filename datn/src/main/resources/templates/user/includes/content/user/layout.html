@@ -46,8 +46,8 @@
 
                                     <div class="mt-4">
                                         <span class="text-lg font-semibold"
-                                              th:text="${@securityUtils.getPrincipal().fullName}"></span>
-                                        <p class="text-slate-400" th:text="${@securityUtils.getPrincipal().email}"></p>
+                                              th:text="${session.khachHang.hoTen}"></span>
+                                        <p class="text-slate-400" th:text="${session.khachHang.email}"></p>
                                     </div>
                                 </div>
                             </div>

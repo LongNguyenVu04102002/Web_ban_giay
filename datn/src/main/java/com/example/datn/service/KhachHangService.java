@@ -34,4 +34,6 @@ public interface KhachHangService {
 
     KhachHang findByEmailAndSdt(String email, String sdt);
 
+    KhachHang login (String email, String password);
+
 }
