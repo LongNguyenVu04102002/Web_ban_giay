@@ -2,6 +2,7 @@ package com.example.datn.service;
 
 import com.example.datn.entity.KhachHang;
 import com.example.datn.model.request.SignupRequest;
+import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface KhachHangService {
 
     KhachHang toggleTrangThai(Long khachHangId);
 
-    KhachHang update(KhachHang khachHang);
+    KhachHang update(KhachHang khachHang, BindingResult result);
 
     boolean isSdtExist(String sdt);
 

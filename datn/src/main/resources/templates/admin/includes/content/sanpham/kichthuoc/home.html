@@ -144,6 +144,7 @@
         $(document).ready(function () {
             $('#kichThuocForm').on('submit', function (event) {
                 var tenKichThuoc = $('#tenKichThuoc').val().trim();
+                var moTa = $('input[name="moTa"]').val().trim();
 
                 if (tenKichThuoc < 0) {
                     event.preventDefault(); // Ngăn chặn form submit
@@ -151,6 +152,26 @@
                         icon: 'warning',
                         title: 'Lỗi',
                         text: 'Kích thước không được là giá trị âm.',
+                    });
+                    return;
+                }
+
+                if (tenKichThuoc.length > 100) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Kích thước không được vượt quá 100 kí tự.',
+                    });
+                    return;
+                }
+
+                if (moTa.length > 300) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Mô tả không được vượt quá 300 kí tự.',
                     });
                     return;
                 }

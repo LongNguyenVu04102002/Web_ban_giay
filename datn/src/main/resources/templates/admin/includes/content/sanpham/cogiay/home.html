@@ -135,6 +135,7 @@
         $(document).ready(function () {
             $('#coGiayForm').on('submit', function (event) {
                 var tenCoGiay = $('#tenCoGiay').val().trim();
+                var moTa = $('input[name="moTa"]').val().trim();
 
                 if (!tenCoGiay) {
                     event.preventDefault(); // Ngăn chặn form submit
@@ -142,6 +143,26 @@
                         icon: 'warning',
                         title: 'Lỗi',
                         text: 'Tên cổ giày không được để trống.',
+                    });
+                    return;
+                }
+
+                if (tenCoGiay.length > 100) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên cổ giày không được vượt quá 100 kí tự.',
+                    });
+                    return;
+                }
+
+                if (moTa.length > 3000) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Mô tả không được vượt quá 3000 kí tự.',
                     });
                     return;
                 }

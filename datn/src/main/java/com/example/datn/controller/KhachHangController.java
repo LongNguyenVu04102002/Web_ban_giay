@@ -77,6 +77,7 @@ public class KhachHangController {
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             diaChi.setKhachHang(khachHang);
         }
+//        khachHang.setHoTen(khachHang.getHoTen()+"hello");
         khachHangService.save(khachHang);
         redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
         return "redirect:/admin/taikhoan/khachhang";
@@ -101,14 +102,14 @@ public class KhachHangController {
 
         // Cập nhật thông tin khách hàng
         redirectAttributes.addFlashAttribute("message", "Chỉnh sửa thông tin khách hàng thành công!");
-        khachHangService.update(khachHang);
+        khachHangService.update(khachHang,result);
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
 
 
     @PostMapping("/khachhang/updateDiaChi")
-    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
+    public String updateDiaChi(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
             result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
@@ -119,20 +120,23 @@ public class KhachHangController {
             result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
         }
 
-        // Nếu có lỗi, trả lại trang form với các lỗi đã thêm
-        if (result.hasErrors()) {
-            return "admin/includes/content/khachhang/update";
-        }
 
-        // Loại bỏ các địa chỉ không hợp lệ
+
+        // Loại bỏ các địa chỉ không hợp lệ và kiểm tra số lượng địa chỉ
         List<DiaChi> validDiaChiList = new ArrayList<>();
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             if (diaChi.getThanhPho() != null && !diaChi.getThanhPho().isEmpty() &&
                     diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
                     diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
                     diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
-                diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
-                validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
+
+                if (validDiaChiList.size() < 3) {
+                    diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
+                    validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
+                } else {
+                    // Nếu đã đủ 3 địa chỉ, bỏ qua các địa chỉ còn lại
+                    break;
+                }
             }
         }
 
@@ -140,18 +144,26 @@ public class KhachHangController {
         khachHang.setDiaChiList(validDiaChiList);
 
         // Cập nhật thông tin khách hàng
-        redirectAttributes.addFlashAttribute("message", "Thêm địa chỉ thành công!");
-        khachHangService.update(khachHang);
+        khachHangService.update(khachHang, result);
+
+        if (result.hasErrors()) {
+            // Nếu có lỗi, hiển thị thông báo cập nhật không thành công
+            redirectAttributes.addFlashAttribute("message1", "Cập nhật địa chỉ không thành công!");
+        } else {
+            // Nếu không có lỗi, hiển thị thông báo cập nhật thành công
+            redirectAttributes.addFlashAttribute("message", "Cập nhật địa chỉ thành công!");
+        }
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
+
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId, RedirectAttributes redirectAttributes) {
         KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
         boolean isActive = khachHang.isTrangThai();
         String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
-        String message = "Trạng thái của khách hàng có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
+        String message = "Trạng thái của khách hàng " +khachHang.getHoTen()+ " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
         redirectAttributes.addFlashAttribute("message2", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";

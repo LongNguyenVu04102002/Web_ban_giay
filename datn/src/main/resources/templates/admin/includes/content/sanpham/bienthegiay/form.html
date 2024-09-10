@@ -90,7 +90,7 @@
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Giá Bán</label>
                                 <input type="text" name="giaBan"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 36)">
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Số Lượng</label>
@@ -277,6 +277,7 @@
                 });
                 return;
             }
+
             if (soLuong < 1) {
                 Swal.fire({
                     icon: 'error',
@@ -285,6 +286,7 @@
                 });
                 return;
             }
+
             if (selectedSizes.length === 0) {
                 Swal.fire({
                     icon: 'error',
@@ -293,6 +295,7 @@
                 });
                 return;
             }
+
             if (selectedColors.length === 0) {
                 Swal.fire({
                     icon: 'error',
@@ -360,7 +363,7 @@
                 <td>${sanPhamChiTiet.sanPham.ten}</td>
                 <td>${sanPhamChiTiet.mauSac.ten}</td>
                 <td>${sanPhamChiTiet.kichThuoc.ten}</td>
-                <td><input type="number" min="1000" name="sanPhamChiTietList[${rowCount}].giaBan" value="${sanPhamChiTiet.giaBan}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
+                <td><input type="number" min="1000" name="sanPhamChiTietList[${rowCount}].giaBan" value="${sanPhamChiTiet.giaBan}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 36)" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
                 <td><input type="number" min="1" name="sanPhamChiTietList[${rowCount}].soLuong" value="${sanPhamChiTiet.soLuong}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-input w-12 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"></td>
                 <input type="hidden" name="sanPhamChiTietList[${rowCount}].sanPham.sanPhamId" value="${sanPhamChiTiet.sanPham.sanPhamId}">
                 <input type="hidden" name="sanPhamChiTietList[${rowCount}].kichThuoc.kichThuocId" value="${sanPhamChiTiet.kichThuoc.kichThuocId}">

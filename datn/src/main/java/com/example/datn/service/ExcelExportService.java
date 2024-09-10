@@ -1,4 +1,5 @@
 package com.example.datn.service;
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -17,7 +18,7 @@ public class ExcelExportService {
 
             // Create header row
             Row headerRow = sheet.createRow(0);
-            String[] headers = {"ID", "Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Email", "Trạng thái"};
+            String[] headers = {"ID", "Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Email", "Địa Chỉ","Trạng thái"};
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
@@ -34,8 +35,19 @@ public class ExcelExportService {
                 row.createCell(3).setCellValue(khachHang.getNgaySinh().toString());
                 row.createCell(4).setCellValue(khachHang.getSdt());
                 row.createCell(5).setCellValue(khachHang.getEmail());
-                row.createCell(6).setCellValue(khachHang.isTrangThai() ? "Không hoạt động" : " Hoạt động");
+
+                // Tạo một chuỗi để lưu thông tin địa chỉ
+                StringBuilder diaChiInfo = new StringBuilder();
+                for (DiaChi diaChi : khachHang.getDiaChiList()) {
+                    diaChiInfo.append(diaChi.getDiaChi());
+
+                }
+
+                row.createCell(6).setCellValue(diaChiInfo.toString().trim()); // Ghi thông tin địa chỉ vào ô
+
+                row.createCell(7).setCellValue(khachHang.isTrangThai() ? "Không hoạt động" : "Hoạt động");
             }
+
 
             // Auto-size columns
             for (int i = 0; i < headers.length; i++) {

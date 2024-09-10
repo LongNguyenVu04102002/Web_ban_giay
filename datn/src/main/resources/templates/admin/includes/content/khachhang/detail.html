@@ -140,14 +140,11 @@
             }
         });
     </script>
-
     <script>
         $(document).ready(function() {
             // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
             $.validator.addMethod("noWhitespace", function(value, element) {
-                // Kiểm tra khoảng trắng ở đầu và cuối
                 var trimmedValue = $.trim(value);
-                // Kiểm tra khoảng trắng liên tiếp
                 var noConsecutiveSpaces = !/\s{2,}/.test(trimmedValue);
                 return trimmedValue === value && noConsecutiveSpaces;
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
@@ -156,16 +153,45 @@
                 return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
             }, "Không được chứa ký tự đặc biệt.");
 
+            // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
+            $.validator.addMethod("validSelection", function(value, element) {
+                return value !== "0"; // Không cho phép giá trị "0"
+            }, "Vui lòng chọn một giá trị hợp lệ.");
+
             $("form").validate({
                 rules: {
+                    'hoTen': {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 100,
+                        noWhitespace: true,
+                        noSpecialChars: true
+                    },
+                    'sdt': {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 15
+                    },
+                    'email': {
+                        required: true,
+                        email: true
+                    },
+                    'ngaySinh': {
+                        required: true,
+                        dateISO: true // Định dạng ngày là yyyy-mm-dd
+                    },
                     'diaChiList[0].thanhPho': {
-                        required: true
+                        required: true,
+                        validSelection: true // Kiểm tra giá trị hợp lệ
                     },
                     'diaChiList[0].huyen': {
-                        required: true
+                        required: true,
+                        validSelection: true
                     },
                     'diaChiList[0].xa': {
-                        required: true
+                        required: true,
+                        validSelection: true
                     },
                     'diaChiList[0].diaChi': {
                         required: true,
@@ -187,14 +213,38 @@
                     }
                 },
                 messages: {
+                    'hoTen': {
+                        required: "Vui lòng nhập họ tên.",
+                        minlength: "Họ tên phải có ít nhất 2 ký tự.",
+                        maxlength: "Họ tên không được vượt quá 100 ký tự.",
+                        noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
+                    },
+                    'sdt': {
+                        required: "Vui lòng nhập số điện thoại.",
+                        digits: "Số điện thoại chỉ chứa các ký tự số.",
+                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    },
+                    'email': {
+                        required: "Vui lòng nhập email.",
+                        email: "Vui lòng nhập địa chỉ email hợp lệ."
+                    },
+                    'ngaySinh': {
+                        required: "Vui lòng nhập ngày sinh.",
+                        dateISO: "Vui lòng nhập ngày sinh hợp lệ (định dạng yyyy-mm-dd)."
+                    },
                     'diaChiList[0].thanhPho': {
-                        required: "Vui lòng chọn thành phố."
+                        required: "Vui lòng chọn thành phố.",
+                        validSelection: "Vui lòng chọn thành phố hợp lệ."
                     },
                     'diaChiList[0].huyen': {
-                        required: "Vui lòng chọn huyện."
+                        required: "Vui lòng chọn huyện.",
+                        validSelection: "Vui lòng chọn huyện hợp lệ."
                     },
                     'diaChiList[0].xa': {
-                        required: "Vui lòng chọn xã."
+                        required: "Vui lòng chọn xã.",
+                        validSelection: "Vui lòng chọn xã hợp lệ."
                     },
                     'diaChiList[0].diaChi': {
                         required: "Vui lòng nhập địa chỉ.",
@@ -224,17 +274,54 @@
         });
     </script>
 
+    <script>
+        function closeAlert(alertId) {
+            var alertElement = document.getElementById(alertId);
+            if (alertElement) {
+                alertElement.style.display = 'none';
+            }
+        }
+    </script>
 
+    <script>
+        function closeAlert(alertId) {
+            var alertElement = document.getElementById(alertId);
+            if (alertElement) {
+                alertElement.style.display = 'none';
+            }
+        }
+
+        // Tự động ẩn thông báo sau 3 giây (3000 milliseconds)
+        setTimeout(function() {
+            closeAlert('successAlert');
+        }, 3000);
+
+        setTimeout(function() {
+            closeAlert('dangerAlert');
+        }, 3000);
+    </script>
 
 </head>
 <body>
 <div layout:fragment="admincontent">
 
-    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
         <span th:text="${message}"></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" aria-label="Close" onclick="closeAlert('successAlert')">
             <span aria-hidden="true">&times;</span>
         </button>
+    </div>
+
+    <div th:if="${message1}" class="alert alert-danger alert-dismissible fade show" role="alert" id="dangerAlert">
+        <span th:text="${message1}"></span>
+        <button type="button" class="close" aria-label="Close" onclick="closeAlert('dangerAlert')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+
+    <div th:if="${messageError}" class="alert alert-danger">
+        <p th:text="${messageError}"></p>
     </div>
     <div class="mb-6 flex justify-between text-center gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h3 class="text-title-md2 font-semibold text-black dark:text-white"

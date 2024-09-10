@@ -390,8 +390,12 @@
                                             <td>
                                                 <div class="flex items-center ml-8">
                                                     <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
+<<<<<<< HEAD
                                                         <img class="avatar-img avatar-rounded" th:src="'data:image/png;base64,' + ${ghct.sanPhamChiTiet.lstAnh.get(0)}" alt="Ảnh từ Base64"
                                                              loading="lazy"/>
+=======
+                                                         <img class="avatar-img avatar-rounded" th:src="'data:image/jpeg;base64,' + ${ghct.sanPhamChiTiet.base64Image}" loading="lazy">
+>>>>>>> origin/master
                                                     </span>
                                                     <div class="ml-4 text-center">
                                                         <h6 th:text="${ghct.sanPhamChiTiet.sanPham.ten}"></h6>
