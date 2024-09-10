@@ -416,10 +416,23 @@
             var fileInputData = document.getElementById('imageData-' + rowCount);
             var files = fileInput.files;
 
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
             var fileReaders = [];
             base64Images[rowCount - 1] = [];
 
             for (var i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                if (!validImageTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Vui lòng chọn tệp ảnh hợp lệ',
+                    });
+                    return;
+                }
+
                 let fileReader = new FileReader();
                 fileReaders.push(fileReader);
 
