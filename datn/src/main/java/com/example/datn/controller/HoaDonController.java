@@ -1,8 +1,10 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.HoaDon;
+import com.example.datn.entity.HoaDonChiTiet;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.SanPhamChiTiet;
+import com.example.datn.service.HinhAnhService;
 import com.example.datn.service.Impl.HoaDonServiceImpl;
 import com.example.datn.service.Impl.NhanVienServiceImpl;
 import com.example.datn.service.Impl.SanPhamChiTietServiceImpl;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -32,6 +35,9 @@ public class HoaDonController {
 
     @Autowired
     NhanVienServiceImpl nhanVienService;
+
+    @Autowired
+    private HinhAnhService hinhAnhService;
 
     @GetMapping("/hoadon")
     public String hoaDon(Model model) {
@@ -59,6 +65,14 @@ public class HoaDonController {
     @GetMapping("/hoadon/detail/{id}")
     public String getHoaDonById(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
+        for (HoaDonChiTiet hdct : hoaDon.getHoaDonChiTietList()) {
+            SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
+            byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1); // Priority là 1 hoặc giá trị khác tùy theo logic của bạn
+            if (imageBytes != null) {
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                spct.setBase64Image(base64Image);
+            }
+        }
         model.addAttribute("hoaDon", hoaDon);
         return "admin/includes/content/hoadon/hoadonchitiet";
     }
