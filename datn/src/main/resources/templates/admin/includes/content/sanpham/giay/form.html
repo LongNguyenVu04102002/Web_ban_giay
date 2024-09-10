@@ -134,6 +134,7 @@
                 var muiGiayId = $('select[name="muiGiay"]').val();
                 var thuongHieuId = $('select[name="thuongHieu"]').val();
                 var sanPhamId = $('input[name="sanPhamId"]').val();
+                var moTa = $('input[name="moTa"]').val().trim();
 
                 // Kiểm tra trống tên sản phẩm
                 if (!tenSanPham) {
@@ -142,6 +143,26 @@
                         icon: 'warning',
                         title: 'Lỗi',
                         text: 'Tên sản phẩm không được để trống.',
+                    });
+                    return;
+                }
+
+                if (tenSanPham.length > 255) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Tên sản phẩm không được vượt quá 255 kí tự.',
+                    });
+                    return;
+                }
+
+                if (moTa.length > 255) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Mô tả không được vượt quá 3000 kí tự.',
                     });
                     return;
                 }

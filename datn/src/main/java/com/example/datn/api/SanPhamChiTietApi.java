@@ -63,6 +63,7 @@ public class SanPhamChiTietApi {
         try {
             for (SanPhamChiTietRequest request : sanPhamChiTietRequestList) {
                 SanPhamChiTiet sanPhamChiTiet = request.getSanPhamChiTiet();
+                sanPhamChiTiet.setTrangThai(true);
                 List<HinhAnhRequest> hinhAnhs = request.getHinhAnhs();
 
                 validateSanPhamChiTiet(sanPhamChiTiet);
