@@ -61,13 +61,13 @@ public class SanPhamController {
     }
 
     private String getString(Model model) {
-        model.addAttribute("lstDeGiay", deGiayService.getAllDeGiay());
-        model.addAttribute("lstThuongHieu", thuongHieuService.getAll());
-        model.addAttribute("lstCoGiay", coGiayService.getAllCoGiay());
-        model.addAttribute("lstLotGiay", lotGiayService.getAllLotGiay());
-        model.addAttribute("lstMuiGiay", muiGiayService.getAllMuiGiay());
-        model.addAttribute("lstChatLieu", chatLieuService.getAllChatLieu());
-        model.addAttribute("lstDayGiay", dayGiayService.getAllDayGiay());
+        model.addAttribute("lstDeGiay", deGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstThuongHieu", thuongHieuService.findAllByTrangThaiTrue());
+        model.addAttribute("lstCoGiay", coGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstLotGiay", lotGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstMuiGiay", muiGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstChatLieu", chatLieuService.findAllByTrangThaiTrue());
+        model.addAttribute("lstDayGiay", dayGiayService.findAllByTrangThaiTrue());
         return "admin/includes/content/sanpham/giay/form";
     }
 
@@ -80,7 +80,6 @@ public class SanPhamController {
 
     @PostMapping("/giay/save")
     public String save(SanPham sanPham) {
-        sanPham.setTen(sanPham.getTen().trim());
         sanPhamService.save(sanPham);
         return "redirect:/admin/sanpham/giay";
     }

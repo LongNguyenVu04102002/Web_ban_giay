@@ -53,7 +53,6 @@
                     <th>Lót Giầy</th>
                     <th>Mũi Giầy</th>
                     <th>Thương Hiệu</th>
-                    <th>Mô tả</th>
                     <th>Trạng Thái</th>
                     <th>Hành Động</th>
                 </tr>
@@ -69,17 +68,16 @@
                     <td th:text="${sp.lotGiay.ten}"></td>
                     <td th:text="${sp.muiGiay.ten}"></td>
                     <td th:text="${sp.thuongHieu.ten}"></td>
-                    <td th:text="${sp.moTa}"></td>
                     <td>
-                        <button th:class="${sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${!sp.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${!sp.trangThai ? 'Ngừng Hoạt Động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
                         <form th:action="@{/admin/sanpham/giay/update/{id}(id=${sp.sanPhamId})}" method="post">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!sp.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${sp.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>

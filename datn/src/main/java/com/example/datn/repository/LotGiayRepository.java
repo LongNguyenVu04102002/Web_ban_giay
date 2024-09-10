@@ -12,5 +12,6 @@ public interface LotGiayRepository extends JpaRepository<LotGiay, Long> {
 
     List<LotGiay> findAllByTenAndLotGiayIdNot(String ten, Long id);
 
-    List<LotGiay> findByTrangThai(boolean trangThai);
+    List<LotGiay> findAllByTrangThaiTrue();
+
 }

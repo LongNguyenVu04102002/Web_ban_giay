@@ -59,8 +59,8 @@
                                         <td th:text="${mg.ten}"></td>
                                         <td th:text="${mg.moTa}"></td>
                                         <td>
-                                            <button th:class="${mg.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                                                <span th:text="${mg.trangThai ? 'Ngừng Hoạt Động' : 'Hoạt Động'}"></span>
+                                            <button th:class="${!mg.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                                                <span th:text="${!mg.trangThai ? 'Ngừng Hoạt Động' : 'Hoạt Động'}"></span>
                                             </button>
                                         </td>
                                         <td class="flex items-center justify-center space-x-2">
@@ -111,15 +111,15 @@
                                     <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
                                     <div class="mt-1 flex items-center space-x-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
                                         <label class="inline-flex items-center">
-                                            <input type="radio" th:field="*{trangThai}" value="false"
+                                            <input type="radio" th:field="*{trangThai}" value="true"
                                                    class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
-                                            <span class="ml-2">Active</span>
+                                            <span class="ml-2">Hoạt Động</span>
                                         </label>
                                         <label class="inline-flex items-center ml-4"
                                                th:if="${kichThuoc.kichThuocId} != null">
-                                            <input type="radio" th:field="*{trangThai}" value="true"
+                                            <input type="radio" th:field="*{trangThai}" value="false"
                                                    class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>
-                                            <span class="ml-2">Inactive</span>
+                                            <span class="ml-2">Ngừng Hoạt Động</span>
                                         </label>
                                     </div>
                                 </div>

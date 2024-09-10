@@ -1,7 +1,7 @@
 package com.example.datn.controller;
 
 import com.example.datn.entity.KichThuoc;
-import com.example.datn.service.KichThuocService;
+import com.example.datn.service.Impl.KichThuocServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import java.util.List;
 public class KichThuocController {
 
     @Autowired
-    private KichThuocService kichThuocService;
+    private KichThuocServiceImpl kichThuocService;
 
     @GetMapping("/kichthuoc")
     public String show(Model model) {
@@ -26,7 +26,6 @@ public class KichThuocController {
 
     @PostMapping("/kichthuoc/save")
     public String save(KichThuoc kichThuoc) {
-        kichThuoc.setTen(kichThuoc.getTen().trim());
         kichThuocService.save(kichThuoc);
         return "redirect:/admin/sanpham/kichthuoc";
     }

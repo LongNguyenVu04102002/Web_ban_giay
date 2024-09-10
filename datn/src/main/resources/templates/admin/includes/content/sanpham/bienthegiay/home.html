@@ -94,9 +94,9 @@
                 <tbody>
                 <tr th:each="sp, rowStat : ${sanPhamChiTietList}">
                     <td th:text="${rowStat.index + 1}"></td>
-                    <td class="avatar avatar-rounded avatar-lg mt-2 mb-2 flex justify-center items-center" data-avatar-size="90">
+                    <td class="avatar avatar-rounded avatar-lg mt-2 mb-2" data-avatar-size="90">
                         <img th:src="'data:image/png;base64,' + ${sp.dataImg}" alt="Ảnh từ Base64"
-                             class="avatar-img avatar-rounded"/>
+                             class=" avatar-rounded"/>
                     </td>
                     <td th:text="${sp.sanPhamChiTiet.sanPham.ten}"></td>
                     <td th:text="${sp.sanPhamChiTiet.barCode}"></td>

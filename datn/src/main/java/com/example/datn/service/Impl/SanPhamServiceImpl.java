@@ -31,6 +31,10 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public void save(SanPham sanPham) {
+        sanPham.setTen(sanPham.getTen().trim());
+        if(sanPham.getSanPhamId() == null){
+            sanPham.setTrangThai(true);
+        }
         sanPhamRepository.save(sanPham);
     }
 
@@ -42,11 +46,6 @@ public class SanPhamServiceImpl implements SanPhamService {
             sp.setTrangThai(!sp.isTrangThai());
             sanPhamRepository.save(sp);
         }
-    }
-
-    @Override
-    public List<SanPham> getSanPhamsByTrangThai(boolean trangThai) {
-        return sanPhamRepository.findByTrangThai(trangThai);
     }
 
     @Override
@@ -66,6 +65,11 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public Page<SanPhamHomeDTO> getSanPhamForShopPage(Long thuongHieuId, Long kichThuocId, Long mauSacId, String keyword, Pageable pageable) {
         return sanPhamRepository.findSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
+    }
+
+    @Override
+    public List<SanPham> findAllByTrangThaiTrue() {
+        return sanPhamRepository.findAllByTrangThaiTrue();
     }
 
 

@@ -126,4 +126,9 @@ public class KhachHangServiceImpl implements KhachHangService {
         return null;
     }
 
+    @Override
+    public List<KhachHang> findKhachHangByTrangThaiTrue() {
+        return khachHangRepository.findKhachHangByTrangThaiTrue();
+    }
+
 }

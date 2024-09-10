@@ -26,6 +26,10 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
     @Override
     public void saveChatLieu(ChatLieu chatLieu) {
+        chatLieu.setTen(chatLieu.getTen().trim());
+        if(chatLieu.getChatLieuId() == null){
+            chatLieu.setTrangThai(true);
+        }
         chatLieuRepository.save(chatLieu);
     }
 
@@ -46,8 +50,8 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
-    public List<ChatLieu> getChatLieusByTrangThai(boolean trangThai) {
-        return chatLieuRepository.findByTrangThai(trangThai);
+    public List<ChatLieu> findAllByTrangThaiTrue() {
+        return chatLieuRepository.findAllByTrangThaiTrue();
     }
 
 }

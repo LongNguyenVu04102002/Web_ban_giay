@@ -12,5 +12,5 @@ public interface DayGiayRepository extends JpaRepository<DayGiay, Long> {
 
     List<DayGiay> findAllByTenAndDayGiayIdNot(String ten, Long id);
 
-    List<DayGiay> findByTrangThai(boolean trangThai);
+    List<DayGiay> findAllByTrangThaiTrue();
 }

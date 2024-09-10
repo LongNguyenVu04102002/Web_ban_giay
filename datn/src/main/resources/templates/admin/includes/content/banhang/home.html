@@ -5,9 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="/js/admin/pages/customer.js"></script>
-    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <script src="/js/admin/pages/customer.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
     <script>
         const notificationTypeHtml = {
             Success: `
@@ -152,27 +153,26 @@
         </h2>
     </div>
     <div class="tabs bg-white">
-        <div
-                role="tablist" class="tab-list tab-list-pill mx-4">
+        <div role="tablist" class="tab-list tab-list-pill mx-4">
             <button class="tab-nav tab-nav-pill active mt-3" data-bs-toggle="tab" data-bs-target="#tab1"
                     role="tab" aria-selected="true" tabindex="0">
-                Hóa Đơn 1
+                Giỏ Hàng 1
             </button>
             <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab2"
                     role="tab" aria-selected="false" tabindex="0">
-                Hóa Đơn 2
+                Giỏ Hàng 2
             </button>
             <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab3"
                     role="tab" aria-selected="false" tabindex="0">
-                Hóa Đơn 3
+                Giỏ Hàng 3
             </button>
             <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab4"
                     role="tab" aria-selected="false" tabindex="0">
-                Hóa Đơn 4
+                Giỏ Hàng 4
             </button>
             <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab5" role="tab"
                     aria-selected="false" tabindex="0">
-                Hóa Đơn 5
+                Giỏ Hàng 5
             </button>
         </div>
         <div class="tab-content" th:each="index : ${tabDataList}">
@@ -287,7 +287,7 @@
                                             </option>
                                         </select>
                                     </label>
-                                </div>
+                                </div>F
 
                             </div>
                             <div id="DataTableCart1">
@@ -343,7 +343,7 @@
                         </div>
                     </div>
                 </div>
-                <form th:action="@{/admin/banhang/save}" method="post" th:object="${thanhToanResponse}">
+                <form th:action="@{/admin/banhang/save}" th:id="'form' + ${index.id}" method="post" th:object="${thanhToanResponse}">
                     <div class="xl:flex gap-4 mt-4">
                         <div class="w-full">
                             <div class="card adaptable-card">
@@ -390,12 +390,7 @@
                                             <td>
                                                 <div class="flex items-center ml-8">
                                                     <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-<<<<<<< HEAD
-                                                        <img class="avatar-img avatar-rounded" th:src="'data:image/png;base64,' + ${ghct.sanPhamChiTiet.lstAnh.get(0)}" alt="Ảnh từ Base64"
-                                                             loading="lazy"/>
-=======
                                                          <img class="avatar-img avatar-rounded" th:src="'data:image/jpeg;base64,' + ${ghct.sanPhamChiTiet.base64Image}" loading="lazy">
->>>>>>> origin/master
                                                     </span>
                                                     <div class="ml-4 text-center">
                                                         <h6 th:text="${ghct.sanPhamChiTiet.sanPham.ten}"></h6>
@@ -555,8 +550,7 @@
                                     <h3 class="mb-4">Thông Tin Thanh Toán</h3>
                                 </div>
                                 <div class="grid lg:grid-cols-12 gap-6 w-full">
-                                    <div th:id="'form-section-' + ${index.id}"
-                                         class="lg:col-span-6 hidden-visibility">
+                                    <div th:id="'form-section-' + ${index.id}" class="lg:col-span-6 hidden-visibility">
                                         <div class="p-6 rounded-md">
                                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                                 <div class="lg:col-span-6">
@@ -585,30 +579,27 @@
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Thành Phố:</label>
-                                                    <select th:id="'province' + ${index.id}"
+                                                    <select th:id="'province' + ${index.id}" name="thanhPho"
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Thành Phố</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'provinceName' + ${index.id}"
-                                                           th:field="*{province}">
+                                                    <input type="hidden" th:id="'provinceName' + ${index.id}" th:field="*{province}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Huyện:</label>
-                                                    <select th:id="'district' + ${index.id}"
+                                                    <select th:id="'district' + ${index.id}" name="huyen"
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Huyện</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'districtName' + ${index.id}"
-                                                           th:field="*{district}">
+                                                    <input type="hidden" th:id="'districtName' + ${index.id}" th:field="*{district}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Xã:</label>
-                                                    <select th:id="'ward' + ${index.id}"
+                                                    <select th:id="'ward' + ${index.id}" name="xa"
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
                                                         <option value="">Chọn Xã</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'wardName' + ${index.id}"
-                                                           th:field="*{ward}">
+                                                    <input type="hidden" th:id="'wardName' + ${index.id}" th:field="*{ward}">
                                                 </div>
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Địa Chỉ: </label>
@@ -633,11 +624,10 @@
                                                         <span
                                                                 th:text="${index.muaThemDeGiam > 0 ? 'Cần mua thêm: ' + #numbers.formatDecimal(index.muaThemDeGiam, 1, 'COMMA', 0, 'POINT') + ' VNĐ để nhận thêm ưu đãi.' : 'Đã áp dụng phiếu giảm giá tốt nhất.'}"></span>
                                             </div>
-
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Giao Hàng: </label>
                                                 <label class="switcher mb-4">
-                                                    <input type="checkbox" th:id="'toggleForm' + ${index.id}">
+                                                    <input type="checkbox" th:id="'toggleForm' + ${index.id}" class="toggle-form-checkbox">
                                                     <span class="switcher-toggle"></span>
                                                 </label>
                                             </div>
@@ -676,13 +666,13 @@
                                             <div class="lg:col-span-12 flex flex-col gap-4">
                                                 <h4 class="font-semibold mt-2">Phương Thức Thanh Toán</h4>
                                                 <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
+                                                    <input type="radio" class="radio" name="paymentMethod"
                                                            value="1"
                                                            checked>
                                                     <span class="font-semibold">Tiền Mặt</span>
                                                 </label>
-                                                <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
+                                                <label th:id="'payment' + ${index.id}" class="radio-label inline-flex hidden">
+                                                    <input type="radio" class="radio" name="paymentMethod"
                                                            value="3">
                                                     <span class="font-semibold">Thanh toán khi nhận hàng</span>
                                                 </label>

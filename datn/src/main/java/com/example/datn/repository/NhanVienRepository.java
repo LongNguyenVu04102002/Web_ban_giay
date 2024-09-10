@@ -17,6 +17,5 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     @Query("SELECT nv FROM NhanVien nv ORDER BY nv.nhanVienId DESC")
     List<NhanVien> findAll();
 
-    NhanVien getAllByEmail(String email);
 
 }

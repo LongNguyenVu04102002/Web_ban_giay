@@ -26,6 +26,10 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
 
     @Override
     public void save(ThuongHieu thuongHieu) {
+        thuongHieu.setTen(thuongHieu.getTen().trim());
+        if(thuongHieu.getThuongHieuId() ==  null){
+            thuongHieu.setTrangThai(true);
+        }
         thuongHieuRepository.save(thuongHieu);
     }
 
@@ -46,8 +50,8 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
-    public List<ThuongHieu> getThuongHieusByTrangThai(boolean trangThai) {
-        return thuongHieuRepository.findByTrangThai(trangThai);
+    public List<ThuongHieu> findAllByTrangThaiTrue() {
+        return thuongHieuRepository.findAllByTrangThaiTrue();
     }
 
 }

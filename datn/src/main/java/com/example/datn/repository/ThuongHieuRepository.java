@@ -12,5 +12,5 @@ public interface ThuongHieuRepository extends JpaRepository<ThuongHieu, Long> {
 
     List<ThuongHieu> findAllByTenAndThuongHieuIdNot(String ten, Long thuongHieuId);
 
-    List<ThuongHieu> findByTrangThai(boolean trangThai);
+    List<ThuongHieu> findAllByTrangThaiTrue();
 }

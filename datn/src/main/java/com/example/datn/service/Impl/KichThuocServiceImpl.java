@@ -26,6 +26,10 @@ public class KichThuocServiceImpl implements KichThuocService {
 
     @Override
     public void save(KichThuoc kichThuoc) {
+        kichThuoc.setTen(kichThuoc.getTen().trim());
+        if(kichThuoc.getKichThuocId() == null){
+            kichThuoc.setTrangThai(true);
+        }
         kichThuocRepository.save(kichThuoc);
     }
 
@@ -46,8 +50,8 @@ public class KichThuocServiceImpl implements KichThuocService {
     }
 
     @Override
-    public List<KichThuoc> getKichThuocsByTrangThai(boolean trangThai) {
-        return kichThuocRepository.findByTrangThai(trangThai);
+    public List<KichThuoc> findAllByTrangThaiTrue() {
+        return kichThuocRepository.findAllByTrangThaiTrue();
     }
 
 }

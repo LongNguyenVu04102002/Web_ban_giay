@@ -12,8 +12,6 @@ public interface HinhAnhRepository extends JpaRepository<HinhAnh, Long> {
 
     List<HinhAnh> findBySanPhamChiTietSanPhamChiTietId(Long sanPhamChiTietId);
 
-    List<HinhAnh> findBySanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet);
-
     List<HinhAnh> findBySanPhamChiTietSanPhamChiTietIdAndUuTienGreaterThan(Long sanPhamChiTietId, int uuTien);
 
 }

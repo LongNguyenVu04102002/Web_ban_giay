@@ -18,6 +18,6 @@ public interface ChatLieuService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<ChatLieu> getChatLieusByTrangThai(boolean trangThai);
-    
+    List<ChatLieu> findAllByTrangThaiTrue();
+
 }

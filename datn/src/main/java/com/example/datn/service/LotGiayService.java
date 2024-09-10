@@ -18,6 +18,6 @@ public interface LotGiayService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<LotGiay> getLotGiaysByTrangThai(boolean trangThai);
+    List<LotGiay> findAllByTrangThaiTrue();
     
 }

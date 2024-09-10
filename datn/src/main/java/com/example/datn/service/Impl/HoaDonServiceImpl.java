@@ -287,6 +287,7 @@ public class HoaDonServiceImpl implements HoaDonService {
                     + thanhToanResponse.getDistrict() + ", "
                     + thanhToanResponse.getProvince());
             hoaDon.setTrangThai(1);
+            hoaDon.setThanhToan(false);
             timeLine.setTrangThai(1);
         } else {
             hoaDon.setTenNguoiNhan(null);
@@ -294,6 +295,7 @@ public class HoaDonServiceImpl implements HoaDonService {
             hoaDon.setSdtNhan(null);
             hoaDon.setPhiShip(BigDecimal.ZERO);
             hoaDon.setDiaChiNhan(null);
+            hoaDon.setThanhToan(true);
             hoaDon.setTrangThai(6);
             timeLine.setTrangThai(6);
         }

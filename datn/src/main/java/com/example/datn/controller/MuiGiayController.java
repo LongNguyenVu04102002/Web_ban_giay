@@ -25,7 +25,6 @@ public class MuiGiayController {
 
     @PostMapping("/muigiay/save")
     public String save(MuiGiay muiGiay) {
-        muiGiay.setTen(muiGiay.getTen().trim());
         muiGiayService.saveMuiGiay(muiGiay);
         return "redirect:/admin/sanpham/muigiay";
     }

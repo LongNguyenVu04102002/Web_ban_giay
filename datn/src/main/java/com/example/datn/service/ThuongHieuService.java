@@ -18,6 +18,6 @@ public interface ThuongHieuService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<ThuongHieu> getThuongHieusByTrangThai(boolean trangThai);
+    List<ThuongHieu> findAllByTrangThaiTrue();
     
 }

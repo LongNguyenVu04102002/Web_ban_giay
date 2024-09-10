@@ -26,6 +26,10 @@ public class DayGiayServiceImpl implements DayGiayService {
 
     @Override
     public void saveDayGiay(DayGiay dayGiay) {
+        dayGiay.setTen(dayGiay.getTen().trim());
+        if (dayGiay.getDayGiayId() == null) {
+            dayGiay.setTrangThai(true);
+        }
         dayGiayRepository.save(dayGiay);
     }
 
@@ -46,8 +50,8 @@ public class DayGiayServiceImpl implements DayGiayService {
     }
 
     @Override
-    public List<DayGiay> getDayGiaysByTrangThai(boolean trangThai) {
-        return dayGiayRepository.findByTrangThai(trangThai);
+    public List<DayGiay> findAllByTrangThaiTrue() {
+        return dayGiayRepository.findAllByTrangThaiTrue();
     }
 
 }

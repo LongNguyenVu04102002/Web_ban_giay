@@ -26,7 +26,6 @@ public class DeGiayController {
 
     @PostMapping("/degiay/save")
     public String save(DeGiay deGiay) {
-        deGiay.setTen(deGiay.getTen().trim());
         deGiayService.saveDeGiay(deGiay);
         return "redirect:/admin/sanpham/degiay";
     }

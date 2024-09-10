@@ -3,12 +3,9 @@ package com.example.datn.controller;
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.Impl.EmailService;
-import com.example.datn.service.KhachHangService;
-import jakarta.mail.MessagingException;
+import com.example.datn.service.Impl.KhachHangServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +21,7 @@ import java.util.List;
 public class KhachHangController {
 
     @Autowired
-    private KhachHangService khachHangService;
-
-    @Autowired
-    private EmailService emailService;
+    private KhachHangServiceImpl khachHangService;
 
     @GetMapping("/khachhang")
     public String show(Model model) {
@@ -84,7 +78,7 @@ public class KhachHangController {
     }
 
     @PostMapping("/khachhang/update")
-    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model,RedirectAttributes redirectAttributes) {
+    public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // Kiểm tra trùng lặp số điện thoại
         if (khachHangService.isPhoneNumberDuplicate(khachHang.getSdt(), khachHang.getKhachHangId())) {
             result.rejectValue("sdt", "error.khachHang", "Số điện thoại đã tồn tại.");
@@ -102,7 +96,7 @@ public class KhachHangController {
 
         // Cập nhật thông tin khách hàng
         redirectAttributes.addFlashAttribute("message", "Chỉnh sửa thông tin khách hàng thành công!");
-        khachHangService.update(khachHang,result);
+        khachHangService.update(khachHang, result);
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
@@ -119,7 +113,6 @@ public class KhachHangController {
         if (khachHangService.isEmailDuplicate(khachHang.getEmail(), khachHang.getKhachHangId())) {
             result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
         }
-
 
 
         // Loại bỏ các địa chỉ không hợp lệ và kiểm tra số lượng địa chỉ
@@ -163,7 +156,7 @@ public class KhachHangController {
         KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
         boolean isActive = khachHang.isTrangThai();
         String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
-        String message = "Trạng thái của khách hàng " +khachHang.getHoTen()+ " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
+        String message = "Trạng thái của khách hàng " + khachHang.getHoTen() + " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
         redirectAttributes.addFlashAttribute("message2", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";

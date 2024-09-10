@@ -19,5 +19,6 @@ public interface MauSacRepository extends JpaRepository<MauSac, Long> {
 
     List<MauSac> findAllByTenAndMauSacIdNot(String ten, Long id);
 
-    List<MauSac> findByTrangThai(boolean trangThai);
+    List<MauSac> findAllByTrangThaiTrue();
+
 }

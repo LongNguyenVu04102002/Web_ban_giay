@@ -17,5 +17,6 @@ public interface DeGiayService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<DeGiay> getDeGiaysByTrangThai(boolean trangThai);
+    List<DeGiay> findAllByTrangThaiTrue();
+
 }

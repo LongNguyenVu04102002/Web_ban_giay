@@ -12,6 +12,6 @@ public interface DeGiayRepository extends JpaRepository<DeGiay, Long> {
 
     List<DeGiay> findAllByTenAndDeGiayIdNot(String ten, Long id);
 
-    List<DeGiay> findByTrangThai(boolean trangThai);
+    List<DeGiay> findAllByTrangThaiTrue();
 
 }

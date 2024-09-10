@@ -1,20 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
-    function handleToggleForm(toggleId, formSectionId, shippingId) {
+    function handleToggleForm(toggleId, formSectionId, shippingId, paymentId) {
         const switcher = document.getElementById(toggleId);
         const formSection = document.getElementById(formSectionId);
         const shipping = document.getElementById(shippingId);
+        const payment = document.getElementById(paymentId);
 
-        if (switcher && formSection && shipping) {
+        if (switcher && formSection && shipping && payment) {
             switcher.addEventListener('change', function () {
                 formSection.classList.toggle('hidden-visibility', !this.checked);
                 shipping.classList.toggle('hidden', !this.checked);
+                payment.classList.toggle('hidden', !this.checked);
             });
         }
     }
 
     // Initialize form toggle handlers
     for (let i = 1; i <= 5; i++) {
-        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`);
+        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`);
     }
 
     // Load saved customer data for each tab
@@ -93,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function clearSelectedCustomer(tabId) {
     localStorage.removeItem(`selectedCustomer-${tabId}`);
-
     const customerInfoContainer = document.getElementById(`customer-info-${tabId}`);
     const khachLeButton = document.getElementById(`khach-le-${tabId}`);
 
@@ -179,7 +180,6 @@ $(document).ready(function () {
         });
     }
 
-    // Hàm lấy danh sách huyện theo tỉnh
     function getDistricts(provinceId, id) {
         $.ajax({
             url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
@@ -232,7 +232,6 @@ $(document).ready(function () {
         });
     }
 
-    // Hàm tính phí vận chuyển
     function calculateShippingFee(id) {
         const selectedDistrict = parseInt($(`#district${id}`).val(), 10);
         const selectedWard = $(`#ward${id}`).val();
@@ -278,7 +277,6 @@ $(document).ready(function () {
         }
     }
 
-    // Khởi tạo dữ liệu tỉnh thành phố cho tất cả các phần tử
     function initialize() {
         $('select[id^="province"]').each(function () {
             const id = $(this).attr('id').replace('province', '');
@@ -350,6 +348,76 @@ function calculateTotal() {
     });
 }
 
+$(document).ready(function () {
+    $('.toggle-form-checkbox').on('change', function () {
+        const indexId = $(this).attr('id').replace('toggleForm', '');
+        const formSectionId = '#form-section-' + indexId;
+        const formId = '#form' + indexId;
 
+        if ($(this).is(':checked')) {
+            $(formSectionId).removeClass('hidden-visibility').show();
+            validateForm(formId);
+        } else {
+            $(formSectionId).hide();
+            $(formSectionId).addClass('hidden-visibility').show();
+            $(formId).validate().resetForm();
+        }
+    });
 
+    function validateForm(formId) {
+        $(formId).validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'div',
+            errorClass: 'input-invalid',
+            validClass: 'input-valid',
+            errorPlacement: function (error, element) {
+                error.addClass('text-red-600 mt-1');
+                if (element.prop('type') === 'checkbox') {
+                    error.insertAfter(element.parent('label'));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            rules: {
+                tenNguoiNhan: {required: true},
+                sdt: {required: true, digits: true, minlength: 10, maxlength: 10},
+                email: {required: true, email: true},
+                thanhPho: {required: true},
+                huyen: {required: true},
+                xa: {required: true},
+                diaChi: {required: true}
+            },
+            messages: {
+                tenNguoiNhan: {
+                    required: 'Vui lòng nhập tên khách hàng'
+                },
+                sdt: {
+                    required: 'Vui lòng nhập số điện thoại',
+                    digits: 'Số điện thoại phải là chữ số',
+                    minlength: 'Số điện thoại phải có ít nhất 10 chữ số',
+                    maxlength: 'Số điện thoại không được quá 10 chữ số'
+                },
+                email: {
+                    required: 'Vui lòng nhập địa chỉ email',
+                    email: 'Địa chỉ email không hợp lệ'
+                },
+                thanhPho: {
+                    required: 'Vui lòng chọn tỉnh thành'
+                },
+                huyen: {
+                    required: 'Vui lòng chọn huyện'
+                },
+                xa: {
+                    required: 'Vui lòng chọn xã'
+                },
+                diaChi: {
+                    required: 'Vui lòng nhập địa chỉ'
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    }
+});
 
