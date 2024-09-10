@@ -54,14 +54,14 @@
                             <div class="border-t border-gray-100 dark:border-gray-700">
                                 <ul class="list-none sidebar-nav mb-0 pb-0" id="navmenu-nav">
                                     <li class="navbar-item account-menu">
-                                        <a th:href="@{/account}"
+                                        <a th:href="@{/account/{id}(id=${session.khachHang.khachHangId})}"
                                            class="navbar-link text-slate-400 flex items-center py-2 rounded">
                                             <span class="me-2 mb-0"><i data-feather="airplay" class="size-4"></i></span>
                                             <h6 class="mb-0 font-medium">Account</h6>
                                         </a>
                                     </li>
                                     <li class="navbar-item account-menu">
-                                        <a th:href="@{/invoice}"
+                                        <a th:href="@{/invoice/{id}(id=${session.khachHang.khachHangId})}"
                                            class="navbar-link text-slate-400 flex items-center py-2 rounded">
                                             <span class="me-2 mb-0"><i data-feather="file-text"
                                                                        class="size-4"></i></span>

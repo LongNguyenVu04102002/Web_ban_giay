@@ -3,6 +3,7 @@ package com.example.datn.service.Impl;
 import com.example.datn.dto.MyUserDetail;
 import com.example.datn.entity.HinhThucThanhToan;
 import com.example.datn.entity.HoaDon;
+import com.example.datn.entity.HoaDonChiTiet;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.PhuongThucThanhToan;
 import com.example.datn.entity.TimeLine;
@@ -10,6 +11,7 @@ import com.example.datn.repository.HinhThucThanhToanRepository;
 import com.example.datn.repository.HoaDonRepository;
 import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.repository.PhuongThucThanhToanRepository;
+import com.example.datn.repository.SanPhamChiTietRepository;
 import com.example.datn.repository.TimeLineRepository;
 import com.example.datn.service.TimeLineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,10 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Autowired
     private NhanVienRepository nhanVienRepository;
+
+    @Autowired
+    private SanPhamChiTietRepository sanPhamChiTietRepository;
+
     @Override
     public TimeLine xacNhanHoaDon(Long id, String mota) {
 
@@ -38,6 +44,12 @@ public class TimeLineServiceImpl implements TimeLineService {
         if (hoaDon != null) {
             hoaDon.setTrangThai(2);
             hoaDonRepository.save(hoaDon);
+            for (HoaDonChiTiet ghct : hoaDon.getHoaDonChiTietList()){
+                sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
+                    spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
+                    sanPhamChiTietRepository.save(spct);
+                });
+            }
         }
 
         TimeLine timeLine = new TimeLine();
@@ -49,16 +61,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     }
 
     private TimeLine getTimeLine(TimeLine timeLine) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof MyUserDetail) {
-                Long nhanVienId = ((MyUserDetail) principal).getId();
-                Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
-                nhanVien.ifPresent(vien -> timeLine.setNguoiThucHien(vien.getMaNhanVien()));
-            }
-        }
-
+        TimeLine(timeLine);
         return timeLineRepository.save(timeLine);
     }
 
@@ -155,17 +158,27 @@ public class TimeLineServiceImpl implements TimeLineService {
                     tl.setNgayTao(LocalDate.now());
                     tl.setHoaDon(hoaDon);
                     tl.setTrangThai(lastTimeLine.getTrangThai());
-                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    if (authentication != null && authentication.isAuthenticated()) {
-                        Object principal = authentication.getPrincipal();
-                        if (principal instanceof MyUserDetail) {
-                            Long nhanVienId = ((MyUserDetail) principal).getId();
-                            Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
-                            nhanVien.ifPresent(vien -> timeLine.setNguoiThucHien(vien.getMaNhanVien()));
-                        }
-                    }
+                    TimeLine(timeLine);
                     timeLineRepository.save(tl);
                 }
+                for (HoaDonChiTiet ghct : hoaDon.getHoaDonChiTietList()){
+                    sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
+                        spct.setSoLuong(spct.getSoLuong() + ghct.getSoLuong());
+                        sanPhamChiTietRepository.save(spct);
+                    });
+                }
+            }
+        }
+    }
+
+    private void TimeLine(TimeLine timeLine) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof MyUserDetail) {
+                Long nhanVienId = ((MyUserDetail) principal).getId();
+                Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
+                nhanVien.ifPresent(vien -> timeLine.setNguoiThucHien(vien.getMaNhanVien()));
             }
         }
     }

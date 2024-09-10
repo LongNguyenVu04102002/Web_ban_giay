@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="/js/admin/pages/customer.js" defer></script>
+    <script src="/js/admin/pages/customer.js"></script>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -390,7 +390,8 @@
                                             <td>
                                                 <div class="flex items-center ml-8">
                                                     <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-                                                        <!-- <img class="avatar-img avatar-rounded" th:src="@{${gh.gioHangChiTietList[0].sanPhamChiTiet.sanPham.image}}" loading="lazy"> -->
+                                                        <img class="avatar-img avatar-rounded" th:src="'data:image/png;base64,' + ${ghct.sanPhamChiTiet.lstAnh.get(0)}" alt="Ảnh từ Base64"
+                                                             loading="lazy"/>
                                                     </span>
                                                     <div class="ml-4 text-center">
                                                         <h6 th:text="${ghct.sanPhamChiTiet.sanPham.ten}"></h6>
@@ -675,11 +676,6 @@
                                                            value="1"
                                                            checked>
                                                     <span class="font-semibold">Tiền Mặt</span>
-                                                </label>
-                                                <label class="radio-label inline-flex">
-                                                    <input type="radio" class="radio" th:field="*{paymentMethod}"
-                                                           value="2">
-                                                    <span class="font-semibold">Thanh toán qua VNPAY</span>
                                                 </label>
                                                 <label class="radio-label inline-flex">
                                                     <input type="radio" class="radio" th:field="*{paymentMethod}"
