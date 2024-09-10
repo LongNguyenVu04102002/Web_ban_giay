@@ -2,7 +2,9 @@ package com.example.datn.controller;
 
 import com.example.datn.dto.TabDataDTO;
 import com.example.datn.entity.GioHang;
+import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.model.response.ThanhToanResponse;
+import com.example.datn.service.HinhAnhService;
 import com.example.datn.service.Impl.ChatLieuServiceImpl;
 import com.example.datn.service.Impl.CoGiayServiceImpl;
 import com.example.datn.service.Impl.DayGiayServiceImpl;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -69,6 +72,9 @@ public class BanHangTaiQuayController {
     @Autowired
     private ThuongHieuServiceImpl thuongHieuService;
 
+    @Autowired
+    private HinhAnhService hinhAnhService;
+
     @GetMapping("/banhang")
     private String view(Model model) {
         return GioHangList(model);
@@ -85,6 +91,22 @@ public class BanHangTaiQuayController {
                 gioHang.setGioHangId(i);
                 gioHangService.save(gioHang);
             }
+            gioHang.getGioHangChiTietList().forEach(ghct -> {
+                SanPhamChiTiet sanPhamChiTiet = ghct.getSanPhamChiTiet();
+                if (sanPhamChiTiet != null) {
+                    try {
+                        byte[] imageData = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(
+                                sanPhamChiTiet.getSanPhamChiTietId(), 1); // Thay đổi priority nếu cần
+                        if (imageData != null && imageData.length > 0) {
+                            String base64Image = Base64.getEncoder().encodeToString(imageData);
+                            sanPhamChiTiet.setBase64Image(base64Image);
+                        }
+                    } catch (RuntimeException e) {
+                        // Xử lý lỗi nếu không tìm thấy ảnh
+                        sanPhamChiTiet.setBase64Image(null); // Hoặc đặt giá trị mặc định
+                    }
+                }
+            });
             gioHangList.add(gioHang);
             TabDataDTO tabDataDTO = gioHangService.updateCart(gioHang);
             tabDataList.add(tabDataDTO);
