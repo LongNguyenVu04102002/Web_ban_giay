@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -87,7 +88,11 @@ public class SanPhamChiTietController {
                              @RequestParam("imageChanged") String imageChanged,
                              @RequestParam(value = "deletedImageIds", required = false) String deletedImageIds) throws IOException {
 
-        System.out.println("Received Image IDs:");
+        if (sanPhamChiTiet.getGiaBan() == null || sanPhamChiTiet.getGiaBan().compareTo(new BigDecimal("1000")) < 0 ||
+                sanPhamChiTiet.getSoLuong() == null || sanPhamChiTiet.getSoLuong() < 1) {
+            return "redirect:/admin/includes/content/sanpham/bienthegiay/home";
+        }
+
         if (imageIds != null) {
             for (Long imageId : imageIds) {
                 System.out.println("Image ID: " + imageId);

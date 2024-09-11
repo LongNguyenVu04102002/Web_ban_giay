@@ -100,7 +100,7 @@
                     </td>
                     <td th:text="${sp.sanPhamChiTiet.sanPham.ten}"></td>
                     <td th:text="${sp.sanPhamChiTiet.barCode}"></td>
-                    <td th:text="${sp.sanPhamChiTiet.giaBan}"></td>
+                    <td th:text="${T(java.lang.String).format('%,.0f', sp.sanPhamChiTiet.giaBan)}"></td>
                     <td th:text="${sp.sanPhamChiTiet.soLuong}"></td>
                     <td th:text="${sp.sanPhamChiTiet.kichThuoc.ten}"></td>
                     <td th:text="${sp.sanPhamChiTiet.mauSac.ten}"></td>
