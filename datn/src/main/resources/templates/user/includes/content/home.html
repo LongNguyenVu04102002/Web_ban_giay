@@ -159,8 +159,8 @@
                         <div class="flex justify-between items-center mt-1">
                             <!-- Hiển thị giá sản phẩm -->
                             <p>
-                                <span th:text="${sanPham.giaThapNhat}">$16.00</span>
-                                <del class="text-slate-400" th:text="${sanPham.giaThapNhat * 1.2}">$21.00</del> <!-- Giả sử giá gốc là 20% cao hơn giá bán hiện tại -->
+                            <p class="text-slate-950 dark:text-white font-semibold mt-1" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></p>
+                            <del class="text-slate-400" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></del>
                             </p>
                             <ul class="font-medium text-amber-400 list-none">
                                 <li class="inline"><i class="mdi mdi-star"></i></li>

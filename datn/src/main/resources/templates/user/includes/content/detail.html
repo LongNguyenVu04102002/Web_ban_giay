@@ -8,6 +8,17 @@
     <script src="/js/user/detail.js"></script>
     <script src="/js/admin/vendors.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>
+        .swiper-slide img {
+            width: 100%; /* Chiều rộng đầy đủ */
+            height: 600px; /* Chiều cao cố định */
+            object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị méo */
+            border-radius: 8px; /* Tùy chọn: bo góc cho ảnh */
+        }
+
+    </style>
 </head>
 <body>
 <div layout:fragment="usercontent">
@@ -39,37 +50,26 @@
             <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6 items-center">
                 <div class="lg:col-span-5">
                     <div class="tiny-single-item">
-                        <div class="tiny-slide">
-                            <div class="m-0.5">
-                                <img src="/images/shop/mens-jecket.jpg" class="shadow dark:shadow-gray-700"
-                                     alt="">
+                        <div th:each="entry : ${productImg}">
+                            <div class="swiper-container tiny-slide" style="width: 100%; height: 300px;">
+                                <div class="swiper-wrapper">
+                                    <div th:each="image : ${entry.value}" class="swiper-slide">
+                                        <img th:src="${image}" alt="Product Image"/>
+                                    </div>
+                                </div>
+
+                                <!-- Nút điều hướng Swiper -->
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+
+                                <!-- Dấu chấm chỉ mục -->
+                                <div class="swiper-pagination"></div>
                             </div>
+</div>
+
+
+
                         </div>
-                        <div class="tiny-slide">
-                            <div class="m-0.5">
-                                <img src="/images/shop/mens-jecket-3.jpg" class="shadow dark:shadow-gray-700"
-                                     alt="">
-                            </div>
-                        </div>
-                        <div class="tiny-slide">
-                            <div class="m-0.5">
-                                <img src="/images/shop/mens-jecket-left.jpg" class="shadow dark:shadow-gray-700"
-                                     alt="">
-                            </div>
-                        </div>
-                        <div class="tiny-slide">
-                            <div class="m-0.5">
-                                <img src="/images/shop/mens-jecket-back.jpg" class="shadow dark:shadow-gray-700"
-                                     alt="">
-                            </div>
-                        </div>
-                        <div class="tiny-slide">
-                            <div class="m-0.5">
-                                <img src="/images/shop/mens-jecket-4.jpg" class="shadow dark:shadow-gray-700"
-                                     alt="">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="lg:col-span-7">
                     <h5 class="text-2xl font-semibold" th:text="${sanPham.ten}"></h5>
@@ -404,5 +404,27 @@
         </div>
     </section>
 </div>
+<script>
+    // Khởi tạo Swiper cho từng sản phẩm chi tiết
+    document.querySelectorAll('.swiper-container').forEach(function(swiperContainer, index) {
+        new Swiper(swiperContainer, {
+            loop: true, // Cho phép lặp slide
+            navigation: {
+                nextEl: swiperContainer.querySelector('.swiper-button-next'),
+                prevEl: swiperContainer.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperContainer.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            autoplay: {
+                delay: 3000, // Tự động chuyển slide sau 3 giây
+                disableOnInteraction: false,
+            },
+        });
+    });
+</script>
+
+
 </body>
 </html>
