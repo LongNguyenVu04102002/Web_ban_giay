@@ -118,16 +118,16 @@ public class SanPhamChiTietController {
     }
 
     private String getString(Model model) {
-        model.addAttribute("lstKichThuoc", kichThuocService.getKichThuocsByTrangThai(false));
-        model.addAttribute("lsMauSac", mauSacService.getMauSacsByTrangThai(false));
-        model.addAttribute("lstSanPham", sanPhamService.getSanPhamsByTrangThai(false));
+        model.addAttribute("lstKichThuoc", kichThuocService.findAllByTrangThaiTrue());
+        model.addAttribute("lsMauSac", mauSacService.findAllByTrangThaiTrue());
+        model.addAttribute("lstSanPham", sanPhamService.findAllByTrangThaiTrue());
         return "admin/includes/content/sanpham/bienthegiay/form";
     }
 
     private String getStringUpdate(Model model) {
-        model.addAttribute("lstKichThuoc", kichThuocService.getKichThuocsByTrangThai(false));
-        model.addAttribute("lsMauSac", mauSacService.getMauSacsByTrangThai(false));
-        model.addAttribute("lstSanPham", sanPhamService.getSanPhamsByTrangThai(false));
+        model.addAttribute("lstKichThuoc", kichThuocService.findAllByTrangThaiTrue());
+        model.addAttribute("lsMauSac", mauSacService.findAllByTrangThaiTrue());
+        model.addAttribute("lstSanPham", sanPhamService.findAllByTrangThaiTrue());
         return "admin/includes/content/sanpham/bienthegiay/form-update";
     }
 

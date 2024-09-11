@@ -421,6 +421,15 @@
                 imageContainer.innerHTML = '';
 
                 Array.from(files).forEach(file => {
+                    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    if (!validImageTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Vui lòng chọn tệp hình ảnh hợp lệ',
+                        });
+                        return; // Bỏ qua nếu tệp không phải là hình ảnh hợp lệ
+                    }
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const imgElement = document.createElement('img');

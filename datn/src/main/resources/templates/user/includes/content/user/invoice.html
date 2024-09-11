@@ -5,11 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- Optional: Bootstrap 5 DataTables theme -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
 <div layout:fragment="content">
     <div class="relative overflow-x-auto shadow dark:shadow-gray-800 rounded-md">
-        <table class="table-default">
+        <table id="data-table-all" class="table-default table-hover data-table">
             <thead>
             <tr>
                 <th>#</th>
@@ -46,5 +50,32 @@
         </table>
     </div>
 </div>
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#data-table-all').DataTable({
+            paging: true,        // Enable pagination
+            searching: true,     // Enable search
+            info: true,          // Enable table info
+            ordering: true,      // Enable column ordering
+            language: {
+                lengthMenu: "Hiển thị _MENU_ mục",
+                zeroRecords: "Không tìm thấy dữ liệu",
+                info: "Hiển thị _PAGE_ trên tổng số _PAGES_ trang",
+                infoEmpty: "Không có bản ghi nào",
+                search: "Tìm kiếm:",
+                paginate: {
+                    previous: "Trước",
+                    next: "Tiếp"
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

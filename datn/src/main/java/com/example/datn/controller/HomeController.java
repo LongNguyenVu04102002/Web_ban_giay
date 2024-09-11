@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -219,25 +220,16 @@ public class HomeController {
     }
 
     // Account
-    @GetMapping("/account")
-    private String account() {
+    @GetMapping("/account/{id}")
+    private String account(@PathVariable Long id) {
         return "user/includes/content/user/account";
     }
 
     // Invoice
-    @GetMapping("/invoice")
-    private String invoice(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof MyUserDetail userDetails) {
-                if (userDetails.getAuthorities().stream()
-                        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_USER"))) {
-                    List<HoaDon> hoaDonList = hoaDonService.getHoaDonKhachHang(userDetails.getId());
-                    model.addAttribute("hoaDonList", hoaDonList);
-                }
-            }
-        }
+    @GetMapping("/invoice/{id}")
+    private String invoice(@PathVariable Long id, Model model) {
+        List<HoaDon> hoaDonList = hoaDonService.getHoaDonKhachHang(id);
+        model.addAttribute("hoaDonList", hoaDonList);
         return "user/includes/content/user/invoice";
     }
 

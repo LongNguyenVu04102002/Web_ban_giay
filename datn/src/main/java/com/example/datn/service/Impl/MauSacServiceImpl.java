@@ -26,6 +26,10 @@ public class MauSacServiceImpl implements MauSacService {
 
     @Override
     public void save(MauSac mauSac) {
+        mauSac.setTen(mauSac.getTen().trim());
+        if(mauSac.getMauSacId() == null){
+            mauSac.setTrangThai(true);
+        }
         mauSacRepository.save(mauSac);
     }
 
@@ -46,9 +50,8 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
-    public List<MauSac> getMauSacsByTrangThai(boolean trangThai) {
-        return mauSacRepository.findByTrangThai(trangThai);
+    public List<MauSac> findAllByTrangThaiTrue() {
+        return mauSacRepository.findAllByTrangThaiTrue();
     }
-
 
 }

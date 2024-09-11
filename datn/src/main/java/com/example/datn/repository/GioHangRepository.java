@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GioHangRepository extends JpaRepository<GioHang, Long> {
-    GioHang findByKhachHang_KhachHangId(Long khachHangId);
 }

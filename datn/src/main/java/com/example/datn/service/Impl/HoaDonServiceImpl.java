@@ -260,8 +260,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
         HoaDon hoaDon = new HoaDon();
 
-        Optional<KhachHang> khachHang = khachHangRepository.findById(khachHangId);
-        khachHang.ifPresent(hoaDon::setKhachHang);
+        khachHangRepository.findById(khachHangId).ifPresent(hoaDon::setKhachHang);
 
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
         if (phieuGiamGia != null) {
@@ -278,14 +277,17 @@ public class HoaDonServiceImpl implements HoaDonService {
         timeLine.setNgayTao(LocalDate.now());
         timeLine.setHoaDon(hoaDon);
 
-        if (thanhToanResponse.getTienShip() != null && thanhToanResponse.getTienShip().compareTo(BigDecimal.ZERO) > 0) {
-            System.out.println(thanhToanResponse.getTenNguoiNhan());
+        if (thanhToanResponse.getPaymentMethod() == 3) {
             hoaDon.setTenNguoiNhan(thanhToanResponse.getTenNguoiNhan());
             hoaDon.setEmail(thanhToanResponse.getEmail());
             hoaDon.setSdtNhan(thanhToanResponse.getSdt());
             hoaDon.setPhiShip(thanhToanResponse.getTienShip());
-            hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", " + thanhToanResponse.getWard() + ", " + thanhToanResponse.getDistrict() + ", " + thanhToanResponse.getProvince());
+            hoaDon.setDiaChiNhan(thanhToanResponse.getDiaChi() + ", "
+                    + thanhToanResponse.getWard() + ", "
+                    + thanhToanResponse.getDistrict() + ", "
+                    + thanhToanResponse.getProvince());
             hoaDon.setTrangThai(1);
+            hoaDon.setThanhToan(false);
             timeLine.setTrangThai(1);
         } else {
             hoaDon.setTenNguoiNhan(null);
@@ -293,6 +295,7 @@ public class HoaDonServiceImpl implements HoaDonService {
             hoaDon.setSdtNhan(null);
             hoaDon.setPhiShip(BigDecimal.ZERO);
             hoaDon.setDiaChiNhan(null);
+            hoaDon.setThanhToan(true);
             hoaDon.setTrangThai(6);
             timeLine.setTrangThai(6);
         }
@@ -302,40 +305,43 @@ public class HoaDonServiceImpl implements HoaDonService {
             Object principal = authentication.getPrincipal();
             if (principal instanceof MyUserDetail) {
                 Long nhanVienId = ((MyUserDetail) principal).getId();
-                Optional<NhanVien> nhanVien = nhanVienRepository.findById(nhanVienId);
-                if (nhanVien.isPresent()) {
-                    hoaDon.setNhanVien(nhanVien.get());
-                    timeLine.setNguoiThucHien(nhanVien.get().getMaNhanVien());
-                }
+                nhanVienRepository.findById(nhanVienId).ifPresent(nhanVien -> {
+                    hoaDon.setNhanVien(nhanVien);
+                    timeLine.setNguoiThucHien(nhanVien.getMaNhanVien());
+                });
             }
         }
 
-        // Lưu TimeLine và Hóa Đơn
         timeLine.setMoTa("Tạo hóa đơn thành công");
         timeLineRepository.save(timeLine);
         hoaDonRepository.save(hoaDon);
 
-        Optional<PhuongThucThanhToan> phuongThucThanhToan = phuongThucThanhToanRepository.findById(thanhToanResponse.getPaymentMethod());
-        if (phuongThucThanhToan.isPresent()) {
+        phuongThucThanhToanRepository.findById(thanhToanResponse.getPaymentMethod()).ifPresent(phuongThucThanhToan -> {
             HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
-            hinhThucThanhToan.setPhuongThucThanhToan(phuongThucThanhToan.get());
+            hinhThucThanhToan.setPhuongThucThanhToan(phuongThucThanhToan);
             hinhThucThanhToan.setHoaDon(hoaDon);
             hinhThucThanhToan.setTienThanhToan(thanhToanResponse.getTongTien());
             hinhThucThanhToanRepository.save(hinhThucThanhToan);
-        }
+        });
 
-        Optional<GioHang> gioHang = gioHangRepository.findById(gioHangId);
-        if (gioHang.isPresent()) {
-            List<GioHangChiTiet> gioHangChiTietList = gioHang.get().getGioHangChiTietList();
+        gioHangRepository.findById(gioHangId).ifPresent(gioHang -> {
+            List<GioHangChiTiet> gioHangChiTietList = gioHang.getGioHangChiTietList();
             for (GioHangChiTiet ghct : gioHangChiTietList) {
                 HoaDonChiTiet hoaDonChiTiet = getHoaDonChiTiet(ghct, hoaDon);
                 hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+                sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
+                    spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
+                    sanPhamChiTietRepository.save(spct);
+                });
+
                 ghct.setGioHang(null);
             }
             gioHangChiTietRepository.saveAll(gioHangChiTietList);
             gioHangChiTietRepository.deleteAll(gioHangChiTietList);
-        }
+        });
     }
+
 
     @Override
     @Transactional

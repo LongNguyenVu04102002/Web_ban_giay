@@ -26,6 +26,10 @@ public class DeGiayServiceImpl implements DeGiayService {
 
     @Override
     public void saveDeGiay(DeGiay deGiay) {
+        deGiay.setTen(deGiay.getTen().trim());
+        if(deGiay.getDeGiayId() == null){
+            deGiay.setTrangThai(true);
+        }
         deGiayRepository.save(deGiay);
     }
 
@@ -47,9 +51,8 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
-    public List<DeGiay> getDeGiaysByTrangThai(boolean trangThai) {
-        return deGiayRepository.findByTrangThai(trangThai);
+    public List<DeGiay> findAllByTrangThaiTrue() {
+        return deGiayRepository.findAllByTrangThaiTrue();
     }
-
 
 }

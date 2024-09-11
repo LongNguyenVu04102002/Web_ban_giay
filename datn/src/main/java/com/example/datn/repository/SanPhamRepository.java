@@ -14,9 +14,8 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 
     List<SanPham> findAllByThuongHieu_ThuongHieuId(Long id);
 
-    List<SanPham> findByTrangThai(boolean trangThai);
-
     List<SanPham> findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId);
+
     @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(sp.sanPhamId, sp.ten, " +
             "MIN(spct.giaBan), " +
             "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))) " +
@@ -50,7 +49,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
             Pageable pageable);
 
 
-
+    List<SanPham> findAllByTrangThaiTrue();
 }
 
 

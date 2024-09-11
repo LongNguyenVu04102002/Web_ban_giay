@@ -17,6 +17,6 @@ public interface CoGiayService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<CoGiay> getCoGiaysByTrangThai(boolean trangThai);
+    List<CoGiay> findAllByTrangThaiTrue();
 
 }

@@ -96,14 +96,13 @@ public class BanHangTaiQuayController {
                 if (sanPhamChiTiet != null) {
                     try {
                         byte[] imageData = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(
-                                sanPhamChiTiet.getSanPhamChiTietId(), 1); // Thay đổi priority nếu cần
+                                sanPhamChiTiet.getSanPhamChiTietId(), 1);
                         if (imageData != null && imageData.length > 0) {
                             String base64Image = Base64.getEncoder().encodeToString(imageData);
                             sanPhamChiTiet.setBase64Image(base64Image);
                         }
                     } catch (RuntimeException e) {
-                        // Xử lý lỗi nếu không tìm thấy ảnh
-                        sanPhamChiTiet.setBase64Image(null); // Hoặc đặt giá trị mặc định
+                        sanPhamChiTiet.setBase64Image(null);
                     }
                 }
             });
@@ -114,17 +113,17 @@ public class BanHangTaiQuayController {
 
         model.addAttribute("tabDataList", tabDataList);
         model.addAttribute("gioHangList", gioHangList);
-        model.addAttribute("sanPhamChiTietList", sanPhamChiTietService.getAll());
-        model.addAttribute("khachHangList", khachHangService.getAll());
-        model.addAttribute("lstDeGiay", deGiayService.getAllDeGiay());
-        model.addAttribute("lstMauSac", mauSacService.getAll());
-        model.addAttribute("lstThuongHieu", thuongHieuService.getAll());
-        model.addAttribute("lstKichThuoc", kichThuocService.getAll());
-        model.addAttribute("lstCoGiay", coGiayService.getAllCoGiay());
-        model.addAttribute("lstLotGiay", lotGiayService.getAllLotGiay());
-        model.addAttribute("lstMuiGiay", muiGiayService.getAllMuiGiay());
-        model.addAttribute("lstChatLieu", chatLieuService.getAllChatLieu());
-        model.addAttribute("lstDayGiay", dayGiayService.getAllDayGiay());
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietService.findAllByTrangThaiTrue());
+        model.addAttribute("khachHangList", khachHangService.findKhachHangByTrangThaiTrue());
+        model.addAttribute("lstDeGiay", deGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstMauSac", mauSacService.findAllByTrangThaiTrue());
+        model.addAttribute("lstThuongHieu", thuongHieuService.findAllByTrangThaiTrue());
+        model.addAttribute("lstKichThuoc", kichThuocService.findAllByTrangThaiTrue());
+        model.addAttribute("lstCoGiay", coGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstLotGiay", lotGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstMuiGiay", muiGiayService.findAllByTrangThaiTrue());
+        model.addAttribute("lstChatLieu", chatLieuService.findAllByTrangThaiTrue());
+        model.addAttribute("lstDayGiay", dayGiayService.findAllByTrangThaiTrue());
         model.addAttribute("thanhToanResponse", new ThanhToanResponse());
 
         return "/admin/includes/content/banhang/home";

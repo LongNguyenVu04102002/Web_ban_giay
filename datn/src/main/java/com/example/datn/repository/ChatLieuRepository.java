@@ -12,6 +12,6 @@ public interface ChatLieuRepository extends JpaRepository<ChatLieu, Long> {
 
     List<ChatLieu> findAllByTenAndChatLieuIdNot(String ten, Long id);
 
-    List<ChatLieu> findByTrangThai(boolean trangThai);
+    List<ChatLieu> findAllByTrangThaiTrue();
 
 }

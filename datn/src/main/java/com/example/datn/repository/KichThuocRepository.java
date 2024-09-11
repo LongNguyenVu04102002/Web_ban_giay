@@ -11,5 +11,6 @@ public interface KichThuocRepository extends JpaRepository<KichThuoc, Long> {
 
     List<KichThuoc> findAllByTenAndKichThuocIdNot(String ten, Long id);
 
-    List<KichThuoc> findByTrangThai(boolean trangThai);
+    List<KichThuoc> findAllByTrangThaiTrue();
+
 }

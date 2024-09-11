@@ -26,6 +26,10 @@ public class LotGiayServiceImpl implements LotGiayService {
 
     @Override
     public void saveLotGiay(LotGiay lotGiay) {
+        lotGiay.setTen(lotGiay.getTen().trim());
+        if(lotGiay.getLotGiayId() == null){
+            lotGiay.setTrangThai(true);
+        }
         lotGiayRepository.save(lotGiay);
     }
 
@@ -46,8 +50,8 @@ public class LotGiayServiceImpl implements LotGiayService {
     }
 
     @Override
-    public List<LotGiay> getLotGiaysByTrangThai(boolean trangThai) {
-        return lotGiayRepository.findByTrangThai(trangThai);
+    public List<LotGiay> findAllByTrangThaiTrue() {
+        return lotGiayRepository.findAllByTrangThaiTrue();
     }
 
 }

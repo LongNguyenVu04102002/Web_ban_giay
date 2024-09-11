@@ -18,6 +18,6 @@ public interface MuiGiayService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<MuiGiay> getMuiGiaysByTrangThai(boolean trangThai);
+    List<MuiGiay> findAllByTrangThaiTrue();
     
 }

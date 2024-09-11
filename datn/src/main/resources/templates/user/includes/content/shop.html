@@ -108,19 +108,16 @@
                         <form class="mt-4" th:action="@{/shop}" method="get">
                             <label for="keyword" class="font-medium">Search:</label>
                             <input type="text" id="keyword" name="keyword" th:value="${keyword}" placeholder="Search...">
-
                             <h5 class="font-medium mt-4">Màu sắc:</h5>
                             <select name="mauSacId">
                                 <option th:value="${null}" th:text="'-- Chọn Màu sắc --'" th:selected="${mauSacId == null}"></option>
                                 <option th:each="mauSac : ${mauSacList}" th:value="${mauSac.mauSacId}" th:text="${mauSac.ten}" th:selected="${mauSac.mauSacId == mauSacId}"></option>
                             </select>
-
                             <h5 class="font-medium mt-4">Thương hiệu:</h5>
                             <select name="thuongHieuId">
                                 <option th:value="${null}" th:text="'-- Chọn thương hiệu --'" th:selected="${thuongHieuId == null}"></option>
                                 <option th:each="thuonghieu : ${thuongHieuList}" th:value="${thuonghieu.thuongHieuId}" th:text="${thuonghieu.ten}" th:selected="${thuonghieu.thuongHieuId == thuongHieuId}"></option>
                             </select>
-
                             <h5 class="font-medium mt-4">Kích cỡ:</h5>
                             <ul class="list-none mt-2">
                                 <li th:each="size : ${kichThuocList}" class="inline-block mr-2">
@@ -130,7 +127,6 @@
                                     </label>
                                 </li>
                             </ul>
-
                             <button type="submit">Apply Filters</button>
                         </form>
                     </div>

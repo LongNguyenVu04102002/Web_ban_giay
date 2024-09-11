@@ -32,4 +32,6 @@ public interface SanPhamChiTietService {
 
     SanPhamChiTiet findByNameAndSizeAndColor(String tenSanPham, String kichThuocId, String mauSacId);
 
+    List<SanPhamChiTiet> findAllByTrangThaiTrue();
+
 }

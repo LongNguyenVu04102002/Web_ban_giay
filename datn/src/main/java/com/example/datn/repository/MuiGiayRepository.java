@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MuiGiayRepository extends JpaRepository<MuiGiay, Long> {
-    List<MuiGiay> findByTrangThai(boolean trangThai);
-
     List<MuiGiay> findAllByTenAndMuiGiayIdNot(String ten, Long id);
 
     Optional<Object> findByTen(String ten);
+
+    List<MuiGiay> findAllByTrangThaiTrue();
+
 }

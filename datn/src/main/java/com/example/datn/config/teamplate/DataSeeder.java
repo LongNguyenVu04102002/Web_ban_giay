@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -52,6 +53,7 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
 			khachHang.setEmail("member@gmail.com");
 			khachHang.setPassword(passwordEncoder.encode("123456"));
 			khachHang.setSdt("0987654321");
+			khachHang.setNgaySinh(LocalDate.ofEpochDay(2024-07-30));
 			khachHang.setTrangThai(true);
 			khachHang.setGioiTinh(true);
 			khachHang.setHoTen("Nguyễn Thị Hằng");

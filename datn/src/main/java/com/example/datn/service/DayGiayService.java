@@ -18,6 +18,6 @@ public interface DayGiayService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<DayGiay> getDayGiaysByTrangThai(boolean trangThai);
+    List<DayGiay> findAllByTrangThaiTrue();
 
 }

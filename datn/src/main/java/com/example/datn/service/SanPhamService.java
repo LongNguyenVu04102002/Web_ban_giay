@@ -16,15 +16,15 @@ public interface SanPhamService {
 
     void update(Long id);
 
-    List<SanPham> getSanPhamsByTrangThai(boolean trangThai);
-
     boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId);
-    Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable) ;
+
+    Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable);
+
     Page<SanPhamHomeDTO> getSanPhamForShopPage(Long thuongHieuId, Long kichThuocId,
                                                Long mauSacId,
                                                String keyword,
                                                Pageable pageable);
 
 
-
+    List<SanPham> findAllByTrangThaiTrue();
 }

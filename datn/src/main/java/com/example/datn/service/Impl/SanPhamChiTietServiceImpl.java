@@ -92,6 +92,11 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return sanPhamChiTietRepository.findByNameSizeAndColor(tenSanPham,kichThuocId,mauSacId);
     }
 
+    @Override
+    public List<SanPhamChiTiet> findAllByTrangThaiTrue() {
+        return sanPhamChiTietRepository.findAllByTrangThaiTrue();
+    }
+
     private String generateBarCode() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
     }

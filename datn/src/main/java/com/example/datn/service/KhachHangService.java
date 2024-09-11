@@ -36,4 +36,6 @@ public interface KhachHangService {
 
     KhachHang login (String email, String password);
 
+    List<KhachHang> findKhachHangByTrangThaiTrue();
+
 }

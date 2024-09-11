@@ -21,7 +21,6 @@
             if (confirm(message)) {
                 form.submit();
             } else {
-                // Hoàn tác thay đổi trạng thái của checkbox nếu người dùng nhấn "Cancel"
                 checkbox.checked = !checkbox.checked;
             }
         }
@@ -31,7 +30,7 @@
 <body>
 <div layout:fragment="admincontent">
 
-    <div th:if="${message2}" th:classappend="${isActive ? 'alert-danger' : 'alert-success'}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <div th:if="${message2}" th:classappend="${isActive ?'alert-success': 'alert-danger'}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${message2}"></span>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -120,13 +119,13 @@
                     <td th:text="${kh.sdt}"></td>
                     <td th:text="${kh.ngaySinh}"></td>
                     <td>
-                        <button th:class="${kh.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
+                        <button th:class="${!kh.gioiTinh ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${!kh.gioiTinh ? 'Nam' : 'Nữ'}"></span>
                         </button>
                     </td>
                     <td>
-                        <button th:class="${kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${!kh.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${!kh.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
@@ -134,7 +133,7 @@
                               method="get" onsubmit="return confirmToggle()">
                             <label class="switcher">
                                 <input type="checkbox" name="trangThai"
-                                       th:checked="${!kh.trangThai}" onchange="confirmToggle(this)">
+                                       th:checked="${kh.trangThai}" onchange="confirmToggle(this)">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>

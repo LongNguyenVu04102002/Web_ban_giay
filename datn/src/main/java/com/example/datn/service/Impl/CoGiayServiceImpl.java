@@ -27,6 +27,10 @@ public class CoGiayServiceImpl implements CoGiayService {
 
     @Override
     public void saveCoGiay(CoGiay coGiay) {
+        coGiay.setTen(coGiay.getTen().trim());
+        if(coGiay.getCoGiayId() == null){
+            coGiay.setTrangThai(true);
+        }
         coGiayRepository.save(coGiay);
     }
 
@@ -47,8 +51,8 @@ public class CoGiayServiceImpl implements CoGiayService {
     }
 
     @Override
-    public List<CoGiay> getCoGiaysByTrangThai(boolean trangThai) {
-        return coGiayRepository.findByTrangThai(trangThai);
+    public List<CoGiay> findAllByTrangThaiTrue() {
+        return coGiayRepository.findAllByTrangThaiTrue();
     }
 
 }

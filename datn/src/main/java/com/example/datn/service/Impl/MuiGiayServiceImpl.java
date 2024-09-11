@@ -26,6 +26,10 @@ public class MuiGiayServiceImpl implements MuiGiayService {
 
     @Override
     public void saveMuiGiay(MuiGiay muiGiay) {
+        muiGiay.setTen(muiGiay.getTen().trim());
+        if(muiGiay.getMuiGiayId() ==  null){
+            muiGiay.setTrangThai(true);
+        }
         muiGiayRepository.save(muiGiay);
     }
 
@@ -46,7 +50,7 @@ public class MuiGiayServiceImpl implements MuiGiayService {
     }
 
     @Override
-    public List<MuiGiay> getMuiGiaysByTrangThai(boolean trangThai) {
-        return muiGiayRepository.findByTrangThai(trangThai);
+    public List<MuiGiay> findAllByTrangThaiTrue() {
+        return muiGiayRepository.findAllByTrangThaiTrue();
     }
 }

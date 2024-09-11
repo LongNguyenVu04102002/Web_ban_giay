@@ -12,6 +12,6 @@ public interface CoGiayRepository extends JpaRepository<CoGiay, Long> {
 
     List<CoGiay> findAllByTenAndCoGiayIdNot(String ten, Long id);
 
-    List<CoGiay> findByTrangThai(boolean trangThai);
+    List<CoGiay> findAllByTrangThaiTrue();
 
 }

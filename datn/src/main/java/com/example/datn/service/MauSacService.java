@@ -18,6 +18,6 @@ public interface MauSacService {
 
     boolean isTenExistsForUpdate(String ten, Long id);
 
-    List<MauSac> getMauSacsByTrangThai(boolean trangThai);
+    List<MauSac> findAllByTrangThaiTrue();
     
 }
