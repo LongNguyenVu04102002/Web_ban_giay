@@ -143,8 +143,7 @@ public class HomeController {
 
         if (page.getContent() == null || page.getContent().isEmpty()) {
             // Thêm thông báo nếu không có kết quả
-            model.addAttribute("message", "Không có sản phẩm tương thích với từ khóa tìm kiếm.");
-
+            model.addAttribute("noProducts", true);
             // Lấy lại tất cả sản phẩm để reload lại trang với đầy đủ sản phẩm
             page = sanPhamService.getSanPhamForShopPage(null, null, null, null, pageable);
         }

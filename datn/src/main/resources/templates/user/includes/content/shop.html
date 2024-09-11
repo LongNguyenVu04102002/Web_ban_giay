@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.2.4/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .product-image {
             object-fit: cover;
@@ -176,5 +178,16 @@
         </div>
     </section>
 </div>
+<script>
+    // Kiểm tra thuộc tính "noProducts" và hiển thị thông báo
+    var noProducts = /*[[${noProducts}]]*/ false;
+    if (noProducts) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Không có sản phẩm',
+            text: 'Không có sản phẩm tương thích với từ khóa tìm kiếm. Trang sẽ hiển thị tất cả sản phẩm.',
+            confirmButtonText: 'OK'
+        });
+    }
 </body>
 </html>

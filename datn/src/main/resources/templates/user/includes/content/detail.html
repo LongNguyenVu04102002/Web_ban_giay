@@ -10,7 +10,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>
+        .swiper-slide img {
+            width: 100%; /* Chiều rộng đầy đủ */
+            height: 600px; /* Chiều cao cố định */
+            object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị méo */
+            border-radius: 8px; /* Tùy chọn: bo góc cho ảnh */
+        }
 
+    </style>
 </head>
 <body>
 <div layout:fragment="usercontent">
