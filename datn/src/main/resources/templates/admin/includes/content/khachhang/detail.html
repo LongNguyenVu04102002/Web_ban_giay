@@ -149,141 +149,132 @@
                 return trimmedValue === value && noConsecutiveSpaces;
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
 
-            // Phương thức kiểm tra không chứa số (dành cho họ tên)
-            $.validator.addMethod("noNumbers", function(value, element) {
-                return !/\d/.test(value); // Không chứa số
-            }, "Họ tên không được chứa số.");
-
-            // Phương thức kiểm tra ký tự đặc biệt cho địa chỉ (chỉ cho phép chữ cái, số và khoảng trắng)
-            $.validator.addMethod("noSpecialCharsInDiaChi", function(value, element) {
-                return /^[a-zA-Z0-9\sàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐđ]*$/.test(value);
-            }, "Địa chỉ không được chứa ký tự đặc biệt.");
+            $.validator.addMethod("noSpecialChars", function(value, element) {
+                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
+            }, "Không được chứa ký tự đặc biệt.");
 
             // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
             $.validator.addMethod("validSelection", function(value, element) {
                 return value !== "0"; // Không cho phép giá trị "0"
             }, "Vui lòng chọn một giá trị hợp lệ.");
 
-            $("form").validate({
-                rules: {
-                    'hoTen': {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 100,
-                        noWhitespace: true,
-                        noNumbers: true, // Không chứa số
-                        noSpecialChars: true // Cấm ký tự đặc biệt
+            // Kiểm tra nếu form đang ở trạng thái thêm địa chỉ
+            var formType = $('input[name="formType"]').val();
+            if (formType === 'add') {
+                $("#address-form").validate({
+                    rules: {
+                        'hoTen': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 100,
+                            noWhitespace: true,
+                            noSpecialChars: true
+                        },
+                        'sdt': {
+                            required: true,
+                            digits: true,
+                            minlength: 10,
+                            maxlength: 15
+                        },
+                        'email': {
+                            required: true,
+                            email: true
+                        },
+                        'ngaySinh': {
+                            required: true,
+                            dateISO: true // Định dạng ngày là yyyy-mm-dd
+                        },
+                        'diaChiList[0].thanhPho': {
+                            required: true,
+                            validSelection: true // Kiểm tra giá trị hợp lệ
+                        },
+                        'diaChiList[0].huyen': {
+                            required: true,
+                            validSelection: true
+                        },
+                        'diaChiList[0].xa': {
+                            required: true,
+                            validSelection: true
+                        },
+                        'diaChiList[0].diaChi': {
+                            required: true,
+                            minlength: 5,
+                            noWhitespace: true,
+                            noSpecialChars: true
+                        },
+                        'diaChiList[0].ten': {
+                            required: true,
+                            minlength: 2,
+                            noWhitespace: true,
+                            noSpecialChars: true
+                        },
+                        'diaChiList[0].sdt': {
+                            required: true,
+                            digits: true,
+                            minlength: 10,
+                            maxlength: 15
+                        }
                     },
-                    'sdt': {
-                        required: true,
-                        digits: true,
-                        minlength: 10,
-                        maxlength: 15
+                    messages: {
+                        'hoTen': {
+                            required: "Vui lòng nhập họ tên.",
+                            minlength: "Họ tên phải có ít nhất 2 ký tự.",
+                            maxlength: "Họ tên không được vượt quá 100 ký tự.",
+                            noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                            noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
+                        },
+                        'sdt': {
+                            required: "Vui lòng nhập số điện thoại.",
+                            digits: "Số điện thoại chỉ chứa các ký tự số.",
+                            minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                            maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                        },
+                        'email': {
+                            required: "Vui lòng nhập email.",
+                            email: "Vui lòng nhập địa chỉ email hợp lệ."
+                        },
+                        'ngaySinh': {
+                            required: "Vui lòng nhập ngày sinh.",
+                            dateISO: "Vui lòng nhập ngày sinh hợp lệ (định dạng yyyy-mm-dd)."
+                        },
+                        'diaChiList[0].thanhPho': {
+                            required: "Vui lòng chọn thành phố.",
+                            validSelection: "Vui lòng chọn thành phố hợp lệ."
+                        },
+                        'diaChiList[0].huyen': {
+                            required: "Vui lòng chọn huyện.",
+                            validSelection: "Vui lòng chọn huyện hợp lệ."
+                        },
+                        'diaChiList[0].xa': {
+                            required: "Vui lòng chọn xã.",
+                            validSelection: "Vui lòng chọn xã hợp lệ."
+                        },
+                        'diaChiList[0].diaChi': {
+                            required: "Vui lòng nhập địa chỉ.",
+                            minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
+                            noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                            noSpecialChars: "Địa chỉ không được chứa ký tự đặc biệt."
+                        },
+                        'diaChiList[0].ten': {
+                            required: "Vui lòng nhập tên người nhận.",
+                            minlength: "Tên người nhận phải có ít nhất 2 ký tự.",
+                            noWhitespace: "Tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                            noSpecialChars: "Tên không được chứa ký tự đặc biệt."
+                        },
+                        'diaChiList[0].sdt': {
+                            required: "Vui lòng nhập số điện thoại.",
+                            digits: "Số điện thoại chỉ chứa các ký tự số.",
+                            minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
+                            maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                        }
                     },
-                    'email': {
-                        required: true,
-                        email: true
-                    },
-                    'ngaySinh': {
-                        required: true,
-                        dateISO: true // Định dạng ngày là yyyy-mm-dd
-                    },
-                    'diaChiList[0].thanhPho': {
-                        required: true,
-                        validSelection: true // Kiểm tra giá trị hợp lệ
-                    },
-                    'diaChiList[0].huyen': {
-                        required: true,
-                        validSelection: true
-                    },
-                    'diaChiList[0].xa': {
-                        required: true,
-                        validSelection: true
-                    },
-                    'diaChiList[0].diaChi': {
-                        required: true,
-                        minlength: 5,
-                        noWhitespace: true,
-                        noSpecialCharsInDiaChi: true // Chỉ cho phép chữ cái, số và khoảng trắng
-                    },
-                    'diaChiList[0].ten': {
-                     required: true,
-                        minlength: 2,
-                        maxlength: 100,
-                        noWhitespace: true,
-                        noNumbers: true, // Không chứa số
-                        noSpecialChars: true // Cấm ký tự đặc biệt
-                    },
-                    'diaChiList[0].sdt': {
-                        required: true,
-                        digits: true,
-                        minlength: 10,
-                        maxlength: 15
+                    errorElement: "div",
+                    errorPlacement: function(error, element) {
+                        error.addClass("text-red-500 text-sm mt-1");
+                        error.insertAfter(element);
                     }
-                },
-                messages: {
-                    'hoTen': {
-                        required: "Vui lòng nhập họ tên.",
-                        minlength: "Họ tên phải có ít nhất 2 ký tự.",
-                        maxlength: "Họ tên không được vượt quá 100 ký tự.",
-                        noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
-                        noNumbers: "Họ tên không được chứa số.",
-                        noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
-                    },
-                    'sdt': {
-                        required: "Vui lòng nhập số điện thoại.",
-                        digits: "Số điện thoại chỉ chứa các ký tự số.",
-                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
-                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
-                    },
-                    'email': {
-                        required: "Vui lòng nhập email.",
-                        email: "Vui lòng nhập địa chỉ email hợp lệ."
-                    },
-                    'ngaySinh': {
-                        required: "Vui lòng nhập ngày sinh.",
-                        dateISO: "Vui lòng nhập ngày sinh hợp lệ (định dạng yyyy-mm-dd)."
-                    },
-                    'diaChiList[0].thanhPho': {
-                        required: "Vui lòng chọn thành phố.",
-                        validSelection: "Vui lòng chọn thành phố hợp lệ."
-                    },
-                    'diaChiList[0].huyen': {
-                        required: "Vui lòng chọn huyện.",
-                        validSelection: "Vui lòng chọn huyện hợp lệ."
-                    },
-                    'diaChiList[0].xa': {
-                        required: "Vui lòng chọn xã.",
-                        validSelection: "Vui lòng chọn xã hợp lệ."
-                    },
-                    'diaChiList[0].diaChi': {
-                        required: "Vui lòng nhập địa chỉ.",
-                        minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
-                        noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
-                        noSpecialCharsInDiaChi: "Địa chỉ không được chứa ký tự đặc biệt."
-                    },
-                    'diaChiList[0].ten': {
-                          required: "Vui lòng nhập họ tên.",
-                        minlength: "Họ tên phải có ít nhất 2 ký tự.",
-                        maxlength: "Họ tên không được vượt quá 100 ký tự.",
-                        noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
-                        noNumbers: "Họ tên không được chứa số.",
-                        noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
-
-                    },
-                    'diaChiList[0].sdt': {
-                        required: "Vui lòng nhập số điện thoại.",
-                        digits: "Số điện thoại chỉ chứa các ký tự số.",
-                        minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
-                        maxlength: "Số điện thoại không được vượt quá 15 ký tự."
-                    }
-                },
-                errorElement: "div",
-                errorPlacement: function(error, element) {
-                    error.addClass("text-red-500 text-sm mt-1");
-                    error.insertAfter(element);
-                }
-            });
+                });
+            }
         });
     </script>
 
