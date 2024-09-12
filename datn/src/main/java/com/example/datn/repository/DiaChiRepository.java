@@ -11,6 +11,6 @@ public interface DiaChiRepository extends JpaRepository<DiaChi,Long> {
     @Query("SELECT COUNT(d) FROM DiaChi d WHERE d.khachHang.khachHangId = :khachHangId")
     long countByKhachHangId(@Param("khachHangId") Long khachHangId);
 
-    @Query("select p from DiaChi p where p.khachHang.khachHangId = :khachHangId")
+    @Query("select p from DiaChi p where p.khachHang.khachHangId = :khachHangId and p.trangThai = true")
     List<DiaChi> findAllByKhachHangId(Long khachHangId);
 }

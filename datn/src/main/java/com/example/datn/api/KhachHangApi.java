@@ -1,7 +1,7 @@
 package com.example.datn.api;
 
 import com.example.datn.entity.DiaChi;
-import com.example.datn.service.DiaChiService;
+import com.example.datn.service.Impl.DiaChiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.List;
 public class KhachHangApi {
 
     @Autowired
-    private DiaChiService diaChiService;
+    private DiaChiServiceImpl diaChiService;
 
     @GetMapping("/khachhang/{khachHangId}")
     public ResponseEntity<List<DiaChi>> getDiaChiByKhachHangId(@PathVariable Long khachHangId) {
