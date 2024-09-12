@@ -72,9 +72,11 @@ public class KhachHangController {
         // Đặt trạng thái khách hàng thành "đang hoạt động" (true)
         khachHang.setTrangThai(true);
 
+
         // Gán khách hàng cho các địa chỉ liên quan
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             diaChi.setKhachHang(khachHang);
+            diaChi.setTrangThai(true);
         }
 
         // Lưu khách hàng vào cơ sở dữ liệu
