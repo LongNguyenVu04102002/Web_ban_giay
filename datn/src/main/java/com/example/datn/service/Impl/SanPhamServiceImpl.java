@@ -64,6 +64,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public Page<SanPhamHomeDTO> getSanPhamForShopPage(Long thuongHieuId, Long kichThuocId, Long mauSacId, String keyword, Pageable pageable) {
+
         return sanPhamRepository.findSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
     }
 

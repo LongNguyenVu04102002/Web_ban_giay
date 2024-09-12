@@ -1,269 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
-<!--      layout:decorate="~{admin/layout.html}">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
-
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>-->
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>-->
-
-<!--    <title>Cập Nhập Biến Thế Giầy</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div layout:fragment="admincontent">-->
-<!--    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">-->
-<!--        <h2 class="text-title-md2 font-semibold text-black dark:text-white">-->
-<!--            Cập Nhập Biến Thế Giầy-->
-<!--        </h2>-->
-<!--    </div>-->
-<!--    <section class="relative md:py-10 bg-white px-25">-->
-<!--        <div class="grid lg:grid-cols-12 gap-6 w-full">-->
-<!--            <div class="lg:col-span-8">-->
-<!--                <div class="p-6 rounded-md">-->
-<!--                    <form id="updateForm" th:action="@{/admin/sanpham/bienthegiay/save-update}" th:object="${spct}"-->
-<!--                          method="post" enctype="multipart/form-data">-->
-<!--                        <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">-->
-<!--                            <input id="sanPhamChiTietId" type="hidden" th:field="*{sanPhamChiTietId}"/>-->
-<!--                            <input type="hidden" th:field="*{barCode}"/>-->
-<!--                            <input type="hidden" name="imageId" value=""/>-->
-
-<!--                            <div class="lg:col-span-12">-->
-<!--                                <label class="font-semibold">Tên Giầy</label>-->
-<!--                                <select id="sanPhamSelect" th:field="*{sanPham}"-->
-<!--                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">-->
-<!--                                    <option th:each="sp : ${lstSanPham}" th:value="${sp.sanPhamId}"-->
-<!--                                            th:text="${sp.ten}"></option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-6">-->
-<!--                                <label class="font-semibold">Kích Thước</label>-->
-<!--                                <select id="kichThuocSelect" th:field="*{kichThuoc}"-->
-<!--                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">-->
-<!--                                    <option th:each="kt : ${lstKichThuoc}" th:value="${kt.kichThuocId}"-->
-<!--                                            th:text="${kt.ten}"></option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-6 mb-4">-->
-<!--                                <label class="font-semibold">Màu Sắc</label>-->
-<!--                                <select id="mauSacSelect" th:field="*{mauSac}"-->
-<!--                                        class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">-->
-<!--                                    <option th:each="ms : ${lsMauSac}" th:value="${ms.mauSacId}"-->
-<!--                                            th:text="${ms.ten}"></option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-6">-->
-<!--                                <label class="font-semibold">Giá Bán</label>-->
-<!--                                <input type="text" th:field="*{giaBan}"-->
-<!--                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-6">-->
-<!--                                <label class="font-semibold">Số Lượng</label>-->
-<!--                                <input type="text" th:field="*{soLuong}"-->
-<!--                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-12">-->
-<!--                                <label class="font-semibold">Hình Ảnh</label>-->
-<!--                                <div class="card adaptable-card mt-2">-->
-<!--                                    <div id="imageContainer"-->
-<!--                                         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4">-->
-<!--                                        &lt;!&ndash; Thêm các ảnh hiện có vào đây &ndash;&gt;-->
-<!--                                        <div th:each="imageDTO : ${imageDTOs}"-->
-<!--                                             class="group relative rounded border p-2 flex">-->
-<!--                                            <img class="rounded max-h-[140px] max-w-full"-->
-<!--                                                 th:src="'data:image/png;base64,' + ${imageDTO.dataImg}"-->
-<!--                                                 alt="Ảnh từ Base64"/>-->
-<!--                                            <div class="absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center">-->
-<!--                                                <span class="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5">-->
-<!--                                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                                         viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em"-->
-<!--                                                         xmlns="http://www.w3.org/2000/svg">-->
-<!--                                                        <path fill-rule="evenodd"-->
-<!--                                                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"-->
-<!--                                                              clip-rule="evenodd"></path>-->
-<!--                                                    </svg>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="upload upload-draggable hover:border-primary-600 min-h-fit">-->
-<!--                                            <input class="upload-input draggable" type="file" id="imageUpload"-->
-<!--                                                   name="image" accept="image/*" multiple onchange="handleFiles(this)">-->
-<!--                                            <div class="max-w-full flex flex-col px-4 py-2 justify-center items-center">-->
-<!--                                                <img src="/images/upload.png" alt="">-->
-<!--                                                <p class="font-semibold text-center text-gray-800 dark:text-white">-->
-<!--                                                    Upload</p>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <input type="hidden" id="imageChanged" name="imageChanged" value="false"/>-->
-<!--                            </div>-->
-<!--                            <div class="lg:col-span-12">-->
-<!--                                <label class="form-label font-medium block text-gray-700">Trạng Thái</label>-->
-<!--                                <div class="mt-1 flex items-center space-x-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm">-->
-<!--                                    <label class="inline-flex items-center">-->
-<!--                                        <input type="radio" th:field="*{trangThai}" value="false"-->
-<!--                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>-->
-<!--                                        <span class="ml-2">Hoạt Động</span>-->
-<!--                                    </label>-->
-<!--                                    <label class="inline-flex items-center ml-4"-->
-<!--                                           th:if="${spct.sanPhamChiTietId} != null">-->
-<!--                                        <input type="radio" th:field="*{trangThai}" value="true"-->
-<!--                                               class="form-radio text-indigo-600 focus:ring-indigo-500 focus:border-indigo-500"/>-->
-<!--                                        <span class="ml-2">Ngừng Hoạt Động</span>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="mt-10 mb-10 flex justify-center space-x-4">-->
-<!--                            <a th:href="@{/admin/sanpham/bienthegiay}"-->
-<!--                               class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">-->
-<!--                                Quay lại-->
-<!--                            </a>-->
-<!--                            <button type="submit" id="submitButton"-->
-<!--                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">-->
-<!--                                <span th:text="${spct.sanPhamChiTietId == null} ? 'Thêm Mới' : 'Cập Nhập'"></span>-->
-<!--                            </button>-->
-<!--                            <a th:href="@{/admin/sanpham/bienthegiay/form}"-->
-<!--                               class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600">-->
-<!--                                Xóa-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
-<!--    <script>-->
-<!--        document.addEventListener("DOMContentLoaded", function () {-->
-<!--            const imageUpload = document.getElementById('imageUpload');-->
-<!--            const imageChanged = document.getElementById('imageChanged');-->
-<!--            const uploadElement = document.querySelector('.upload');-->
-<!--            const imageContainer = document.getElementById('imageContainer');-->
-
-<!--            // Ẩn phần upload nếu có đủ 3 ảnh ngay từ đầu-->
-<!--            checkImageCount();-->
-
-<!--            imageUpload.addEventListener('change', function (event) {-->
-<!--                const files = Array.from(event.target.files);-->
-<!--                const currentImages = imageContainer.querySelectorAll('.group').length;-->
-
-<!--                // Kiểm tra và giới hạn số ảnh thêm vào nếu vượt quá 3-->
-<!--                if (currentImages + files.length > 3) {-->
-<!--                    files.splice(3 - currentImages);-->
-<!--                }-->
-
-<!--                imageChanged.value = "true";-->
-
-<!--                files.forEach(file => {-->
-<!--                    const reader = new FileReader();-->
-<!--                    reader.onload = function (e) {-->
-<!--                        const imgElement = document.createElement('img');-->
-<!--                        imgElement.src = e.target.result;-->
-<!--                        imgElement.className = 'rounded max-h-[140px] max-w-full';-->
-<!--                        imgElement.alt = 'Uploaded Image';-->
-
-<!--                        const imageWrapper = document.createElement('div');-->
-<!--                        imageWrapper.className = 'group relative rounded border p-2 flex';-->
-
-<!--                        const removeButton = document.createElement('span');-->
-<!--                        removeButton.className = 'absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center text-gray-100 hover:text-gray-300 cursor-pointer p-1.5';-->
-<!--                        removeButton.innerHTML = `<svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                                         viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em"-->
-<!--                                                         xmlns="http://www.w3.org/2000/svg">-->
-<!--                                                        <path fill-rule="evenodd"-->
-<!--                                                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"-->
-<!--                                                              clip-rule="evenodd"></path>-->
-<!--                                                    </svg> `;-->
-
-<!--                        removeButton.onclick = function () {-->
-<!--                            imageWrapper.remove(); // Xóa ảnh-->
-<!--                            if (imageContainer.querySelectorAll('.group').length < 3) {-->
-<!--                                uploadElement.style.display = 'flex'; // Hiển thị lại phần upload nếu số ảnh < 3-->
-<!--                            }-->
-<!--                        };-->
-
-<!--                        imageWrapper.appendChild(imgElement);-->
-<!--                        imageWrapper.appendChild(removeButton);-->
-
-<!--                        imageContainer.insertBefore(imageWrapper, uploadElement);-->
-<!--                    };-->
-<!--                    reader.readAsDataURL(file);-->
-<!--                });-->
-<!--                checkImageCount();-->
-<!--            });-->
-
-<!--            function checkImageCount() {-->
-<!--                if (imageContainer.querySelectorAll('.group').length >= 3) {-->
-<!--                    uploadElement.style.display = 'none';-->
-<!--                } else {-->
-<!--                    uploadElement.style.display = 'flex';-->
-<!--                }-->
-<!--            }-->
-<!--        });-->
-
-<!--        function checkDuplicateAndSubmit() {-->
-<!--            const sanPhamId = $('#sanPhamSelect').val();-->
-<!--            const kichThuocId = $('#kichThuocSelect').val();-->
-<!--            const mauSacId = $('#mauSacSelect').val();-->
-<!--            const sanPhamChiTietId = $('#sanPhamChiTietId').val();-->
-
-<!--            Swal.fire({-->
-<!--                title: 'Bạn có chắc chắn muốn cập nhật?',-->
-<!--                icon: 'warning',-->
-<!--                showCancelButton: true,-->
-<!--                confirmButtonText: 'Đồng ý',-->
-<!--                cancelButtonText: 'Hủy bỏ'-->
-<!--            }).then((result) => {-->
-<!--                if (result.isConfirmed) {-->
-<!--                    $.ajax({-->
-<!--                        url: '/check/update-spct',-->
-<!--                        type: 'GET',-->
-<!--                        data: {-->
-<!--                            sanPhamId: sanPhamId,-->
-<!--                            kichThuocId: kichThuocId,-->
-<!--                            mauSacId: mauSacId,-->
-<!--                            sanPhamChiTietId: sanPhamChiTietId-->
-<!--                        },-->
-<!--                        success: function (response) {-->
-<!--                            if (response) {-->
-<!--                                Swal.fire({-->
-<!--                                    icon: 'error',-->
-<!--                                    title: 'Lỗi',-->
-<!--                                    text: 'Sản phẩm này đã tồn tại. Không thể cập nhật!',-->
-<!--                                });-->
-<!--                            } else {-->
-<!--                                $('#updateForm').submit();-->
-<!--                                Swal.fire({-->
-<!--                                    icon: 'success',-->
-<!--                                    title: 'Thành công',-->
-<!--                                    text: "Cập nhật thành công"-->
-<!--                                });-->
-<!--                            }-->
-<!--                        },-->
-<!--                        error: function (error) {-->
-<!--                            console.error('Error checking duplicate:', error);-->
-<!--                        }-->
-<!--                    });-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-
-<!--        $(document).ready(function () {-->
-<!--            $('#submitButton').on('click', function (event) {-->
-<!--                event.preventDefault();-->
-<!--                checkDuplicateAndSubmit();-->
-<!--            });-->
-<!--        });-->
-<!--    </script>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -272,8 +6,6 @@
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">-->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
 
@@ -282,7 +14,7 @@
         .image-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px; /* Khoảng cách giữa các hình ảnh */
+            gap: 20px;
         }
         .image-container div {
             position: relative;
@@ -354,12 +86,13 @@
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Giá Bán</label>
                                 <input type="text" th:field="*{giaBan}"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 36)">
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Số Lượng</label>
                                 <input type="text" th:field="*{soLuong}"
-                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
+                                       class="form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Trạng Thái</label>
@@ -403,30 +136,37 @@
             const imageChanged = document.getElementById('imageChanged');
             const imageContainer = document.querySelector('.image-container');
 
-            // Đọc và hiển thị các ảnh hiện có trên form
             function loadExistingImages() {
                 const imageItems = imageContainer.querySelectorAll('.image-item');
                 if (imageItems.length > 0) {
-                    imageChanged.value = "false"; // Đặt giá trị imageChanged nếu đã có ảnh
+                    imageChanged.value = "false";
                 }
             }
 
-            loadExistingImages(); // Gọi hàm để hiển thị các ảnh hiện có khi tải trang
+            loadExistingImages();
 
             imageUpload.addEventListener('change', function(event) {
                 imageChanged.value = "true";
                 const files = event.target.files;
 
-                // Clear existing images
                 imageContainer.innerHTML = '';
 
                 Array.from(files).forEach(file => {
+                    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    if (!validImageTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Vui lòng chọn tệp hình ảnh hợp lệ',
+                        });
+                        return;
+                    }
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const imgElement = document.createElement('img');
                         imgElement.src = e.target.result;
-                        imgElement.style.width = '45px'; // Adjust size as needed
-                        imgElement.style.height = '55px'; // Adjust size as needed
+                        imgElement.style.width = '45px';
+                        imgElement.style.height = '55px';
 
                         const imageWrapper = document.createElement('div');
                         imageWrapper.style.position = 'relative';
@@ -437,7 +177,7 @@
                         const removeButton = document.createElement('button');
                         removeButton.textContent = 'Xóa';
                         removeButton.onclick = function() {
-                            imageWrapper.remove(); // Remove image on button click
+                            imageWrapper.remove();
                         };
 
                         imageWrapper.appendChild(imgElement);
@@ -455,7 +195,6 @@
                 imageItem.remove();
             }
 
-            // Tìm hoặc tạo trường hidden để lưu trữ ID của các ảnh đã bị xóa
             let deletedImages = document.getElementById('deletedImages');
             if (!deletedImages) {
                 deletedImages = document.createElement('input');
@@ -465,7 +204,6 @@
                 document.getElementById('updateForm').appendChild(deletedImages);
             }
 
-            // Cập nhật giá trị của trường hidden với ID của ảnh đã xóa
             if (deletedImages.value) {
                 deletedImages.value += ',' + imageId;
             } else {
@@ -477,14 +215,35 @@
             const imageUpload = document.getElementById('imageUpload');
             const imageFiles = imageUpload.files;
 
-            // Check if no images are selected
             if (imageFiles.length === 0 && document.querySelectorAll('.image-item').length === 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
                     text: 'Vui lòng chọn ít nhất một ảnh!',
                 });
-                return; // Stop the function if no image is selected
+                return;
+            }
+
+            const giaBan = $('input[name="giaBan"]').val().trim();
+            const soLuong = $('input[name="soLuong"]').val().trim();
+
+            if (!giaBan || isNaN(giaBan) || parseFloat(giaBan) < 1000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Giá bán phải là một số và lớn hơn 1000!',
+                });
+                return;
+            }
+
+
+            if (!soLuong || isNaN(soLuong) || parseInt(soLuong) < 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Số lượng phải là một số và lớn hơn 1!',
+                });
+                return;
             }
 
             const sanPhamId = $('#sanPhamSelect').val();
@@ -535,7 +294,7 @@
 
         $(document).ready(function() {
             $('#submitButton').on('click', function(event) {
-                event.preventDefault(); // Ngăn chặn việc submit form mặc định
+                event.preventDefault();
                 checkDuplicateAndSubmit();
             });
         });

@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.2.4/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .product-image {
             object-fit: cover;
@@ -137,20 +139,15 @@
                     <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 pt-6 gap-6">
                         <div th:each="sanPham : ${page.content}" class="product-card">
                             <div class="relative overflow-hidden shadow dark:shadow-gray-800 rounded-md">
-                                <img th:src="@{${sanPham.anhDauTien}}" class="product-image" alt="">
-                                <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                                    <a href="#" class="py-2 px-5 inline-block font-semibold text-base text-center bg-slate-900 text-white w-full rounded-md">Add to Cart</a>
-                                </div>
-                                <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
-                                    <li><a href="#" class="btn btn-icon btn-sm border bg-white dark:bg-slate-900 dark:border-slate-900 hover:text-red-600"><i class="mdi mdi-heart"></i></a></li>
-                                    <li><a href="#" class="btn btn-icon btn-sm border bg-white dark:bg-slate-900 dark:border-slate-900 hover:text-orange-500"><i class="uil uil-shopping-cart"></i></a></li>
-                                    <li><a href="#" class="btn btn-icon btn-sm border bg-white dark:bg-slate-900 dark:border-slate-900 hover:text-indigo-600"><i class="uil uil-eye"></i></a></li>
-                                </ul>
+                                <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}">
+                                    <img th:src="${sanPham.anhDauTien}" class="product-image" alt="Product Image">
+                                </a>
                             </div>
                             <div class="mt-3">
                                 <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}" class="text-lg font-medium hover:text-orange-500 duration-500 ease-in-out" th:text="${sanPham.ten}"></a>
-                                <p class="text-slate-950 dark:text-white font-semibold mt-1" th:text="${sanPham.giaThapNhat}"></p>
-                                <del class="text-slate-400" th:text="${sanPham.giaThapNhat}"></del>
+
+                                <p class="text-slate-950 dark:text-white font-semibold mt-1" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></p>
+                                <del class="text-slate-400" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></del>
                             </div>
                         </div>
                     </div>
@@ -181,5 +178,16 @@
         </div>
     </section>
 </div>
+<script>
+    // Kiểm tra thuộc tính "noProducts" và hiển thị thông báo
+    var noProducts = /*[[${noProducts}]]*/ false;
+    if (noProducts) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Không có sản phẩm',
+            text: 'Không có sản phẩm tương thích với từ khóa tìm kiếm. Trang sẽ hiển thị tất cả sản phẩm.',
+            confirmButtonText: 'OK'
+        });
+    }
 </body>
 </html>

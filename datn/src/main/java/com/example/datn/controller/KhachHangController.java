@@ -4,6 +4,7 @@ import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.service.Impl.EmailService;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
+import com.example.datn.service.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import java.util.List;
 public class KhachHangController {
 
     @Autowired
-    private KhachHangServiceImpl khachHangService;
+    private KhachHangService khachHangService;
 
     @GetMapping("/khachhang")
     public String show(Model model) {
@@ -68,14 +69,24 @@ public class KhachHangController {
             return "admin/includes/content/khachhang/form";
         }
 
+        // Đặt trạng thái khách hàng thành "đang hoạt động" (true)
+        khachHang.setTrangThai(true);
+
+        // Gán khách hàng cho các địa chỉ liên quan
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             diaChi.setKhachHang(khachHang);
         }
-//        khachHang.setHoTen(khachHang.getHoTen()+"hello");
+
+        // Lưu khách hàng vào cơ sở dữ liệu
         khachHangService.save(khachHang);
+
+        // Thêm thông báo thành công
         redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!");
+
+        // Chuyển hướng đến danh sách khách hàng
         return "redirect:/admin/taikhoan/khachhang";
     }
+
 
     @PostMapping("/khachhang/update")
     public String update(@Valid @ModelAttribute("khachHang") KhachHang khachHang, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
@@ -114,7 +125,6 @@ public class KhachHangController {
             result.rejectValue("email", "error.khachHang", "Email đã tồn tại.");
         }
 
-
         // Loại bỏ các địa chỉ không hợp lệ và kiểm tra số lượng địa chỉ
         List<DiaChi> validDiaChiList = new ArrayList<>();
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
@@ -122,6 +132,8 @@ public class KhachHangController {
                     diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
                     diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
                     diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
+
+
 
                 if (validDiaChiList.size() < 3) {
                     diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
@@ -141,7 +153,7 @@ public class KhachHangController {
 
         if (result.hasErrors()) {
             // Nếu có lỗi, hiển thị thông báo cập nhật không thành công
-            redirectAttributes.addFlashAttribute("message1", "Cập nhật địa chỉ không thành công!");
+            redirectAttributes.addFlashAttribute("message1", "Cập nhật địa chỉ không thành công, địa chỉ của bạn đã đạt tối đa 3 địa chỉ!");
         } else {
             // Nếu không có lỗi, hiển thị thông báo cập nhật thành công
             redirectAttributes.addFlashAttribute("message", "Cập nhật địa chỉ thành công!");
@@ -151,11 +163,12 @@ public class KhachHangController {
     }
 
 
+
     @GetMapping("/khachhang/{khachHangId}/toggle")
     public String toggleTrangThai(@PathVariable Long khachHangId, RedirectAttributes redirectAttributes) {
         KhachHang khachHang = khachHangService.toggleTrangThai(khachHangId);
         boolean isActive = khachHang.isTrangThai();
-        String newStatusText = isActive ? "ngừng hoạt động" : "hoạt động";
+        String newStatusText = isActive ? " hoạt động" : " ngừng hoạt động";
         String message = "Trạng thái của khách hàng " + khachHang.getHoTen() + " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
         redirectAttributes.addFlashAttribute("message2", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);

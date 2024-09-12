@@ -63,6 +63,7 @@ public class KhachHangServiceImpl implements KhachHangService {
             return existingKhachHang;
         }
 
+
         // Xóa tất cả các địa chỉ cũ
         existingKhachHang.getDiaChiList().clear();
 

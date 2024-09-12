@@ -3,12 +3,7 @@ package com.example.datn.controller;
 import com.example.datn.dto.CartItem;
 import com.example.datn.dto.MyUserDetail;
 import com.example.datn.dto.SanPhamHomeDTO;
-import com.example.datn.entity.HoaDon;
-import com.example.datn.entity.KichThuoc;
-import com.example.datn.entity.MauSac;
-import com.example.datn.entity.SanPham;
-import com.example.datn.entity.SanPhamChiTiet;
-import com.example.datn.entity.ThuongHieu;
+import com.example.datn.entity.*;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.*;
@@ -30,11 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -103,8 +94,27 @@ public class HomeController {
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
                 .collect(Collectors.toList());
-
         model.addAttribute("uniqueColors", uniqueColors);
+
+        // Lấy danh sách hình ảnh cho từng biến thể sản phẩm
+        Map<Long, List<String>> productImg = new HashMap<>();
+        for (SanPhamChiTiet chiTiet : sanPham.getSanPhamChiTietList()) {
+            List<String> hinhAnh = chiTiet.getLstAnh().stream()
+                    .map(hinhAnhEntity -> {
+                        // Chuyển đổi byte[] thành chuỗi Base64 nếu có dữ liệu ảnh
+                        if (hinhAnhEntity.getDataImg() != null) {
+                            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(hinhAnhEntity.getDataImg());
+                        }
+                        // Nếu không, sử dụng link trực tiếp
+                        return hinhAnhEntity.getLink();
+                    })
+                    .distinct()
+                    .collect(Collectors.toList());
+            productImg.put(chiTiet.getSanPhamChiTietId(), hinhAnh);
+        }
+        model.addAttribute("productImg", productImg);
+
+        model.addAttribute("sanPhamChiTietList", sanPham.getSanPhamChiTietList());
 
         return "user/includes/content/detail";
     }
@@ -130,6 +140,12 @@ public class HomeController {
 
         Page<SanPhamHomeDTO> page = sanPhamService.getSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
 
+        if (page.getContent() == null || page.getContent().isEmpty()) {
+            // Thêm thông báo nếu không có kết quả
+            model.addAttribute("noProducts", true);
+            // Lấy lại tất cả sản phẩm để reload lại trang với đầy đủ sản phẩm
+            page = sanPhamService.getSanPhamForShopPage(null, null, null, null, pageable);
+        }
         model.addAttribute("products", page.getContent());
         model.addAttribute("page", page);
         model.addAttribute("thuongHieuId", thuongHieuId);
@@ -151,6 +167,7 @@ public class HomeController {
         }
         model.addAttribute("sanPham", sanPham);
 
+        // Lấy danh sách kích thước duy nhất cho sản phẩm
         List<KichThuoc> uniqueSizes = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getKichThuoc)
                 .distinct()
@@ -159,12 +176,32 @@ public class HomeController {
 
         model.addAttribute("uniqueSizes", uniqueSizes);
 
+        // Lấy danh sách màu sắc duy nhất cho sản phẩm
         List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
                 .collect(Collectors.toList());
-
         model.addAttribute("uniqueColors", uniqueColors);
+
+        // Lấy danh sách hình ảnh cho từng biến thể sản phẩm
+        Map<Long, List<String>> productImg = new HashMap<>();
+        for (SanPhamChiTiet chiTiet : sanPham.getSanPhamChiTietList()) {
+            List<String> hinhAnh = chiTiet.getLstAnh().stream()
+                    .map(hinhAnhEntity -> {
+                        // Chuyển đổi byte[] thành chuỗi Base64 nếu có dữ liệu ảnh
+                        if (hinhAnhEntity.getDataImg() != null) {
+                            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(hinhAnhEntity.getDataImg());
+                        }
+                        // Nếu không, sử dụng link trực tiếp
+                        return hinhAnhEntity.getLink();
+                    })
+                    .distinct()
+                    .collect(Collectors.toList());
+            productImg.put(chiTiet.getSanPhamChiTietId(), hinhAnh);
+        }
+        model.addAttribute("productImg", productImg);
+
+        model.addAttribute("sanPhamChiTietList", sanPham.getSanPhamChiTietList());
 
         return "user/includes/content/detail";
     }

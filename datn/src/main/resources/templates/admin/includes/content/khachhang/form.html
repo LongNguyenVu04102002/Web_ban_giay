@@ -53,19 +53,7 @@
 
         <!-- JavaScript -->
 
-    function showAddressForm() {
-        var form = document.getElementById('address-form');
-        if (form.classList.contains('hidden')) {
-            form.classList.remove('hidden');
-        }
-    }
 
-    function hideAddressForm() {
-        var form = document.getElementById('address-form');
-        if (!form.classList.contains('hidden')) {
-            form.classList.add('hidden');
-        }
-    }
 
     </script>
     <script>
@@ -77,9 +65,15 @@
                 return trimmedValue === value && noConsecutiveSpaces;
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
 
-            $.validator.addMethod("noSpecialChars", function(value, element) {
-                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
-            }, "Không được chứa ký tự đặc biệt.");
+            // Phương thức kiểm tra không chứa số (dành cho họ tên)
+            $.validator.addMethod("noNumbers", function(value, element) {
+                return !/\d/.test(value); // Không chứa số
+            }, "Họ tên không được chứa số.");
+
+            // Phương thức kiểm tra ký tự đặc biệt cho địa chỉ (chỉ cho phép chữ cái, số và khoảng trắng)
+            $.validator.addMethod("noSpecialCharsInDiaChi", function(value, element) {
+                return /^[a-zA-Z0-9\sàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐđ]*$/.test(value);
+            }, "Địa chỉ không được chứa ký tự đặc biệt.");
 
             // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
             $.validator.addMethod("validSelection", function(value, element) {
@@ -93,7 +87,8 @@
                         minlength: 2,
                         maxlength: 100,
                         noWhitespace: true,
-                        noSpecialChars: true
+                        noNumbers: true, // Không chứa số
+                        noSpecialChars: true // Cấm ký tự đặc biệt
                     },
                     'sdt': {
                         required: true,
@@ -125,13 +120,15 @@
                         required: true,
                         minlength: 5,
                         noWhitespace: true,
-                        noSpecialChars: true
+                        noSpecialCharsInDiaChi: true // Chỉ cho phép chữ cái, số và khoảng trắng
                     },
                     'diaChiList[0].ten': {
-                        required: true,
+                     required: true,
                         minlength: 2,
+                        maxlength: 100,
                         noWhitespace: true,
-                        noSpecialChars: true
+                        noNumbers: true, // Không chứa số
+                        noSpecialChars: true // Cấm ký tự đặc biệt
                     },
                     'diaChiList[0].sdt': {
                         required: true,
@@ -146,6 +143,7 @@
                         minlength: "Họ tên phải có ít nhất 2 ký tự.",
                         maxlength: "Họ tên không được vượt quá 100 ký tự.",
                         noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noNumbers: "Họ tên không được chứa số.",
                         noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
                     },
                     'sdt': {
@@ -178,13 +176,16 @@
                         required: "Vui lòng nhập địa chỉ.",
                         minlength: "Địa chỉ phải có ít nhất 5 ký tự.",
                         noWhitespace: "Địa chỉ không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
-                        noSpecialChars: "Địa chỉ không được chứa ký tự đặc biệt."
+                        noSpecialCharsInDiaChi: "Địa chỉ không được chứa ký tự đặc biệt."
                     },
                     'diaChiList[0].ten': {
-                        required: "Vui lòng nhập tên người nhận.",
-                        minlength: "Tên người nhận phải có ít nhất 2 ký tự.",
-                        noWhitespace: "Tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
-                        noSpecialChars: "Tên không được chứa ký tự đặc biệt."
+                          required: "Vui lòng nhập họ tên.",
+                        minlength: "Họ tên phải có ít nhất 2 ký tự.",
+                        maxlength: "Họ tên không được vượt quá 100 ký tự.",
+                        noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
+                        noNumbers: "Họ tên không được chứa số.",
+                        noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
+
                     },
                     'diaChiList[0].sdt': {
                         required: "Vui lòng nhập số điện thoại.",
@@ -201,6 +202,10 @@
             });
         });
     </script>
+
+
+
+
 
 
 
@@ -279,12 +284,7 @@
                             </div>
                         </div>
 
-                        <!-- Nút thêm địa chỉ -->
-                        <button type="button" onclick="showAddressForm()" class="py-2 px-4 bg-blue-500 text-white rounded">Thêm Địa Chỉ</button>
 
-                        <!-- Form thêm địa chỉ -->
-                        <div id="address-form" class="hidden mt-6">
-                            <button type="button" onclick="hideAddressForm()" class="py-2 px-4 bg-red-500 text-white rounded mb-4">Đóng</button>
 
                             <div class="grid lg:grid-cols-12 grid-cols-1 gap-5 css_select_div">
                                 <div class="lg:col-span-4">
