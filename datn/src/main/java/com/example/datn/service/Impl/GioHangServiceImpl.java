@@ -43,7 +43,7 @@ public class GioHangServiceImpl implements GioHangService {
 
     @Override
     @Transactional
-    public void addToCart(Long gioHangId, Long sanPhamChiTietId) {
+    public boolean addToCart(Long gioHangId, Long sanPhamChiTietId) {
         Optional<GioHang> gioHangOpt = gioHangRepository.findById(gioHangId);
         Optional<SanPhamChiTiet> sanPhamChiTietOpt = sanPhamChiTietRepository.findById(sanPhamChiTietId);
 
@@ -51,13 +51,22 @@ public class GioHangServiceImpl implements GioHangService {
             GioHang gioHang = gioHangOpt.get();
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietOpt.get();
 
+            int availableQuantity = sanPhamChiTiet.getSoLuong();  // Lấy số lượng có sẵn của sản phẩm chi tiết
             Optional<GioHangChiTiet> existingItemOpt = gioHangChiTietRepository.findByGioHangAndSanPhamChiTiet(gioHang, sanPhamChiTiet);
 
             if (existingItemOpt.isPresent()) {
                 GioHangChiTiet existingItem = existingItemOpt.get();
-                existingItem.setSoLuong(existingItem.getSoLuong() + 1);
+                int newQuantity = existingItem.getSoLuong() + 1;
+
+                if (newQuantity > availableQuantity) {
+                    return false;
+                }
+                existingItem.setSoLuong(newQuantity);
                 gioHangChiTietRepository.save(existingItem);
             } else {
+                if (availableQuantity < 1) {
+                    return false;
+                }
                 GioHangChiTiet gioHangChiTiet = GioHangChiTiet.builder()
                         .gioHang(gioHang)
                         .sanPhamChiTiet(sanPhamChiTiet)
@@ -67,8 +76,11 @@ public class GioHangServiceImpl implements GioHangService {
                 gioHangChiTietRepository.save(gioHangChiTiet);
             }
             updateCart(gioHang);
+            return true;
         }
+        return false;
     }
+
 
 
     @Override
@@ -94,18 +106,30 @@ public class GioHangServiceImpl implements GioHangService {
 
     @Override
     @Transactional
-    public void stepUp(Long gioHangChiTietId, Long sanPhamChiTietId) {
+    public boolean stepUp(Long gioHangChiTietId, Long sanPhamChiTietId) {
         Optional<GioHangChiTiet> gioHangChiTietOpt = gioHangChiTietRepository.findById(gioHangChiTietId);
         Optional<SanPhamChiTiet> sanPhamChiTietOpt = sanPhamChiTietRepository.findById(sanPhamChiTietId);
 
         if (gioHangChiTietOpt.isPresent() && sanPhamChiTietOpt.isPresent()) {
             GioHangChiTiet gioHangChiTiet = gioHangChiTietOpt.get();
-            gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + 1);
+            SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietOpt.get();
+
+            int currentCartQuantity = gioHangChiTiet.getSoLuong();
+            int availableQuantity = sanPhamChiTiet.getSoLuong();
+
+            if (currentCartQuantity + 1 > availableQuantity) {
+                return false;
+            }
+            gioHangChiTiet.setSoLuong(currentCartQuantity + 1);
             gioHangChiTietRepository.save(gioHangChiTiet);
 
             updateCart(gioHangChiTiet.getGioHang());
+            return true;
         }
+
+        return false;
     }
+
 
     @Override
     public void delete(Long gioHangChiTietId) {

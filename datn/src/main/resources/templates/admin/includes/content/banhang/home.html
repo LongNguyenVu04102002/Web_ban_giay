@@ -35,6 +35,48 @@
                     </div>
                 </div>
     `,
+            Error: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-blue-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Info</div>
+                                <div class="notification-description">
+                                    Số lượng sản phẩm trong kho không đủ.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+            Info: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-blue-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Info</div>
+                                <div class="notification-description">
+                                    Giỏ hàng của bạn đang trống.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
             StepUp: `
                 <div class="toast fade" id="notificationToastSuccess">
                     <div class="notification">
@@ -140,6 +182,18 @@
             const deletes = JSON.parse([[${deletes}]]);
             if (deletes) {
                 handleNotificationType('Delete');
+            }
+        });
+        $(document).ready(function () {
+            const error = JSON.parse([[${error}]]);
+            if (error) {
+                handleNotificationType('Error');
+            }
+        });
+        $(document).ready(function () {
+            const info = JSON.parse([[${info}]]);
+            if (info) {
+                handleNotificationType('Info');
             }
         });
     </script>
@@ -287,7 +341,8 @@
                                             </option>
                                         </select>
                                     </label>
-                                </div>F
+                                </div>
+                                F
 
                             </div>
                             <div id="DataTableCart1">
@@ -343,13 +398,18 @@
                         </div>
                     </div>
                 </div>
-                <form th:action="@{/admin/banhang/save}" th:id="'form' + ${index.id}" method="post" th:object="${thanhToanResponse}">
+                <form th:action="@{/admin/banhang/save}" th:id="'form' + ${index.id}" method="post"
+                      th:object="${thanhToanResponse}">
                     <div class="xl:flex gap-4 mt-4">
                         <div class="w-full">
                             <div class="card adaptable-card">
                                 <div class="card-body flex items-center justify-between">
                                     <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
                                     <div class="flex">
+                                        <button type="button"
+                                                class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600 mr-2">
+                                            Quét BarCode
+                                        </button>
                                         <button type="button" data-bs-toggle="modal"
                                                 th:data-bs-target="'#dialogSanPham' + ${index.id}"
                                                 class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
@@ -390,7 +450,9 @@
                                             <td>
                                                 <div class="flex items-center ml-8">
                                                     <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-                                                         <img class="avatar-img avatar-rounded" th:src="'data:image/jpeg;base64,' + ${ghct.sanPhamChiTiet.base64Image}" loading="lazy">
+                                                         <img class="avatar-img avatar-rounded"
+                                                              th:src="'data:image/jpeg;base64,' + ${ghct.sanPhamChiTiet.base64Image}"
+                                                              loading="lazy">
                                                     </span>
                                                     <div class="ml-4 text-center">
                                                         <h6 th:text="${ghct.sanPhamChiTiet.sanPham.ten}"></h6>
@@ -551,12 +613,44 @@
                                 </div>
                                 <div class="grid lg:grid-cols-12 gap-6 w-full">
                                     <div th:id="'form-section-' + ${index.id}" class="lg:col-span-6 hidden-visibility">
+                                        <div class="flex justify-end">
+                                            <button type="button" data-bs-toggle="modal"
+                                                    th:data-bs-target="'#dialogDiaChi' + ${index.id}"
+                                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                                Chọn địa chỉ
+                                            </button>
+                                            <div class="modal fade" th:id="'dialogDiaChi' + ${index.id}"
+                                                 tabindex="-1"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog dialog md:max-w-[960px]">
+                                                    <div class="dialog-content">
+                                                        <table class="table-default table-hover data-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Tên Khách Hàng</th>
+                                                                <th>Email</th>
+                                                                <th>Số Điện Thoại</th>
+                                                                <th>Thành Phố</th>
+                                                                <th>Huyện</th>
+                                                                <th>Xã</th>
+                                                                <th>Địa Chỉ</th>
+                                                                <th>Hành Động</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody th:id="'address-list-body' + ${index.id}">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="p-6 rounded-md">
                                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                                                 <div class="lg:col-span-6">
                                                     <label class="form-label font-semibold">Tên Khách Hàng: </label>
                                                     <label>
-                                                        <input type="text" th:field="*{tenNguoiNhan}"
+                                                        <input type="text" th:field="*{tenNguoiNhan}" th:id="'tenNguoiNhan' + ${index.id}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Tên Khách Hàng">
                                                     </label>
@@ -564,7 +658,7 @@
                                                 <div class="lg:col-span-6">
                                                     <label class="form-label font-semibold">Số Điện Thoại:</label>
                                                     <label>
-                                                        <input type="text" th:field="*{sdt}"
+                                                        <input type="text" th:field="*{sdt}" th:id="'sdt' + ${index.id}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Số Điện Thoại">
                                                     </label>
@@ -572,7 +666,7 @@
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Email: </label>
                                                     <label>
-                                                        <input type="email" th:field="*{email}"
+                                                        <input type="email" th:field="*{email}" th:id="'email' + ${index.id}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Email">
                                                     </label>
@@ -583,7 +677,8 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Thành Phố</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'provinceName' + ${index.id}" th:field="*{province}">
+                                                    <input type="hidden" th:id="'provinceName' + ${index.id}"
+                                                           th:field="*{province}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Huyện:</label>
@@ -591,7 +686,8 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                                         <option value="">Chọn Huyện</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'districtName' + ${index.id}" th:field="*{district}">
+                                                    <input type="hidden" th:id="'districtName' + ${index.id}"
+                                                           th:field="*{district}">
                                                 </div>
                                                 <div class="lg:col-span-4">
                                                     <label class="font-semibold">Xã:</label>
@@ -599,11 +695,12 @@
                                                             class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0">
                                                         <option value="">Chọn Xã</option>
                                                     </select>
-                                                    <input type="hidden" th:id="'wardName' + ${index.id}" th:field="*{ward}">
+                                                    <input type="hidden" th:id="'wardName' + ${index.id}"
+                                                           th:field="*{ward}">
                                                 </div>
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Địa Chỉ: </label>
-                                                    <input type="text" th:field="*{diaChi}"
+                                                    <input type="text" th:field="*{diaChi}" th:id="'diaChi' + ${index.id}"
                                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                            placeholder="Địa Chỉ">
                                                 </div>
@@ -627,7 +724,8 @@
                                             <div class="lg:col-span-12 flex items-center justify-between">
                                                 <label class="form-label font-semibold">Giao Hàng: </label>
                                                 <label class="switcher mb-4">
-                                                    <input type="checkbox" th:id="'toggleForm' + ${index.id}" class="toggle-form-checkbox">
+                                                    <input type="checkbox" th:id="'toggleForm' + ${index.id}"
+                                                           class="toggle-form-checkbox">
                                                     <span class="switcher-toggle"></span>
                                                 </label>
                                             </div>
@@ -667,20 +765,19 @@
                                                 <h4 class="font-semibold mt-2">Phương Thức Thanh Toán</h4>
                                                 <label class="radio-label inline-flex">
                                                     <input type="radio" class="radio" name="paymentMethod"
-                                                           value="1"
-                                                           checked>
+                                                           value="1" th:id="'cashPayment' + ${index.id}" checked>
                                                     <span class="font-semibold">Tiền Mặt</span>
                                                 </label>
-                                                <label th:id="'payment' + ${index.id}" class="radio-label inline-flex hidden">
+                                                <label th:id="'payment' + ${index.id}"
+                                                       class="radio-label inline-flex hidden">
                                                     <input type="radio" class="radio" name="paymentMethod"
-                                                           value="3">
+                                                           value="3" th:id="'paymentOnDelivery' + ${index.id}">
                                                     <span class="font-semibold">Thanh toán khi nhận hàng</span>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12">
                                                 <div class="mt-10">
-                                                    <button
-                                                            th:type="${gioHangList != null && !gioHangList.isEmpty() && gioHangList.get(index.id - 1).getGioHangChiTietList() != null && !gioHangList.get(index.id - 1).getGioHangChiTietList().isEmpty() ? 'submit' : 'button'}"
+                                                    <button type="submit"
                                                             class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
                                                         Thanh Toán
                                                     </button>
