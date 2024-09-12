@@ -143,6 +143,11 @@
                 return value !== "0"; // Không cho phép giá trị "0"
             }, "Vui lòng chọn một giá trị hợp lệ.");
 
+            // Phương thức kiểm tra định dạng email
+            $.validator.addMethod("validEmail", function (value, element) {
+                return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value); // Kiểm tra định dạng email
+            }, "Email không hợp lệ.");
+
             $("form").validate({
                 rules: {
                     'hoTen': {
@@ -198,6 +203,10 @@
                         digits: true,
                         minlength: 10,
                         maxlength: 15
+                    },
+                    'diaChiList[0].email': {
+                        required: true,
+                        validEmail: true // Kiểm tra định dạng email
                     }
                 },
                 messages: {
@@ -248,13 +257,16 @@
                         noWhitespace: "Họ tên không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.",
                         noNumbers: "Họ tên không được chứa số.",
                         noSpecialChars: "Họ tên không được chứa ký tự đặc biệt."
-
                     },
                     'diaChiList[0].sdt': {
                         required: "Vui lòng nhập số điện thoại.",
                         digits: "Số điện thoại chỉ chứa các ký tự số.",
                         minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
                         maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                    },
+                    'diaChiList[0].email': {
+                        required: "Vui lòng nhập email.",
+                        validEmail: "Email không hợp lệ."
                     }
                 },
                 errorElement: "div",
@@ -265,6 +277,7 @@
             });
         });
     </script>
+
 
 </head>
 <body>
@@ -368,6 +381,12 @@
                                 <input type="text" th:field="*{diaChiList[0].ten}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Tên Người Nhận">
+                            </div>
+                            <div class="lg:col-span-12">
+                                <label class="form-label font-semibold">Email: </label>
+                                <input type="text" name="diaChiList[0].email"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Email người nhận">
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số điện thoại người nhận: </label>
