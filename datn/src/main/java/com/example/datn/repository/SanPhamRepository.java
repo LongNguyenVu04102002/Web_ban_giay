@@ -34,7 +34,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 
             "FROM SanPham sp " +
             "JOIN sp.sanPhamChiTietList spct " +
-            "WHERE sp.trangThai = false " +
+            "WHERE sp.trangThai = true " +
             "AND (:thuongHieuId IS NULL OR sp.thuongHieu.thuongHieuId = :thuongHieuId) " +
             "AND (:kichThuocId IS NULL OR spct.kichThuoc.kichThuocId = :kichThuocId) " +
             "AND (:mauSacId IS NULL OR spct.mauSac.mauSacId = :mauSacId) " +
