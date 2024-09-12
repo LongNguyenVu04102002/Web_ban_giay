@@ -68,7 +68,6 @@ public class HomeController {
     public String home(Model model) {
         Page<SanPhamHomeDTO> sanPhams = sanPhamService.getSanPhamForHomePage(PageRequest.of(0, 8));
         model.addAttribute("sanPhams", sanPhams);
-
         return "user/includes/content/home";
     }
 

@@ -1,25 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
-    function handleToggleForm(toggleId, formSectionId, shippingId, paymentId) {
+    function handleToggleForm(toggleId, formSectionId, shippingId, paymentId, cashPaymentId) {
         const switcher = document.getElementById(toggleId);
         const formSection = document.getElementById(formSectionId);
         const shipping = document.getElementById(shippingId);
         const payment = document.getElementById(paymentId);
+        const cashPayment = document.getElementById(cashPaymentId);
 
-        if (switcher && formSection && shipping && payment) {
+        if (switcher && formSection && shipping && payment && cashPayment) {
             switcher.addEventListener('change', function () {
-                formSection.classList.toggle('hidden-visibility', !this.checked);
-                shipping.classList.toggle('hidden', !this.checked);
-                payment.classList.toggle('hidden', !this.checked);
+                const isChecked = this.checked;
+                formSection.classList.toggle('hidden-visibility', !isChecked);
+                shipping.classList.toggle('hidden', !isChecked);
+                payment.classList.toggle('hidden', !isChecked);
+
+                if (!isChecked) {
+                    cashPayment.checked = true;
+                }
             });
         }
     }
 
-    // Initialize form toggle handlers
     for (let i = 1; i <= 5; i++) {
-        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`);
+        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`, `cashPayment${i}`);
     }
 
-    // Load saved customer data for each tab
     function loadCustomerData(tabId) {
         const customerNameSpan = document.querySelector(`#customer-name-${tabId} .font-semibold`);
         const customerEmailSpan = document.querySelector(`#customer-email-${tabId} .font-semibold`);
@@ -147,6 +151,186 @@ function selectCustomer(button, tabId) {
                 modalInstance.hide();
             }
         }
+        fetch('/api/diachi/khachhang/' + customerId)
+            .then(response => response.json())
+            .then(data => {
+                displayAddressList(data, tabId);
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy danh sách địa chỉ:', error);
+            });
+    }
+}
+
+function displayAddressList(data, tabId) {
+    const addressListBody = document.getElementById('address-list-body' + tabId);
+
+    addressListBody.innerHTML = '';
+
+    // Nếu có dữ liệu
+    if (data && data.length > 0) {
+        data.forEach((address, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${address.ten}</td>
+                <td>${address.email}</td>
+                <td>${address.sdt}</td>
+                <td>${address.thanhPho}</td>
+                <td>${address.huyen}</td>
+                <td>${address.xa}</td>
+                <td>${address.diaChi}</td>
+                <td>
+                    <button type="button" class="btn btn-sm bg-green-500 text-white" 
+                        onclick="chooseAddress(${tabId},'${address.ten}', '${address.email}', '${address.sdt}', '${address.thanhPho}', '${address.huyen}', '${address.xa}', '${address.diaChi}')">
+                        Chọn
+                    </button>
+                </td>
+            `;
+            addressListBody.appendChild(tr);
+        });
+    } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td colspan="9" class="text-center">Không có địa chỉ</td>
+        `;
+        addressListBody.appendChild(tr);
+    }
+}
+
+function chooseAddress(indexId, ten, email, sdt, provinceId, districtId, wardId, diaChi) {
+    document.getElementById('tenNguoiNhan' + indexId).value = ten;
+    document.getElementById('email' + indexId).value = email;
+    document.getElementById('sdt' + indexId).value = sdt;
+    document.getElementById('diaChi' + indexId).value = diaChi;
+
+    $.ajax({
+        url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const provinceSelect = $(`#province${indexId}`);
+                provinceSelect.html('<option value="">Chọn Thành Phố</option>');
+                response.data.forEach(province => {
+                    const selected = Number(province.ProvinceID) === Number(provinceId) ? 'selected' : '';
+                    provinceSelect.append(`<option value="${province.ProvinceID}" ${selected}>${province.ProvinceName}</option>`);
+                    if (selected) {
+                        $(`#provinceName${indexId}`).val(province.ProvinceName);
+                    }
+                });
+            } else {
+                console.error('Error fetching provinces:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+        }
+    });
+
+    $.ajax({
+        url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const districtSelect = $(`#district${indexId}`);
+                response.data.forEach(district => {
+                    const selected = Number(district.DistrictID) === Number(districtId) ? 'selected' : '';
+                    districtSelect.append(`<option value="${district.DistrictID}" ${selected}>${district.DistrictName}</option>`);
+                    if (selected) {
+                        $(`#districtName${indexId}`).val(district.DistrictName);
+                    }
+                });
+            } else {
+                console.error('Error fetching districts:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+
+    $.ajax({
+        url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const wardSelect = $(`#ward${indexId}`);
+                response.data.forEach(ward => {
+                    const selected = ward.WardCode === wardId ? 'selected' : '';
+                    wardSelect.append(`<option value="${ward.WardCode}" ${selected}>${ward.WardName}</option>`);
+                    if (selected) {
+                        $(`#wardName${indexId}`).val(ward.WardName);
+                    }
+                });
+            } else {
+                console.error('Error fetching wards:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+
+    if (districtId && wardId) {
+        const data = {
+            service_type_id: 2,
+            from_district_id: 3440,
+            to_district_id: Number(districtId),
+            to_ward_code: wardId,
+            height: 20,
+            length: 40,
+            weight: 20,
+            width: 20,
+            insurance_value: 3000000
+        };
+
+        $.ajax({
+            url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af',
+                'ShopId': '5144948'
+            },
+            data: JSON.stringify(data),
+            success: function (response) {
+                if (response.code === 200) {
+                    $(`#shippingFee${indexId}`).text(response.data.total.toLocaleString() + ' VNĐ');
+                    $(`#hiddenShippingFee${indexId}`).val(response.data.total);
+                    calculateTotal()
+                } else {
+                    $(`#shippingFee${indexId}`).text('Error fetching shipping fee.');
+                    console.error('Error fetching shipping fee:', response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                $(`#shippingFee${indexId}`).text('Error fetching shipping fee.');
+                console.error('AJAX error:', status, error);
+                console.error('Response text:', xhr.responseText);
+            }
+        });
+    }
+
+    const modal = document.getElementById(`dialogDiaChi${indexId}`);
+    if (modal) {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
     }
 }
 
@@ -154,7 +338,6 @@ $(document).ready(function () {
     const token = 'c00660e2-2e4f-11ef-8f55-4ee3d82283af';
     const shopId = '5144948';
 
-    // Hàm lấy danh sách tỉnh thành phố
     function getProvinces(id) {
         $.ajax({
             url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
