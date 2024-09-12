@@ -31,6 +31,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("SELECT sp FROM SanPhamChiTiet sp WHERE sp.sanPham.sanPhamId = :sanPhamId AND sp.kichThuoc.kichThuocId = :kichThuocId AND sp.mauSac.mauSacId = :mauSacId AND sp.sanPhamChiTietId <> :sanPhamChiTietId")
     List<SanPhamChiTiet> findDuplicateExceptCurrent(Long sanPhamId, Long kichThuocId, Long mauSacId, Long sanPhamChiTietId);
 
+    @Query("SELECT s FROM SanPhamChiTiet s WHERE s.trangThai = true AND s.soLuong > 0")
     List<SanPhamChiTiet> findAllByTrangThaiTrue();
 
 }
