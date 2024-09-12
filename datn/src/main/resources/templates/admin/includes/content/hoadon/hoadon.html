@@ -6,10 +6,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Hoa Don</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const notificationTypeHtml = {
+            Success: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Tạo hóa đơn thành công.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+        }
+
+        function handleNotificationType(type) {
+            console.log('type', type)
+            $('#notification-toast').append(notificationTypeHtml[type])
+            $('#notification-toast .toast:last-child').toast('show');
+            setTimeout(function () {
+                $('#notification-toast .toast:first-child').remove();
+            }, 5000);
+        }
+
+        $(document).ready(function () {
+            const success = JSON.parse([[${success}]]);
+            if (success) {
+                handleNotificationType('Success');
+            }
+        });
+    </script>
 </head>
 
 <body>
 <div layout:fragment="admincontent">
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-semibold text-black dark:text-white">
             Hóa Đơn

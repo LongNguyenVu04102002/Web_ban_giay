@@ -255,11 +255,18 @@ public class HoaDonServiceImpl implements HoaDonService {
         }
     }
 
-    @Transactional
     @Override
-    public void saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
-        HoaDon hoaDon = new HoaDon();
+    @Transactional
+    public boolean saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
+        Optional<GioHang> gioHangOpt = gioHangRepository.findById(gioHangId);
 
+        if (gioHangOpt.isEmpty() || gioHangOpt.get().getGioHangChiTietList().isEmpty()) {
+            return false;
+        }
+
+        GioHang gioHang = gioHangOpt.get();
+
+        HoaDon hoaDon = new HoaDon();
         khachHangRepository.findById(khachHangId).ifPresent(hoaDon::setKhachHang);
 
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
@@ -324,23 +331,25 @@ public class HoaDonServiceImpl implements HoaDonService {
             hinhThucThanhToanRepository.save(hinhThucThanhToan);
         });
 
-        gioHangRepository.findById(gioHangId).ifPresent(gioHang -> {
-            List<GioHangChiTiet> gioHangChiTietList = gioHang.getGioHangChiTietList();
-            for (GioHangChiTiet ghct : gioHangChiTietList) {
-                HoaDonChiTiet hoaDonChiTiet = getHoaDonChiTiet(ghct, hoaDon);
-                hoaDonChiTietRepository.save(hoaDonChiTiet);
+        List<GioHangChiTiet> gioHangChiTietList = gioHang.getGioHangChiTietList();
+        for (GioHangChiTiet ghct : gioHangChiTietList) {
+            HoaDonChiTiet hoaDonChiTiet = getHoaDonChiTiet(ghct, hoaDon);
+            hoaDonChiTietRepository.save(hoaDonChiTiet);
 
-                sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
-                    spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
-                    sanPhamChiTietRepository.save(spct);
-                });
+            sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
+                spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
+                sanPhamChiTietRepository.save(spct);
+            });
 
-                ghct.setGioHang(null);
-            }
-            gioHangChiTietRepository.saveAll(gioHangChiTietList);
-            gioHangChiTietRepository.deleteAll(gioHangChiTietList);
-        });
+            ghct.setGioHang(null);
+        }
+
+        gioHangChiTietRepository.saveAll(gioHangChiTietList);
+        gioHangChiTietRepository.deleteAll(gioHangChiTietList);
+
+        return true;
     }
+
 
 
     @Override

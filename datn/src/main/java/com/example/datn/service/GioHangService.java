@@ -6,11 +6,11 @@ public interface GioHangService {
 
     GioHang getById(Long id);
 
-    void addToCart(Long gioHangId, Long sanPhamChiTietId);
+    boolean addToCart(Long gioHangId, Long sanPhamChiTietId);
 
     void stepDown(Long gioHangChiTietId, Long sanPhamChiTietId);
 
-    void stepUp(Long gioHangChiTietId, Long sanPhamChiTietId);
+    boolean stepUp(Long gioHangChiTietId, Long sanPhamChiTietId);
 
     void delete(Long gioHangChiTietId);
 

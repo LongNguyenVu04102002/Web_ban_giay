@@ -119,7 +119,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     public KhachHang login(String email, String password) {
         KhachHang khachHang = khachHangRepository.findKhachHangByEmailAndPassword(email, password);
         if(khachHang != null) {
-            if (khachHang.isTrangThai()) {
+            if (!khachHang.isTrangThai()) {
                 return null;
             }
             return khachHang;
