@@ -146,13 +146,7 @@
             if (formType === 'add') {
                 $("#address-form").validate({
                     rules: {
-                        'hoTen': {
-                            required: true,
-                            minlength: 2,
-                            maxlength: 100,
-                            noWhitespace: true,
-                            noSpecialChars: true
-                        },
+
                         'sdt': {
                             required: true,
                             digits: true,
@@ -512,7 +506,7 @@
     function fetchProvinces() {
         return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
             headers: {
-                'Token': 'd7d24c0b-3bcd-11ef-8ba9-b6fbcb92e37e'
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
             }
         })
         .then(response => response.json())
@@ -532,7 +526,7 @@
     function fetchDistricts() {
         return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', {
             headers: {
-                'Token': 'd7d24c0b-3bcd-11ef-8ba9-b6fbcb92e37e'
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
             }
         })
         .then(response => response.json())
@@ -555,7 +549,7 @@
 
         return fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`, {
             headers: {
-                'Token': 'd7d24c0b-3bcd-11ef-8ba9-b6fbcb92e37e'
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
             }
         })
         .then(response => response.json())
