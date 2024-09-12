@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -133,8 +134,12 @@ public class BanHangTaiQuayController {
     private String addToCart(@RequestParam Long gioHangId,
                              @RequestParam Long sanPhamChiTietId,
                              Model model) {
-        model.addAttribute("success", true);
-        gioHangService.addToCart(gioHangId, sanPhamChiTietId);
+        boolean add = gioHangService.addToCart(gioHangId, sanPhamChiTietId);
+        if (add) {
+            model.addAttribute("success", true);
+        } else {
+            model.addAttribute("error", true);
+        }
         return GioHangList(model);
     }
 
@@ -151,8 +156,12 @@ public class BanHangTaiQuayController {
     public String stepUp(@RequestParam("gioHangChiTietId") Long gioHangChiTietId,
                          @RequestParam("sanPhamChiTietId") Long sanPhamChiTietId,
                          Model model) {
-        model.addAttribute("stepup", true);
-        gioHangService.stepUp(gioHangChiTietId, sanPhamChiTietId);
+        boolean stepup = gioHangService.stepUp(gioHangChiTietId, sanPhamChiTietId);
+        if (stepup) {
+            model.addAttribute("stepup", true);
+        } else {
+            model.addAttribute("error", true);
+        }
         return GioHangList(model);
     }
 
@@ -164,12 +173,21 @@ public class BanHangTaiQuayController {
     }
 
     @PostMapping("/banhang/save")
-    public String save(@RequestParam Long gioHangId,
+    public String save(@RequestParam(defaultValue = "0") Long gioHangId,
                        @RequestParam(defaultValue = "0") Long customerId,
                        @RequestParam(defaultValue = "") String discountCode,
-                       @ModelAttribute ThanhToanResponse thanhToanResponse) {
-        hoaDonService.saveHoaDonTaiQuay(gioHangId, customerId, discountCode, thanhToanResponse);
-        return "redirect:/admin/hoadon";
+                       @ModelAttribute ThanhToanResponse thanhToanResponse,
+                       Model model,
+                       RedirectAttributes redirectAttributes) {
+        boolean add = hoaDonService.saveHoaDonTaiQuay(gioHangId, customerId, discountCode, thanhToanResponse);
+        if(add){
+            redirectAttributes.addFlashAttribute("success",true);
+            return "redirect:/admin/hoadon";
+
+        }else {
+            model.addAttribute("info",true);
+            return GioHangList(model);
+        }
     }
 
 }

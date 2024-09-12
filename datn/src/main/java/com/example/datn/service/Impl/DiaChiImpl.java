@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,6 +62,11 @@ public class DiaChiImpl implements DiaChiService {
     @Override
     public void save(DiaChi diaChi) {
         diaChiRepository.save(diaChi);
+    }
+
+    @Override
+    public List<DiaChi> findByKhachHangId(Long khachHangId) {
+        return diaChiRepository.findAllByKhachHangId(khachHangId);
     }
 
 }

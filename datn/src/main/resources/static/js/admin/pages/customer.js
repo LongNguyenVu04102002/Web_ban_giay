@@ -1,25 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
-    function handleToggleForm(toggleId, formSectionId, shippingId, paymentId) {
+    function handleToggleForm(toggleId, formSectionId, shippingId, paymentId, cashPaymentId) {
         const switcher = document.getElementById(toggleId);
         const formSection = document.getElementById(formSectionId);
         const shipping = document.getElementById(shippingId);
         const payment = document.getElementById(paymentId);
+        const cashPayment = document.getElementById(cashPaymentId);
 
-        if (switcher && formSection && shipping && payment) {
+        if (switcher && formSection && shipping && payment && cashPayment) {
             switcher.addEventListener('change', function () {
-                formSection.classList.toggle('hidden-visibility', !this.checked);
-                shipping.classList.toggle('hidden', !this.checked);
-                payment.classList.toggle('hidden', !this.checked);
+                const isChecked = this.checked;
+                formSection.classList.toggle('hidden-visibility', !isChecked);
+                shipping.classList.toggle('hidden', !isChecked);
+                payment.classList.toggle('hidden', !isChecked);
+
+                if (!isChecked) {
+                    cashPayment.checked = true;
+                }
             });
         }
     }
 
-    // Initialize form toggle handlers
     for (let i = 1; i <= 5; i++) {
-        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`);
+        handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`, `cashPayment${i}`);
     }
 
-    // Load saved customer data for each tab
     function loadCustomerData(tabId) {
         const customerNameSpan = document.querySelector(`#customer-name-${tabId} .font-semibold`);
         const customerEmailSpan = document.querySelector(`#customer-email-${tabId} .font-semibold`);
@@ -146,6 +150,68 @@ function selectCustomer(button, tabId) {
             if (modalInstance) {
                 modalInstance.hide();
             }
+        }
+        fetch('/api/diachi/khachhang/' + customerId)
+            .then(response => response.json())
+            .then(data => {
+                displayAddressList(data, tabId);
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy danh sách địa chỉ:', error);
+            });
+    }
+}
+
+function displayAddressList(data, tabId) {
+    const addressListBody = document.getElementById('address-list-body' + tabId);
+
+    addressListBody.innerHTML = '';
+
+    // Nếu có dữ liệu
+    if (data && data.length > 0) {
+        data.forEach((address, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${address.ten}</td>
+                <td>${address.email}</td>
+                <td>${address.sdt}</td>
+                <td>${address.thanhPho}</td>
+                <td>${address.huyen}</td>
+                <td>${address.xa}</td>
+                <td>${address.diaChi}</td>
+                <td>
+                    <button type="button" class="btn btn-sm bg-green-500 text-white" 
+                        onclick="chooseAddress(${tabId},'${address.ten}', '${address.email}', '${address.sdt}', '${address.thanhPho}', '${address.huyen}', '${address.xa}', '${address.diaChi}')">
+                        Chọn
+                    </button>
+                </td>
+            `;
+            addressListBody.appendChild(tr);
+        });
+    } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td colspan="9" class="text-center">Không có địa chỉ</td>
+        `;
+        addressListBody.appendChild(tr);
+    }
+}
+
+function chooseAddress(indexId, ten, email, sdt, thanhPho, huyen, xa, diaChi) {
+    document.getElementById('tenNguoiNhan' + indexId).value = ten;
+    document.getElementById('email' + indexId).value = email;
+    document.getElementById('sdt' + indexId).value = sdt;
+    document.getElementById('province' + indexId).value = thanhPho;
+    document.getElementById('district' + indexId).value = huyen;
+    document.getElementById('ward' + indexId).value = xa;
+    document.getElementById('diaChi' + indexId).value = diaChi;
+
+    const modal = document.getElementById(`dialogDiaChi${indexId}`);
+    if (modal) {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
         }
     }
 }

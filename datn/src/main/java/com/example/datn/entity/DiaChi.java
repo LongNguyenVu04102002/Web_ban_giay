@@ -41,6 +41,9 @@ public class DiaChi {
     @Column(name = "ten")
     private String ten;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "trangThai")
     private boolean trangThai;
 
