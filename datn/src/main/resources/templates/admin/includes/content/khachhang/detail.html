@@ -150,7 +150,7 @@
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
 
             $.validator.addMethod("noSpecialChars", function(value, element) {
-                return /^[a-zA-Z0-9\s]*$/.test(value); // Chỉ cho phép chữ cái, số và khoảng trắng
+                 return /^[a-zA-Z0-9\sàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐđ]*$/.test(value);// Chỉ cho phép chữ cái, số và khoảng trắng
             }, "Không được chứa ký tự đặc biệt.");
 
             // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
