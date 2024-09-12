@@ -22,7 +22,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
             ") " +
             "FROM SanPham sp " +
             "JOIN sp.sanPhamChiTietList spct " +
-            "WHERE sp.trangThai = false " +
+            "WHERE sp.trangThai = true " +
             "GROUP BY sp.sanPhamId, sp.ten " +
             "HAVING COUNT(spct) > 0")
     Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable);

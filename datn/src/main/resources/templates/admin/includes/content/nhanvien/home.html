@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+
       layout:decorate="~{admin/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -35,7 +38,7 @@
                     <label>
                         <select id="trangThaiAccFilter" name="trangThai"
                                 class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
-                            <option value="0">Trạng Thái</option>
+                            <option value="">Trạng Thái</option>
                             <option value="Ngừng hoạt động">Ngừng hoạt động</option>
                             <option value="Đang Hoạt Động">Đang Hoạt Động</option>
                         </select>
@@ -118,5 +121,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
