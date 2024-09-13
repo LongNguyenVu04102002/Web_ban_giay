@@ -65,7 +65,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
         existingKhachHang.setSdt(khachHang.getSdt());
         existingKhachHang.setEmail(khachHang.getEmail());
-   
+
 
         // Cập nhật password (nếu có)
         if (khachHang.getPassword() != null && !khachHang.getPassword().isEmpty()) {
@@ -76,7 +76,8 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
             existingKhachHang.getDiaChiList().clear();
             for (DiaChi diaChi : khachHang.getDiaChiList()) {
-                diaChi.setKhachHang(existingKhachHang); // Thiết lập liên kết
+                diaChi.setKhachHang(existingKhachHang);
+                diaChi.setTrangThai(true);// Thiết lập liên kết
                 existingKhachHang.getDiaChiList().add(diaChi);
             }
         }
