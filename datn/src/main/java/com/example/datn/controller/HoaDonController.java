@@ -67,7 +67,7 @@ public class HoaDonController {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
         for (HoaDonChiTiet hdct : hoaDon.getHoaDonChiTietList()) {
             SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
-            byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1); // Priority là 1 hoặc giá trị khác tùy theo logic của bạn
+            byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1);
             if (imageBytes != null) {
                 String base64Image = Base64.getEncoder().encodeToString(imageBytes);
                 spct.setBase64Image(base64Image);
@@ -88,6 +88,14 @@ public class HoaDonController {
     public String getCartDetail(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
         List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
+        for (HoaDonChiTiet hdct : hoaDon.getHoaDonChiTietList()) {
+            SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
+            byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1);
+            if (imageBytes != null) {
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                spct.setBase64Image(base64Image);
+            }
+        }
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";

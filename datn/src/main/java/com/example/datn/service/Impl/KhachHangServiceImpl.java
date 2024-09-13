@@ -1,5 +1,6 @@
 package com.example.datn.service.Impl;
 
+import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
 import com.example.datn.model.request.SignupRequest;
 import com.example.datn.repository.KhachHangRepository;
@@ -55,24 +56,36 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Transactional
     public KhachHang update(KhachHang khachHang, BindingResult result) {
         // Tìm khách hàng hiện tại từ cơ sở dữ liệu
-        KhachHang existingKhachHang = khachHangRepository.findById(khachHang.getKhachHangId()).orElseThrow();
+        KhachHang existingKhachHang = khachHangRepository.findById(khachHang.getKhachHangId())
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
 
-        // Kiểm tra nếu khách hàng đã có 3 địa chỉ
-        if (existingKhachHang.getDiaChiList().size() >= 3) {
-            result.rejectValue("diaChiList", "error.khachHang", "Khách hàng đã có tối đa 3 địa chỉ. Không thể cập nhật thêm.");
-            return existingKhachHang;
+        // Cập nhật thông tin của existingKhachHang bằng thông tin từ khachHang
+        existingKhachHang.setHoTen(khachHang.getHoTen());
+        existingKhachHang.setGioiTinh(khachHang.isGioiTinh());
+        existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
+        existingKhachHang.setSdt(khachHang.getSdt());
+        existingKhachHang.setEmail(khachHang.getEmail());
+
+
+        // Cập nhật password (nếu có)
+        if (khachHang.getPassword() != null && !khachHang.getPassword().isEmpty()) {
+            existingKhachHang.setPassword(khachHang.getPassword());
         }
 
+        // Cập nhật lại các địa chỉ nếu cần
+        if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
+            existingKhachHang.getDiaChiList().clear();
+            for (DiaChi diaChi : khachHang.getDiaChiList()) {
+                diaChi.setKhachHang(existingKhachHang);
+                diaChi.setTrangThai(true);// Thiết lập liên kết
+                existingKhachHang.getDiaChiList().add(diaChi);
+            }
+        }
 
-        // Xóa tất cả các địa chỉ cũ
-        existingKhachHang.getDiaChiList().clear();
-
-        // Thêm lại các địa chỉ hợp lệ mới
-        existingKhachHang.getDiaChiList().addAll(khachHang.getDiaChiList());
-
-        // Lưu khách hàng với danh sách địa chỉ đã được cập nhật
+        // Lưu khách hàng với thông tin đã được cập nhật
         return khachHangRepository.save(existingKhachHang);
     }
+
 
 
 

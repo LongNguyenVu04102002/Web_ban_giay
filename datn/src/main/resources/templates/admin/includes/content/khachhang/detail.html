@@ -118,7 +118,11 @@
             });
 
         });
+
     </script>
+
+
+
     <script>
         $(document).ready(function() {
             // Thêm phương thức tùy chỉnh để kiểm tra khoảng trắng liên tiếp và khoảng trắng ở đầu/cuối
@@ -129,12 +133,12 @@
             }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
 
             $.validator.addMethod("noSpecialChars", function(value, element) {
-                 return /^[a-zA-Z0-9\sàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐđ]*$/.test(value);// Chỉ cho phép chữ cái, số và khoảng trắng
+                return /^[a-zA-Z0-9\sàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐđ]*$/.test(value);
             }, "Không được chứa ký tự đặc biệt.");
 
             // Phương thức tùy chỉnh để kiểm tra xem giá trị có hợp lệ không (không được là "0")
             $.validator.addMethod("validSelection", function(value, element) {
-                return value !== "0"; // Không cho phép giá trị "0"
+                return value !== "0";
             }, "Vui lòng chọn một giá trị hợp lệ.");
 
             // Kiểm tra nếu form đang ở trạng thái thêm địa chỉ
@@ -142,13 +146,7 @@
             if (formType === 'add') {
                 $("#address-form").validate({
                     rules: {
-                        'hoTen': {
-                            required: true,
-                            minlength: 2,
-                            maxlength: 100,
-                            noWhitespace: true,
-                            noSpecialChars: true
-                        },
+
                         'sdt': {
                             required: true,
                             digits: true,
@@ -192,6 +190,10 @@
                             digits: true,
                             minlength: 10,
                             maxlength: 15
+                        },
+                        'diaChiList[0].email': {
+                            required: true,
+                            email: true // Validate email format
                         }
                     },
                     messages: {
@@ -245,6 +247,10 @@
                             digits: "Số điện thoại chỉ chứa các ký tự số.",
                             minlength: "Số điện thoại phải có ít nhất 10 ký tự.",
                             maxlength: "Số điện thoại không được vượt quá 15 ký tự."
+                        },
+                        'diaChiList[0].email': {
+                            required: "Vui lòng nhập email.",
+                            email: "Vui lòng nhập địa chỉ email hợp lệ."
                         }
                     },
                     errorElement: "div",
@@ -256,6 +262,7 @@
             }
         });
     </script>
+
     <script>
         function confirmAddAddress() {
             return confirm("Bạn có chắc chắn muốn thêm địa chỉ này không?");
@@ -425,6 +432,12 @@
                                        placeholder="Tên Người Nhận">
                             </div>
                             <div class="lg:col-span-12">
+                                <label class="form-label font-semibold">Email: </label>
+                                <input type="text" name="diaChiList[0].email"
+                                       class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                                       placeholder="Email người nhận">
+                            </div>
+                            <div class="lg:col-span-12">
                                 <label class="form-label font-semibold">Số điện thoại: </label>
                                 <input type="text" name="diaChiList[0].sdt"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
@@ -445,11 +458,11 @@
             <tr>
                 <th>Tên Người Nhận</th>
                 <th>Số Điện Thoại Người Nhận</th>
+                <th>Email Người Nhận</th>
                 <th>Tỉnh/Thành Phố</th>
                 <th>Quận/Huyện</th>
                 <th>Phường/Xã</th>
                 <th>Địa Chỉ</th>
-<!--                <th>Trạng Thái</th>-->
                 <th>Hành Động</th>
             </tr>
             </thead>
@@ -457,34 +470,170 @@
             <tr th:each="diaChi : ${khachHang.diaChiList}">
                 <td th:text="${diaChi.ten}"></td>
                 <td th:text="${diaChi.sdt}"></td>
-                <td th:text="${diaChi.thanhPho}" class="tinhThanhPho"></td>
-                <td th:text="${diaChi.huyen}" class="huyenQuan"></td>
-                <td th:text="${diaChi.xa}" class="xaPhuong"></td>
+                <td th:text="${diaChi.email}"></td>
+
+                <!-- Tỉnh/Thành Phố -->
+                <td class="tinhThanhPho" th:attr="data-province-id=${diaChi.thanhPho}"></td>
+
+                <!-- Quận/Huyện -->
+                <td class="huyenQuan" th:attr="data-district-id=${diaChi.huyen}"></td>
+
+                <!-- Phường/Xã -->
+                <td class="xaPhuong" th:attr="data-ward-code=${diaChi.xa}"></td>
+
                 <td th:text="${diaChi.diaChi}"></td>
-<!--                <td>-->
-<!--                    <button th:class="${diaChi.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">-->
-<!--                        <span th:text="${diaChi.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>-->
-<!--                    </button>-->
-<!--                </td>-->
+
                 <td>
-                    <!-- Liên kết xóa với thông báo xác nhận -->
                     <a th:href="@{/admin/taikhoan/diaChi/delete/{id}(id=${diaChi.diaChiId}, khachHangId=${khachHang.khachHangId})}"
                        onclick="return confirm('Bạn có chắc chắn muốn xóa địa chỉ này không?');">Xóa</a>
-                    <!-- Nút để cập nhật trạng thái -->
-<!--                    <form th:action="@{/admin/taikhoan/khachhang/updateTrangThai}" method="post" style="display:inline;" onsubmit="return confirmUpdateStatus();">-->
-<!--                        <input type="hidden" name="diaChiId" th:value="${diaChi.diaChiId}">-->
-<!--                        <input type="hidden" name="trangThai" th:value="${!diaChi.trangThai}">-->
-<!--                        <button type="submit" class="btn btn-warning" >-->
-<!--                            [[${diaChi.trangThai} ? 'Ngừng hoạt động' : 'Hoạt động']]-->
-<!--                        </button>-->
-<!--                    </form>-->
-<!--                    <a th:href="@{/admin/taikhoan/diaChi/edit(diaChiId=${diaChi.diaChiId})}">Edit</a>-->
-
                 </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 </body>
 </html>
+<!--<td th:text="${diaChi.huyen}" class="huyenQuan"></td>-->
+<!--<td th:text="${diaChi.xa}" class="xaPhuong"></td>-->
+
+<script>
+    // Lưu trữ dữ liệu xã theo từng huyện
+    const districtWardsMap = new Map();
+
+    // Hàm để lấy dữ liệu tỉnh/thành phố từ API
+    function fetchProvinces() {
+        return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+            headers: {
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu tỉnh/thành phố không hợp lệ');
+            }
+            return new Map(data.data.map(province => [province.ProvinceID, province.ProvinceName]));
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+    }
+
+    // Hàm để lấy dữ liệu quận/huyện từ API
+    function fetchDistricts() {
+        return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', {
+            headers: {
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu quận/huyện không hợp lệ');
+            }
+            const districtsMap = new Map(data.data.map(district => [district.DistrictID, district.DistrictName]));
+            return districtsMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu quận/huyện:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+    }
+
+    // Hàm để lấy dữ liệu phường/xã từ API với district_id
+    function fetchWards(districtId) {
+        console.log('Fetching wards for districtId:', districtId); // Hiển thị districtId
+
+        return fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`, {
+            headers: {
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu phường/xã không hợp lệ');
+            }
+            const wardMap = new Map(data.data.map(ward => [ward.WardCode, ward.WardName]));
+            districtWardsMap.set(districtId, wardMap);
+
+            // Hiển thị wardMap
+            console.log('WardMap for districtId', districtId, ':', Array.from(wardMap.entries()));
+
+            return wardMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu phường/xã:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+    }
+
+    // Hàm để cập nhật tên tỉnh/thành phố, quận/huyện và phường/xã trong bảng
+    function updateTableContent(provinceMap, districtMap) {
+        const tinhThanhPhoElements = document.querySelectorAll('.tinhThanhPho');
+        const huyenQuanElements = document.querySelectorAll('.huyenQuan');
+        const xaPhuongElements = document.querySelectorAll('.xaPhuong');
+
+        tinhThanhPhoElements.forEach(element => {
+            const provinceID = parseInt(element.getAttribute('data-province-id'), 10);
+            if (isNaN(provinceID)) {
+                console.error('ProvinceID không hợp lệ hoặc không phải số:', element.getAttribute('data-province-id'));
+                element.textContent = 'Không xác định';
+                return;
+            }
+            const provinceName = provinceMap.get(provinceID);
+            element.textContent = provinceName || 'Không xác định';
+        });
+
+        huyenQuanElements.forEach(element => {
+            const districtID = parseInt(element.getAttribute('data-district-id'), 10);
+            if (isNaN(districtID)) {
+                console.error('DistrictID không hợp lệ hoặc không phải số:', element.getAttribute('data-district-id'));
+                element.textContent = 'Không xác định';
+                return;
+            }
+            const districtName = districtMap.get(districtID);
+            element.textContent = districtName || 'Không xác định';
+
+            // Fetch wards for each district and update xaPhuongElements
+            fetchWards(districtID)
+                .then(fetchedWardMap => {
+                    xaPhuongElements.forEach(wardElement => {
+                        const wardCode = wardElement.getAttribute('data-ward-code');
+                        console.log('WardCode:', wardCode); // Hiển thị wardCode
+
+                        if (!wardCode) {
+                            console.error('WardCode không hợp lệ hoặc không có giá trị:', wardCode);
+                            wardElement.textContent = 'Không xác định';
+                            return;
+                        }
+
+                        // Hiển thị tất cả phường/xã cho các districtId
+                        const wardName = fetchedWardMap.get(wardCode);
+                        if (wardName) {
+                            wardElement.textContent = wardName;
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy dữ liệu phường/xã cho districtID:', districtID, error);
+                });
+        });
+    }
+
+    // Khi trang đã được tải
+    document.addEventListener('DOMContentLoaded', function() {
+        Promise.all([fetchProvinces(), fetchDistricts()])
+            .then(([provinceMap, districtMap]) => {
+                updateTableContent(provinceMap, districtMap);
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy dữ liệu:', error);
+            });
+    });
+
+
+</script>
