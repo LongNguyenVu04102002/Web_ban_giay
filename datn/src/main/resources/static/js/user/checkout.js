@@ -282,3 +282,282 @@ function updateTotal() {
 document.addEventListener('DOMContentLoaded', function () {
     updateTotal();
 });
+
+document.addEventListener('shown.bs.modal', function (event) {
+    if (event.target.id === 'dialogDiaChi') {
+        const khachHangId = document.getElementById('khachHangId').value;
+
+        fetch('/api/diachi/khachhang/' + khachHangId)
+            .then(response => response.json())
+            .then(data => {
+                displayAddressList(data);
+            })
+            .catch(error => {
+                console.error('Error fetching address list:', error);
+            });
+    }
+});
+
+
+// Hàm này dùng để hiển thị danh sách địa chỉ, đồng thời gọi API để lấy tên đầy đủ cho tỉnh/thành phố, quận/huyện, và phường/xã
+function displayAddressList(data) {
+    const addressListBody = document.getElementById('address-list-body');
+    addressListBody.innerHTML = '';
+
+    // Lấy bản đồ tỉnh/thành phố, quận/huyện
+    Promise.all([fetchProvinces(), fetchDistricts()])
+        .then(([provinceMap, districtMap]) => {
+            // Nếu có dữ liệu
+            if (data && data.length > 0) {
+                data.forEach((address, index) => {
+                    // Lấy tên tỉnh/thành phố từ provinceMap
+                    const provinceName = provinceMap.get(parseInt(address.thanhPho)) || 'Không xác định';
+
+                    // Lấy tên quận/huyện từ districtMap
+                    const districtName = districtMap.get(parseInt(address.huyen)) || 'Không xác định';
+
+                    // Gọi API để lấy tên phường/xã từ districtId
+                    fetchWards(parseInt(address.huyen))
+                        .then(wardMap => {
+                            // Lấy tên phường/xã từ wardMap
+                            const wardName = wardMap.get(address.xa) || 'Không xác định';
+
+                            // Tạo hàng trong bảng
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${address.ten}</td>
+                                <td>${address.email}</td>
+                                <td>${address.sdt}</td>
+                                <td>${provinceName}</td>
+                                <td>${districtName}</td>
+                                <td>${wardName}</td>
+                                <td>${address.diaChi}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm bg-orange-600 text-white"
+                                        onclick="chooseAddress('${address.ten}', '${address.email}', '${address.sdt}', '${address.thanhPho}', '${address.huyen}', '${address.xa}', '${address.diaChi}')">
+                                        Chọn
+                                    </button>
+                                </td>
+                            `;
+                            addressListBody.appendChild(tr);
+                        })
+                        .catch(error => {
+                            console.error('Lỗi khi lấy dữ liệu phường/xã:', error);
+                        });
+                });
+            } else {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td colspan="9" class="text-center">Không có địa chỉ</td>
+                `;
+                addressListBody.appendChild(tr);
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố hoặc quận/huyện:', error);
+        });
+}
+
+//đổi id địa chỉ sang tên
+// Lưu trữ dữ liệu xã theo từng huyện
+const districtWardsMap = new Map();
+
+// Hàm để lấy dữ liệu tỉnh/thành phố từ API
+function fetchProvinces() {
+    return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        headers: {
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu tỉnh/thành phố không hợp lệ');
+            }
+            return new Map(data.data.map(province => [province.ProvinceID, province.ProvinceName]));
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+}
+
+// Hàm để lấy dữ liệu quận/huyện từ API
+function fetchDistricts() {
+    return fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', {
+        headers: {
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu quận/huyện không hợp lệ');
+            }
+            const districtsMap = new Map(data.data.map(district => [district.DistrictID, district.DistrictName]));
+            return districtsMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu quận/huyện:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+}
+
+// Hàm để lấy dữ liệu phường/xã từ API với district_id
+function fetchWards(districtId) {
+    return fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`, {
+        headers: {
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu phường/xã không hợp lệ');
+            }
+            const wardMap = new Map(data.data.map(ward => [ward.WardCode, ward.WardName]));
+            districtWardsMap.set(districtId, wardMap);
+            return wardMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu phường/xã:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
+}
+
+function chooseAddress(ten, email, sdt, provinceId, districtId, wardId, diaChi) {
+    document.getElementById('tenNguoiNhan').value = ten;
+    document.getElementById('email').value = email;
+    document.getElementById('sdt').value = sdt;
+    document.getElementById('diaChi').value = diaChi;
+
+    $.ajax({
+        url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const provinceSelect = $(`#province`);
+                provinceSelect.html('<option value="">Chọn Thành Phố</option>');
+                response.data.forEach(province => {
+                    const selected = Number(province.ProvinceID) === Number(provinceId) ? 'selected' : '';
+                    provinceSelect.append(`<option value="${province.ProvinceID}" ${selected}>${province.ProvinceName}</option>`);
+                    if (selected) {
+                        $(`#provinceName`).val(province.ProvinceName);
+                    }
+                });
+            } else {
+                console.error('Error fetching provinces:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+        }
+    });
+
+    $.ajax({
+        url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const districtSelect = $(`#district`);
+                response.data.forEach(district => {
+                    const selected = Number(district.DistrictID) === Number(districtId) ? 'selected' : '';
+                    districtSelect.append(`<option value="${district.DistrictID}" ${selected}>${district.DistrictName}</option>`);
+                    if (selected) {
+                        $(`#districtName`).val(district.DistrictName);
+                    }
+                });
+            } else {
+                console.error('Error fetching districts:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+
+    $.ajax({
+        url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
+        type: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                const wardSelect = $(`#ward`);
+                response.data.forEach(ward => {
+                    const selected = ward.WardCode === wardId ? 'selected' : '';
+                    wardSelect.append(`<option value="${ward.WardCode}" ${selected}>${ward.WardName}</option>`);
+                    if (selected) {
+                        $(`#wardName`).val(ward.WardName);
+                    }
+                });
+            } else {
+                console.error('Error fetching wards:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', status, error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+
+    if (districtId && wardId) {
+        const data = {
+            service_type_id: 2,
+            from_district_id: 3440,
+            to_district_id: Number(districtId),
+            to_ward_code: wardId,
+            height: 20,
+            length: 40,
+            weight: 20,
+            width: 20,
+            insurance_value: 3000000
+        };
+
+        $.ajax({
+            url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af',
+                'ShopId': '5144948'
+            },
+            data: JSON.stringify(data),
+            success: function (response) {
+                if (response.code === 200) {
+                    $(`#shippingFee`).text(response.data.total.toLocaleString() + ' VNĐ');
+                    $(`#hiddenShippingFee`).val(response.data.total);
+                    updateTotal()
+                } else {
+                    $(`#shippingFee`).text('Error fetching shipping fee.');
+                    console.error('Error fetching shipping fee:', response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                $(`#shippingFee`).text('Error fetching shipping fee.');
+                console.error('AJAX error:', status, error);
+                console.error('Response text:', xhr.responseText);
+            }
+        });
+    }
+
+    const modal = document.getElementById(`dialogDiaChi`);
+    if (modal) {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+}

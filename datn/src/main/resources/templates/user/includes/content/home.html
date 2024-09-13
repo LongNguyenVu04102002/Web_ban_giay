@@ -20,6 +20,7 @@
             height: auto; /* Hoặc sử dụng `height: 100%;` nếu muốn ảnh tự động điều chỉnh chiều cao */
             object-fit: cover; /* Hoặc `contain` tùy thuộc vào cách bạn muốn ảnh hiển thị */
         }
+
         .custom-iframe {
             width: 100%; /* Đặt chiều rộng của iframe bằng với chiều rộng của phần tử chứa */
             height: 450px; /* Đặt chiều cao của iframe */
@@ -34,7 +35,6 @@
 
 <body>
 <div layout:fragment="usercontent">
-
     <section
             class="relative md:flex table w-full items-center md:h-screen py-36 bg-emerald-500/5 bg-[url('../..//images/hero/bg3.html')] md:bg-top bg-center bg-no-repeat bg-cover">
         <div class="container relative">
@@ -70,7 +70,6 @@
             </div><!--end grid-->
         </div><!--end container-->
     </section>
-
     <section class="relative md:py-24 py-16">
         <div class="container relative">
             <div class="grid grid-cols-1 justify-center text-center mb-6">
@@ -113,7 +112,7 @@
 
         <div class="container relative md:mt-24 mt-16">
             <div class="grid grid-cols-1 justify-center text-center mb-6">
-                <h5 class="font-semibold text-3xl leading-normal mb-4">TOP  SẢN PHẨM MỚI NHẤT CỦA SHOP</h5>
+                <h5 class="font-semibold text-3xl leading-normal mb-4">TOP SẢN PHẨM MỚI NHẤT CỦA SHOP</h5>
                 <p class="text-slate-400 max-w-xl mx-auto">Shop the latest products from the most popular collections
                 </p>
             </div><!--end grid-->
@@ -129,7 +128,8 @@
 
                         <div class="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
                             <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
-                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add to Cart</a>
+                               class="py-2 px-5 inline-block font-semibold tracking-wide align-middle duration-500 text-base text-center bg-slate-900 text-white w-full rounded-md">Add
+                                to Cart</a>
                         </div>
 
                         <ul class="list-none absolute top-[10px] end-4 opacity-0 group-hover:opacity-100 duration-500 space-y-1">
@@ -154,13 +154,16 @@
 
                     <div class="mt-4">
                         <!-- Hiển thị tên sản phẩm và liên kết chi tiết sản phẩm -->
-                        <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}" class="hover:text-orange-500 text-lg font-medium"
+                        <a th:href="@{/shop/detail/{id}(id=${sanPham.sanPhamId})}"
+                           class="hover:text-orange-500 text-lg font-medium"
                            th:text="${sanPham.ten}">Product Name</a>
                         <div class="flex justify-between items-center mt-1">
                             <!-- Hiển thị giá sản phẩm -->
                             <p>
-                            <p class="text-slate-950 dark:text-white font-semibold mt-1" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></p>
-                            <del class="text-slate-400" th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></del>
+                            <p class="text-slate-950 dark:text-white font-semibold mt-1"
+                               th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></p>
+                            <del class="text-slate-400"
+                                 th:text="${#numbers.formatDecimal(sanPham.giaThapNhat, 0, 'COMMA', 0, 'POINT') + ' VND'}"></del>
                             </p>
                             <ul class="font-medium text-amber-400 list-none">
                                 <li class="inline"><i class="mdi mdi-star"></i></li>

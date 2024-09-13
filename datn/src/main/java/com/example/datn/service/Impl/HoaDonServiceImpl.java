@@ -256,6 +256,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public HoaDon getHoaDonTraCuu(String maVanDon, String email) {
+        return hoaDonRepository.getHoaDonTraCuu(maVanDon,email);
+    }
+
+    @Override
     @Transactional
     public boolean saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
         Optional<GioHang> gioHangOpt = gioHangRepository.findById(gioHangId);

@@ -42,23 +42,55 @@
                 <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-6">
                     <div class="lg:col-span-8">
                         <div class="p-6 rounded-md shadow dark:shadow-gray-800">
-                            <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-xl leading-normal font-semibold">Địa Chỉ Thanh Toán</h3>
+                                <button th:if="${session.khachHang != null}" type="button" data-bs-toggle="modal" data-bs-target="#dialogDiaChi"
+                                        class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                    Chọn địa chỉ
+                                </button>
+                                <div class="modal fade" id="dialogDiaChi"
+                                     tabindex="-1"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="dialog-product bg-white">
+                                            <table class="table-default table-hover data-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tên Khách Hàng</th>
+                                                    <th>Email</th>
+                                                    <th>Số Điện Thoại</th>
+                                                    <th>Thành Phố</th>
+                                                    <th>Huyện</th>
+                                                    <th>Xã</th>
+                                                    <th>Địa Chỉ</th>
+                                                    <th>Hành Động</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="address-list-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
+                                <input type="hidden" id="khachHangId" th:value="${session.khachHang.khachHangId}">
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Tên Khách Hàng : </label>
-                                    <input type="text" th:field="*{tenNguoiNhan}"
+                                    <input type="text" th:field="*{tenNguoiNhan}" id="tenNguoiNhan"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Tên khách hàng" name="tenNguoiNhan">
                                 </div>
                                 <div class="lg:col-span-6">
                                     <label class="form-label font-semibold">Số Điện Thoại</label>
-                                    <input type="text" th:field="*{sdt}"
+                                    <input type="text" th:field="*{sdt}" id="sdt"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Số điện thoại" name="sdt">
                                 </div>
                                 <div class="lg:col-span-12">
                                     <label class="form-label font-semibold">Email : </label>
-                                    <input type="email" th:field="*{email}"
+                                    <input type="email" th:field="*{email}" id="email"
                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                            placeholder="Email" name="email">
                                 </div>

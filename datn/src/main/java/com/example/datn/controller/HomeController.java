@@ -1,7 +1,6 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
-import com.example.datn.dto.MyUserDetail;
 import com.example.datn.dto.SanPhamHomeDTO;
 import com.example.datn.entity.*;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
@@ -14,11 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -449,6 +444,31 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("thatbai", true);
         }
         return "redirect:/cart";
+    }
+
+    // Tra cuu hoa don
+    @GetMapping("/viewSearchInvoice")
+    private String viewSearchInvoice(){
+        return "user/includes/content/search/search";
+    }
+
+    @PostMapping("/searchInvoice")
+    private String searchInvoice(@RequestParam String maVanDon,
+                                 @RequestParam String email,
+                                 Model model){
+
+        HoaDon hoaDon = hoaDonService.getHoaDonTraCuu(maVanDon,email);
+        if (hoaDon != null) {
+            List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
+            model.addAttribute("hoaDon", hoaDon);
+            model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+            model.addAttribute("success", true);
+            return "user/includes/content/search/detail";
+        } else {
+            model.addAttribute("error", true);
+            return "redirect:/viewSearchInvoice";
+        }
+
     }
 
 }
