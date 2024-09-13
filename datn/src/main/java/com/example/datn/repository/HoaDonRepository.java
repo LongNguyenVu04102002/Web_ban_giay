@@ -40,4 +40,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query("select p from HoaDon p where p.khachHang.khachHangId =:idKhachHang order by p.hoaDonId desc")
     List<HoaDon> getHoaDonKhachHang(Long idKhachHang);
 
+    @Query("select p from HoaDon p where p.maVanDon = :maVanDon and p.email = :email and p.loaiHoaDon = false")
+    HoaDon getHoaDonTraCuu(@Param("maVanDon") String maVanDon, @Param("email") String email);
+
 }
