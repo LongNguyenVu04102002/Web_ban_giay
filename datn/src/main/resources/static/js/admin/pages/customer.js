@@ -222,7 +222,7 @@ function displayAddressList(data, tabId) {
         });
 }
 
-
+//đổi id địa chỉ sang tên
 // Lưu trữ dữ liệu xã theo từng huyện
 const districtWardsMap = new Map();
 
