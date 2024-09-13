@@ -8,7 +8,7 @@
     <script src="/js/admin/pages/customer.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/instascan/1.0.0/instascan.min.js"></script>
     <script>
         const notificationTypeHtml = {
             Success: `
@@ -196,6 +196,60 @@
                 handleNotificationType('Info');
             }
         });
+    </script>
+    <script>
+        function startBarcodeScanner(indexId) {
+            const video = document.getElementById('video');
+            const scanner = new Instascan.Scanner({ video: video });
+
+            // Handle the scanned result
+            scanner.addListener('scan', function (content) {
+                console.log('Scanned content:', content);
+                addProductByBarcode(content);
+                scanner.stop();
+                const modal = document.getElementById(`barcodeScannerModal${indexId}`);
+                if (modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                }
+            });
+            // Start scanning
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                } else {
+                    console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+        }
+        function addProductByBarcode(barcode) {
+            console.log('Adding product with barcode:', barcode);
+            $.ajax({
+                url: '/add-product',
+                type: 'POST',
+                data: JSON.stringify({ barcode: barcode }),
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log('Product added successfully:', response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error adding product:', status, error);
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+                button.addEventListener('click', function () {
+                    const indexId = this.getAttribute('data-bs-target').replace('#barcodeScannerModal', '');
+                    startBarcodeScanner(indexId);
+                });
+            });
+        });
+
     </script>
 </head>
 <body>
@@ -406,10 +460,19 @@
                                 <div class="card-body flex items-center justify-between">
                                     <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
                                     <div class="flex">
-                                        <button type="button"
+                                        <button type="button" data-bs-toggle="modal"
+                                                th:data-bs-target="'#barcodeScannerModal' + ${index.id}"
                                                 class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600 mr-2">
-                                            Quét BarCode
+                                            BarCode
                                         </button>
+                                        <div th:id="'barcodeScannerModal' + ${index.id}" class="modal fade" tabindex="-1"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog dialog md:max-w-[500px] ">
+                                                <div class="dialog-confirm">
+                                                    <video id="video"></video>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <button type="button" data-bs-toggle="modal"
                                                 th:data-bs-target="'#dialogSanPham' + ${index.id}"
                                                 class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
@@ -650,7 +713,8 @@
                                                 <div class="lg:col-span-6">
                                                     <label class="form-label font-semibold">Tên Khách Hàng: </label>
                                                     <label>
-                                                        <input type="text" th:field="*{tenNguoiNhan}" th:id="'tenNguoiNhan' + ${index.id}"
+                                                        <input type="text" th:field="*{tenNguoiNhan}"
+                                                               th:id="'tenNguoiNhan' + ${index.id}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Tên Khách Hàng">
                                                     </label>
@@ -666,7 +730,8 @@
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Email: </label>
                                                     <label>
-                                                        <input type="email" th:field="*{email}" th:id="'email' + ${index.id}"
+                                                        <input type="email" th:field="*{email}"
+                                                               th:id="'email' + ${index.id}"
                                                                class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                                placeholder="Email">
                                                     </label>
@@ -700,7 +765,8 @@
                                                 </div>
                                                 <div class="lg:col-span-12">
                                                     <label class="form-label font-semibold">Địa Chỉ: </label>
-                                                    <input type="text" th:field="*{diaChi}" th:id="'diaChi' + ${index.id}"
+                                                    <input type="text" th:field="*{diaChi}"
+                                                           th:id="'diaChi' + ${index.id}"
                                                            class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                                            placeholder="Địa Chỉ">
                                                 </div>

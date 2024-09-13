@@ -9963,6 +9963,9 @@ hr{
     .md\:max-w-\[200px\]{
         max-width: 200px;
     }
+    .md\:max-w-\[500px\]{
+        max-width: 500px;
+    }
     .md\:max-w-\[700px\]{
         max-width: 700px;
     }
