@@ -39,7 +39,7 @@ public class KhachHang implements UserDetails {
     @Column(name = "khachHangId", nullable = false)
     private Long khachHangId;
 
-    @Size(max = 100, message = "Họ tên không được vượt quá 100 ký tự")
+    @Size(max = 50, message = "Họ tên không được vượt quá 50 ký tự")
     @Pattern(regexp = "^[\\p{L} \\s]*$", message = "Họ tên chỉ được chứa chữ cái và khoảng trắng")
     @Pattern(regexp = "^(?!\\s).*$", message = "Họ tên không được bắt đầu bằng khoảng trắng")
     @Pattern(regexp = ".*\\S$", message = "Họ tên không được kết thúc bằng khoảng trắng")
@@ -58,8 +58,9 @@ public class KhachHang implements UserDetails {
 
     @Column(name = "sdt", length = 20)
     @NotBlank(message = "Số điện thoại không được để trống")
-    @Size(max = 20, message = "Số điện thoại không được vượt quá 20 ký tự")
-    @Pattern(regexp = "^0\\d{9,19}$", message = "Số điện thoại phải bắt đầu bằng số 0 và chỉ chứa các chữ số")
+    @Size(max = 11, message = "Số điện thoại không được vượt quá 11 ký tự")
+    @Size(min = 10, message = "Số điện thoại phải có 10 ký tự")
+    @Pattern(regexp = "^0\\d{9,11}$", message = "Số điện thoại phải bắt đầu bằng số 0, có từ 10-11 số và chỉ chứa các chữ số")
     private String sdt;
 
     @Column(name = "email")
