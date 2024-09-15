@@ -53,11 +53,13 @@ public class PhieuGiamGiaController {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "admin/includes/content/giamgia/form";
         } else {
+            String actionMessage = (phieuGiamGia.getPhieuGiamGiaId() == null) ? "Thêm phiếu giảm giá thành công!" : "Cập nhật phiếu giảm giá thành công!";
             phieuGiamGiaService.save(phieuGiamGia);
-            redirectAttributes.addFlashAttribute("successMessage", "Thêm phiếu giảm giá thành công!");
+            redirectAttributes.addFlashAttribute("success", actionMessage);
             return "redirect:/admin/giamgia";
         }
     }
+
 
     @PostMapping("/giamgia/update/{id}")
     public String update(@PathVariable Long id) {
@@ -66,9 +68,9 @@ public class PhieuGiamGiaController {
     }
 
     @GetMapping("/giamgia/{phieuGiamGiaId}/toggle")
-    public String toggleTrangThai(@PathVariable Long phieuGiamGiaId, Model model) {
+    public String toggleTrangThai(@PathVariable Long phieuGiamGiaId, RedirectAttributes redirectAttributes) {
         phieuGiamGiaService.tonggleTrangThaiGiamGia(phieuGiamGiaId);
-        model.addAttribute("successMessage", "Cập nhật trạng thái thành công");
+        redirectAttributes.addFlashAttribute("success", "Cập nhật trạng thái thành công!");
         return "redirect:/admin/giamgia";
     }
 
@@ -94,7 +96,7 @@ public class PhieuGiamGiaController {
         // Kiểm tra số lượng phiếu
         if (phieuGiamGia.getSoLuongPhieu() == null) {
             bindingResult.rejectValue("soLuongPhieu", "NotNull.phieuGiamGia.soLuongPhieu", "Không được để trống.");
-        } else if (phieuGiamGia.getSoLuongPhieu() <= 0) {
+        } else if (phieuGiamGia.getSoLuongPhieu() < 0) {
             bindingResult.rejectValue("soLuongPhieu", "Positive.phieuGiamGia.soLuongPhieu", "Giá trị phải lớn hơn 0.");
         }
 

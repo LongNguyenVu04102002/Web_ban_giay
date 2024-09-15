@@ -25,11 +25,32 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
 
     @Autowired
     private PhieuGiamGiaRepository phieuGiamGiaRepository;
+    private LocalDate lastUpdateDate = null;
 
     @Override
     public List<PhieuGiamGia> getAll() {
-        return phieuGiamGiaRepository.findAll(Sort
-                .by(Sort.Direction.DESC, "phieuGiamGiaId"));
+        LocalDate currentDate = LocalDate.now();
+
+        if (lastUpdateDate == null || !lastUpdateDate.isEqual(currentDate)) {
+            updateAllVoucherStatuses();
+            lastUpdateDate = currentDate;
+        }
+
+        return phieuGiamGiaRepository.findAll(Sort.by(Sort.Direction.DESC, "phieuGiamGiaId"));
+    }
+
+    private void updateAllVoucherStatuses() {
+        List<PhieuGiamGia> danhSachPhieu = phieuGiamGiaRepository.findAll();
+
+        for (PhieuGiamGia phieu : danhSachPhieu) {
+            int oldStatus = phieu.getTrangThai();
+            if (oldStatus == 1 || oldStatus == 2) {
+                updateVoucherStatus(phieu);
+                if (phieu.getTrangThai() != oldStatus) {
+                    phieuGiamGiaRepository.save(phieu);
+                }
+            }
+        }
     }
 
     @Override
