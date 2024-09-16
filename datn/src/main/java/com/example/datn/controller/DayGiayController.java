@@ -19,8 +19,10 @@ public class DayGiayController {
     @GetMapping("/daygiay")
     public String show(Model model) {
         List<DayGiay> dayGiayList = dayGiayService.getAllDayGiay();
+        DayGiay dg = new DayGiay();
+        dg.setTrangThai(true);
         model.addAttribute("dayGiayList", dayGiayList);
-        model.addAttribute("dayGiay", new DayGiay());
+        model.addAttribute("dayGiay", dg);
         return "admin/includes/content/sanpham/daygiay/home";
     }
 

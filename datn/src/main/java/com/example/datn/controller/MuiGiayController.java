@@ -18,8 +18,10 @@ public class MuiGiayController {
     @GetMapping("/muigiay")
     public String show(Model model) {
         List<MuiGiay> muiGiayList = muiGiayService.getAllMuiGiay();
+        MuiGiay mg = new MuiGiay();
+        mg.setTrangThai(true);
         model.addAttribute("muiGiayList", muiGiayList);
-        model.addAttribute("muiGiay", new MuiGiay());
+        model.addAttribute("muiGiay", mg);
         return "admin/includes/content/sanpham/muigiay/home";
     }
 

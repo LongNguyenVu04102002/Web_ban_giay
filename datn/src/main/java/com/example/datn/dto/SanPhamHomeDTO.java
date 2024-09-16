@@ -16,6 +16,10 @@ public class SanPhamHomeDTO {
     private String ten;
     private BigDecimal giaThapNhat;
     private String anhDauTien;
+    private Long soLuong;
+    private Long soLuotMua;
+
+
 
 
 }

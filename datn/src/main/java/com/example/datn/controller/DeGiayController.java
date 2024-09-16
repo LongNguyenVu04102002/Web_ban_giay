@@ -19,8 +19,10 @@ public class DeGiayController {
     @GetMapping("/degiay")
     public String show(Model model) {
         List<DeGiay> deGiayList = deGiayService.getAllDeGiay();
+        DeGiay dg = new DeGiay();
+        dg.setTrangThai(true);
         model.addAttribute("deGiayList", deGiayList);
-        model.addAttribute("deGiay", new DeGiay());
+        model.addAttribute("deGiay", dg);
         return "admin/includes/content/sanpham/degiay/home";
     }
 

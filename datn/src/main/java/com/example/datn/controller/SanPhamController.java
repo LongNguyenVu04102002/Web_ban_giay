@@ -56,7 +56,9 @@ public class SanPhamController {
 
     @GetMapping("/giay/form")
     public String form(Model model) {
-        model.addAttribute("sanPham", new SanPham());
+        SanPham sp = new SanPham();
+        sp.setTrangThai(true);
+        model.addAttribute("sanPham", sp);
         return getString(model);
     }
 

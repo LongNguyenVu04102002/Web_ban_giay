@@ -19,8 +19,10 @@ public class ThuongHieuController {
     @GetMapping("/thuonghieu")
     public String show(Model model) {
         List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
+        ThuongHieu th = new ThuongHieu();
+        th.setTrangThai(true);
         model.addAttribute("thuongHieuList", thuongHieuList);
-        model.addAttribute("thuongHieu", new ThuongHieu());
+        model.addAttribute("thuongHieu", th);
         return "admin/includes/content/sanpham/thuonghieu/home";
     }
 

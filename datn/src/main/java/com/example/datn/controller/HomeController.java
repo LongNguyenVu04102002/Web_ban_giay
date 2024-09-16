@@ -62,8 +62,11 @@ public class HomeController {
     // Home
     @GetMapping("/home")
     public String home(Model model) {
+
         Page<SanPhamHomeDTO> sanPhams = sanPhamService.getSanPhamForHomePage(PageRequest.of(0, 8));
+        List<SanPhamHomeDTO> sanPhamTop = sanPhamService.getTopSellingProduct();
         model.addAttribute("sanPhams", sanPhams);
+        model.addAttribute("sanPhamTop", sanPhamTop);
         return "user/includes/content/home";
     }
 

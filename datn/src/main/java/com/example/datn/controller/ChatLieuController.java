@@ -18,8 +18,10 @@ public class ChatLieuController {
     @GetMapping("/chatlieu")
     public String show(Model model) {
         List<ChatLieu> chatLieuList = chatLieuService.getAllChatLieu();
+        ChatLieu cl = new ChatLieu();
+        cl.setTrangThai(true);
         model.addAttribute("chatLieuList", chatLieuList);
-        model.addAttribute("chatLieu", new ChatLieu());
+        model.addAttribute("chatLieu", cl);
         return "admin/includes/content/sanpham/chatlieu/home";
     }
     @PostMapping("/chatlieu/save")

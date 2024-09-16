@@ -89,7 +89,7 @@ public class SanPhamChiTietController {
                              @RequestParam(value = "deletedImageIds", required = false) String deletedImageIds) throws IOException {
 
         if (sanPhamChiTiet.getGiaBan() == null || sanPhamChiTiet.getGiaBan().compareTo(new BigDecimal("1000")) < 0 ||
-                sanPhamChiTiet.getSoLuong() == null || sanPhamChiTiet.getSoLuong() < 1) {
+                sanPhamChiTiet.getSoLuong() == null || sanPhamChiTiet.getSoLuong() < 0) {
             return "redirect:/admin/includes/content/sanpham/bienthegiay/home";
         }
 

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" layout:decorate="~{admin/layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout.html}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="icon" href="/images/logo_xboy.png" type="image/png">
+    <title>Phiếu giảm giá</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -18,14 +21,14 @@
         <div class="flex items-center justify-between border-b border-stroke py-4 px-4">
             <div class="flex flex-wrap items-center gap-4">
                 <label class="flex-grow">
-                    <input type="text" id="search"
-                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                           placeholder="Search...">
+                    <input class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary" id="search"
+                           placeholder="Search..."
+                           type="text">
                 </label>
                 <div class="flex-shrink-0">
                     <label>
-                        <select id="loaiPhieuFilter" name="loaiHoaDon"
-                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                        <select class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary" id="loaiPhieuFilter"
+                                name="loaiHoaDon">
                             <option>Loại Phiếu</option>
                             <option value="Tiền mặt">Tiền mặt</option>
                             <option value="Phần trăm">Phần trăm</option>
@@ -34,8 +37,8 @@
                 </div>
                 <div class="flex-shrink-0">
                     <label>
-                        <select id="trangThaiPggFilter" name="trangThai"
-                                class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary">
+                        <select class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary" id="trangThaiPggFilter"
+                                name="trangThai">
                             <option value="0">Trạng Thái</option>
                             <option value="Đang diễn ra">Đang diễn ra</option>
                             <option value="Sắp diễn ra">Sắp diễn ra</option>
@@ -45,27 +48,27 @@
                 </div>
                 <span class="ml-4">From Date:</span>
                 <label class="flex-grow">
-                    <input type="date" id="fromDate"
-                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                           placeholder="From date">
+                    <input class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary" id="fromDate"
+                           placeholder="From date"
+                           type="date">
                 </label>
                 <span>To Date:</span>
                 <label class="flex-grow">
-                    <input type="date" id="toDate"
-                           class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                           placeholder="To date">
+                    <input class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary" id="toDate"
+                           placeholder="To date"
+                           type="date">
                 </label>
             </div>
             <div>
-                <a th:href="@{/admin/giamgia/form}"
-                   class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800">
+                <a class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800"
+                   th:href="@{/admin/giamgia/form}">
                     Thêm phiếu giảm giá
                 </a>
             </div>
         </div>
 
-        <div id="DataTableAll" class="px-4">
-            <table id="data-table-pgg" class="table-default table-hover data-table">
+        <div class="px-4" id="DataTableAll">
+            <table class="table-default table-hover data-table" id="data-table-pgg">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -104,39 +107,39 @@
                     <td th:text="${pgg.ngayBatDau}"></td>
                     <td th:text="${pgg.ngayKetThuc}"></td>
                     <td>
-                        <span th:if="${pgg.trangThai == 1}"
-                              class="btn btn-sm bg-sky-50 text-sky-800"
+                        <span class="btn btn-sm bg-sky-50 text-sky-800"
+                              th:if="${pgg.trangThai == 1}"
                               th:text="'Đang diễn ra'"></span>
-                        <span th:if="${pgg.trangThai == 2}"
-                              class="btn btn-sm bg-yellow-50 hover:bg-yellow-100 text-yellow-600"
+                        <span class="btn btn-sm bg-yellow-50 hover:bg-yellow-100 text-yellow-600"
+                              th:if="${pgg.trangThai == 2}"
                               th:text="'Sắp diễn ra'"></span>
-                        <span th:if="${pgg.trangThai == 3}"
-                              class="btn btn-sm bg-rose-50 hover:bg-orange-100 text-rose-600"
+                        <span class="btn btn-sm bg-rose-50 hover:bg-orange-100 text-rose-600"
+                              th:if="${pgg.trangThai == 3}"
                               th:text="'Đã kết thúc'"></span>
                     </td>
-                    <td class="flex items-center text-center justify-center space-x-2">
+                    <td class="flex items-center justify-center space-x-2">
                         <a th:href="@{/admin/giamgia/detail/{id}(id=${pgg.phieuGiamGiaId})}">
-                            <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white"
-                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                 height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
-                                <path stroke="currentColor" stroke-width="2"
-                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            <svg aria-hidden="true"
+                                 class="w-[18px] h-[18px] text-gray-800 dark:text-white" fill="none" height="24"
+                                 viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" stroke="currentColor"
+                                      stroke-width="2"/>
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor"
+                                      stroke-width="2"/>
                             </svg>
                         </a>
-                        <form th:if="${pgg.trangThai == 1}"
+                        <form method="get"
                               th:action="@{/admin/giamgia/{phieuGiamGiaId}/toggle(phieuGiamGiaId=${pgg.phieuGiamGiaId})}"
-                              method="get">
+                              th:if="${pgg.trangThai == 1}">
                             <label class="switcher">
-                                <input type="checkbox" name="trangThai"
-                                       th:checked="${pgg.trangThai == 1}" onchange="confirmToggle(this)">
+                                <input name="trangThai" onchange="confirmToggle(this)"
+                                       th:checked="${pgg.trangThai == 1}" type="checkbox">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
                         <form th:if="${pgg.trangThai != 1}">
                             <label class="switcher">
-                                <input type="checkbox" name="trangThai" disabled>
+                                <input disabled name="trangThai" type="checkbox">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
@@ -160,5 +163,29 @@
             checkbox.checked = !checkbox.checked;
         }
     }
+    document.addEventListener('DOMContentLoaded', function () {
+        var successMessage = "[[${success}]]";
+        console.log("Success message:", successMessage); // Debugging line
+
+        if (successMessage !== 'null' && successMessage.trim() !== '') {
+            Swal.fire({
+                position: 'top-end', // Vị trí của thông báo
+                toast: true, // Thiết lập kiểu thông báo là "toast"
+                showConfirmButton: false, // Không hiển thị nút xác nhận
+                timer: 4000, // Thời gian hiển thị (đơn vị là milliseconds)
+                width: '300px', // Đặt chiều rộng của thông báo
+                text: successMessage,
+                icon: 'success',
+                timerProgressBar: true, // Không hiển thị thanh tiến trình
+            });
+        }
+    });
+
 </script>
+<style>
+    .swal2-toast {
+        top: 60px !important; /* Điều chỉnh khoảng cách từ top */
+    }
+</style>
+
 
