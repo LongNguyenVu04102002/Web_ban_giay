@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -56,7 +57,9 @@ public class SanPhamController {
 
     @GetMapping("/giay/form")
     public String form(Model model) {
-        model.addAttribute("sanPham", new SanPham());
+        SanPham sp = new SanPham();
+        sp.setTrangThai(true);
+        model.addAttribute("sanPham", sp);
         return getString(model);
     }
 
@@ -79,14 +82,20 @@ public class SanPhamController {
     }
 
     @PostMapping("/giay/save")
-    public String save(SanPham sanPham) {
+    public String save(SanPham sanPham, RedirectAttributes redirectAttributes) {
+        if(sanPham.getSanPhamId() == null){
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("update", true);
+        }
         sanPhamService.save(sanPham);
         return "redirect:/admin/sanpham/giay";
     }
 
     @PostMapping("/giay/update/{id}")
-    public String update(@PathVariable Long id) {
+    public String update(@PathVariable Long id,RedirectAttributes redirectAttributes) {
         sanPhamService.update(id);
+        redirectAttributes.addFlashAttribute("status",true);
         return "redirect:/admin/sanpham/giay";
     }
 

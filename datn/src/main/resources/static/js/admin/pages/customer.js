@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Load customer data for all tabs
     for (let i = 1; i <= 5; i++) {
         loadCustomerData(i);
     }
@@ -86,12 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Load the active tab from localStorage if it exists
     const savedTab = localStorage.getItem('activeTab');
     if (savedTab) {
         activateTab(savedTab);
     } else {
-        // Default to the first tab if no tab is saved
         activateTab('tab1');
     }
     calculateTotal();
@@ -140,7 +137,7 @@ function selectCustomer(button, tabId) {
         localStorage.setItem(`selectedCustomer-${tabId}`, JSON.stringify({
             id: customerId,
             name: hoTen,
-            email,
+            email: email,
             phone: sdt
         }));
 
@@ -695,4 +692,6 @@ $(document).ready(function () {
         });
     }
 });
+
+
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -19,13 +20,20 @@ public class ThuongHieuController {
     @GetMapping("/thuonghieu")
     public String show(Model model) {
         List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
+        ThuongHieu th = new ThuongHieu();
+        th.setTrangThai(true);
         model.addAttribute("thuongHieuList", thuongHieuList);
-        model.addAttribute("thuongHieu", new ThuongHieu());
+        model.addAttribute("thuongHieu", th);
         return "admin/includes/content/sanpham/thuonghieu/home";
     }
 
     @PostMapping("/thuonghieu/save")
-    public String save(ThuongHieu thuongHieu) {
+    public String save(ThuongHieu thuongHieu, RedirectAttributes redirectAttributes) {
+        if (thuongHieu.getThuongHieuId() == null) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("update", true);
+        }
         thuongHieuService.save(thuongHieu);
         return "redirect:/admin/sanpham/thuonghieu";
     }
@@ -44,5 +52,5 @@ public class ThuongHieuController {
         thuongHieuService.delete(id);
         return "redirect:/admin/sanpham/thuonghieu";
     }
-    
+
 }

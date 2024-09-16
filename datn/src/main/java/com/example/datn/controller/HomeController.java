@@ -1,12 +1,12 @@
 package com.example.datn.controller;
 
 import com.example.datn.dto.CartItem;
-import com.example.datn.dto.MyUserDetail;
 import com.example.datn.dto.SanPhamHomeDTO;
 import com.example.datn.entity.*;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
 import com.example.datn.service.Impl.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,11 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +62,11 @@ public class HomeController {
     // Home
     @GetMapping("/home")
     public String home(Model model) {
+
         Page<SanPhamHomeDTO> sanPhams = sanPhamService.getSanPhamForHomePage(PageRequest.of(0, 8));
+        List<SanPhamHomeDTO> sanPhamTop = sanPhamService.getTopSellingProduct();
         model.addAttribute("sanPhams", sanPhams);
+        model.addAttribute("sanPhamTop", sanPhamTop);
         return "user/includes/content/home";
     }
 
@@ -118,24 +117,14 @@ public class HomeController {
 
         return "user/includes/content/detail";
     }
-    // Shop
-//    @GetMapping("/shop")
-//    public String shop(Model model) {
-//        List<SanPham> sanPhamList = sanPhamService.getAll();
-//        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
-//        List<KichThuoc> kichThuocList = kichThuocService.getAll();
-//        model.addAttribute("sanPhamList", sanPhamList);
-//        model.addAttribute("thuongHieuList", thuongHieuList);
-//        model.addAttribute("kichThuocList", kichThuocList);
-//        return "user/includes/content/shop";
-//    }
+
     @GetMapping("/shop")
     public String getShopPage(
             @RequestParam(required = false) Long thuongHieuId,
             @RequestParam(required = false) Long kichThuocId,
             @RequestParam(required = false) Long mauSacId,
             @RequestParam(required = false) String keyword,
-            @PageableDefault(size = 100,page = 0, sort = "ten", direction = Sort.Direction.ASC) Pageable pageable,
+            @PageableDefault(size = 100, page = 0, sort = "ten", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
         Page<SanPhamHomeDTO> page = sanPhamService.getSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
@@ -277,8 +266,12 @@ public class HomeController {
 
     @PostMapping("/user/invoice/update/stepup")
     public String stepUp(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
-        hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
-        redirectAttributes.addFlashAttribute("stepup", true);
+        boolean stepUp = hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
+        if (stepUp){
+            redirectAttributes.addFlashAttribute("stepup", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/user/invoice/cartdetail/" + hoaDonId;
     }
 
@@ -290,7 +283,7 @@ public class HomeController {
     }
 
     @PostMapping("/user/timeline/huydon/{id}")
-    public String huyDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) {
+    public String huyDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
         timeLineService.huyDonHang(id, mota);
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/user/invoice/detail/" + id;
@@ -446,6 +439,123 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("thatbai", true);
         }
         return "redirect:/cart";
+    }
+
+    // Tra cuu hoa don
+    @GetMapping("/viewSearchInvoice")
+    private String viewSearchInvoice() {
+        return "user/includes/content/search/search";
+    }
+
+    @RequestMapping(value = "/searchInvoice", method = {RequestMethod.GET, RequestMethod.POST})
+    private String searchInvoice(@RequestParam String maVanDon,
+                                 @RequestParam String email,
+                                 Model model,
+                                 RedirectAttributes redirectAttributes) {
+
+        HoaDon hoaDon = hoaDonService.getHoaDonTraCuu(maVanDon, email);
+        if (hoaDon != null) {
+            List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.findAllByTrangThaiTrue();
+            model.addAttribute("hoaDon", hoaDon);
+            model.addAttribute("maVanDon", maVanDon);
+            model.addAttribute("email", email);
+            model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+            model.addAttribute("success", true);
+            return "user/includes/content/search/detail";
+        } else {
+            redirectAttributes.addFlashAttribute("error", true);
+            return "redirect:/viewSearchInvoice";
+        }
+
+    }
+
+    @PostMapping("/search/timeline/huydon/{id}")
+    public String huyDonHangSearch(@PathVariable Long id,
+                                   @RequestParam String mota,
+                                   @RequestParam String maVanDon,
+                                   @RequestParam String email,
+                                   RedirectAttributes redirectAttributes) throws MessagingException {
+        timeLineService.huyDonHang(id, mota);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/searchInvoice?maVanDon=" + maVanDon + "&email=" + email;
+    }
+
+    @PostMapping("/search/invoice/update/thongtingiaohang")
+    public String updateThongTinGiaoHangSearch(@ModelAttribute HoaDon hoaDon,
+                                               @RequestParam String maVanDon,
+                                               @RequestParam String email,
+                                               RedirectAttributes redirectAttributes) {
+        hoaDonService.updateThongTinGiaoHang(hoaDon);
+        redirectAttributes.addFlashAttribute("update", true);
+        return "redirect:/searchInvoice?maVanDon=" + maVanDon + "&email=" + email;
+    }
+
+    @GetMapping("/search/invoice/cartdetail/{id}")
+    public String getCartDetailSearch(@PathVariable Long id,
+                                      @RequestParam String maVanDon,
+                                      @RequestParam String email,
+                                      Model model) {
+        HoaDon hoaDon = hoaDonService.getHoaDonById(id);
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.findAllByTrangThaiTrue();
+        model.addAttribute("hoaDon", hoaDon);
+        model.addAttribute("maVanDon", maVanDon);
+        model.addAttribute("email", email);
+        model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
+        return "user/includes/content/search/cartdetail";
+    }
+
+    @PostMapping("/search/invoice/update")
+    public String updateSearch(@RequestParam Long idHoaDon,
+                               @RequestParam Long idSanPhamChiTiet,
+                               @RequestParam String maVanDon,
+                               @RequestParam String email,
+                               RedirectAttributes redirectAttributes) {
+        boolean add = hoaDonService.update(idHoaDon, idSanPhamChiTiet);
+        if (add) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
+        return "redirect:/search/invoice/cartdetail/" + idHoaDon + "?maVanDon=" + maVanDon + "&email=" + email;
+    }
+
+    @PostMapping("/search/invoice/update/stepdown")
+    public String stepDownSearch(@RequestParam Long hoaDonId,
+                                 @RequestParam Long hoaDonChiTietId,
+                                 @RequestParam String maVanDon,
+                                 @RequestParam String email,
+                                 RedirectAttributes redirectAttributes) {
+        hoaDonService.stepDown(hoaDonId, hoaDonChiTietId);
+        redirectAttributes.addFlashAttribute("stepdown", true);
+        return "redirect:/search/invoice/cartdetail/" + hoaDonId + "?maVanDon=" + maVanDon + "&email=" + email;
+
+    }
+
+    @PostMapping("/search/invoice/update/stepup")
+    public String stepUpSearch(@RequestParam Long hoaDonId,
+                               @RequestParam Long hoaDonChiTietId,
+                               @RequestParam String maVanDon,
+                               @RequestParam String email,
+                               RedirectAttributes redirectAttributes) {
+        boolean stepup = hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
+        if (stepup) {
+            redirectAttributes.addFlashAttribute("stepup", true);
+        } else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
+        return "redirect:/search/invoice/cartdetail/" + hoaDonId + "?maVanDon=" + maVanDon + "&email=" + email;
+    }
+
+    @PostMapping("/search/invoice/delete")
+    public String deleteSearch(@RequestParam Long hoaDonId,
+                               @RequestParam Long hoaDonChiTietId,
+                               @RequestParam String maVanDon,
+                               @RequestParam String email,
+                               RedirectAttributes redirectAttributes) {
+        hoaDonService.delete(hoaDonId, hoaDonChiTietId);
+        redirectAttributes.addFlashAttribute("deletes", true);
+        return "redirect:/search/invoice/cartdetail/" + hoaDonId + "?maVanDon=" + maVanDon + "&email=" + email;
+
     }
 
 }

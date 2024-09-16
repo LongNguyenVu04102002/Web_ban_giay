@@ -11,6 +11,80 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const notificationTypeHtml = {
+            Add: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Thêm màu sắc thành công.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+            Update: `
+                <div class="toast fade" id="notificationToastSuccess">
+                    <div class="notification">
+                        <div class="notification-content">
+                            <div class="mr-3">
+                                <span class="text-2xl text-emerald-400">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
+                                         aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mr-4">
+                                <div class="notification-title">Success</div>
+                                <div class="notification-description">
+                                    Cập nhập màu sắc thành công.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    `,
+        }
+
+        function handleNotificationType(type) {
+            console.log('type', type)
+            $('#notification-toast').append(notificationTypeHtml[type])
+            $('#notification-toast .toast:last-child').toast('show');
+            setTimeout(function () {
+                $('#notification-toast .toast:first-child').remove();
+            }, 5000);
+        }
+        $(document).ready(function () {
+            const add = JSON.parse([[${add}]]);
+            if (add) {
+                handleNotificationType('Add');
+            }
+        });
+        $(document).ready(function () {
+            const update = JSON.parse([[${update}]]);
+            if (update) {
+                handleNotificationType('Update');
+            }
+        });
+    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -64,14 +138,14 @@
                                             </button>
                                         </td>
                                         <td class="flex items-center justify-center space-x-2">
-                                            <a th:href="@{/admin/sanpham/mausac/delete/{id}(id=${ms.mauSacId})}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                                     class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
-                                                </svg>
-                                            </a>
+<!--                                            <a th:href="@{/admin/sanpham/mausac/delete/{id}(id=${ms.mauSacId})}">-->
+<!--                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"-->
+<!--                                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true"-->
+<!--                                                     class="w-6 h-6">-->
+<!--                                                    <path stroke-linecap="round" stroke-linejoin="round"-->
+<!--                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>-->
+<!--                                                </svg>-->
+<!--                                            </a>-->
                                             <a th:href="@{/admin/sanpham/mausac/detail/{id}(id=${ms.mauSacId})}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                      stroke-width="1.5" stroke="currentColor" aria-hidden="true"
@@ -140,14 +214,23 @@
             </div>
         </div>
     </div>
+    <div id="notification-toast" class="toast-wrapper top-end"></div>
     <script>
         $(document).ready(function () {
             $('#mauSacForm').on('submit', function (event) {
+<<<<<<< HEAD
+                const tenMauSac = $('#tenMauSac').val().trim();
+                const moTa = $('input[name="moTa"]').val().trim();
+=======
+                event.preventDefault(); // Ngăn chặn form submit mặc định
+
                 var tenMauSac = $('#tenMauSac').val().trim();
                 var moTa = $('input[name="moTa"]').val().trim();
+                var mauSacId = $('#mauSacId').val(); // Lấy giá trị ID màu sắc nếu có
+>>>>>>> origin/master
 
+                // Kiểm tra các trường hợp dữ liệu không hợp lệ
                 if (!tenMauSac) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -157,7 +240,6 @@
                 }
 
                 if (tenMauSac.length > 100) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -167,7 +249,6 @@
                 }
 
                 if (moTa.length > 3000) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -176,7 +257,8 @@
                     return;
                 }
 
-                var mauSacId = $('#mauSacId').val();
+<<<<<<< HEAD
+                const mauSacId = $('#mauSacId').val();
 
                 if (mauSacId) {
                     $.ajax({
@@ -192,29 +274,95 @@
                                     text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
                                 });
                             }
+=======
+                // Xác nhận trước khi thêm hoặc cập nhật
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: mauSacId ? 'Bạn có muốn cập nhật thông tin màu sắc này không?' : 'Bạn có muốn thêm màu sắc này không?', // Thông báo dựa trên hành động
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Xử lý logic kiểm tra trùng tên màu sắc
+                        if (mauSacId) {
+                            $.ajax({
+                                url: `/check/update-ms?id=${mauSacId}&ten=${tenMauSac}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để cập nhật
+                                        submitForm('Cập nhật màu sắc thành công!');
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: `/check/add-ms?ten=${tenMauSac}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        }).then(function () {
+                                            $('#mauSacForm')[0].reset();
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để thêm mới
+                                        submitForm('Thêm mới màu sắc thành công!');
+                                    }
+                                }
+                            });
+>>>>>>> origin/master
                         }
-                    });
-                } else {
-                    $.ajax({
-                        url: `/check/add-ms?ten=${tenMauSac}`,
-                        method: 'GET',
-                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                }).then(function () {
-                                    $('#mauSacForm')[0].reset();
-                                });
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             });
+
+            // Hàm submit form và hiển thị thông báo thành công
+            function submitForm(successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage, // Hiển thị thông báo tương ứng với hành động
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#mauSacForm').unbind('submit').submit(); // Thực hiện submit form
+                });
+            }
+
+            // Hiển thị thông báo thành công nếu tham số 'success=true' tồn tại trên URL
+            function showSuccessMessage(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    location.reload(); // Reload lại trang sau khi thông báo kết thúc
+                });
+            }
+
+            // Kiểm tra tham số 'success=true' trong URL và hiển thị thông báo
+            if (window.location.search.includes('success=true')) {
+                var action = window.location.search.includes('action=update') ? 'Cập nhật' : 'Thêm mới';
+                showSuccessMessage(action + ' màu sắc thành công!');
+            }
         });
+
     </script>
 </div>
 </body>

@@ -7,7 +7,6 @@ import com.example.datn.model.response.ThanhToanResponse;
 
 import java.util.List;
 
-
 public interface HoaDonService {
     List<HoaDon> getAllHoaDon();
 
@@ -33,14 +32,16 @@ public interface HoaDonService {
 
     String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
 
-    void update(Long idHoaDon, Long idSanPhamChiTiet);
+    boolean update(Long idHoaDon, Long idSanPhamChiTiet);
 
     void stepDown(Long hoaDonId, Long hoaDonChiTietId);
 
-    void stepUp(Long hoaDonId, Long hoaDonChiTietId);
+    boolean stepUp(Long hoaDonId, Long hoaDonChiTietId);
 
     void updateThongTinGiaoHang(HoaDon hoaDon);
 
     void delete(Long hoaDonId, Long hoaDonChiTietId);
+
+    HoaDon getHoaDonTraCuu(String maVanDon, String email);
 
 }

@@ -16,7 +16,7 @@ public interface SanPhamService {
 
     void update(Long id);
 
-    boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId);
+    boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId, Long sanPhamId);
 
     Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable);
 
@@ -27,4 +27,5 @@ public interface SanPhamService {
 
 
     List<SanPham> findAllByTrangThaiTrue();
+     List<SanPhamHomeDTO> getTopSellingProduct();
 }

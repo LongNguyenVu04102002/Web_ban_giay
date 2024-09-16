@@ -128,7 +128,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     @Transactional
-    public void update(Long idHoaDon, Long idSanPhamChiTiet) {
+    public boolean update(Long idHoaDon, Long idSanPhamChiTiet) {
         Optional<HoaDon> hoaDonOpt = hoaDonRepository.findById(idHoaDon);
         Optional<SanPhamChiTiet> sanPhamChiTietOpt = sanPhamChiTietRepository.findById(idSanPhamChiTiet);
 
@@ -137,11 +137,16 @@ public class HoaDonServiceImpl implements HoaDonService {
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietOpt.get();
             List<HoaDonChiTiet> hoaDonChiTietList = hoaDon.getHoaDonChiTietList();
             BigDecimal tongTien = BigDecimal.ZERO;
+            int availableQuantity = sanPhamChiTiet.getSoLuong();
 
             boolean updated = false;
 
             for (HoaDonChiTiet hdct : hoaDonChiTietList) {
                 if (Objects.equals(hdct.getSanPhamChiTiet().getSanPhamChiTietId(), idSanPhamChiTiet)) {
+                    if (hdct.getSoLuong() + 1 > availableQuantity) {
+                        return false;
+                    }
+
                     hdct.setSoLuong(hdct.getSoLuong() + 1);
 
                     BigDecimal giaBan = sanPhamChiTiet.getGiaBan();
@@ -157,6 +162,10 @@ public class HoaDonServiceImpl implements HoaDonService {
             }
 
             if (!updated) {
+                if (availableQuantity <= 0) {
+                    return false;
+                }
+
                 HoaDonChiTiet hoaDonChiTiet = HoaDonChiTiet.builder()
                         .sanPhamChiTiet(sanPhamChiTiet)
                         .hoaDon(hoaDon)
@@ -165,14 +174,18 @@ public class HoaDonServiceImpl implements HoaDonService {
                         .donGia(sanPhamChiTiet.getGiaBan())
                         .build();
 
+                // Lưu chi tiết hóa đơn mới
                 hoaDonChiTietRepository.save(hoaDonChiTiet);
                 tongTien = tongTien.add(hoaDonChiTiet.getDonGia());
             }
 
             tienGiam(hoaDon, tongTien);
-        }
-    }
 
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     @Transactional
@@ -197,7 +210,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     @Transactional
-    public void stepUp(Long hoaDonId, Long hoaDonChiTietId) {
+    public boolean stepUp(Long hoaDonId, Long hoaDonChiTietId) {
         Optional<HoaDon> hoaDonOpt = hoaDonRepository.findById(hoaDonId);
         Optional<HoaDonChiTiet> hoaDonChiTietOpt = hoaDonChiTietRepository.findById(hoaDonChiTietId);
 
@@ -205,15 +218,27 @@ public class HoaDonServiceImpl implements HoaDonService {
             HoaDon hoaDon = hoaDonOpt.get();
             HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietOpt.get();
 
-            int currentQuantity = hoaDonChiTiet.getSoLuong();
-            if (currentQuantity > 0) {
-                hoaDonChiTiet.setSoLuong(currentQuantity + 1);
-                hoaDonChiTiet.setDonGia(BigDecimal.valueOf(currentQuantity + 1).multiply(hoaDonChiTiet.getSanPhamChiTiet().getGiaBan()));
+            int currentCartQuantity = hoaDonChiTiet.getSoLuong();
+            int availableQuantity = hoaDonChiTiet.getSanPhamChiTiet().getSoLuong();
+
+            if (currentCartQuantity + 1 > availableQuantity) {
+                return false;
+            }
+
+            if (currentCartQuantity > 0) {
+                hoaDonChiTiet.setSoLuong(currentCartQuantity + 1);
+                hoaDonChiTiet.setDonGia(BigDecimal.valueOf(currentCartQuantity + 1)
+                        .multiply(hoaDonChiTiet.getSanPhamChiTiet().getGiaBan()));
 
                 updateHoaDon(hoaDon, hoaDonChiTiet);
+
+                return true;
             }
         }
+
+        return false;
     }
+
 
     @Override
     @Transactional
@@ -256,6 +281,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public HoaDon getHoaDonTraCuu(String maVanDon, String email) {
+        return hoaDonRepository.getHoaDonTraCuu(maVanDon,email);
+    }
+
+    @Override
     @Transactional
     public boolean saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse) {
         Optional<GioHang> gioHangOpt = gioHangRepository.findById(gioHangId);
@@ -272,6 +302,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
         if (phieuGiamGia != null) {
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
 
         hoaDon.setLoaiHoaDon(true);
@@ -371,6 +403,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         if (phieuGiamGia != null) {
             hoaDon.setTienGiam(phieuGiamGiaResponse.getTienGiam());
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
         BigDecimal tongTien = BigDecimal.ZERO;
 

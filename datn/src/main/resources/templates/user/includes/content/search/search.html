@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tra cứu</title>
+    <script src="/js/admin/vendors.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#search-form').validate({
+                ignore: ':hidden:not(:checkbox)',
+                errorElement: 'div',
+                errorClass: 'input-invalid',
+                validClass: 'input-valid',
+                errorPlacement: function (error, element) {
+                    error.addClass('text-red-600 mt-1');
+                    if (element.prop('type') === 'checkbox') {
+                        error.insertAfter(element.parent('label'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    maVanDon: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                },
+                messages: {
+                    maVanDon: {
+                        required: 'Vui lòng nhập mã nhận đơn.'
+                    },
+                    email: {
+                        required: 'Vui lòng nhập email',
+                        email: 'Email không đúng định dạng'
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        const notificationTypeHtml = {
+            Error: `<div class="toast fade" id="notificationToastSuccess">
+                        <div class="notification">
+                            <div class="notification-content">
+                                <div class="mr-3">
+                                    <span class="text-2xl text-blue-400">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mr-4">
+                                    <div class="notification-title">Info</div>
+                                    <div class="notification-description">
+                                        Không tìm thấy hóa đơn.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+        };
+
+        function handleNotificationType(type) {
+            $('#notification-toast').append(notificationTypeHtml[type])
+            $('#notification-toast .toast:last-child').toast('show');
+            setTimeout(function () {
+                $('#notification-toast .toast:first-child').remove();
+            }, 5000);
+        }
+
+        $(document).ready(function () {
+            const error = JSON.parse([[${error}]]);
+            if (error) {
+                handleNotificationType('Error');
+            }
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="usercontent">
+    <section
+            class="relative table w-full items-center py-36 bg-top bg-no-repeat bg-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900"></div>
+        <div class="container relative">
+            <div class="grid grid-cols-1 pb-8 text-center mt-10">
+                <h3 class="mb-3 text-4xl leading-normal tracking-wider font-semibold text-white">Search Invoice</h3>
+            </div>
+        </div>
+
+        <div class="absolute text-center z-10 bottom-5 start-0 end-0 mx-3">
+            <ul class="tracking-[0.5px] mb-0 inline-block">
+                <li
+                        class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white/50 hover:text-white">
+                    <a href="#">Xboy</a></li>
+                <li class="inline-block text-base text-white/50 mx-0.5 ltr:rotate-0 rtl:rotate-180"><i
+                        class="mdi mdi-chevron-right"></i></li>
+                <li class="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white"
+                    aria-current="page">Search Invoice
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section class="container relative py-4">
+        <form th:action="@{/searchInvoice}" method="post" id="search-form">
+            <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-6">
+                <div class="lg:col-span-5">
+                    <label class="form-label font-semibold">Mã Vận Đơn: </label>
+                    <input type="text" name="maVanDon"
+                           class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                           placeholder="Mã Vận Đơn ">
+                </div>
+                <div class="lg:col-span-5">
+                    <label class="form-label font-semibold">Email: </label>
+                    <input type="email" name="email"
+                           class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
+                           placeholder="Email ">
+                </div>
+                <div class="lg:col-span-2">
+                    <button type="submit"
+                            class="py-2 px-5 mt-8 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-5">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+    <div id="notification-toast" aria-live="polite" aria-atomic="true" class="position-relative"></div>
+</div>
+</body>
+</html>
