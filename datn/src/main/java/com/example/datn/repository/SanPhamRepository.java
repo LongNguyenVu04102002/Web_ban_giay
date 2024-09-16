@@ -16,24 +16,33 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 
     List<SanPham> findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId);
 
-    @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(sp.sanPhamId, sp.ten, " +
+    @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(" +
+            "sp.sanPhamId, " +
+            "sp.ten, " +
             "MIN(spct.giaBan), " +
-            "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))) " +
-            ") " +
+            "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))), " +
+            "COALESCE(CAST(SUM(spct.soLuong) AS long), 0L), " +
+            "COALESCE(CAST(SUM(hd.soLuong) AS long), 0L)) " +
             "FROM SanPham sp " +
-            "JOIN sp.sanPhamChiTietList spct " +
+            "LEFT JOIN sp.sanPhamChiTietList spct " +
+            "LEFT JOIN HoaDonChiTiet hd ON hd.sanPhamChiTiet = spct " +
             "WHERE sp.trangThai = true " +
             "GROUP BY sp.sanPhamId, sp.ten " +
             "HAVING COUNT(spct) > 0")
     Page<SanPhamHomeDTO> getSanPhamForHomePage(Pageable pageable);
 
 
-    @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(sp.sanPhamId, sp.ten, MIN(spct.giaBan), " +
-            "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))) " +
-            ") " +
 
+    @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(" +
+            "sp.sanPhamId, " +
+            "sp.ten, " +
+            "MIN(spct.giaBan), " +
+            "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))), " +
+            "COALESCE(CAST(SUM(spct.soLuong) AS long), 0L), " +
+            "COALESCE(CAST(SUM(hd.soLuong) AS long), 0L)) " +
             "FROM SanPham sp " +
-            "JOIN sp.sanPhamChiTietList spct " +
+            "LEFT JOIN sp.sanPhamChiTietList spct " +
+            "LEFT JOIN HoaDonChiTiet hd ON hd.sanPhamChiTiet = spct " +
             "WHERE sp.trangThai = true " +
             "AND (:thuongHieuId IS NULL OR sp.thuongHieu.thuongHieuId = :thuongHieuId) " +
             "AND (:kichThuocId IS NULL OR spct.kichThuoc.kichThuocId = :kichThuocId) " +
@@ -47,9 +56,27 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
             @Param("mauSacId") Long mauSacId,
             @Param("keyword") String keyword,
             Pageable pageable);
-
+//
 
     List<SanPham> findAllByTrangThaiTrue();
-}
+
+
+
+    @Query("SELECT new com.example.datn.dto.SanPhamHomeDTO(" +
+            "sp.sanPhamId, " +
+            "sp.ten, " +
+            "MIN(spct.giaBan), " +
+            "CONCAT('data:image/jpeg;base64,', TO_BASE64((SELECT ha.dataImg FROM HinhAnh ha WHERE ha.sanPhamChiTiet.sanPham = sp ORDER BY ha.hinhAnhId ASC LIMIT 1))), " +
+            "COALESCE(CAST(SUM(spct.soLuong) AS long), 0L), " +
+            "COALESCE(CAST(SUM(hd.soLuong) AS long), 0L)) " +
+            "FROM SanPham sp " +
+            "LEFT JOIN sp.sanPhamChiTietList spct " +
+            "LEFT JOIN HoaDonChiTiet hd ON hd.sanPhamChiTiet = spct " +
+            "GROUP BY sp.sanPhamId, sp.ten " +
+            "ORDER BY SUM(hd.soLuong) DESC")
+    List<SanPhamHomeDTO> findTopSanPhamBanChay(Pageable pageable);
+    }
+
+
 
 

@@ -73,5 +73,11 @@ public class SanPhamServiceImpl implements SanPhamService {
         return sanPhamRepository.findAllByTrangThaiTrue();
     }
 
+    @Override
+    public List<SanPhamHomeDTO> getTopSellingProduct() {
+        Pageable pageable = PageRequest.of(0, 8);
+        return sanPhamRepository.findTopSanPhamBanChay(pageable);
+    }
+
 
 }

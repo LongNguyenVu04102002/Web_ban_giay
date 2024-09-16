@@ -43,4 +43,6 @@ public interface HoaDonService {
 
     void delete(Long hoaDonId, Long hoaDonChiTietId);
 
+    HoaDon getHoaDonTraCuu(String maVanDon, String email);
+
 }
