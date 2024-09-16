@@ -218,11 +218,19 @@
     <script>
         $(document).ready(function () {
             $('#thuongHieuForm').on('submit', function (event) {
+<<<<<<< HEAD
                 const tenThuongHieu = $('#tenThuongHieu').val().trim();
                 const moTa = $('input[name="moTa"]').val().trim();
+=======
+                event.preventDefault(); // Ngăn chặn form submit mặc định
 
+                var tenThuongHieu = $('#tenThuongHieu').val().trim();
+                var moTa = $('input[name="moTa"]').val().trim();
+                var thuongHieuId = $('#thuongHieuId').val(); // Lấy giá trị ID thương hiệu nếu có
+>>>>>>> origin/master
+
+                // Kiểm tra các trường hợp dữ liệu không hợp lệ
                 if (!tenThuongHieu) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -232,7 +240,6 @@
                 }
 
                 if (tenThuongHieu.length > 100) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -242,7 +249,6 @@
                 }
 
                 if (moTa.length > 3000) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -251,6 +257,7 @@
                     return;
                 }
 
+<<<<<<< HEAD
                 const thuongHieuId = $('#thuongHieuId').val();
 
                 if (thuongHieuId) {
@@ -267,29 +274,95 @@
                                     text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
                                 });
                             }
+=======
+                // Xác nhận trước khi thêm hoặc cập nhật
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: thuongHieuId ? 'Bạn có muốn cập nhật thông tin thương hiệu này không?' : 'Bạn có muốn thêm thương hiệu này không?', // Thông báo dựa trên hành động
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Xử lý logic kiểm tra trùng tên thương hiệu
+                        if (thuongHieuId) {
+                            $.ajax({
+                                url: `/check/update-th?id=${thuongHieuId}&ten=${tenThuongHieu}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để cập nhật
+                                        submitForm('Cập nhật thương hiệu thành công!');
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: `/check/add-th?ten=${tenThuongHieu}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        }).then(function () {
+                                            $('#thuongHieuForm')[0].reset();
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để thêm mới
+                                        submitForm('Thêm mới thương hiệu thành công!');
+                                    }
+                                }
+                            });
+>>>>>>> origin/master
                         }
-                    });
-                } else {
-                    $.ajax({
-                        url: `/check/add-th?ten=${tenThuongHieu}`,
-                        method: 'GET',
-                        async: false,
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault();
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                }).then(function () {
-                                    $('#thuongHieuForm')[0].reset();
-                                });
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             });
+
+            // Hàm submit form và hiển thị thông báo thành công
+            function submitForm(successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage, // Hiển thị thông báo tương ứng với hành động
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#thuongHieuForm').unbind('submit').submit(); // Thực hiện submit form
+                });
+            }
+
+            // Hiển thị thông báo thành công nếu tham số 'success=true' tồn tại trên URL
+            function showSuccessMessage(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    location.reload(); // Reload lại trang sau khi thông báo kết thúc
+                });
+            }
+
+            // Kiểm tra tham số 'success=true' trong URL và hiển thị thông báo
+            if (window.location.search.includes('success=true')) {
+                var action = window.location.search.includes('action=update') ? 'Cập nhật' : 'Thêm mới';
+                showSuccessMessage(action + ' thương hiệu thành công!');
+            }
         });
+
     </script>
 </div>
 </body>

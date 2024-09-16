@@ -125,6 +125,8 @@
     <script>
         $(document).ready(function () {
             $('#sanPhamForm').on('submit', function (event) {
+                event.preventDefault(); // Ngăn chặn form submit mặc định
+
                 var tenSanPham = $('input[name="ten"]').val().trim();
                 var chatLieuId = $('select[name="chatLieu"]').val();
                 var coGiayId = $('select[name="coGiay"]').val();
@@ -136,8 +138,8 @@
                 var sanPhamId = $('input[name="sanPhamId"]').val();
                 var moTa = $('textarea[name="moTa"]').val().trim();
 
+                // Kiểm tra hợp lệ các trường dữ liệu
                 if (!tenSanPham) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -147,7 +149,6 @@
                 }
 
                 if (!thuongHieuId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -157,7 +158,6 @@
                 }
 
                 if (!chatLieuId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -167,7 +167,6 @@
                 }
 
                 if (!coGiayId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -177,7 +176,6 @@
                 }
 
                 if (!dayGiayId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -187,7 +185,6 @@
                 }
 
                 if (!deGiayId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -197,7 +194,6 @@
                 }
 
                 if (!lotGiayId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -207,7 +203,6 @@
                 }
 
                 if (!muiGiayId) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -217,7 +212,6 @@
                 }
 
                 if (tenSanPham.length > 255) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -227,7 +221,6 @@
                 }
 
                 if (moTa.length > 255) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -236,34 +229,81 @@
                     return;
                 }
 
-                $.ajax({
-                    url: '/check/addAndUpdate-sp',
-                    method: 'GET',
-                    data: {
-                        ten: tenSanPham,
-                        chatLieuId: chatLieuId,
-                        coGiayId: coGiayId,
-                        dayGiayId: dayGiayId,
-                        deGiayId: deGiayId,
-                        lotGiayId: lotGiayId,
-                        muiGiayId: muiGiayId,
-                        thuongHieuId: thuongHieuId,
-                        id: sanPhamId
-                    },
-                    async: false,
-                    success: function (response) {
-                        if (response) {
-                            event.preventDefault();
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi',
-                                text: 'Tên sản phẩm này đã tồn tại với các thuộc tính bạn chọn. Vui lòng chọn tên hoặc thuộc tính khác.',
-                            });
-                        }
+                // Xác nhận trước khi thêm hoặc cập nhật
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: sanPhamId ? 'Bạn có muốn cập nhật thông tin sản phẩm này không?' : 'Bạn có muốn thêm sản phẩm này không?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/check/addAndUpdate-sp',
+                            method: 'GET',
+                            data: {
+                                ten: tenSanPham,
+                                chatLieuId: chatLieuId,
+                                coGiayId: coGiayId,
+                                dayGiayId: dayGiayId,
+                                deGiayId: deGiayId,
+                                lotGiayId: lotGiayId,
+                                muiGiayId: muiGiayId,
+                                thuongHieuId: thuongHieuId,
+                                sanPhamId: sanPhamId
+                            },
+                            async: false,
+                            success: function (response) {
+                                if (response) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Lỗi',
+                                        text: 'Tên sản phẩm này đã tồn tại với các thuộc tính bạn chọn. Vui lòng chọn tên hoặc thuộc tính khác.',
+                                    });
+                                } else {
+                                    // Nếu không trùng, submit form để thêm hoặc cập nhật
+                                    submitForm(sanPhamId ? 'Cập nhật sản phẩm thành công!' : 'Thêm mới sản phẩm thành công!');
+                                }
+                            }
+                        });
                     }
                 });
             });
+
+            // Hàm submit form và hiển thị thông báo thành công
+            function submitForm(successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#sanPhamForm').unbind('submit').submit(); // Thực hiện submit form
+                });
+            }
+
+            // Hiển thị thông báo thành công nếu tham số 'success=true' tồn tại trên URL
+            function showSuccessMessage(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    location.reload(); // Reload lại trang sau khi thông báo kết thúc
+                });
+            }
+
+            // Kiểm tra tham số 'success=true' trong URL và hiển thị thông báo
+            if (window.location.search.includes('success=true')) {
+                var action = window.location.search.includes('action=update') ? 'Cập nhật' : 'Thêm mới';
+                showSuccessMessage(action + ' sản phẩm thành công!');
+            }
         });
+
     </script>
 </div>
 </body>

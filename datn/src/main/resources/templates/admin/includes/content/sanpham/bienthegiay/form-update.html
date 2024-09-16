@@ -152,7 +152,7 @@
                 imageContainer.innerHTML = '';
 
                 Array.from(files).forEach(file => {
-                    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/png'];
                     if (!validImageTypes.includes(file.type)) {
                         Swal.fire({
                             icon: 'error',
