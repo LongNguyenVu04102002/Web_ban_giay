@@ -18,8 +18,10 @@ public class MauSacController {
     @GetMapping("/mausac")
     public String show(Model model) {
         List<MauSac> mauSacList = mauSacService.getAll();
+        MauSac ms = new MauSac();
+        ms.setTrangThai(true);
         model.addAttribute("mauSacList", mauSacList);
-        model.addAttribute("mauSac", new MauSac());
+        model.addAttribute("mauSac", ms);
         return "admin/includes/content/sanpham/mausac/home";
     }
 

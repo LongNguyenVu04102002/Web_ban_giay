@@ -12,15 +12,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/sanpham")
 public class LotGiayController {
-
     @Autowired
     private LotGiayServiceImpl lotGiayService;
 
     @GetMapping("/lotgiay")
     public String show(Model model) {
         List<LotGiay> lotGiayList = lotGiayService.getAllLotGiay();
+        LotGiay lg = new LotGiay();
+        lg.setTrangThai(true);
         model.addAttribute("lotGiayList", lotGiayList);
-        model.addAttribute("lotGiay", new LotGiay());
+        model.addAttribute("lotGiay", lg);
         return "admin/includes/content/sanpham/lotgiay/home";
     }
 

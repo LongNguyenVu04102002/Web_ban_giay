@@ -19,8 +19,10 @@ public class CoGiayController {
     @GetMapping("/cogiay")
     public String show(Model model) {
         List<CoGiay> coGiayList = coGiayService.getAllCoGiay();
+        CoGiay cg = new CoGiay();
+        cg.setTrangThai(true);
         model.addAttribute("coGiayList", coGiayList);
-        model.addAttribute("coGiay", new CoGiay());
+        model.addAttribute("coGiay", cg);
         return "admin/includes/content/sanpham/cogiay/home";
     }
 

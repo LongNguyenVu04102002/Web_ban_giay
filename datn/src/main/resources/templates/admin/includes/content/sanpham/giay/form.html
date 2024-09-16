@@ -34,49 +34,49 @@
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Thương Hiệu:</label>
-                                <select th:field="*{thuongHieu}"
+                                <select th:field="*{thuongHieu}" name="thuongHieu"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="th : ${lstThuongHieu}" th:value="${th.thuongHieuId}" th:text="${th.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Chất Liệu:</label>
-                                <select th:field="*{chatLieu}"
+                                <select th:field="*{chatLieu}" name="chatLieu"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="cl : ${lstChatLieu}" th:value="${cl.chatLieuId}" th:text="${cl.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Cổ Giầy:</label>
-                                <select th:field="*{coGiay}"
+                                <select th:field="*{coGiay}" name="coGiay"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="cg : ${lstCoGiay}" th:value="${cg.coGiayId}" th:text="${cg.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Dây Giầy:</label>
-                                <select th:field="*{dayGiay}"
+                                <select th:field="*{dayGiay}" name="dayGiay"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="dg : ${lstDayGiay}" th:value="${dg.dayGiayId}" th:text="${dg.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Đế Giầy:</label>
-                                <select th:field="*{deGiay}"
+                                <select th:field="*{deGiay}" name="deGiay"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="dg : ${lstDeGiay}" th:value="${dg.deGiayId}" th:text="${dg.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Lót Giầy:</label>
-                                <select th:field="*{lotGiay}"
+                                <select th:field="*{lotGiay}" name="lotGiay"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="lg : ${lstLotGiay}" th:value="${lg.lotGiayId}" th:text="${lg.ten}"></option>
                                 </select>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="font-semibold">Mũi Giầy:</label>
-                                <select th:field="*{muiGiay}"
+                                <select th:field="*{muiGiay}" name="muiGiay"
                                         class="form-select form-input mt-2 w-full py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-100 focus:ring-0">
                                     <option th:each="mg : ${lstMuiGiay}" th:value="${mg.muiGiayId}" th:text="${mg.ten}"></option>
                                 </select>
@@ -134,11 +134,10 @@
                 var muiGiayId = $('select[name="muiGiay"]').val();
                 var thuongHieuId = $('select[name="thuongHieu"]').val();
                 var sanPhamId = $('input[name="sanPhamId"]').val();
-                var moTa = $('input[name="moTa"]').val().trim();
+                var moTa = $('textarea[name="moTa"]').val().trim();
 
-                // Kiểm tra trống tên sản phẩm
                 if (!tenSanPham) {
-                    event.preventDefault(); // Ngăn chặn form submit
+                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -147,8 +146,78 @@
                     return;
                 }
 
+                if (!thuongHieuId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Thương hiệu đang trống. Vui lòng thêm một thương hiệu!',
+                    });
+                    return;
+                }
+
+                if (!chatLieuId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Chất liệu đang trống. Vui lòng thêm một chất liệu!',
+                    });
+                    return;
+                }
+
+                if (!coGiayId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Cổ giày đang trống. Vui lòng thêm một cổ giày!',
+                    });
+                    return;
+                }
+
+                if (!dayGiayId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Dây giày đang trống. Vui lòng thêm một dây giày!',
+                    });
+                    return;
+                }
+
+                if (!deGiayId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Đế giày đang trống. Vui lòng thêm một đế giày!',
+                    });
+                    return;
+                }
+
+                if (!lotGiayId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Lót giày đang trống. Vui lòng thêm một lót giày!',
+                    });
+                    return;
+                }
+
+                if (!muiGiayId) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lỗi',
+                        text: 'Mũi giày đang trống. Vui lòng thêm một mũi giày!',
+                    });
+                    return;
+                }
+
                 if (tenSanPham.length > 255) {
-                    event.preventDefault(); // Ngăn chặn form submit
+                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -158,16 +227,15 @@
                 }
 
                 if (moTa.length > 255) {
-                    event.preventDefault(); // Ngăn chặn form submit
+                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
-                        text: 'Mô tả không được vượt quá 3000 kí tự.',
+                        text: 'Mô tả không được vượt quá 255 kí tự.',
                     });
                     return;
                 }
 
-                // Kiểm tra trùng tên sản phẩm và các thuộc tính khác
                 $.ajax({
                     url: '/check/addAndUpdate-sp',
                     method: 'GET',
@@ -185,7 +253,7 @@
                     async: false,
                     success: function (response) {
                         if (response) {
-                            event.preventDefault(); // Ngăn chặn form submit
+                            event.preventDefault();
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Lỗi',

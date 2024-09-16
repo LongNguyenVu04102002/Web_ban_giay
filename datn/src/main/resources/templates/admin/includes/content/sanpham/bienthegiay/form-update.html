@@ -231,17 +231,17 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Giá bán phải là một số và lớn hơn 1000!',
+                    text: 'Giá bán tối thiểu từ 1000!',
                 });
                 return;
             }
 
 
-            if (!soLuong || isNaN(soLuong) || parseInt(soLuong) < 1) {
+            if (!soLuong || isNaN(soLuong) || parseInt(soLuong) < 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Số lượng phải là một số và lớn hơn 1!',
+                    text: 'Số lượng không được trống!',
                 });
                 return;
             }
