@@ -203,7 +203,7 @@
                         </div>
                     </div>
                     <a class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"
-                       th:href="@{/invoice}" type="submit">
+                       th:href="@{/invoice/{id}(id=${session.khachHang.khachHangId})}" type="submit">
                         Quay lại
                     </a>
                 </div>
