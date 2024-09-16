@@ -50,6 +50,7 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
             nhanVien.setRole("ADMIN");
             nhanVien.setTrangThai(true);
             nhanVien.setGioiTinh(true);
+            nhanVien.setNgaySinh(LocalDate.of(2000, 8, 29));
             nhanVien.setMaNhanVien("admin");
             nhanVienRepository.save(nhanVien);
         }
