@@ -71,8 +71,8 @@ public class CheckAPI {
     }
 
     @GetMapping("/addAndUpdate-sp")
-    public boolean checkAddAndUpdateSp(@RequestParam String ten, @RequestParam Long chatLieuId, @RequestParam Long coGiayId, @RequestParam Long dayGiayId, @RequestParam Long deGiayId, @RequestParam Long lotGiayId, @RequestParam Long muiGiayId, @RequestParam Long thuongHieuId) {
-        return sanPhamService.findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(ten.trim(), chatLieuId, coGiayId, dayGiayId, deGiayId, lotGiayId, muiGiayId, thuongHieuId);
+    public boolean checkAddAndUpdateSp(@RequestParam String ten, @RequestParam Long chatLieuId, @RequestParam Long coGiayId, @RequestParam Long dayGiayId, @RequestParam Long deGiayId, @RequestParam Long lotGiayId, @RequestParam Long muiGiayId, @RequestParam Long thuongHieuId, @RequestParam Long sanPhamId) {
+        return sanPhamService.findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(ten.trim(), chatLieuId, coGiayId, dayGiayId, deGiayId, lotGiayId, muiGiayId, thuongHieuId, sanPhamId);
     }
 
     @GetMapping("/add-cl")

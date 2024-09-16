@@ -49,12 +49,10 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId) {
+    public boolean findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(String ten, Long chatLieuId, Long coGiayId, Long dayGiayId, Long deGiayId, Long lotGiayId, Long muiGiayId, Long thuongHieuId, Long sanPhamId) {
         List<SanPham> sanPhamList = sanPhamRepository.findByTenAndChatLieu_ChatLieuIdAndCoGiay_CoGiayIdAndDayGiay_DayGiayIdAndDeGiay_DeGiayIdAndLotGiay_LotGiayIdAndMuiGiay_MuiGiayIdAndThuongHieu_ThuongHieuId(ten, chatLieuId, coGiayId, dayGiayId, deGiayId, lotGiayId, muiGiayId, thuongHieuId);
-        if (!sanPhamList.isEmpty()) {
-            return true;
-        }
-        return false;
+        sanPhamList.removeIf(sanPham -> sanPham.getSanPhamId().equals(sanPhamId));
+        return !sanPhamList.isEmpty();
     }
 
     @Override

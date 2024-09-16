@@ -143,11 +143,14 @@
     <script>
         $(document).ready(function () {
             $('#chatLieuForm').on('submit', function (event) {
+                event.preventDefault(); // Ngăn chặn form submit mặc định
+
                 var tenChatLieu = $('#tenChatLieu').val().trim();
                 var moTa = $('input[name="moTa"]').val().trim();
+                var chatLieuId = $('#chatLieuId').val(); // Lấy giá trị ID của chất liệu nếu có
 
+                // Kiểm tra các trường hợp dữ liệu không hợp lệ
                 if (!tenChatLieu) {
-                    event.preventDefault();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -157,7 +160,6 @@
                 }
 
                 if (tenChatLieu.length > 100) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -167,7 +169,6 @@
                 }
 
                 if (moTa.length > 3000) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -176,45 +177,93 @@
                     return;
                 }
 
-                var chatLieuId = $('#chatLieuId').val();
-
-                if (chatLieuId) {
-                    $.ajax({
-                        url: `/check/update-cl?id=${chatLieuId}&ten=${tenChatLieu}`,
-                        method: 'GET',
-                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                });
-                            }
+                // Xác nhận trước khi thêm hoặc cập nhật
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: chatLieuId ? 'Bạn có muốn cập nhật thông tin chất liệu này không?' : 'Bạn có muốn thêm chất liệu này không?', // Thông báo dựa trên hành động
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Xử lý logic kiểm tra trùng tên chất liệu
+                        if (chatLieuId) {
+                            $.ajax({
+                                url: `/check/update-cl?id=${chatLieuId}&ten=${tenChatLieu}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để cập nhật
+                                        submitForm('Cập nhật chất liệu thành công!');
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: `/check/add-cl?ten=${tenChatLieu}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        }).then(function () {
+                                            $('#chatLieuForm')[0].reset();
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để thêm mới
+                                        submitForm('Thêm mới chất liệu thành công!');
+                                    }
+                                }
+                            });
                         }
-                    });
-                } else {
-                    $.ajax({
-                        url: `/check/add-cl?ten=${tenChatLieu}`,
-                        method: 'GET',
-                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                }).then(function () {
-                                    $('#chatLieuForm')[0].reset();
-                                });
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             });
+
+            // Hàm submit form và hiển thị thông báo thành công
+            function submitForm(successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage, // Hiển thị thông báo tương ứng với hành động
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#chatLieuForm').unbind('submit').submit(); // Thực hiện submit form
+                });
+            }
+
+            // Hiển thị thông báo thành công nếu tham số 'success=true' tồn tại trên URL
+            function showSuccessMessage(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    location.reload(); // Reload lại trang sau khi thông báo kết thúc
+                });
+            }
+
+            // Kiểm tra tham số 'success=true' trong URL và hiển thị thông báo
+            if (window.location.search.includes('success=true')) {
+                var action = window.location.search.includes('action=update') ? 'Cập nhật' : 'Thêm mới';
+                showSuccessMessage(action + ' chất liệu thành công!');
+            }
         });
+
     </script>
 </div>
 </body>
