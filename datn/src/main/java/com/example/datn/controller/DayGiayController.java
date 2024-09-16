@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,7 +28,12 @@ public class DayGiayController {
     }
 
     @PostMapping("/daygiay/save")
-    public String save(DayGiay dayGiay) {
+    public String save(DayGiay dayGiay, RedirectAttributes redirectAttributes) {
+        if (dayGiay.getDayGiayId() == null) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("update", true);
+        }
         dayGiayService.saveDayGiay(dayGiay);
         return "redirect:/admin/sanpham/daygiay";
     }

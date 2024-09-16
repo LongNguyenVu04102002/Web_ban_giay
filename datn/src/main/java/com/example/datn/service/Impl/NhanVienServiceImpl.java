@@ -27,6 +27,9 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public void save(NhanVien nhanVien) {
+        if(nhanVien.getNhanVienId() == null){
+            nhanVien.setTrangThai(true);
+        }
         nhanVienRepository.save(nhanVien);
     }
 

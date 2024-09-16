@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -83,10 +84,12 @@ public class SanPhamChiTietController {
 
     @PostMapping("/bienthegiay/save-update")
     public String saveUpdate(SanPhamChiTiet sanPhamChiTiet,
+                             RedirectAttributes redirectAttributes,
                              @RequestParam("image") MultipartFile[] images,
                              @RequestParam(value = "imageId", required = false) Long[] imageIds,
                              @RequestParam("imageChanged") String imageChanged,
-                             @RequestParam(value = "deletedImageIds", required = false) String deletedImageIds) throws IOException {
+                             @RequestParam(value = "deletedImageIds", required = false
+                             ) String deletedImageIds) throws IOException {
 
         if (sanPhamChiTiet.getGiaBan() == null || sanPhamChiTiet.getGiaBan().compareTo(new BigDecimal("1000")) < 0 ||
                 sanPhamChiTiet.getSoLuong() == null || sanPhamChiTiet.getSoLuong() < 0) {
@@ -138,8 +141,9 @@ public class SanPhamChiTietController {
 
     //update trang thai
     @PostMapping("/bienthegiay/update/{id}")
-    public String update(@PathVariable Long id) {
+    public String update(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         sanPhamChiTietService.update(id);
+        redirectAttributes.addFlashAttribute("status",true);
         return "redirect:/admin/sanpham/bienthegiay";
     }
 }

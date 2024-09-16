@@ -302,6 +302,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
         if (phieuGiamGia != null) {
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
 
         hoaDon.setLoaiHoaDon(true);
@@ -401,6 +403,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         if (phieuGiamGia != null) {
             hoaDon.setTienGiam(phieuGiamGiaResponse.getTienGiam());
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
         BigDecimal tongTien = BigDecimal.ZERO;
 

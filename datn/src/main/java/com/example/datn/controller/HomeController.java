@@ -118,17 +118,6 @@ public class HomeController {
         return "user/includes/content/detail";
     }
 
-    // Shop
-//    @GetMapping("/shop")
-//    public String shop(Model model) {
-//        List<SanPham> sanPhamList = sanPhamService.getAll();
-//        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
-//        List<KichThuoc> kichThuocList = kichThuocService.getAll();
-//        model.addAttribute("sanPhamList", sanPhamList);
-//        model.addAttribute("thuongHieuList", thuongHieuList);
-//        model.addAttribute("kichThuocList", kichThuocList);
-//        return "user/includes/content/shop";
-//    }
     @GetMapping("/shop")
     public String getShopPage(
             @RequestParam(required = false) Long thuongHieuId,
