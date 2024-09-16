@@ -64,14 +64,14 @@
                                             </button>
                                         </td>
                                         <td class="flex items-center justify-center space-x-2">
-                                            <a th:href="@{/admin/sanpham/kichthuoc/delete/{id}(id=${mg.kichThuocId})}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                                     class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
-                                                </svg>
-                                            </a>
+<!--                                            <a th:href="@{/admin/sanpham/kichthuoc/delete/{id}(id=${mg.kichThuocId})}">-->
+<!--                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"-->
+<!--                                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true"-->
+<!--                                                     class="w-6 h-6">-->
+<!--                                                    <path stroke-linecap="round" stroke-linejoin="round"-->
+<!--                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>-->
+<!--                                                </svg>-->
+<!--                                            </a>-->
                                             <a th:href="@{/admin/sanpham/kichthuoc/detail/{id}(id=${mg.kichThuocId})}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                      stroke-width="1.5" stroke="currentColor" aria-hidden="true"
@@ -99,7 +99,7 @@
                                 <input type="hidden" th:field="*{kichThuocId}"/>
                                 <div class="mb-3 mt-3">
                                     <label class="form-label font-medium block text-gray-700">Tên Kích Thước</label>
-                                    <input type="number" id="tenKichThuoc" th:field="*{ten}"
+                                    <input type="number" id="tenKichThuoc" th:field="*{ten}" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                            class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                                 </div>
                                 <div class="mb-3">
@@ -143,21 +143,23 @@
     <script>
         $(document).ready(function () {
             $('#kichThuocForm').on('submit', function (event) {
+                event.preventDefault(); // Ngăn chặn form submit mặc định
+
                 var tenKichThuoc = $('#tenKichThuoc').val().trim();
                 var moTa = $('input[name="moTa"]').val().trim();
+                var kichThuocId = $('#kichThuocId').val(); // Lấy giá trị ID kích thước nếu có
 
-                if (tenKichThuoc < 0) {
-                    event.preventDefault(); // Ngăn chặn form submit
+                // Kiểm tra các trường hợp dữ liệu không hợp lệ
+                if (!tenKichThuoc) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
-                        text: 'Kích thước không được là giá trị âm.',
+                        text: 'Kích thước không được để trống.',
                     });
                     return;
                 }
 
                 if (tenKichThuoc.length > 100) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -167,7 +169,6 @@
                 }
 
                 if (moTa.length > 300) {
-                    event.preventDefault(); // Ngăn chặn form submit
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
@@ -176,55 +177,102 @@
                     return;
                 }
 
-                if (!tenKichThuoc) {
-                    event.preventDefault(); // Ngăn chặn form submit
+                if (tenKichThuoc < 1) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lỗi',
-                        text: 'Kích thước không được để trống.',
+                        text: 'Kích thước phải lớn hơn 0.',
                     });
                     return;
                 }
 
-                var kichThuocId = $('#kichThuocId').val();
-
-                if (kichThuocId) {
-                    $.ajax({
-                        url: `/check/update-kt?id=${kichThuocId}&ten=${tenKichThuoc}`,
-                        method: 'GET',
-                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                });
-                            }
+                // Xác nhận trước khi thêm hoặc cập nhật
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: kichThuocId ? 'Bạn có muốn cập nhật thông tin kích thước này không?' : 'Bạn có muốn thêm kích thước này không?', // Thông báo dựa trên hành động
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Xử lý logic kiểm tra trùng tên kích thước
+                        if (kichThuocId) {
+                            $.ajax({
+                                url: `/check/update-kt?id=${kichThuocId}&ten=${tenKichThuoc}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để cập nhật
+                                        submitForm('Cập nhật kích thước thành công!');
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: `/check/add-kt?ten=${tenKichThuoc}`,
+                                method: 'GET',
+                                async: false, // Chặn form submit cho đến khi nhận được phản hồi
+                                success: function (response) {
+                                    if (response) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
+                                        }).then(function () {
+                                            $('#kichThuocForm')[0].reset();
+                                        });
+                                    } else {
+                                        // Nếu không trùng, submit form để thêm mới
+                                        submitForm('Thêm mới kích thước thành công!');
+                                    }
+                                }
+                            });
                         }
-                    });
-                } else {
-                    $.ajax({
-                        url: `/check/add-kt?ten=${tenKichThuoc}`,
-                        method: 'GET',
-                        async: false, // Để chặn form submit cho đến khi nhận được phản hồi
-                        success: function (response) {
-                            if (response) {
-                                event.preventDefault(); // Ngăn chặn form submit nếu tên đã tồn tại
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Lỗi',
-                                    text: 'Tên này đã tồn tại. Vui lòng chọn tên khác.',
-                                }).then(function () {
-                                    $('#kichThuocForm')[0].reset();
-                                });
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             });
+
+            // Hàm submit form và hiển thị thông báo thành công
+            function submitForm(successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage, // Hiển thị thông báo tương ứng với hành động
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $('#kichThuocForm').unbind('submit').submit(); // Thực hiện submit form
+                });
+            }
+
+            // Hiển thị thông báo thành công nếu tham số 'success=true' tồn tại trên URL
+            function showSuccessMessage(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    location.reload(); // Reload lại trang sau khi thông báo kết thúc
+                });
+            }
+
+            // Kiểm tra tham số 'success=true' trong URL và hiển thị thông báo
+            if (window.location.search.includes('success=true')) {
+                var action = window.location.search.includes('action=update') ? 'Cập nhật' : 'Thêm mới';
+                showSuccessMessage(action + ' kích thước thành công!');
+            }
         });
+
     </script>
 </div>
 </body>

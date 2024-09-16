@@ -18,6 +18,7 @@ public class EmailConfig {
 
         mailSender.setUsername("vinhdqph20271@fpt.edu.vn");
         mailSender.setPassword("proh tedl utct rnhk");
+        mailSender.setDefaultEncoding("UTF-8");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

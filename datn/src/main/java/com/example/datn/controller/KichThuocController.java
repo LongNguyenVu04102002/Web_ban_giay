@@ -19,8 +19,10 @@ public class KichThuocController {
     @GetMapping("/kichthuoc")
     public String show(Model model) {
         List<KichThuoc> kichThuocList = kichThuocService.getAll();
+        KichThuoc kt = new KichThuoc();
+        kt.setTrangThai(true);
         model.addAttribute("kichThuocList", kichThuocList);
-        model.addAttribute("kichThuoc", new KichThuoc());
+        model.addAttribute("kichThuoc", kt);
         return "admin/includes/content/sanpham/kichthuoc/home";
     }
 
