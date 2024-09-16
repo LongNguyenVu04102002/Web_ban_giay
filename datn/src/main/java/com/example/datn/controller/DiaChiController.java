@@ -33,7 +33,7 @@ public class DiaChiController {
             diaChiService.deleteDiaChi(id);
 
             // Nếu xóa thành công, thêm thông báo thành công vào RedirectAttributes
-            redirectAttributes.addFlashAttribute("message3", "Xóa địa chỉ thành công.");
+            redirectAttributes.addFlashAttribute("message", "Xóa địa chỉ thành công.");
         } catch (IllegalStateException e) {
             // Trường hợp khách hàng chỉ có một địa chỉ, ném ngoại lệ này
             redirectAttributes.addFlashAttribute("error1", "Không thể xóa địa chỉ này vì khách hàng phải có ít nhất một địa chỉ.");

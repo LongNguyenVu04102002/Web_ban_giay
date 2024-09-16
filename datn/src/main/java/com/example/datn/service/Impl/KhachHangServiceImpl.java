@@ -65,19 +65,27 @@ public class KhachHangServiceImpl implements KhachHangService {
         existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
         existingKhachHang.setSdt(khachHang.getSdt());
         existingKhachHang.setEmail(khachHang.getEmail());
-
-
+        if (existingKhachHang.getDiaChiList().size() >= 3) {
+            result.rejectValue("diaChiList", "error.khachHang", "Khách hàng đã có tối đa 3 địa chỉ. Không thể cập nhật thêm.");
+            return existingKhachHang;
+        }
         // Cập nhật password (nếu có)
         if (khachHang.getPassword() != null && !khachHang.getPassword().isEmpty()) {
             existingKhachHang.setPassword(khachHang.getPassword());
         }
 
-        // Cập nhật lại các địa chỉ nếu cần
-        if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
+        // Kiểm tra số lượng địa chỉ
+        if (khachHang.getDiaChiList() != null) {
+            if (khachHang.getDiaChiList().size() > 3) {
+                result.rejectValue("diaChiList", "error.khachHang", "Khách hàng chỉ có thể có tối đa 3 địa chỉ.");
+                return existingKhachHang;
+            }
+
+            // Cập nhật lại các địa chỉ nếu cần
             existingKhachHang.getDiaChiList().clear();
             for (DiaChi diaChi : khachHang.getDiaChiList()) {
                 diaChi.setKhachHang(existingKhachHang);
-                diaChi.setTrangThai(true);// Thiết lập liên kết
+                diaChi.setTrangThai(true); // Thiết lập liên kết
                 existingKhachHang.getDiaChiList().add(diaChi);
             }
         }

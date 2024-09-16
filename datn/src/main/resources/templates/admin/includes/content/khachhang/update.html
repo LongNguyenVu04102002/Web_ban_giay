@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="/images/logo_xboy.png" type="image/png">
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -20,8 +22,7 @@
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
                     <form th:action="@{/admin/taikhoan/khachhang/update}" th:object="${khachHang}"
-                          onsubmit="return confirm('Bạn có chắc chắn muốn chỉnh sửa dự liệu này không?');"
-                          method="post">
+                          id="khachHangForm" method="post">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{khachHangId}"/>
                             <div class="lg:col-span-6">
@@ -81,7 +82,7 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Lưu</button>
+                            <button type="button" class="bg-blue-500 text-white py-2 px-4 rounded" onclick="confirmSubmit()">Lưu</button>
                             <a href="#" class="bg-gray-500 text-white py-2 px-4 rounded ml-2">Hủy</a>
                         </div>
                     </form>
@@ -92,3 +93,54 @@
 </div>
 </body>
 </html>
+
+<script>
+    function confirmSubmit() {
+        Swal.fire({
+            title: 'Xác nhận hành động',
+            text: 'Bạn có chắc chắn muốn cập nhật thông tin khách hàng này?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            customClass: {
+                confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('khachHangForm').submit();
+            }
+        });
+    }
+</script>
+
+<style>
+    .swal2-confirm, .swal2-cancel {
+        width: 120px;
+        height: 40px;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .swal2-confirm {
+        background-color: #28a745;
+        color: white;
+        margin-right: 20px;
+    }
+
+    .swal2-confirm:hover {
+        background-color: #218838;
+    }
+
+    .swal2-cancel {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .swal2-cancel:hover {
+        background-color: #c82333;
+    }
+</style>

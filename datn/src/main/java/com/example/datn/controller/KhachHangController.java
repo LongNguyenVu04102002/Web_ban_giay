@@ -134,9 +134,6 @@ diaChi.setTrangThai(true);
                     diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
                     diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
                     diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
-
-
-
                 if (validDiaChiList.size() < 3) {
                     diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
                     validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
@@ -172,7 +169,7 @@ diaChi.setTrangThai(true);
         boolean isActive = khachHang.isTrangThai();
         String newStatusText = isActive ? " hoạt động" : " ngừng hoạt động";
         String message = "Trạng thái của khách hàng " + khachHang.getHoTen() + " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
-        redirectAttributes.addFlashAttribute("message2", message);
+        redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";
     }
