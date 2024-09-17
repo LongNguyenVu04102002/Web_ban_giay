@@ -6,7 +6,8 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="/images/logo_xboy.png" type="image/png">
 
     <script>
         $(document).ready(function () {
@@ -121,152 +122,7 @@
 
         });
     </script>
-  <script>
-      $(document).ready(function () {
-        // Tạo đối tượng validator
-        var form = $("form");
 
-        // Thêm custom rule cho họ tên
-        $.validator.addMethod("validName", function (value, element) {
-            // Biểu thức chính quy kiểm tra các yêu cầu
-            var regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừửữựỲỴÝỶỸ\s]+$/;
-            // Biểu thức chính quy kiểm tra khoảng trắng liên tiếp
-            var doubleSpaceRegex = /\s{2,}/;
-            // Biểu thức chính quy kiểm tra số
-            var containsNumberRegex = /\d/;
-
-            var trimmedValue = value.trim();
-            // Kiểm tra không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp và không chứa số
-            return this.optional(element) ||
-                regex.test(trimmedValue) &&
-                !doubleSpaceRegex.test(trimmedValue) &&
-                !containsNumberRegex.test(trimmedValue);
-        }, "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.");
-
-        // Disable automatic validation on submit
-        var validator = form.validate({
-            rules: {
-                hoTen: {
-                    required: true,
-                    maxlength: 100,
-                    validName: true // Áp dụng custom rule
-                },
-                sdt: {
-                    required: true,
-                    digits: true,
-                    maxlength: 20
-                },
-                email: {
-                    required: true,
-                    email: true
-                },
-                ngaySinh: {
-                    required: true,
-                    date: true
-                },
-                "diaChiList[0].diaChi": {
-                    required: true
-                },
-                "diaChiList[0].ten": {
-                    required: true
-                },
-                "diaChiList[0].email": {
-                    required: true,
-                    email: true
-                },
-                "diaChiList[0].sdt": {
-                    required: true,
-                    digits: true
-                },
-                "diaChiList[0].thanhPho": {
-                    required: true
-                },
-                "diaChiList[0].huyen": {
-                    required: true
-                },
-                "diaChiList[0].xa": {
-                    required: true
-                }
-            },
-            messages: {
-                hoTen: {
-                    required: "Vui lòng nhập tên khách hàng",
-                    maxlength: "Tên không được vượt quá 100 ký tự",
-                    validName: "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp."
-                },
-                sdt: {
-                    required: "Vui lòng nhập số điện thoại",
-                    digits: "Vui lòng nhập số hợp lệ",
-                    maxlength: "Số điện thoại không được vượt quá 20 ký tự"
-                },
-                email: {
-                    required: "Vui lòng nhập email",
-                    email: "Email không hợp lệ"
-                },
-                ngaySinh: {
-                    required: "Vui lòng nhập ngày sinh",
-                    date: "Ngày sinh không hợp lệ"
-                },
-                "diaChiList[0].diaChi": {
-                    required: "Vui lòng nhập địa chỉ"
-                },
-                "diaChiList[0].ten": {
-                    required: "Vui lòng nhập tên người nhận"
-                },
-                "diaChiList[0].email": {
-                    required: "Vui lòng nhập email người nhận",
-                    email: "Email người nhận không hợp lệ"
-                },
-                "diaChiList[0].sdt": {
-                    required: "Vui lòng nhập số điện thoại người nhận",
-                    digits: "Vui lòng nhập số điện thoại hợp lệ"
-                },
-                "diaChiList[0].thanhPho": {
-                    required: "Vui lòng chọn Thành Phố"
-                },
-                "diaChiList[0].huyen": {
-                    required: "Vui lòng chọn Quận/Huyện"
-                },
-                "diaChiList[0].xa": {
-                    required: "Vui lòng chọn Phường/Xã"
-                }
-            },
-            errorPlacement: function (error, element) {
-                error.appendTo(element.closest("div"));
-            },
-            // Disable automatic validation on form submit
-            onfocusout: false,
-            onkeyup: false
-        });
-
-        // Bắt sự kiện submit của form
-        form.on('submit', function (e) {
-            // Ngăn chặn hành động submit form ban đầu
-            e.preventDefault();
-
-            // Xác nhận với người dùng
-            var confirmed = confirm("Bạn có chắc chắn muốn thêm khách hàng mới không?");
-
-            if (confirmed) {
-                console.log("Người dùng đã chọn OK, bắt đầu kiểm tra validate...");
-
-                // Thủ công kiểm tra form validation
-                if (form.valid()) {
-                    console.log("Form hợp lệ, chuẩn bị submit.");
-                    this.submit();  // Submit form nếu hợp lệ
-                } else {
-                    console.log("Form không hợp lệ, hiển thị lỗi.");
-                }
-            } else {
-                console.log("Người dùng đã chọn Cancel, không submit form.");
-                // Reset lại thông báo lỗi nếu nhấn "Cancel"
-                validator.resetForm();
-            }
-        });
-    });
-
-
-  </script>
 
 
 
@@ -291,7 +147,7 @@
             <div class="lg:col-span-8 mb-10">
                 <div class="p-6 rounded-md">
                     <form th:action="@{/admin/taikhoan/khachhang/save}" th:object="${khachHang}"
-                          onsubmit="return confirmAddCustomer()" method="post">
+                           method="post">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{khachHangId}"/>
                             <div class="lg:col-span-6">
@@ -391,7 +247,7 @@
                                        placeholder="Số điện thoại người nhận">
                             </div>
                             <div class="lg:col-span-12 mt-4 flex items-center justify-center space-x-2">
-                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Lưu</button>
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="confirmToggle()">Lưu</button>
                                 <a href="#" class="bg-red-50 text-red-600 px-4 py-2 rounded-md">Hủy</a>
                             </div>
                         </div>
@@ -403,3 +259,179 @@
 </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        // Tạo đối tượng validator
+        var form = $("form");
+
+        // Thêm custom rule cho họ tên
+        $.validator.addMethod("validName", function (value, element) {
+            var regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừửữựỲỴÝỶỸ\s]+$/;
+            var doubleSpaceRegex = /\s{2,}/;
+            var containsNumberRegex = /\d/;
+
+            var trimmedValue = value.trim();
+            return this.optional(element) ||
+                regex.test(trimmedValue) &&
+                !doubleSpaceRegex.test(trimmedValue) &&
+                !containsNumberRegex.test(trimmedValue);
+        }, "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.");
+
+        // Disable automatic validation on submit
+        var validator = form.validate({
+            rules: {
+                hoTen: {
+                    required: true,
+                    maxlength: 100,
+                    validName: true
+                },
+                sdt: {
+                    required: true,
+                    digits: true,
+                    maxlength: 20
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                ngaySinh: {
+                    required: true,
+                    date: true
+                },
+                "diaChiList[0].diaChi": {
+                    required: true
+                },
+                "diaChiList[0].ten": {
+                    required: true
+                },
+                "diaChiList[0].email": {
+                    required: true,
+                    email: true
+                },
+                "diaChiList[0].sdt": {
+                    required: true,
+                    digits: true
+                },
+                "diaChiList[0].thanhPho": {
+                    required: true
+                },
+                "diaChiList[0].huyen": {
+                    required: true
+                },
+                "diaChiList[0].xa": {
+                    required: true
+                }
+            },
+            messages: {
+                hoTen: {
+                    required: "Vui lòng nhập tên khách hàng",
+                    maxlength: "Tên không được vượt quá 100 ký tự",
+                    validName: "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp."
+                },
+                sdt: {
+                    required: "Vui lòng nhập số điện thoại",
+                    digits: "Vui lòng nhập số hợp lệ",
+                    maxlength: "Số điện thoại không được vượt quá 20 ký tự"
+                },
+                email: {
+                    required: "Vui lòng nhập email",
+                    email: "Email không hợp lệ"
+                },
+                ngaySinh: {
+                    required: "Vui lòng nhập ngày sinh",
+                    date: "Ngày sinh không hợp lệ"
+                },
+                "diaChiList[0].diaChi": {
+                    required: "Vui lòng nhập địa chỉ"
+                },
+                "diaChiList[0].ten": {
+                    required: "Vui lòng nhập tên người nhận"
+                },
+                "diaChiList[0].email": {
+                    required: "Vui lòng nhập email người nhận",
+                    email: "Email người nhận không hợp lệ"
+                },
+                "diaChiList[0].sdt": {
+                    required: "Vui lòng nhập số điện thoại người nhận",
+                    digits: "Vui lòng nhập số điện thoại hợp lệ"
+                },
+                "diaChiList[0].thanhPho": {
+                    required: "Vui lòng chọn Thành Phố"
+                },
+                "diaChiList[0].huyen": {
+                    required: "Vui lòng chọn Quận/Huyện"
+                },
+                "diaChiList[0].xa": {
+                    required: "Vui lòng chọn Phường/Xã"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.closest("div"));
+            },
+            onfocusout: false,
+            onkeyup: false
+        });
+
+        // Bắt sự kiện submit của form
+        form.on('submit', function (e) {
+            e.preventDefault();
+
+            // Hiển thị thông báo xác nhận bằng SweetAlert2
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Bạn có chắc chắn muốn thêm khách hàng mới không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("Người dùng đã chọn OK, bắt đầu kiểm tra validate...");
+
+                    // Thủ công kiểm tra form validation
+                    if (form.valid()) {
+                        console.log("Form hợp lệ, chuẩn bị submit.");
+                        form.off('submit').submit(); // Xóa sự kiện submit trước đó và gửi form
+                    } else {
+                        console.log("Form không hợp lệ, hiển thị lỗi.");
+                    }
+                } else {
+                    console.log("Người dùng đã chọn Cancel, không submit form.");
+                    validator.resetForm(); // Reset form nếu người dùng hủy
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .swal2-confirm, .swal2-cancel {
+        width: 120px; /* Chiều rộng bằng nhau cho cả hai nút */
+        height: 40px; /* Chiều cao tùy chọn cho nút */
+        font-size: 16px; /* Kích thước font của nút */
+        line-height: 1.5; /* Đặt khoảng cách dòng cho văn bản */
+        text-align: center; /* Căn giữa văn bản */
+        border-radius: 10px;
+    }
+
+    .swal2-confirm {
+        background-color: #28a745; /* Màu xanh cho nút "Có" */
+        color: white;
+        margin-right: 20px; /* Khoảng cách giữa hai nút */
+    }
+
+    .swal2-confirm:hover {
+        background-color: #218838; /* Màu xanh đậm hơn khi hover */
+    }
+
+    .swal2-cancel {
+        background-color: #dc3545; /* Màu đỏ cho nút "Không" */
+        color: white;
+    }
+
+    .swal2-cancel:hover {
+        background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
+    }
+</style>
+

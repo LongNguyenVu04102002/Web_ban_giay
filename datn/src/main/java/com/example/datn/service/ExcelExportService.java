@@ -45,7 +45,7 @@ public class ExcelExportService {
 
                 row.createCell(6).setCellValue(diaChiInfo.toString().trim()); // Ghi thông tin địa chỉ vào ô
 
-                row.createCell(7).setCellValue(khachHang.isTrangThai() ? "Không hoạt động" : "Hoạt động");
+                row.createCell(7).setCellValue(khachHang.isTrangThai() ? "Hoạt động" : "Ngừng hoạt động");
             }
 
 
