@@ -36,7 +36,7 @@ public class DiaChiController {
             redirectAttributes.addFlashAttribute("message", "Xóa địa chỉ thành công.");
         } catch (IllegalStateException e) {
             // Trường hợp khách hàng chỉ có một địa chỉ, ném ngoại lệ này
-            redirectAttributes.addFlashAttribute("error1", "Không thể xóa địa chỉ này vì khách hàng phải có ít nhất một địa chỉ.");
+            redirectAttributes.addFlashAttribute("messageDiaChi", "Không thể xóa địa chỉ này vì khách hàng phải có ít nhất một địa chỉ.");
         } catch (NoSuchElementException e) {
             // Trường hợp không tìm thấy địa chỉ, ném ngoại lệ này
             redirectAttributes.addFlashAttribute("error1", "Không tìm thấy địa chỉ cần xóa.");

@@ -496,6 +496,7 @@
         // Lấy thông báo từ model (Thymeleaf)
         var successMessage = "[[${message}]]";
         var warningMessage = "[[${message1}]]";
+          var warningMessageDiaChi = "[[${messageDiaChi}]]";
 
         // Hiển thị thông báo thành công nếu có
         if (successMessage !== 'null' && successMessage.trim() !== '') {
@@ -520,6 +521,19 @@
                 timer: 4000, // Thời gian hiển thị (đơn vị là milliseconds)
                 width: '300px', // Đặt chiều rộng của thông báo
                 text: warningMessage,
+                icon: 'warning',
+                timerProgressBar: true, // Hiển thị thanh tiến trình
+            });
+        }
+
+         if (warningMessageDiaChi !== 'null' && warningMessageDiaChi.trim() !== '') {
+            Swal.fire({
+                position: 'top-end', // Vị trí của thông báo
+                toast: true, // Thiết lập kiểu thông báo là "toast"
+                showConfirmButton: false, // Không hiển thị nút xác nhận
+                timer: 4000, // Thời gian hiển thị (đơn vị là milliseconds)
+                width: '300px', // Đặt chiều rộng của thông báo
+                text: warningMessageDiaChi,
                 icon: 'warning',
                 timerProgressBar: true, // Hiển thị thanh tiến trình
             });
@@ -654,7 +668,7 @@
             // Hiển thị thông báo xác nhận bằng SweetAlert2
             Swal.fire({
                 title: 'Xác nhận',
-                text: 'Bạn có chắc chắn muốn thêm khách hàng mới không?',
+                text: 'Bạn có chắc chắn muốn thêm địa chỉ mới cho khách hàng này không?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Có',
@@ -764,3 +778,15 @@
     }
 </style>
 
+<style>
+    label.error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    input.error {
+        border-color: red;
+    }
+</style>

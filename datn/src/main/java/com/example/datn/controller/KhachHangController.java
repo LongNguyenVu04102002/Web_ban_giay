@@ -155,7 +155,7 @@ diaChi.setTrangThai(true);
             redirectAttributes.addFlashAttribute("message1", "Cập nhật địa chỉ không thành công, địa chỉ của bạn đã đạt tối đa 3 địa chỉ!");
         } else {
             // Nếu không có lỗi, hiển thị thông báo cập nhật thành công
-            redirectAttributes.addFlashAttribute("message", "Cập nhật địa chỉ thành công!");
+            redirectAttributes.addFlashAttribute("message", "Thêm địa chỉ thành công!");
         }
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
