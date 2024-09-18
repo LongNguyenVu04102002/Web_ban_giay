@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class NhanVienController {
         return "admin/includes/content/nhanvien/form";
     }
     @PostMapping("/nhanvien/save")
-    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model) throws MessagingException {
+    public String save(@Valid NhanVien nhanVien, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws MessagingException {
         boolean isUpdate = nhanVien.getNhanVienId() != null;
 
         NhanVien existingNhanVien = nhanVienService.existsByEmail(nhanVien.getEmail());
@@ -62,7 +63,9 @@ public class NhanVienController {
             model.addAttribute("nhanVien", nhanVien);
             return "admin/includes/content/nhanvien/form";
         }
-
+        String actionMessage = (nhanVien.getNhanVienId() == null) ? "Thêm nhân viên mới thành công!" : "Cập nhật thông tin nhân viên thành công!";
+        redirectAttributes.addFlashAttribute("success", actionMessage);
+        nhanVien.setTrangThai(true);
         nhanVienService.save(nhanVien);
 
         if (!isUpdate) {
