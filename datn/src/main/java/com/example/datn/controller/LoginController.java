@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Controller
@@ -147,19 +148,48 @@ public class LoginController {
     public String showRegistrationForm() {
         return "authentication/register";
     }
-
     @PostMapping("/signup")
     public String registerEmployee(@RequestParam String username,
                                    @RequestParam String email,
                                    @RequestParam String sdt,
+                                   @RequestParam boolean gioiTinh,
+                                   @RequestParam LocalDate ngaySinh,
                                    @RequestParam String password,
+                                   @RequestParam String diaChi,
+                                   @RequestParam String xa,
+                                   @RequestParam String huyen,
+                                   @RequestParam String thanhPho,
+                                   @RequestParam String diaChiSdt,
+                                   @RequestParam String diaChiTen,
                                    Model model) {
         try {
-            khachHangService.register(username, email,sdt, password);
-            return "redirect:/loginUser";
+            // Kiểm tra xem email đã tồn tại chưa
+            if (khachHangService.isEmailExist(email)) {
+                model.addAttribute("emailError", "Email đã tồn tại!");
+            }
+
+            // Kiểm tra xem số điện thoại đã tồn tại chưa
+            if (khachHangService.isSdtExist(sdt)) {
+                model.addAttribute("phoneError", "Số điện thoại đã tồn tại!");
+            }
+
+            // Nếu có lỗi, hiển thị lại trang đăng ký với lỗi
+            if (model.containsAttribute("emailError") || model.containsAttribute("phoneError")) {
+                model.addAttribute("username", username);
+                model.addAttribute("email", email);
+                model.addAttribute("sdt", sdt);
+                return "authentication/register"; // Trả về trang đăng ký cùng lỗi
+            }
+
+            // Nếu không có lỗi, tiến hành đăng ký
+            khachHangService.register(username, email, sdt, gioiTinh, ngaySinh, password, diaChi, xa, huyen, thanhPho, diaChiSdt, diaChiTen);
+            return "redirect:/loginUser"; // Điều hướng đến trang đăng nhập
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "authentication/register";
         }
     }
+
+
+
 }

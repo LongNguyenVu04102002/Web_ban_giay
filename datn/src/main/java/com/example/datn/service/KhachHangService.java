@@ -3,6 +3,7 @@ package com.example.datn.service;
 import com.example.datn.entity.KhachHang;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface KhachHangService {
@@ -26,7 +27,6 @@ public interface KhachHangService {
 
     boolean isEmailDuplicate(String email, Long excludeId);
 
-    void register(String username, String email,String sdt, String password);
 
     KhachHang findByResetToken(String token);
 
@@ -35,5 +35,8 @@ public interface KhachHangService {
     KhachHang login (String email, String password);
 
     List<KhachHang> findKhachHangByTrangThaiTrue();
+    boolean isEmailOrPhoneExist(String email, String sdt);
+    void register(String username, String email, String sdt, boolean gioiTinh, LocalDate ngaySinh, String password,
+                  String diaChiStr, String xa, String huyen, String thanhPho, String diaChiSdt, String diaChiTen);
 
 }
