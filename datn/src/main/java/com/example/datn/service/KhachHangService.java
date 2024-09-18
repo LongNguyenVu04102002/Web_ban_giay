@@ -1,10 +1,8 @@
 package com.example.datn.service;
 
 import com.example.datn.entity.KhachHang;
-import com.example.datn.model.request.SignupRequest;
 import org.springframework.validation.BindingResult;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface KhachHangService {
@@ -28,7 +26,7 @@ public interface KhachHangService {
 
     boolean isEmailDuplicate(String email, Long excludeId);
 
-    void register(SignupRequest signupRequest);
+    void register(String username, String email,String sdt, String password);
 
     KhachHang findByResetToken(String token);
 

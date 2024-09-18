@@ -2,7 +2,6 @@ package com.example.datn.controller;
 
 import com.example.datn.config.teamplate.Utility;
 import com.example.datn.entity.KhachHang;
-import com.example.datn.model.request.SignupRequest;
 import com.example.datn.service.Impl.EmailService;
 import com.example.datn.service.Impl.KhachHangServiceImpl;
 import jakarta.mail.MessagingException;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -135,7 +133,7 @@ public class LoginController {
         KhachHang khachHang = khachHangService.findByResetToken(token);
         if (khachHang != null) {
             khachHang.setPassword(passwordEncoder.encode(password));
-            khachHang.setResetToken(null); // Clear the token after successful password reset
+            khachHang.setResetToken(null);
             khachHangService.save(khachHang);
             model.addAttribute("message", "Mật khẩu đã được thay đổi thành công. Vui lòng đăng nhập.");
             return "redirect:/login?resetSuccess";
@@ -146,18 +144,19 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("signUpRequest", new SignupRequest());
+    public String showRegistrationForm() {
         return "authentication/register";
     }
 
     @PostMapping("/signup")
-    public String registerEmployee(@ModelAttribute SignupRequest signupRequest,
+    public String registerEmployee(@RequestParam String username,
+                                   @RequestParam String email,
+                                   @RequestParam String sdt,
+                                   @RequestParam String password,
                                    Model model) {
-
         try {
-            khachHangService.register(signupRequest);
-            return "redirect:/login?success";
+            khachHangService.register(username, email,sdt, password);
+            return "redirect:/loginUser";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "authentication/register";

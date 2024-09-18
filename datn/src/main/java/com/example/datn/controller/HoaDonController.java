@@ -65,6 +65,11 @@ public class HoaDonController {
     @GetMapping("/hoadon/detail/{id}")
     public String getHoaDonById(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
+        getImage(model, hoaDon);
+        return "admin/includes/content/hoadon/hoadonchitiet";
+    }
+
+    private void getImage(Model model, HoaDon hoaDon) {
         for (HoaDonChiTiet hdct : hoaDon.getHoaDonChiTietList()) {
             SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
             byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1);
@@ -74,7 +79,6 @@ public class HoaDonController {
             }
         }
         model.addAttribute("hoaDon", hoaDon);
-        return "admin/includes/content/hoadon/hoadonchitiet";
     }
 
     @GetMapping("/hoadon/invoice/{id}")
@@ -87,24 +91,20 @@ public class HoaDonController {
     @GetMapping("/hoadon/cartdetail/{id}")
     public String getCartDetail(@PathVariable Long id, Model model) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(id);
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.getAll();
-        for (HoaDonChiTiet hdct : hoaDon.getHoaDonChiTietList()) {
-            SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
-            byte[] imageBytes = hinhAnhService.getImageBySanPhamChiTietIdWithPriority(spct.getSanPhamChiTietId(), 1);
-            if (imageBytes != null) {
-                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-                spct.setBase64Image(base64Image);
-            }
-        }
-        model.addAttribute("hoaDon", hoaDon);
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.findAllByTrangThaiTrue();
+        getImage(model, hoaDon);
         model.addAttribute("sanPhamChiTietList", sanPhamChiTietList);
         return "admin/includes/content/hoadon/cartdetail";
     }
 
     @PostMapping("/hoadon/update")
     public String update(@RequestParam Long idHoaDon, @RequestParam Long idSanPhamChiTiet, RedirectAttributes redirectAttributes) {
-        hoaDonService.update(idHoaDon, idSanPhamChiTiet);
-        redirectAttributes.addFlashAttribute("add", true);
+        boolean add = hoaDonService.update(idHoaDon, idSanPhamChiTiet);
+        if (add) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("info", true);
+        }
         return "redirect:/admin/hoadon/cartdetail/" + idHoaDon;
     }
 
