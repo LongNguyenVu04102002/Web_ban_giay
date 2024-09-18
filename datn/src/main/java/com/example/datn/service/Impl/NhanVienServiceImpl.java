@@ -4,6 +4,7 @@ import com.example.datn.entity.NhanVien;
 import com.example.datn.repository.NhanVienRepository;
 import com.example.datn.service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Autowired
     private NhanVienRepository nhanVienRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<NhanVien> getAllNhanVien() {
@@ -27,6 +31,14 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public void save(NhanVien nhanVien) {
+        if(nhanVien.getNhanVienId() == null){
+            nhanVien.setTrangThai(true);
+            long count = nhanVienRepository.count();
+            String newMaNhanVien = "NV" + (count + 1);
+            nhanVien.setMaNhanVien(newMaNhanVien);
+        }
+        nhanVien.setRole("ADMIN");
+        nhanVien.setPassword(passwordEncoder.encode(nhanVien.getSdt()));
         nhanVienRepository.save(nhanVien);
     }
 

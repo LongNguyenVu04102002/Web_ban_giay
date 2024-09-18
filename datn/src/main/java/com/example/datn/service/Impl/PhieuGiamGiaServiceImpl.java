@@ -121,6 +121,10 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
             return null;
         }
 
+        if (phieuGiamGia.getSoLuongPhieu() == 0){
+            return null;
+        }
+
         BigDecimal tongTien = cartItems.stream()
                 .map(item -> item.getGia().multiply(new BigDecimal(item.getSoLuong())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

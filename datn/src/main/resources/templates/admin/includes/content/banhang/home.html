@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/instascan/1.0.0/instascan.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const notificationTypeHtml = {
             Success: `
@@ -197,60 +198,6 @@
             }
         });
     </script>
-    <script>
-        function startBarcodeScanner(indexId) {
-            const video = document.getElementById('video');
-            const scanner = new Instascan.Scanner({ video: video });
-
-            // Handle the scanned result
-            scanner.addListener('scan', function (content) {
-                console.log('Scanned content:', content);
-                addProductByBarcode(content);
-                scanner.stop();
-                const modal = document.getElementById(`barcodeScannerModal${indexId}`);
-                if (modal) {
-                    const modalInstance = bootstrap.Modal.getInstance(modal);
-                    if (modalInstance) {
-                        modalInstance.hide();
-                    }
-                }
-            });
-            // Start scanning
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                    scanner.start(cameras[0]);
-                } else {
-                    console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-        }
-        function addProductByBarcode(barcode) {
-            console.log('Adding product with barcode:', barcode);
-            $.ajax({
-                url: '/add-product',
-                type: 'POST',
-                data: JSON.stringify({ barcode: barcode }),
-                contentType: 'application/json',
-                success: function (response) {
-                    console.log('Product added successfully:', response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error adding product:', status, error);
-                }
-            });
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-                button.addEventListener('click', function () {
-                    const indexId = this.getAttribute('data-bs-target').replace('#barcodeScannerModal', '');
-                    startBarcodeScanner(indexId);
-                });
-            });
-        });
-
-    </script>
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -274,13 +221,10 @@
                     role="tab" aria-selected="false" tabindex="0">
                 Giỏ Hàng 3
             </button>
-            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab4"
-                    role="tab" aria-selected="false" tabindex="0">
-                Giỏ Hàng 4
-            </button>
-            <button class="tab-nav tab-nav-pill mt-3" data-bs-toggle="tab" data-bs-target="#tab5" role="tab"
-                    aria-selected="false" tabindex="0">
-                Giỏ Hàng 5
+            <button id="addCartButton" class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2 mt-3" role="tab" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"></path>
+                </svg>
             </button>
         </div>
         <div class="tab-content" th:each="index : ${tabDataList}">
@@ -837,14 +781,15 @@
                                                 <label th:id="'payment' + ${index.id}"
                                                        class="radio-label inline-flex hidden">
                                                     <input type="radio" class="radio" name="paymentMethod"
-                                                           value="3" th:id="'paymentOnDelivery' + ${index.id}">
+                                                           value="2" th:id="'paymentOnDelivery' + ${index.id}">
                                                     <span class="font-semibold">Thanh toán khi nhận hàng</span>
                                                 </label>
                                             </div>
                                             <div class="lg:col-span-12">
                                                 <div class="mt-10">
-                                                    <button type="submit"
-                                                            class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full">
+                                                    <button type="button" th:id="'submit' + ${index.id}"
+                                                            class="py-2 px-5 inline-block tracking-wide align-middle duration-500 text-base text-center bg-orange-500 text-white rounded-md w-full"
+                                                            th:onclick="'confirmPayment(' + ${index.id} + ')'">
                                                         Thanh Toán
                                                     </button>
                                                 </div>
@@ -860,6 +805,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

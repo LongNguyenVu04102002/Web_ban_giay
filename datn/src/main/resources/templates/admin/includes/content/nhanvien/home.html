@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="icon" href="/images/logo_xboy.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
@@ -92,15 +93,15 @@
                         </button>
                     </td>
                     <td>
-                        <button th:class="${nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
-                            <span th:text="${nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
+                        <button th:class="${!nv.trangThai ? 'btn btn-sm bg-orange-50 text-orange-600' : 'btn btn-sm bg-emerald-50 text-emerald-600'}">
+                            <span th:text="${!nv.trangThai ? 'Ngừng hoạt động' : 'Đang Hoạt Động'}"></span>
                         </button>
                     </td>
                     <td class="flex items-center justify-center space-x-2">
                         <form th:action="@{/admin/taikhoan/nhanvien/{nhanVienId}/toggle(nhanVienId=${nv.nhanVienId})}" method="get">
                             <label class="switcher">
                                 <input type="checkbox" id="trangThai${nv.nhanVienId}" name="trangThai"
-                                       th:checked="${!nv.trangThai}" onchange="this.form.submit()">
+                                       th:checked="${nv.trangThai}" onchange="this.form.submit()">
                                 <span class="switcher-toggle"></span>
                             </label>
                         </form>
@@ -124,3 +125,80 @@
 
 </body>
 </html>
+
+<script>
+    function confirmToggle(checkbox) {
+        var form = checkbox.form;
+        var message = "Bạn có chắc chắn muốn kết thúc?";
+
+        // Sử dụng SweetAlert2 để tạo hộp thoại xác nhận
+        Swal.fire({
+            title: 'Xác nhận',
+            text: message,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            customClass: {
+                confirmButton: 'swal2-confirm',  // Áp dụng lớp tùy chỉnh cho nút "Có"
+                cancelButton: 'swal2-cancel'     // Áp dụng lớp tùy chỉnh cho nút "Không"
+            },
+            buttonsStyling: false // Tắt kiểu mặc định của SweetAlert2
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Nếu xác nhận, submit form
+            } else {
+                checkbox.checked = !checkbox.checked; // Hoàn tác thay đổi nếu hủy
+            }
+        });
+
+
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var successMessage = "[[${success}]]";
+        console.log("Success message:", successMessage); // Debugging line
+
+        if (successMessage !== 'null' && successMessage.trim() !== '') {
+            Swal.fire({
+                position: 'top-end', // Vị trí của thông báo
+                toast: true, // Thiết lập kiểu thông báo là "toast"
+                showConfirmButton: false, // Không hiển thị nút xác nhận
+                timer: 4000, // Thời gian hiển thị (đơn vị là milliseconds)
+                width: '300px', // Đặt chiều rộng của thông báo
+                text: successMessage,
+                icon: 'success',
+                timerProgressBar: true, // Không hiển thị thanh tiến trình
+            });
+        }
+    });
+</script>
+<style>
+    .swal2-confirm, .swal2-cancel {
+        width: 120px; /* Chiều rộng bằng nhau cho cả hai nút */
+        height: 40px; /* Chiều cao tùy chọn cho nút */
+        font-size: 16px; /* Kích thước font của nút */
+        line-height: 1.5; /* Đặt khoảng cách dòng cho văn bản */
+        text-align: center; /* Căn giữa văn bản */
+        border-radius: 10px;
+    }
+
+    .swal2-confirm {
+        background-color: #28a745; /* Màu xanh cho nút "Có" */
+        color: white;
+        margin-right: 20px; /* Khoảng cách giữa hai nút */
+    }
+
+    .swal2-confirm:hover {
+        background-color: #218838; /* Màu xanh đậm hơn khi hover */
+    }
+
+    .swal2-cancel {
+        background-color: #dc3545; /* Màu đỏ cho nút "Không" */
+        color: white;
+    }
+
+    .swal2-cancel:hover {
+        background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
+    }
+</style>
+

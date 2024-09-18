@@ -27,6 +27,7 @@ import com.example.datn.repository.PhuongThucThanhToanRepository;
 import com.example.datn.repository.SanPhamChiTietRepository;
 import com.example.datn.repository.TimeLineRepository;
 import com.example.datn.service.HoaDonService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -75,6 +76,9 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Autowired
     private GioHangChiTietRepository gioHangChiTietRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<HoaDon> getAllHoaDon() {
@@ -302,6 +306,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(discountCode);
         if (phieuGiamGia != null) {
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
 
         hoaDon.setLoaiHoaDon(true);
@@ -384,7 +390,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     @Transactional
-    public String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) {
+    public String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) throws MessagingException {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setLoaiHoaDon(false);
         hoaDon.setThanhToan(false);
@@ -401,6 +407,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         if (phieuGiamGia != null) {
             hoaDon.setTienGiam(phieuGiamGiaResponse.getTienGiam());
             hoaDon.setPhieuGiamGia(phieuGiamGia);
+            phieuGiamGia.setSoLuongPhieu(phieuGiamGia.getSoLuongPhieu() - 1);
+            phieuGiamGiaRepository.save(phieuGiamGia);
         }
         BigDecimal tongTien = BigDecimal.ZERO;
 
@@ -448,7 +456,11 @@ public class HoaDonServiceImpl implements HoaDonService {
             hinhThucThanhToan.setHoaDon(hoaDon);
             hinhThucThanhToanRepository.save(hinhThucThanhToan);
         }
-
+        emailService.sendEmail(
+                hoaDon.getEmail(),
+                "Bạn đã đặt hàng thành công",
+                "Mã vận đơn của bạn là: "  + hoaDon.getMaVanDon()
+        );
 
         return hoaDon.getMaVanDon();
     }

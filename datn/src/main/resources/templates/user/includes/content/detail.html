@@ -13,7 +13,7 @@
     <style>
         .swiper-slide img {
             width: 100%; /* Chiều rộng đầy đủ */
-            height: 600px; /* Chiều cao cố định */
+            height: 800px; /* Chiều cao cố định */
             object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị méo */
             border-radius: 8px; /* Tùy chọn: bo góc cho ảnh */
         }
@@ -51,7 +51,7 @@
                 <div class="lg:col-span-5">
                     <div class="tiny-single-item">
                         <div th:each="entry : ${productImg}">
-                            <div class="swiper-container tiny-slide" style="width: 100%; height: 300px;">
+                            <div class="swiper-container tiny-slide" style="width: 800px; height: 800px;">
                                 <div class="swiper-wrapper">
                                     <div th:each="image : ${entry.value}" class="swiper-slide">
                                         <img th:src="${image}" alt="Product Image"/>
@@ -78,14 +78,7 @@
                         <div class="price-display">
                             <span id="product-price" class="text-slate-400 font-semibold me-1">0 VNĐ</span>
                         </div>
-                        <ul class="list-none inline-block text-orange-400">
-                            <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                            <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                            <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                            <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                            <li class="inline"><i class="mdi mdi-star text-lg"></i></li>
-                            <li class="inline text-slate-400 font-semibold">4.8 (45)</li>
-                        </ul>
+
                     </div>
                     <div class="mt-4">
                         <h5 class="text-lg font-semibold">Overview :</h5>

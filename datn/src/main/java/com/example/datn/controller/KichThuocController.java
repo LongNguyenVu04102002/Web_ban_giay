@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,7 +28,12 @@ public class KichThuocController {
     }
 
     @PostMapping("/kichthuoc/save")
-    public String save(KichThuoc kichThuoc) {
+    public String save(KichThuoc kichThuoc, RedirectAttributes redirectAttributes) {
+        if (kichThuoc.getKichThuocId() == null) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("update", true);
+        }
         kichThuocService.save(kichThuoc);
         return "redirect:/admin/sanpham/kichthuoc";
     }

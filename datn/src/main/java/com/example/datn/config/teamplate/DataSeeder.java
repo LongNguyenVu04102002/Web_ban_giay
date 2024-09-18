@@ -50,6 +50,7 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
             nhanVien.setRole("ADMIN");
             nhanVien.setTrangThai(true);
             nhanVien.setGioiTinh(true);
+            nhanVien.setNgaySinh(LocalDate.of(2000, 8, 29));
             nhanVien.setMaNhanVien("admin");
             nhanVienRepository.save(nhanVien);
         }
@@ -57,7 +58,7 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
         if (khachHangRepository.findByEmail("member@gmail.com") == null) {
             KhachHang khachHang = new KhachHang();
             khachHang.setEmail("member@gmail.com");
-            khachHang.setPassword(passwordEncoder.encode("123456"));
+            khachHang.setPassword("123456");
             khachHang.setSdt("0987654321");
             khachHang.setNgaySinh(LocalDate.ofEpochDay(2024 - 07 - 30));
             khachHang.setTrangThai(true);
@@ -66,7 +67,7 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
             khachHangRepository.save(khachHang);
         }
 
-        for (long i = 1L; i <= 5L; i++) {
+        for (long i = 1L; i <= 10L; i++) {
             Optional<GioHang> gioHang = gioHangRepository.findById(i);
             if (gioHang.isEmpty()) {
                 GioHang gh = new GioHang();

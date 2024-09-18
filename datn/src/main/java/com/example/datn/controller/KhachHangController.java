@@ -76,7 +76,7 @@ public class KhachHangController {
         // Gán khách hàng cho các địa chỉ liên quan
         for (DiaChi diaChi : khachHang.getDiaChiList()) {
             diaChi.setKhachHang(khachHang);
-diaChi.setTrangThai(true);
+            diaChi.setTrangThai(true);
         }
 
         // Lưu khách hàng vào cơ sở dữ liệu
@@ -134,9 +134,6 @@ diaChi.setTrangThai(true);
                     diaChi.getHuyen() != null && !diaChi.getHuyen().isEmpty() &&
                     diaChi.getXa() != null && !diaChi.getXa().isEmpty() &&
                     diaChi.getDiaChi() != null && !diaChi.getDiaChi().isEmpty()) {
-
-
-
                 if (validDiaChiList.size() < 3) {
                     diaChi.setKhachHang(khachHang);  // Gán khách hàng cho địa chỉ hợp lệ
                     validDiaChiList.add(diaChi);  // Thêm địa chỉ hợp lệ vào danh sách
@@ -158,12 +155,11 @@ diaChi.setTrangThai(true);
             redirectAttributes.addFlashAttribute("message1", "Cập nhật địa chỉ không thành công, địa chỉ của bạn đã đạt tối đa 3 địa chỉ!");
         } else {
             // Nếu không có lỗi, hiển thị thông báo cập nhật thành công
-            redirectAttributes.addFlashAttribute("message", "Cập nhật địa chỉ thành công!");
+            redirectAttributes.addFlashAttribute("message", "Thêm địa chỉ thành công!");
         }
 
         return "redirect:/admin/taikhoan/khachhang/detail/" + khachHang.getKhachHangId();
     }
-
 
 
     @GetMapping("/khachhang/{khachHangId}/toggle")
@@ -172,7 +168,7 @@ diaChi.setTrangThai(true);
         boolean isActive = khachHang.isTrangThai();
         String newStatusText = isActive ? " hoạt động" : " ngừng hoạt động";
         String message = "Trạng thái của khách hàng " + khachHang.getHoTen() + " có số điện thoại " + khachHang.getSdt() + " đã được thay đổi thành " + newStatusText + ".";
-        redirectAttributes.addFlashAttribute("message2", message);
+        redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("isActive", isActive);
         return "redirect:/admin/taikhoan/khachhang";
     }

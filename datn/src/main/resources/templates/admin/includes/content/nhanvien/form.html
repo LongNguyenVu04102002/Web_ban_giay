@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="icon" href="/images/logo_xboy.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://esgoo.net/scripts/jquery.js"></script>
     <style type="text/css">
         .css_select_div{ text-align: center;}
@@ -71,7 +73,7 @@
         <div class="grid lg:grid-cols-12 gap-6 w-full">
             <div class="lg:col-span-8">
                 <div class="p-6 rounded-md">
-                    <form th:action="@{/admin/taikhoan/nhanvien/save}" th:object="${nhanVien}" method="post" onsubmit="return confirmSubmission()">
+                    <form th:action="@{/admin/taikhoan/nhanvien/save}" th:object="${nhanVien}" method="post" id="nhanVienForm">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{nhanVienId}"/>
                             <div class="lg:col-span-6">
@@ -151,8 +153,9 @@
                                class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                 Quay lại
                             </a>
-                            <button type="submit"
-                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2">
+                            <button type="button"
+                                    class="btn btn-sm bg-sky-50 hover:bg-sky-100 active:bg-sky-200 text-sky-800 mr-2"  onclick="confirmSubmit(this)"
+                                    th:id="${nhanVien.nhanVienId == null} ? 'btnAdd' : 'btnUpdate'">
                                 <span th:text="${nhanVien.nhanVienId == null} ? 'Thêm Mới' : 'Cập Nhật'"></span>
                             </button>
                             <a th:href="@{/admin/taikhoan/nhanvien/form}"
@@ -171,3 +174,59 @@
 
 </body>
 </html>
+
+
+<script>
+    function confirmSubmit(button) {
+        const buttonId = button.id;
+        const actionUrl = buttonId === 'btnAdd' ? 'Thêm mới' : 'Cập nhật';
+
+        Swal.fire({
+            title: 'Xác nhận hành động',
+            text: `Bạn có chắc chắn muốn ${actionUrl} nhân viên này?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            customClass: {
+                confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('nhanVienForm').submit();
+            }
+        });
+    }
+
+</script>
+<style>
+    .swal2-confirm, .swal2-cancel {
+        width: 120px;
+        height: 40px;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .swal2-confirm {
+        background-color: #28a745;
+        color: white;
+        margin-right: 20px;
+    }
+
+    .swal2-confirm:hover {
+        background-color: #218838;
+    }
+
+    .swal2-cancel {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .swal2-cancel:hover {
+        background-color: #c82333;
+    }
+</style>
+

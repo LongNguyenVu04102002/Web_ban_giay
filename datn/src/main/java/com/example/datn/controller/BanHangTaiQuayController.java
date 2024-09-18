@@ -85,11 +85,12 @@ public class BanHangTaiQuayController {
         List<GioHang> gioHangList = new ArrayList<>();
         List<TabDataDTO> tabDataList = new ArrayList<>();
 
-        for (long i = 1L; i <= 5L; i++) {
+        for (long i = 1L; i <= 10L; i++) {
             GioHang gioHang = gioHangService.getById(i);
             if (gioHang == null) {
                 gioHang = new GioHang();
                 gioHang.setGioHangId(i);
+                gioHang.setTienGiam(BigDecimal.ZERO);
                 gioHangService.save(gioHang);
             }
             gioHang.getGioHangChiTietList().forEach(ghct -> {

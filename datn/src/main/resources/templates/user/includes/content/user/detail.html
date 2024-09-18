@@ -382,17 +382,7 @@
                             <tbody>
                             <tr th:each="hdct, rowStat : ${hoaDon.hoaDonChiTietList}">
                                 <td th:text="${rowStat.index + 1}"></td>
-                                <td>
-                                    <div class="flex items-center">
-                                            <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-                                                <img class="avatar-img avatar-rounded" src="img/products/product-2.jpg"
-                                                     loading="lazy">
-                                            </span>
-                                        <div class="ml-4 text-center">
-                                            <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></td>
                                 <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                 <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                 <td>

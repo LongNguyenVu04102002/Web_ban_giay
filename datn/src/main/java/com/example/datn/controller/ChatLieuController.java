@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -25,7 +26,12 @@ public class ChatLieuController {
         return "admin/includes/content/sanpham/chatlieu/home";
     }
     @PostMapping("/chatlieu/save")
-    public String save(ChatLieu chatLieu) {
+    public String save(ChatLieu chatLieu, RedirectAttributes redirectAttributes) {
+        if(chatLieu.getChatLieuId() != null){
+            redirectAttributes.addFlashAttribute("update",true);
+        }else {
+            redirectAttributes.addFlashAttribute("add",true);
+        }
         chatLieuService.saveChatLieu(chatLieu);
         return "redirect:/admin/sanpham/chatlieu";
     }

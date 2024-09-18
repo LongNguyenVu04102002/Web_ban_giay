@@ -2,16 +2,16 @@ package com.example.datn.service.Impl;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
-import com.example.datn.model.request.SignupRequest;
+import com.example.datn.repository.DiaChiRepository;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     private KhachHangRepository khachHangRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private DiaChiRepository diaChiRepository;
 
     @Override
     public List<KhachHang> getAll() {
@@ -37,7 +37,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang save(KhachHang khachHang) {
-        khachHang.setPassword(passwordEncoder.encode(khachHang.getSdt()));
+        khachHang.setPassword(khachHang.getSdt());
         return khachHangRepository.save(khachHang);
     }
 
@@ -55,39 +55,38 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     @Transactional
     public KhachHang update(KhachHang khachHang, BindingResult result) {
-        // Tìm khách hàng hiện tại từ cơ sở dữ liệu
         KhachHang existingKhachHang = khachHangRepository.findById(khachHang.getKhachHangId())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
 
-        // Cập nhật thông tin của existingKhachHang bằng thông tin từ khachHang
         existingKhachHang.setHoTen(khachHang.getHoTen());
         existingKhachHang.setGioiTinh(khachHang.isGioiTinh());
         existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
         existingKhachHang.setSdt(khachHang.getSdt());
         existingKhachHang.setEmail(khachHang.getEmail());
-
-
-        // Cập nhật password (nếu có)
+        if (existingKhachHang.getDiaChiList().size() >= 3) {
+            result.rejectValue("diaChiList", "error.khachHang", "Khách hàng đã có tối đa 3 địa chỉ. Không thể cập nhật thêm.");
+            return existingKhachHang;
+        }
         if (khachHang.getPassword() != null && !khachHang.getPassword().isEmpty()) {
             existingKhachHang.setPassword(khachHang.getPassword());
         }
 
-        // Cập nhật lại các địa chỉ nếu cần
-        if (khachHang.getDiaChiList() != null && !khachHang.getDiaChiList().isEmpty()) {
+        if (khachHang.getDiaChiList() != null) {
+            if (khachHang.getDiaChiList().size() > 3) {
+                result.rejectValue("diaChiList", "error.khachHang", "Khách hàng chỉ có thể có tối đa 3 địa chỉ.");
+                return existingKhachHang;
+            }
+
             existingKhachHang.getDiaChiList().clear();
             for (DiaChi diaChi : khachHang.getDiaChiList()) {
                 diaChi.setKhachHang(existingKhachHang);
-                diaChi.setTrangThai(true);// Thiết lập liên kết
+                diaChi.setTrangThai(true); // Thiết lập liên kết
                 existingKhachHang.getDiaChiList().add(diaChi);
             }
         }
 
-        // Lưu khách hàng với thông tin đã được cập nhật
         return khachHangRepository.save(existingKhachHang);
     }
-
-
-
 
     @Override
     public boolean isSdtExist(String sdt) {
@@ -107,16 +106,40 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
 
-    public void register(SignupRequest signupRequest) {
+    @Override
+    public void register(String username, String email, String sdt, boolean gioiTinh, LocalDate ngaySinh, String password,
+                         String diaChiStr, String xa, String huyen, String thanhPho, String diaChiSdt, String diaChiTen) {
+        // Tạo đối tượng KhachHang
         KhachHang khachHang = KhachHang.builder()
-                .email(signupRequest.getEmail())
-                .hoTen(signupRequest.getUsername())
-                .password(passwordEncoder.encode(signupRequest.getPassword()))
+                .email(email)
+                .hoTen(username)
+                .password(password)
+                .sdt(sdt)
                 .trangThai(true)
-                .gioiTinh(true)
+                .gioiTinh(gioiTinh)
+                .ngaySinh(ngaySinh)
                 .build();
+
+        // Lưu KhachHang vào cơ sở dữ liệu
         khachHangRepository.save(khachHang);
+
+        // Tạo đối tượng DiaChi và liên kết với KhachHang vừa tạo
+        DiaChi diaChi = DiaChi.builder()
+                .diaChi(diaChiStr)
+                .sdt(diaChiSdt)
+                .ten(diaChiTen)
+                .email(email)  // Bạn có thể sử dụng email từ KhachHang
+                .trangThai(true)
+                .xa(xa)
+                .huyen(huyen)
+                .thanhPho(thanhPho)
+                .khachHang(khachHang)  // Liên kết địa chỉ với khách hàng
+                .build();
+
+        // Lưu DiaChi vào cơ sở dữ liệu
+        diaChiRepository.save(diaChi);
     }
+
 
     @Override
     public KhachHang findByResetToken(String token) {
@@ -131,7 +154,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang login(String email, String password) {
         KhachHang khachHang = khachHangRepository.findKhachHangByEmailAndPassword(email, password);
-        if(khachHang != null) {
+        if (khachHang != null) {
             if (!khachHang.isTrangThai()) {
                 return null;
             }
@@ -143,6 +166,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public List<KhachHang> findKhachHangByTrangThaiTrue() {
         return khachHangRepository.findKhachHangByTrangThaiTrue();
+    }
+
+    @Override
+    public boolean isEmailOrPhoneExist(String email, String sdt) {
+        return khachHangRepository.existsByEmail(email) || khachHangRepository.existsBySdt(sdt);
     }
 
 }

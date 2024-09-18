@@ -73,62 +73,9 @@ public class HomeController {
 
     @GetMapping("/home/detail/{id}")
     public String detailhome(@PathVariable Long id, Model model) {
-        SanPham sanPham = sanPhamService.getSanPhamById(id);
-        if (sanPham == null) {
-            return "redirect:/error";
-        }
-        model.addAttribute("sanPham", sanPham);
-
-        // Lấy danh sách kích thước duy nhất cho sản phẩm
-        List<KichThuoc> uniqueSizes = sanPham.getSanPhamChiTietList().stream()
-                .map(SanPhamChiTiet::getKichThuoc)
-                .distinct()
-                .sorted(Comparator.comparingInt(kt -> Integer.parseInt(kt.getTen())))
-                .collect(Collectors.toList());
-
-        model.addAttribute("uniqueSizes", uniqueSizes);
-
-        // Lấy danh sách màu sắc duy nhất cho sản phẩm
-        List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
-                .map(SanPhamChiTiet::getMauSac)
-                .distinct()
-                .collect(Collectors.toList());
-        model.addAttribute("uniqueColors", uniqueColors);
-
-        // Lấy danh sách hình ảnh cho từng biến thể sản phẩm
-        Map<Long, List<String>> productImg = new HashMap<>();
-        for (SanPhamChiTiet chiTiet : sanPham.getSanPhamChiTietList()) {
-            List<String> hinhAnh = chiTiet.getLstAnh().stream()
-                    .map(hinhAnhEntity -> {
-                        // Chuyển đổi byte[] thành chuỗi Base64 nếu có dữ liệu ảnh
-                        if (hinhAnhEntity.getDataImg() != null) {
-                            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(hinhAnhEntity.getDataImg());
-                        }
-                        // Nếu không, sử dụng link trực tiếp
-                        return hinhAnhEntity.getLink();
-                    })
-                    .distinct()
-                    .collect(Collectors.toList());
-            productImg.put(chiTiet.getSanPhamChiTietId(), hinhAnh);
-        }
-        model.addAttribute("productImg", productImg);
-
-        model.addAttribute("sanPhamChiTietList", sanPham.getSanPhamChiTietList());
-
-        return "user/includes/content/detail";
+        return getString(id, model);
     }
 
-    // Shop
-//    @GetMapping("/shop")
-//    public String shop(Model model) {
-//        List<SanPham> sanPhamList = sanPhamService.getAll();
-//        List<ThuongHieu> thuongHieuList = thuongHieuService.getAll();
-//        List<KichThuoc> kichThuocList = kichThuocService.getAll();
-//        model.addAttribute("sanPhamList", sanPhamList);
-//        model.addAttribute("thuongHieuList", thuongHieuList);
-//        model.addAttribute("kichThuocList", kichThuocList);
-//        return "user/includes/content/shop";
-//    }
     @GetMapping("/shop")
     public String getShopPage(
             @RequestParam(required = false) Long thuongHieuId,
@@ -140,10 +87,9 @@ public class HomeController {
 
         Page<SanPhamHomeDTO> page = sanPhamService.getSanPhamForShopPage(thuongHieuId, kichThuocId, mauSacId, keyword, pageable);
 
-        if (page.getContent() == null || page.getContent().isEmpty()) {
-            // Thêm thông báo nếu không có kết quả
+        page.getContent();
+        if (page.getContent().isEmpty()) {
             model.addAttribute("noProducts", true);
-            // Lấy lại tất cả sản phẩm để reload lại trang với đầy đủ sản phẩm
             page = sanPhamService.getSanPhamForShopPage(null, null, null, null, pageable);
         }
         model.addAttribute("products", page.getContent());
@@ -161,13 +107,16 @@ public class HomeController {
 
     @GetMapping("/shop/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
+        return getString(id, model);
+    }
+
+    private String getString(@PathVariable Long id, Model model) {
         SanPham sanPham = sanPhamService.getSanPhamById(id);
         if (sanPham == null) {
             return "redirect:/error";
         }
         model.addAttribute("sanPham", sanPham);
 
-        // Lấy danh sách kích thước duy nhất cho sản phẩm
         List<KichThuoc> uniqueSizes = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getKichThuoc)
                 .distinct()
@@ -176,23 +125,19 @@ public class HomeController {
 
         model.addAttribute("uniqueSizes", uniqueSizes);
 
-        // Lấy danh sách màu sắc duy nhất cho sản phẩm
         List<MauSac> uniqueColors = sanPham.getSanPhamChiTietList().stream()
                 .map(SanPhamChiTiet::getMauSac)
                 .distinct()
                 .collect(Collectors.toList());
         model.addAttribute("uniqueColors", uniqueColors);
 
-        // Lấy danh sách hình ảnh cho từng biến thể sản phẩm
         Map<Long, List<String>> productImg = new HashMap<>();
         for (SanPhamChiTiet chiTiet : sanPham.getSanPhamChiTietList()) {
             List<String> hinhAnh = chiTiet.getLstAnh().stream()
                     .map(hinhAnhEntity -> {
-                        // Chuyển đổi byte[] thành chuỗi Base64 nếu có dữ liệu ảnh
                         if (hinhAnhEntity.getDataImg() != null) {
                             return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(hinhAnhEntity.getDataImg());
                         }
-                        // Nếu không, sử dụng link trực tiếp
                         return hinhAnhEntity.getLink();
                     })
                     .distinct()
@@ -263,8 +208,12 @@ public class HomeController {
 
     @PostMapping("/user/invoice/update")
     public String update(@RequestParam Long idHoaDon, @RequestParam Long idSanPhamChiTiet, RedirectAttributes redirectAttributes) {
-        hoaDonService.update(idHoaDon, idSanPhamChiTiet);
-        redirectAttributes.addFlashAttribute("add", true);
+        boolean add = hoaDonService.update(idHoaDon, idSanPhamChiTiet);
+        if (add) {
+            redirectAttributes.addFlashAttribute("add", true);
+        } else {
+            redirectAttributes.addFlashAttribute("info", true);
+        }
         return "redirect:/user/invoice/cartdetail/" + idHoaDon;
     }
 
@@ -314,7 +263,6 @@ public class HomeController {
     public ResponseEntity<Map<String, Object>> addToCart(@RequestBody CartItem cartItem, @ModelAttribute("cartItems") List<CartItem> cartItems) {
         Map<String, Object> response = new HashMap<>();
         boolean itemExists = false;
-
         try {
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findByNameAndSizeAndColor(cartItem.getTenSanPham(), cartItem.getKichThuoc(), cartItem.getMauSac());
             int maxQuantity = sanPhamChiTiet.getSoLuong();
@@ -333,7 +281,6 @@ public class HomeController {
                     break;
                 }
             }
-
             if (!itemExists) {
                 if (cartItem.getSoLuong() > maxQuantity) {
                     response.put("status", "error");
@@ -342,7 +289,6 @@ public class HomeController {
                 cartItem.setId(counter.incrementAndGet());
                 cartItems.add(cartItem);
             }
-
             response.put("status", "success");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -410,7 +356,7 @@ public class HomeController {
                              @ModelAttribute ThanhToanResponse thanhToanResponse,
                              @ModelAttribute("cartItems") List<CartItem> cartItems,
                              HttpSession session,
-                             Model model) {
+                             Model model) throws MessagingException {
         PhieuGiamGiaResponse pgg = (PhieuGiamGiaResponse) session.getAttribute("pgg");
         if (pgg == null) {
             pgg = new PhieuGiamGiaResponse();
@@ -424,7 +370,6 @@ public class HomeController {
 
         return "user/includes/content/ordersusses";
     }
-
 
     @GetMapping("/success")
     public String success() {
