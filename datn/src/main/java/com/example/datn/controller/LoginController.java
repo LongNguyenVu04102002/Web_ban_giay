@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Controller
@@ -147,19 +148,36 @@ public class LoginController {
     public String showRegistrationForm() {
         return "authentication/register";
     }
-
     @PostMapping("/signup")
     public String registerEmployee(@RequestParam String username,
                                    @RequestParam String email,
                                    @RequestParam String sdt,
+                                   @RequestParam boolean gioiTinh,
+                                   @RequestParam LocalDate ngaySinh,
                                    @RequestParam String password,
+                                   @RequestParam String diaChi,  // Thêm địa chỉ
+                                   @RequestParam String xa,      // Thêm xã
+                                   @RequestParam String huyen,   // Thêm huyện
+                                   @RequestParam String thanhPho,// Thêm thành phố
+                                   @RequestParam String diaChiSdt,  // Số điện thoại liên hệ tại địa chỉ
+                                   @RequestParam String diaChiTen,  // Tên người liên hệ tại địa chỉ
                                    Model model) {
         try {
-            khachHangService.register(username, email,sdt, password);
+            // Kiểm tra xem email hoặc số điện thoại đã tồn tại chưa
+            if (khachHangService.isEmailOrPhoneExist(email, sdt)) {
+                // Ném ngoại lệ nếu email hoặc số điện thoại đã tồn tại
+                throw new RuntimeException("Email hoặc số điện thoại đã tồn tại!");
+            }
+
+            // Nếu không trùng, tiến hành đăng ký
+            khachHangService.register(username, email, sdt, gioiTinh, ngaySinh, password, diaChi, xa, huyen, thanhPho, diaChiSdt, diaChiTen);
             return "redirect:/loginUser";
         } catch (RuntimeException e) {
+            // Hiển thị thông báo lỗi
             model.addAttribute("error", e.getMessage());
             return "authentication/register";
         }
     }
+
+
 }

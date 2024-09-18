@@ -2,6 +2,7 @@ package com.example.datn.service.Impl;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
+import com.example.datn.repository.DiaChiRepository;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,9 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+
+    @Autowired
+    private DiaChiRepository diaChiRepository;
 
     @Override
     public List<KhachHang> getAll() {
@@ -103,18 +107,39 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public void register(String username, String email,String sdt, String password) {
+    public void register(String username, String email, String sdt, boolean gioiTinh, LocalDate ngaySinh, String password,
+                         String diaChiStr, String xa, String huyen, String thanhPho, String diaChiSdt, String diaChiTen) {
+        // Tạo đối tượng KhachHang
         KhachHang khachHang = KhachHang.builder()
                 .email(email)
                 .hoTen(username)
                 .password(password)
                 .sdt(sdt)
                 .trangThai(true)
-                .gioiTinh(true)
-                .ngaySinh(LocalDate.now())
+                .gioiTinh(gioiTinh)
+                .ngaySinh(ngaySinh)
                 .build();
+
+        // Lưu KhachHang vào cơ sở dữ liệu
         khachHangRepository.save(khachHang);
+
+        // Tạo đối tượng DiaChi và liên kết với KhachHang vừa tạo
+        DiaChi diaChi = DiaChi.builder()
+                .diaChi(diaChiStr)
+                .sdt(diaChiSdt)
+                .ten(diaChiTen)
+                .email(email)  // Bạn có thể sử dụng email từ KhachHang
+                .trangThai(true)
+                .xa(xa)
+                .huyen(huyen)
+                .thanhPho(thanhPho)
+                .khachHang(khachHang)  // Liên kết địa chỉ với khách hàng
+                .build();
+
+        // Lưu DiaChi vào cơ sở dữ liệu
+        diaChiRepository.save(diaChi);
     }
+
 
     @Override
     public KhachHang findByResetToken(String token) {
@@ -141,6 +166,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public List<KhachHang> findKhachHangByTrangThaiTrue() {
         return khachHangRepository.findKhachHangByTrangThaiTrue();
+    }
+
+    @Override
+    public boolean isEmailOrPhoneExist(String email, String sdt) {
+        return khachHangRepository.existsByEmail(email) || khachHangRepository.existsBySdt(sdt);
     }
 
 }
