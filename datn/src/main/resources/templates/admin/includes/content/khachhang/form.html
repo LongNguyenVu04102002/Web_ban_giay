@@ -319,9 +319,20 @@
             return this.optional(element) || !/\d/.test(value);
         }, "Name cannot contain numbers.");
 
-        $.validator.addMethod("noSpecialChars", function(value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9\s]+$/.test(value);
-        }, "No special characters allowed.");
+       $.validator.addMethod("noSpecialChars", function(value, element) {
+    // Biểu thức chính quy cho phép chữ cái, số, khoảng trắng và các ký tự tiếng Việt cơ bản
+    return this.optional(element) || /^[\p{L}\p{N}\s]+$/u.test(value);
+}, "No special characters allowed.");
+
+
+ $.validator.addMethod("notFutureDate", function(value, element) {
+            // Get the current date
+            var today = new Date();
+            var inputDate = new Date(value);
+
+            // Ensure the input date is not in the future
+            return this.optional(element) || inputDate <= today;
+        }, "Ngày sinh không được là ngày trong tương lai.");
 
         // Initialize form validation
         $("#khachHangForm").validate({
@@ -351,7 +362,8 @@
                 },
                 ngaySinh: {
                     required: true,
-                    dateISO: true
+                    dateISO: true,
+                    notFutureDate: true
                 },
                 // Validate required fields for diaChiList[0]
                 'diaChiList[0].diaChi': {
@@ -359,12 +371,14 @@
                     noLeadingTrailingSpaces: true,
                     noConsecutiveSpaces: true,
                     maxlength: 50
+
                 },
                 'diaChiList[0].ten': {
                     required: true,
                     noLeadingTrailingSpaces: true,
                     noConsecutiveSpaces: true,
-                    maxlength: 50
+                    maxlength: 50,
+                     noSpecialChars: true // Apply the noSpecialChars validation rule
                 },
                 'diaChiList[0].email': {
                     required: true,
@@ -414,19 +428,22 @@
                 },
                 ngaySinh: {
                     required: "Vui lòng chọn ngày sinh",
-                    dateISO: "Ngày sinh không hợp lệ"
+                    dateISO: "Ngày sinh không hợp lệ",
+                      notFutureDate: "Ngày sinh không được là ngày trong tương lai."
                 },
                 'diaChiList[0].diaChi': {
                     required: "Vui lòng nhập địa chỉ",
                     noLeadingTrailingSpaces: "Địa chỉ không được có khoảng trắng ở đầu hoặc cuối",
                     noConsecutiveSpaces: "Địa chỉ không được có khoảng trắng liên tiếp",
                     maxlength: "Địa chỉ không được quá 50 ký tự"
+
                 },
                 'diaChiList[0].ten': {
                     required: "Vui lòng nhập tên người nhận",
                     noLeadingTrailingSpaces: "Tên người nhận không được có khoảng trắng ở đầu hoặc cuối",
                     noConsecutiveSpaces: "Tên người nhận không được có khoảng trắng liên tiếp",
-                    maxlength: "Tên người nhận không được quá 50 ký tự"
+                    maxlength: "Tên người nhận không được quá 50 ký tự",
+                      noSpecialChars: "Tên khách hàng không được chứa ký tự đặc biệt"
                 },
                 'diaChiList[0].email': {
                     required: "Vui lòng nhập email người nhận",
