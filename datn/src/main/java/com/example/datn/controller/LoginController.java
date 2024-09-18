@@ -155,29 +155,41 @@ public class LoginController {
                                    @RequestParam boolean gioiTinh,
                                    @RequestParam LocalDate ngaySinh,
                                    @RequestParam String password,
-                                   @RequestParam String diaChi,  // Thêm địa chỉ
-                                   @RequestParam String xa,      // Thêm xã
-                                   @RequestParam String huyen,   // Thêm huyện
-                                   @RequestParam String thanhPho,// Thêm thành phố
-                                   @RequestParam String diaChiSdt,  // Số điện thoại liên hệ tại địa chỉ
-                                   @RequestParam String diaChiTen,  // Tên người liên hệ tại địa chỉ
+                                   @RequestParam String diaChi,
+                                   @RequestParam String xa,
+                                   @RequestParam String huyen,
+                                   @RequestParam String thanhPho,
+                                   @RequestParam String diaChiSdt,
+                                   @RequestParam String diaChiTen,
                                    Model model) {
         try {
-            // Kiểm tra xem email hoặc số điện thoại đã tồn tại chưa
-            if (khachHangService.isEmailOrPhoneExist(email, sdt)) {
-                // Ném ngoại lệ nếu email hoặc số điện thoại đã tồn tại
-                throw new RuntimeException("Email hoặc số điện thoại đã tồn tại!");
+            // Kiểm tra xem email đã tồn tại chưa
+            if (khachHangService.isEmailExist(email)) {
+                model.addAttribute("emailError", "Email đã tồn tại!");
             }
 
-            // Nếu không trùng, tiến hành đăng ký
+            // Kiểm tra xem số điện thoại đã tồn tại chưa
+            if (khachHangService.isSdtExist(sdt)) {
+                model.addAttribute("phoneError", "Số điện thoại đã tồn tại!");
+            }
+
+            // Nếu có lỗi, hiển thị lại trang đăng ký với lỗi
+            if (model.containsAttribute("emailError") || model.containsAttribute("phoneError")) {
+                model.addAttribute("username", username);
+                model.addAttribute("email", email);
+                model.addAttribute("sdt", sdt);
+                return "authentication/register"; // Trả về trang đăng ký cùng lỗi
+            }
+
+            // Nếu không có lỗi, tiến hành đăng ký
             khachHangService.register(username, email, sdt, gioiTinh, ngaySinh, password, diaChi, xa, huyen, thanhPho, diaChiSdt, diaChiTen);
-            return "redirect:/loginUser";
+            return "redirect:/loginUser"; // Điều hướng đến trang đăng nhập
         } catch (RuntimeException e) {
-            // Hiển thị thông báo lỗi
             model.addAttribute("error", e.getMessage());
             return "authentication/register";
         }
     }
+
 
 
 }
