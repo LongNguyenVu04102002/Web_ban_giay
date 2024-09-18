@@ -484,7 +484,8 @@ public class HoaDonServiceImpl implements HoaDonService {
         BigDecimal tienGiam = BigDecimal.ZERO;
         PhieuGiamGia phieuGiamGia = hoaDon.getPhieuGiamGia();
 
-        if (phieuGiamGia != null) {
+        // Check if the voucher exists, its soLuong > 0, and trangThai == true
+        if (phieuGiamGia != null && phieuGiamGia.getSoLuongPhieu() > 0 && phieuGiamGia.getTrangThai() != 3) {
             if (tongTien.compareTo(phieuGiamGia.getGiaTriDonToiThieu()) >= 0) {
                 if (phieuGiamGia.isLoaiPhieu()) {
                     BigDecimal discountPercent = new BigDecimal(phieuGiamGia.getGiaTriGiam()).divide(new BigDecimal(100));
@@ -504,7 +505,9 @@ public class HoaDonServiceImpl implements HoaDonService {
             }
         }
 
-        BigDecimal finalTotal = tongTien.subtract(tienGiam).add(hoaDon.getPhiShip() != null ? hoaDon.getPhiShip() : BigDecimal.ZERO);
+        BigDecimal finalTotal = tongTien.subtract(tienGiam)
+                .add(hoaDon.getPhiShip() != null ? hoaDon.getPhiShip() : BigDecimal.ZERO);
+
         hoaDon.setTienGiam(tienGiam);
         hoaDon.setTongTien(finalTotal);
 

@@ -221,8 +221,10 @@
                     role="tab" aria-selected="false" tabindex="0">
                 Giỏ Hàng 3
             </button>
-            <button id="addCartButton" class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2 mt-3" role="tab" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 h-6">
+            <button id="addCartButton" class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2 mt-3" role="tab"
+                    tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" aria-hidden="true" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"></path>
                 </svg>
             </button>
@@ -403,26 +405,11 @@
                             <div class="card adaptable-card">
                                 <div class="card-body flex items-center justify-between">
                                     <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
-                                    <div class="flex">
-                                        <button type="button" data-bs-toggle="modal"
-                                                th:data-bs-target="'#barcodeScannerModal' + ${index.id}"
-                                                class="btn btn-sm bg-orange-50 hover:bg-orange-100 active:bg-orange-200 text-orange-600 mr-2">
-                                            BarCode
-                                        </button>
-                                        <div th:id="'barcodeScannerModal' + ${index.id}" class="modal fade" tabindex="-1"
-                                             aria-hidden="true">
-                                            <div class="modal-dialog dialog md:max-w-[500px] ">
-                                                <div class="dialog-confirm">
-                                                    <video id="video"></video>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" data-bs-toggle="modal"
-                                                th:data-bs-target="'#dialogSanPham' + ${index.id}"
-                                                class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
-                                            Thêm sản phẩm
-                                        </button>
-                                    </div>
+                                    <button type="button" data-bs-toggle="modal"
+                                            th:data-bs-target="'#dialogSanPham' + ${index.id}"
+                                            class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
+                                        Thêm sản phẩm
+                                    </button>
                                 </div>
                                 <div class="card-body overflow-x-auto"
                                      th:if="${gioHangList.get(index.id  - 1).gioHangChiTietList != null and #lists.size(gioHangList.get(index.id  - 1).gioHangChiTietList) > 0}">

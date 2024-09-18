@@ -32,13 +32,25 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/admin/taikhoan/nhanvien",
+                                "/admin/sanpham/thuonghieu",
+                                "/admin/sanpham/chatlieu",
+                                "/admin/sanpham/cogiay",
+                                "/admin/sanpham/daygiay",
+                                "/admin/sanpham/lotgiay",
+                                "/admin/sanpham/muigiay",
+                                "/admin/sanpham/mausac",
+                                "/admin/sanpham/kichthuoc",
+                                "/admin/giamgia"
+                        ).hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "STAFF")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/loginAdmin")
                         .loginProcessingUrl("/loginAdmin")
-                        .defaultSuccessUrl("/admin/thongke")
+                        .defaultSuccessUrl("/admin/hoadon")
                         .failureUrl("/loginAdmin?error")
                         .permitAll()
                 )

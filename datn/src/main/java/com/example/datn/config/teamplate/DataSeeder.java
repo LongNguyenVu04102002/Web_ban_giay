@@ -41,19 +41,8 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent arg0) {
 
-        if (nhanVienRepository.findByEmail("admin@gmail.com") == null) {
-            NhanVien nhanVien = new NhanVien();
-            nhanVien.setEmail("admin@gmail.com");
-            nhanVien.setPassword(passwordEncoder.encode("123456"));
-            nhanVien.setHoTen("Nguyễn Thành Vinh");
-            nhanVien.setSdt("0123456789");
-            nhanVien.setRole("ADMIN");
-            nhanVien.setTrangThai(true);
-            nhanVien.setGioiTinh(true);
-            nhanVien.setNgaySinh(LocalDate.of(2000, 8, 29));
-            nhanVien.setMaNhanVien("admin");
-            nhanVienRepository.save(nhanVien);
-        }
+        createUserIfNotExists("admin@gmail.com", "123456", "Nguyễn Thành Vinh", "0123456789", "ADMIN", "admin");
+        createUserIfNotExists("staff@gmail.com", "123123", "Nguyễn Thị Hằng", "0123454321", "STAFF", "staff");
 
         if (khachHangRepository.findByEmail("member@gmail.com") == null) {
             KhachHang khachHang = new KhachHang();
@@ -88,5 +77,21 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
         phuongThucThanhToan2.setTen("Thanh toán khi nhận hàng");
         phuongThucThanhToan2.setTrangThai(true);
         phuongThucThanhToanRepository.save(phuongThucThanhToan2);
+    }
+
+    private void createUserIfNotExists(String email, String password, String hoTen, String sdt, String role, String maNhanVien) {
+        if (nhanVienRepository.findByEmail(email) == null) {
+            NhanVien nhanVien = new NhanVien();
+            nhanVien.setEmail(email);
+            nhanVien.setPassword(passwordEncoder.encode(password));
+            nhanVien.setHoTen(hoTen);
+            nhanVien.setSdt(sdt);
+            nhanVien.setRole(role);
+            nhanVien.setTrangThai(true);
+            nhanVien.setGioiTinh(true);
+            nhanVien.setNgaySinh(LocalDate.of(2000, 8, 29));
+            nhanVien.setMaNhanVien(maNhanVien);
+            nhanVienRepository.save(nhanVien);
+        }
     }
 }

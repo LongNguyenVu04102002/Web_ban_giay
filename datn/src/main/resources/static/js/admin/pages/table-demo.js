@@ -3,8 +3,8 @@ $(document).ready(function () {
         '#data-table-all', '#data-table-cancel', '#data-table-delivery',
         '#data-table-confirm', '#data-table-confirmed', '#data-table-shipping',
         '#data-table-delivered', '#data-table-completed', '#data-table-cart',
-        '#data-table-sp', '#data-table-pgg', '#data-table-account','#data-table-cart1',
-        '#data-table-cart2','#data-table-cart3','#data-table-cart4','#data-table-cart5'
+        '#data-table-sp', '#data-table-pgg', '#data-table-account', '#data-table-cart1',
+        '#data-table-cart2', '#data-table-cart3', '#data-table-cart4', '#data-table-cart5'
     ];
 
     const initializeDataTable = (selector) => {
@@ -117,11 +117,7 @@ $(document).ready(function () {
                     return true;
                 }
                 return false;
-
-} else if (settings.nTable.id === 'data-table-account') {
             } else if (settings.nTable.id === 'data-table-account') {
-
-} else if (settings.nTable.id === 'data-table-account') {
 
                 const fromDate = $('#fromDate').val();
                 const toDate = $('#toDate').val();
