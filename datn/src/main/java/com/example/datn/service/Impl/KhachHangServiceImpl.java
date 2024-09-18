@@ -2,16 +2,15 @@ package com.example.datn.service.Impl;
 
 import com.example.datn.entity.DiaChi;
 import com.example.datn.entity.KhachHang;
-import com.example.datn.model.request.SignupRequest;
 import com.example.datn.repository.KhachHangRepository;
 import com.example.datn.service.KhachHangService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,13 +102,15 @@ public class KhachHangServiceImpl implements KhachHangService {
         return khachHangRepository.existsByEmailAndKhachHangIdNot(email, excludeId);
     }
 
-    public void register(SignupRequest signupRequest) {
+    @Override
+    public void register(String username, String email, String password) {
         KhachHang khachHang = KhachHang.builder()
-                .email(signupRequest.getEmail())
-                .hoTen(signupRequest.getUsername())
-                .password(signupRequest.getPassword())
+                .email(email)
+                .hoTen(username)
+                .password(password)
                 .trangThai(true)
                 .gioiTinh(true)
+                .ngaySinh(LocalDate.now())
                 .build();
         khachHangRepository.save(khachHang);
     }
