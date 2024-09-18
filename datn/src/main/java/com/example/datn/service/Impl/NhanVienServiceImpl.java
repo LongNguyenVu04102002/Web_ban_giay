@@ -37,7 +37,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             String newMaNhanVien = "NV" + (count + 1);
             nhanVien.setMaNhanVien(newMaNhanVien);
         }
-        nhanVien.setRole("ADMIN");
+        nhanVien.setRole("STAFF");
         nhanVien.setPassword(passwordEncoder.encode(nhanVien.getSdt()));
         nhanVienRepository.save(nhanVien);
     }

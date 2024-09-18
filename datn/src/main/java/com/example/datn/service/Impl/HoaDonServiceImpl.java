@@ -320,7 +320,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         timeLine.setNgayTao(LocalDate.now());
         timeLine.setHoaDon(hoaDon);
 
-        if (thanhToanResponse.getPaymentMethod() == 3) {
+        if (thanhToanResponse.getPaymentMethod() == 2) {
             hoaDon.setTenNguoiNhan(thanhToanResponse.getTenNguoiNhan());
             hoaDon.setEmail(thanhToanResponse.getEmail());
             hoaDon.setSdtNhan(thanhToanResponse.getSdt());
