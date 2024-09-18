@@ -44,6 +44,8 @@ public class KhachHang implements UserDetails {
     @Column(name = "gioiTinh")
     private boolean gioiTinh;
 
+    @Column(name = "ngaySinh")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngaySinh;
 
     @Column(name = "sdt", length = 20)

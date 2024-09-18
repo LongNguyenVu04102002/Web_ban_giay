@@ -212,7 +212,7 @@ public class ThongKeServiceImpl implements ThongKeService {
     }
 
     @Override
-    public Integer sumDonHangByDay(Integer trangThai) {
+    public Double sumDonHangByDay(Integer trangThai) {
         LocalDate today = LocalDate.now();
         int year = today.getYear();
         int month = today.getMonthValue();

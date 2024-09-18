@@ -6,6 +6,7 @@
     <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" href="/images/logo_xboy.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.css">
 </head>
 <body>
 <div layout:fragment="admincontent">
@@ -30,16 +31,15 @@
                                 <input type="text" th:field="*{hoTen}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Tên Khách Hàng">
-                                <div th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"
-                                     class="text-red-500 text-sm mt-1"></div>
+                                <div class="text-red-500 text-sm mt-1" id="hoTenError"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Số Điện Thoại:</label>
                                 <input type="text" th:field="*{sdt}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Số Điện Thoại">
-                                <div th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}"
-                                     class="text-red-500 text-sm mt-1"></div>
+                                <div class="text-red-500 text-sm mt-1" id="sdtError"></div>
+                                <div th:if="${#fields.hasErrors('sdt')}" th:errors="*{sdt}" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
                             <div class="lg:col-span-6" style="display: none;">
@@ -54,16 +54,15 @@
                                 <input type="text" th:field="*{email}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Email">
-                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                     class="text-red-500 text-sm mt-1"></div>
+                                <div class="text-red-500 text-sm mt-1" id="emailError"></div>
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             <div class="lg:col-span-6">
                                 <label class="form-label font-semibold">Ngày Sinh: </label>
                                 <input type="date" th:field="*{ngaySinh}"
                                        class="w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 mt-2"
                                        placeholder="Ngày Sinh">
-                                <div th:if="${#fields.hasErrors('ngaySinh')}" th:errors="*{ngaySinh}"
-                                     class="text-red-500 text-sm mt-1"></div>
+                                <div class="text-red-500 text-sm mt-1" id="ngaySinhError"></div>
                             </div>
                             <div class="lg:col-span-12">
                                 <label class="form-label font-medium block text-gray-700">Giới tính</label>
@@ -82,7 +81,7 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <button type="button" class="bg-blue-500 text-white py-2 px-4 rounded" onclick="confirmSubmit()">Lưu</button>
+                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Lưu</button>
                             <a href="#" class="bg-gray-500 text-white py-2 px-4 rounded ml-2">Hủy</a>
                         </div>
                     </form>
@@ -94,53 +93,92 @@
 </body>
 </html>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
 <script>
-    function confirmSubmit() {
-        Swal.fire({
-            title: 'Xác nhận hành động',
-            text: 'Bạn có chắc chắn muốn cập nhật thông tin khách hàng này?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Có',
-            cancelButtonText: 'Không',
-            customClass: {
-                confirmButton: 'swal2-confirm',
-                cancelButton: 'swal2-cancel'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('khachHangForm').submit();
+    $(document).ready(function() {
+        // Thêm quy tắc tùy chỉnh kiểm tra khoảng trắng
+        $.validator.addMethod("noWhitespace", function(value, element) {
+            return this.optional(element) || !/\s{2,}/.test(value) && !/^\s|\s$/.test(value);
+        }, "Không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối.");
+
+        $("#khachHangForm").validate({
+            rules: {
+                hoTen: {
+                    required: true,
+                    maxlength: 50,
+                    noWhitespace: true
+                },
+                sdt: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 11,
+                    noWhitespace: true
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    noWhitespace: true
+                },
+                ngaySinh: {
+                    required: true,
+                    date: true
+                }
+            },
+            messages: {
+                hoTen: {
+                    required: "Vui lòng nhập tên khách hàng.",
+                    maxlength: "Tên khách hàng không được vượt quá 50 ký tự.",
+                    noWhitespace: "Tên khách hàng không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối."
+                },
+                sdt: {
+                    required: "Vui lòng nhập số điện thoại.",
+                    digits: "Số điện thoại chỉ được chứa chữ số.",
+                    minlength: "Số điện thoại phải có từ 10 đến 11 ký tự.",
+                    maxlength: "Số điện thoại phải có từ 10 đến 11 ký tự.",
+                    noWhitespace: "Số điện thoại không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối."
+                },
+                email: {
+                    required: "Vui lòng nhập email.",
+                    email: "Vui lòng nhập địa chỉ email hợp lệ.",
+                    noWhitespace: "Email không được chứa khoảng trắng liên tiếp hoặc khoảng trắng ở đầu/cuối."
+                },
+                ngaySinh: {
+                    required: "Vui lòng chọn ngày sinh.",
+                    date: "Ngày sinh không hợp lệ."
+                }
+            },
+            errorElement: "div",
+            errorClass: "text-red-500 text-sm mt-1",
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass("border-red-500");
+                var id = $(element).attr('name') + 'Error';
+                $('#' + id).text($(element).data('message'));
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass("border-red-500");
+                var id = $(element).attr('name') + 'Error';
+                $('#' + id).text('');
+            },
+            submitHandler: function(form) {
+                Swal.fire({
+                    title: 'Xác nhận',
+                    text: 'Bạn có chắc chắn muốn lưu thông tin này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             }
         });
-    }
+    });
 </script>
-
-<style>
-    .swal2-confirm, .swal2-cancel {
-        width: 120px;
-        height: 40px;
-        font-size: 16px;
-        line-height: 1.5;
-        text-align: center;
-        border-radius: 10px;
-    }
-
-    .swal2-confirm {
-        background-color: #28a745;
-        color: white;
-        margin-right: 20px;
-    }
-
-    .swal2-confirm:hover {
-        background-color: #218838;
-    }
-
-    .swal2-cancel {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .swal2-cancel:hover {
-        background-color: #c82333;
-    }
-</style>
