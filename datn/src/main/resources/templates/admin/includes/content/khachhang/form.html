@@ -322,19 +322,25 @@
                     noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối
                 },
                 "diaChiList[0].ten": {
-                    required: true,
-                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối
+                  required: true,
+                    maxlength: 50, // Giới hạn tối đa 50 ký tự
+                    validName: true,
+                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối // Kiểm tra khoảng trắng đầu/cuối
                 },
                 "diaChiList[0].email": {
                     required: true,
                     email: true,
+                    maxlength: 50,
                     noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
                     validEmail: true // Kiểm tra không có khoảng trắng liên tiếp
                 },
                 "diaChiList[0].sdt": {
-                    required: true,
+                     required: true,
                     digits: true,
-                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối
+                    maxlength: 11, // Giới hạn số điện thoại từ 10-11 ký tự
+                    minlength: 10,
+                    noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
+                    pattern: /^0\d+$/ // Số điện thoại bắt đầu bằng số 0
                 },
                 "diaChiList[0].thanhPho": {
                     required: true
@@ -377,18 +383,24 @@
                     noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
                 },
                 "diaChiList[0].ten": {
-                    required: "Vui lòng nhập tên người nhận",
+                    required: "Vui lòng nhập tên khách hàng",
+                    maxlength: "Tên không được vượt quá 50 ký tự",
+                    validName: "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.",
                     noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
                 },
                 "diaChiList[0].email": {
-                    required: "Vui lòng nhập email người nhận",
-                    email: "Email người nhận không hợp lệ",
+                        required: "Vui lòng nhập email",
+                    email: "Email không hợp lệ",
+                    maxlength: "Email không được vượt quá 50 ký tự",
                     noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối",
                     validEmail: "Email không được chứa khoảng trắng liên tiếp"
                 },
                 "diaChiList[0].sdt": {
-                    required: "Vui lòng nhập số điện thoại người nhận",
-                    digits: "Vui lòng nhập số điện thoại hợp lệ",
+                  required: "Vui lòng nhập số điện thoại",
+                    digits: "Vui lòng nhập số hợp lệ",
+                    minlength: "Số điện thoại phải có ít nhất 10 ký tự",
+                    maxlength: "Số điện thoại không được vượt quá 11 ký tự",
+                    pattern: "Số điện thoại phải bắt đầu bằng số 0",
                     noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
                 },
                 "diaChiList[0].thanhPho": {
