@@ -90,7 +90,7 @@ public class ThongKeApi {
     }
 
     @GetMapping("/sumDonHangByDay")
-    public Integer sumDonHangByDay(@RequestParam("trangThai") int trangThai){
+    public Double sumDonHangByDay(@RequestParam("trangThai") int trangThai){
         return thongKeService.sumDonHangByDay(trangThai);
     }
 
