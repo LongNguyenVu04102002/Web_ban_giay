@@ -147,7 +147,7 @@
             <div class="lg:col-span-8 mb-10">
                 <div class="p-6 rounded-md">
                     <form th:action="@{/admin/taikhoan/khachhang/save}" th:object="${khachHang}"
-                           method="post">
+                           method="post" id="khachHangForm">
                         <div class="grid lg:grid-cols-12 grid-cols-1 mt-6 gap-5">
                             <input type="hidden" th:field="*{khachHangId}"/>
                             <div class="lg:col-span-6">
@@ -247,7 +247,7 @@
                                        placeholder="Số điện thoại người nhận">
                             </div>
                             <div class="lg:col-span-12 mt-4 flex items-center justify-center space-x-2">
-                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="confirmToggle()">Lưu</button>
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="confirmSubmit()">Lưu</button>
                                 <a href="#" class="bg-red-50 text-red-600 px-4 py-2 rounded-md">Hủy</a>
                             </div>
                         </div>
@@ -260,199 +260,7 @@
 </body>
 </html>
 
-<script>
-    $(document).ready(function () {
-        // Tạo đối tượng validator
-        var form = $("form");
 
-        // Thêm custom rule kiểm tra không có khoảng trắng đầu/cuối
-        $.validator.addMethod("noSpaceAtStartEnd", function (value, element) {
-            return this.optional(element) || (value.trim() === value);
-        }, "Không được có khoảng trắng đầu hoặc cuối.");
-
-        // Thêm custom rule cho họ tên
-        $.validator.addMethod("validName", function (value, element) {
-            var regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừửữựỲỴÝỶỸ\s]+$/;
-            var doubleSpaceRegex = /\s{2,}/;
-            var containsNumberRegex = /\d/;
-
-            var trimmedValue = value.trim();
-            return this.optional(element) ||
-                regex.test(trimmedValue) &&
-                !doubleSpaceRegex.test(trimmedValue) &&
-                !containsNumberRegex.test(trimmedValue);
-        }, "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.");
-
-        // Thêm custom rule cho email không có khoảng trắng liên tiếp
-        $.validator.addMethod("validEmail", function (value, element) {
-            var doubleSpaceRegex = /\s{2,}/;
-            return this.optional(element) || (!doubleSpaceRegex.test(value.trim()));
-        }, "Email không được chứa khoảng trắng liên tiếp.");
-
-        // Disable automatic validation on submit
-        var validator = form.validate({
-            rules: {
-                hoTen: {
-                    required: true,
-                    maxlength: 50, // Giới hạn tối đa 50 ký tự
-                    validName: true,
-                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối
-                },
-                sdt: {
-                    required: true,
-                    digits: true,
-                    maxlength: 11, // Giới hạn số điện thoại từ 10-11 ký tự
-                    minlength: 10,
-                    noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
-                    pattern: /^0\d+$/ // Số điện thoại bắt đầu bằng số 0
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    maxlength: 50, // Giới hạn tối đa 50 ký tự
-                    noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
-                    validEmail: true // Kiểm tra không có khoảng trắng liên tiếp
-                },
-                ngaySinh: {
-                    required: true,
-                    date: true
-                },
-                "diaChiList[0].diaChi": {
-                    required: true,
-                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối
-                },
-                "diaChiList[0].ten": {
-                  required: true,
-                    maxlength: 50, // Giới hạn tối đa 50 ký tự
-                    validName: true,
-                    noSpaceAtStartEnd: true // Kiểm tra khoảng trắng đầu/cuối // Kiểm tra khoảng trắng đầu/cuối
-                },
-                "diaChiList[0].email": {
-                    required: true,
-                    email: true,
-                    maxlength: 50,
-                    noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
-                    validEmail: true // Kiểm tra không có khoảng trắng liên tiếp
-                },
-                "diaChiList[0].sdt": {
-                     required: true,
-                    digits: true,
-                    maxlength: 11, // Giới hạn số điện thoại từ 10-11 ký tự
-                    minlength: 10,
-                    noSpaceAtStartEnd: true, // Kiểm tra khoảng trắng đầu/cuối
-                    pattern: /^0\d+$/ // Số điện thoại bắt đầu bằng số 0
-                },
-                "diaChiList[0].thanhPho": {
-                    required: true
-                },
-                "diaChiList[0].huyen": {
-                    required: true
-                },
-                "diaChiList[0].xa": {
-                    required: true
-                }
-            },
-            messages: {
-                hoTen: {
-                    required: "Vui lòng nhập tên khách hàng",
-                    maxlength: "Tên không được vượt quá 50 ký tự",
-                    validName: "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
-                },
-                sdt: {
-                    required: "Vui lòng nhập số điện thoại",
-                    digits: "Vui lòng nhập số hợp lệ",
-                    minlength: "Số điện thoại phải có ít nhất 10 ký tự",
-                    maxlength: "Số điện thoại không được vượt quá 11 ký tự",
-                    pattern: "Số điện thoại phải bắt đầu bằng số 0",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
-                },
-                email: {
-                    required: "Vui lòng nhập email",
-                    email: "Email không hợp lệ",
-                    maxlength: "Email không được vượt quá 50 ký tự",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối",
-                    validEmail: "Email không được chứa khoảng trắng liên tiếp"
-                },
-                ngaySinh: {
-                    required: "Vui lòng nhập ngày sinh",
-                    date: "Ngày sinh không hợp lệ"
-                },
-                "diaChiList[0].diaChi": {
-                    required: "Vui lòng nhập địa chỉ",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
-                },
-                "diaChiList[0].ten": {
-                    required: "Vui lòng nhập tên khách hàng",
-                    maxlength: "Tên không được vượt quá 50 ký tự",
-                    validName: "Tên không hợp lệ: không chứa số, không chứa ký tự đặc biệt, không có khoảng trắng liên tiếp.",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
-                },
-                "diaChiList[0].email": {
-                        required: "Vui lòng nhập email",
-                    email: "Email không hợp lệ",
-                    maxlength: "Email không được vượt quá 50 ký tự",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối",
-                    validEmail: "Email không được chứa khoảng trắng liên tiếp"
-                },
-                "diaChiList[0].sdt": {
-                  required: "Vui lòng nhập số điện thoại",
-                    digits: "Vui lòng nhập số hợp lệ",
-                    minlength: "Số điện thoại phải có ít nhất 10 ký tự",
-                    maxlength: "Số điện thoại không được vượt quá 11 ký tự",
-                    pattern: "Số điện thoại phải bắt đầu bằng số 0",
-                    noSpaceAtStartEnd: "Không được có khoảng trắng đầu hoặc cuối"
-                },
-                "diaChiList[0].thanhPho": {
-                    required: "Vui lòng chọn Thành Phố"
-                },
-                "diaChiList[0].huyen": {
-                    required: "Vui lòng chọn Quận/Huyện"
-                },
-                "diaChiList[0].xa": {
-                    required: "Vui lòng chọn Phường/Xã"
-                }
-            },
-            errorPlacement: function (error, element) {
-                error.appendTo(element.closest("div"));
-            },
-            onfocusout: false,
-            onkeyup: false
-        });
-
-        // Bắt sự kiện submit của form
-        form.on('submit', function (e) {
-            e.preventDefault();
-
-            // Hiển thị thông báo xác nhận bằng SweetAlert2
-            Swal.fire({
-                title: 'Xác nhận',
-                text: 'Bạn có chắc chắn muốn thêm khách hàng mới không?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Có',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log("Người dùng đã chọn OK, bắt đầu kiểm tra validate...");
-
-                    // Thủ công kiểm tra form validation
-                    if (form.valid()) {
-                        console.log("Form hợp lệ, chuẩn bị submit.");
-                        form.off('submit').submit(); // Xóa sự kiện submit trước đó và gửi form
-                    } else {
-                        console.log("Form không hợp lệ, hiển thị lỗi.");
-                    }
-                } else {
-                    console.log("Người dùng đã chọn Cancel, không submit form.");
-                    validator.resetForm(); // Reset form nếu người dùng hủy
-                }
-            });
-        });
-    });
-
-
-</script>
 
 <style>
     .swal2-confirm, .swal2-cancel {
@@ -483,4 +291,200 @@
         background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
     }
 </style>
+
+
+
+<!-- Include SweetAlert2 and jQuery Validation libraries -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Custom methods for validation
+        $.validator.addMethod("noLeadingTrailingSpaces", function(value, element) {
+            return this.optional(element) || /^[^\s].*[^\s]$/.test(value);
+        }, "No leading or trailing spaces allowed.");
+
+        $.validator.addMethod("noConsecutiveSpaces", function(value, element) {
+            return this.optional(element) || !/\s{2,}/.test(value);
+        }, "No consecutive spaces allowed.");
+
+        $.validator.addMethod("exactLength", function(value, element, param) {
+            return this.optional(element) || value.length === param;
+        }, "Please enter exactly {0} characters.");
+
+        $.validator.addMethod("noNumbers", function(value, element) {
+            return this.optional(element) || !/\d/.test(value);
+        }, "Name cannot contain numbers.");
+
+        $.validator.addMethod("noSpecialChars", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9\s]+$/.test(value);
+        }, "No special characters allowed.");
+
+        // Initialize form validation
+        $("#khachHangForm").validate({
+            rules: {
+                hoTen: {
+                    required: true,
+                    noLeadingTrailingSpaces: true,
+                    noConsecutiveSpaces: true,
+                    maxlength: 50,
+                    noNumbers: true,
+                    noSpecialChars: true // Apply the noSpecialChars validation rule
+                },
+                sdt: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 11,
+                    exactLength: 10,
+                    noSpecialChars: true // Apply the noSpecialChars validation rule
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    noLeadingTrailingSpaces: true,
+                    noConsecutiveSpaces: true,
+                    maxlength: 50
+                },
+                ngaySinh: {
+                    required: true,
+                    dateISO: true
+                },
+                // Validate required fields for diaChiList[0]
+                'diaChiList[0].diaChi': {
+                    required: true,
+                    noLeadingTrailingSpaces: true,
+                    noConsecutiveSpaces: true,
+                    maxlength: 50
+                },
+                'diaChiList[0].ten': {
+                    required: true,
+                    noLeadingTrailingSpaces: true,
+                    noConsecutiveSpaces: true,
+                    maxlength: 50
+                },
+                'diaChiList[0].email': {
+                    required: true,
+                    email: true,
+                    noLeadingTrailingSpaces: true,
+                    noConsecutiveSpaces: true,
+                    maxlength: 50
+                },
+                'diaChiList[0].sdt': {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 11
+                },
+                'diaChiList[0].thanhPho': {
+                    required: true
+                },
+                'diaChiList[0].huyen': {
+                    required: true
+                },
+                'diaChiList[0].xa': {
+                    required: true
+                }
+            },
+            messages: {
+                hoTen: {
+                    required: "Vui lòng nhập tên khách hàng",
+                    noLeadingTrailingSpaces: "Tên khách hàng không được có khoảng trắng ở đầu hoặc cuối",
+                    noConsecutiveSpaces: "Tên khách hàng không được có khoảng trắng liên tiếp",
+                    maxlength: "Tên khách hàng không được quá 50 ký tự",
+                    noNumbers: "Tên khách hàng không được chứa số",
+                    noSpecialChars: "Tên khách hàng không được chứa ký tự đặc biệt"
+                },
+                sdt: {
+                    required: "Vui lòng nhập số điện thoại",
+                    digits: "Số điện thoại phải chỉ chứa số",
+                    minlength: "Số điện thoại phải có từ 10 đến 11 ký tự",
+                    maxlength: "Số điện thoại phải có từ 10 đến 11 ký tự",
+                    noSpecialChars: "Số điện thoại không được chứa ký tự đặc biệt"
+                },
+                email: {
+                    required: "Vui lòng nhập email",
+                    email: "Email không hợp lệ",
+                    noLeadingTrailingSpaces: "Email không được có khoảng trắng ở đầu hoặc cuối",
+                    noConsecutiveSpaces: "Email không được có khoảng trắng liên tiếp",
+                    maxlength: "Email không được quá 50 ký tự"
+                },
+                ngaySinh: {
+                    required: "Vui lòng chọn ngày sinh",
+                    dateISO: "Ngày sinh không hợp lệ"
+                },
+                'diaChiList[0].diaChi': {
+                    required: "Vui lòng nhập địa chỉ",
+                    noLeadingTrailingSpaces: "Địa chỉ không được có khoảng trắng ở đầu hoặc cuối",
+                    noConsecutiveSpaces: "Địa chỉ không được có khoảng trắng liên tiếp",
+                    maxlength: "Địa chỉ không được quá 50 ký tự"
+                },
+                'diaChiList[0].ten': {
+                    required: "Vui lòng nhập tên người nhận",
+                    noLeadingTrailingSpaces: "Tên người nhận không được có khoảng trắng ở đầu hoặc cuối",
+                    noConsecutiveSpaces: "Tên người nhận không được có khoảng trắng liên tiếp",
+                    maxlength: "Tên người nhận không được quá 50 ký tự"
+                },
+                'diaChiList[0].email': {
+                    required: "Vui lòng nhập email người nhận",
+                    email: "Email người nhận không hợp lệ",
+                    noLeadingTrailingSpaces: "Email người nhận không được có khoảng trắng ở đầu hoặc cuối",
+                    noConsecutiveSpaces: "Email người nhận không được có khoảng trắng liên tiếp",
+                    maxlength: "Email người nhận không được quá 50 ký tự"
+                },
+                'diaChiList[0].sdt': {
+                    required: "Vui lòng nhập số điện thoại người nhận",
+                    digits: "Số điện thoại người nhận chỉ chứa số",
+                    minlength: "Số điện thoại người nhận phải có từ 10 đến 11 ký tự",
+                    maxlength: "Số điện thoại người nhận phải có từ 10 đến 11 ký tự"
+                },
+                'diaChiList[0].thanhPho': {
+                    required: "Vui lòng chọn thành phố"
+                },
+                'diaChiList[0].huyen': {
+                    required: "Vui lòng chọn huyện"
+                },
+                'diaChiList[0].xa': {
+                    required: "Vui lòng chọn xã"
+                }
+            },
+            errorPlacement: function (error, element) {
+                // Place error message below the input field
+                error.insertAfter(element);
+            }
+        });
+
+        // Intercept the form submission
+        $("#khachHangForm").on('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            confirmSubmit(); // Call confirmSubmit function
+        });
+    });
+
+    function confirmSubmit() {
+        Swal.fire({
+            title: 'Xác nhận hành động',
+            text: `Bạn có chắc chắn muốn thêm khách hàng mới?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            customClass: {
+                confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Check if the form is valid
+                if ($("#khachHangForm").valid()) {
+                    // Submit the form if it's valid
+                    $("#khachHangForm")[0].submit();
+                }
+            }
+        });
+    }
+</script>
 
