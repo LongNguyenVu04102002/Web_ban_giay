@@ -26,7 +26,7 @@ public interface KhachHangService {
 
     boolean isEmailDuplicate(String email, Long excludeId);
 
-    void register(String username, String email, String password);
+    void register(String username, String email,String sdt, String password);
 
     KhachHang findByResetToken(String token);
 

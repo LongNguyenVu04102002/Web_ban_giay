@@ -151,10 +151,11 @@ public class LoginController {
     @PostMapping("/signup")
     public String registerEmployee(@RequestParam String username,
                                    @RequestParam String email,
+                                   @RequestParam String sdt,
                                    @RequestParam String password,
                                    Model model) {
         try {
-            khachHangService.register(username, email, password);
+            khachHangService.register(username, email,sdt, password);
             return "redirect:/loginUser";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());

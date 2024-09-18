@@ -29,6 +29,12 @@
                             required: true,
                             email: true
                         },
+                        sdt:{
+                            required: true,
+                            digits: true,
+                            minlength: 10,
+                            maxlength: 10
+                        },
                         password: {
                             required: true,
                             minlength: 6
@@ -44,6 +50,12 @@
                         email: {
                             required: 'Vui lòng nhập email',
                             email: 'Email không đúng định dạng'
+                        },
+                        sdt: {
+                            required: 'Vui lòng nhập số điện thoại',
+                            digits: 'Số điện thoại phải là chữ số',
+                            minlength: 'Số điện thoại phải có ít nhất 10 chữ số',
+                            maxlength: 'Số điện thoại không được quá 10 chữ số'
                         },
                         password: {
                             required: 'Vui lòng nhập mật khẩu',
@@ -85,6 +97,12 @@
                                 <div class="mb-4">
                                     <label class="font-semibold">Email</label>
                                     <input type="email" name="email"
+                                           class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
+                                           placeholder="name@example.com">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="font-semibold">Số điện thoại</label>
+                                    <input type="text" name="sdt"
                                            class="mt-3 w-full py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded outline-none border border-gray-100 dark:border-gray-800 focus:ring-0"
                                            placeholder="name@example.com">
                                 </div>

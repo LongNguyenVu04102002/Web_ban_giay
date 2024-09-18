@@ -103,11 +103,12 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public void register(String username, String email, String password) {
+    public void register(String username, String email,String sdt, String password) {
         KhachHang khachHang = KhachHang.builder()
                 .email(email)
                 .hoTen(username)
                 .password(password)
+                .sdt(sdt)
                 .trangThai(true)
                 .gioiTinh(true)
                 .ngaySinh(LocalDate.now())
