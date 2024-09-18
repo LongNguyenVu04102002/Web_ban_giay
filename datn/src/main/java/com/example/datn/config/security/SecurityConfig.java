@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/403")
                         .accessDeniedHandler(customAccessDeniedHandler)
                 );
 
@@ -74,7 +75,4 @@ public class SecurityConfig {
                 .userDetailsService(customAdminDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
 }
-
-
