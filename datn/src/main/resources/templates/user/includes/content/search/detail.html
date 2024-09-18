@@ -154,7 +154,7 @@
         function handleNotificationType(type) {
             $('#notification-toast').append(notificationTypeHtml[type])
             $('#notification-toast .toast:last-child').toast('show');
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#notification-toast .toast:first-child').remove();
             }, 5000);
         }
@@ -242,7 +242,8 @@
                                  data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog dialog">
                                     <div class="dialog-confirm bg-white p-6 rounded-lg shadow-lg">
-                                        <form th:action="@{/search/timeline/huydon/{id}(id=${hoaDon.hoaDonId})}" id="form-validation-1"
+                                        <form th:action="@{/search/timeline/huydon/{id}(id=${hoaDon.hoaDonId})}"
+                                              id="form-validation-1"
                                               method="post">
                                             <input type="hidden" name="maVanDon" th:value="${maVanDon}">
                                             <input type="hidden" name="email" th:value="${email}">
@@ -446,17 +447,7 @@
                             <tbody>
                             <tr th:each="hdct, rowStat : ${hoaDon.hoaDonChiTietList}">
                                 <td th:text="${rowStat.index + 1}"></td>
-                                <td>
-                                    <div class="flex items-center">
-                                            <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-                                                <img class="avatar-img avatar-rounded" src="img/products/product-2.jpg"
-                                                     loading="lazy">
-                                            </span>
-                                        <div class="ml-4 text-center">
-                                            <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></td>
                                 <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                 <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                 <td>

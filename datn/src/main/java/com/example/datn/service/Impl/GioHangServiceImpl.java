@@ -51,7 +51,7 @@ public class GioHangServiceImpl implements GioHangService {
             GioHang gioHang = gioHangOpt.get();
             SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietOpt.get();
 
-            int availableQuantity = sanPhamChiTiet.getSoLuong();  // Lấy số lượng có sẵn của sản phẩm chi tiết
+            int availableQuantity = sanPhamChiTiet.getSoLuong();
             Optional<GioHangChiTiet> existingItemOpt = gioHangChiTietRepository.findByGioHangAndSanPhamChiTiet(gioHang, sanPhamChiTiet);
 
             if (existingItemOpt.isPresent()) {

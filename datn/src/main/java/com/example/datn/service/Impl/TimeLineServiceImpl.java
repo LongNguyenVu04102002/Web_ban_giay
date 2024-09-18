@@ -141,8 +141,8 @@ public class TimeLineServiceImpl implements TimeLineService {
             HoaDon hoaDon = hoaDonRepository.findById(timeLine.getHoaDon().getHoaDonId()).orElse(null);
             if (hoaDon != null) {
                 List<TimeLine> timeLines = timeLineRepository.findByHoaDonId(hoaDon.getHoaDonId());
-                if (!timeLines.isEmpty()) {
-                    TimeLine lastTimeLine = timeLines.get(timeLines.size() - 2);
+                if (timeLines.size() >= 2) {
+                    TimeLine lastTimeLine = timeLines.get(timeLines.size() - 2); // Lấy phần tử gần cuối
                     hoaDon.setTrangThai(lastTimeLine.getTrangThai());
                     hoaDonRepository.save(hoaDon);
 
@@ -150,12 +150,15 @@ public class TimeLineServiceImpl implements TimeLineService {
                     tl.setNgayTao(LocalDate.now());
                     tl.setHoaDon(hoaDon);
                     tl.setTrangThai(lastTimeLine.getTrangThai());
-                    getTimeLine(timeLine);
+                    getTimeLine(tl);
 
-                    // Gửi email thông báo
-                    String status = getStatus(lastTimeLine.getTrangThai());
-                    emailService.sendEmail(hoaDon.getEmail(), "Cập Nhật Trạng Thái Hóa Đơn",
-                            "Trạng thái hóa đơn " + hoaDon.getMaVanDon() + " đã chuyển thành " + status);
+                    String email = hoaDon.getEmail();
+                    if (email != null && !email.isEmpty()) {
+                        String status = getStatus(lastTimeLine.getTrangThai());
+                        emailService.sendEmail(email, "Cập Nhật Trạng Thái Hóa Đơn",
+                                "Trạng thái hóa đơn " + hoaDon.getMaVanDon() + " đã chuyển thành " + status);
+                        System.out.println(status);
+                    }
                 }
 
                 for (HoaDonChiTiet ghct : hoaDon.getHoaDonChiTietList()) {
@@ -169,23 +172,17 @@ public class TimeLineServiceImpl implements TimeLineService {
     }
 
     private String getStatus(int trangThai) {
-        switch (trangThai) {
-            case 2:
-                return "Đã xác nhận";
-            case 3:
-                return "Chờ giao hàng";
-            case 4:
-                return "Đang giao hàng";
-            case 5:
-                return "Đã giao";
-            case 6:
-                return "Hoàn thành";
-            case 7:
-                return "Đã hủy";
-            default:
-                return "Không rõ";
-        }
+        return switch (trangThai) {
+            case 2 -> "Đã xác nhận";
+            case 3 -> "Chờ giao hàng";
+            case 4 -> "Đang giao hàng";
+            case 5 -> "Đã giao";
+            case 6 -> "Hoàn thành";
+            case 7 -> "Đã hủy";
+            default -> "Không rõ";
+        };
     }
+
 
     private TimeLine createAndSendEmail(HoaDon hoaDon, String mota, int trangThai, String statusMessage) throws MessagingException {
         TimeLine timeLine = new TimeLine();

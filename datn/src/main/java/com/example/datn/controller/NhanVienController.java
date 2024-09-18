@@ -65,6 +65,7 @@ public class NhanVienController {
         }
         String actionMessage = (nhanVien.getNhanVienId() == null) ? "Thêm nhân viên mới thành công!" : "Cập nhật thông tin nhân viên thành công!";
         redirectAttributes.addFlashAttribute("success", actionMessage);
+        nhanVien.setTrangThai(true);
         nhanVienService.save(nhanVien);
 
         if (!isUpdate) {

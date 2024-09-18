@@ -21,9 +21,6 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Autowired
     private KhachHangRepository khachHangRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public List<KhachHang> getAll() {
         return khachHangRepository.findAll((Sort.by(Sort.Direction.DESC, "khachHangId")));
@@ -37,7 +34,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang save(KhachHang khachHang) {
-        khachHang.setPassword(passwordEncoder.encode(khachHang.getSdt()));
+        khachHang.setPassword(khachHang.getSdt());
         return khachHangRepository.save(khachHang);
     }
 
@@ -55,11 +52,9 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     @Transactional
     public KhachHang update(KhachHang khachHang, BindingResult result) {
-        // Tìm khách hàng hiện tại từ cơ sở dữ liệu
         KhachHang existingKhachHang = khachHangRepository.findById(khachHang.getKhachHangId())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
 
-        // Cập nhật thông tin của existingKhachHang bằng thông tin từ khachHang
         existingKhachHang.setHoTen(khachHang.getHoTen());
         existingKhachHang.setGioiTinh(khachHang.isGioiTinh());
         existingKhachHang.setNgaySinh(khachHang.getNgaySinh());
@@ -69,19 +64,16 @@ public class KhachHangServiceImpl implements KhachHangService {
             result.rejectValue("diaChiList", "error.khachHang", "Khách hàng đã có tối đa 3 địa chỉ. Không thể cập nhật thêm.");
             return existingKhachHang;
         }
-        // Cập nhật password (nếu có)
         if (khachHang.getPassword() != null && !khachHang.getPassword().isEmpty()) {
             existingKhachHang.setPassword(khachHang.getPassword());
         }
 
-        // Kiểm tra số lượng địa chỉ
         if (khachHang.getDiaChiList() != null) {
             if (khachHang.getDiaChiList().size() > 3) {
                 result.rejectValue("diaChiList", "error.khachHang", "Khách hàng chỉ có thể có tối đa 3 địa chỉ.");
                 return existingKhachHang;
             }
 
-            // Cập nhật lại các địa chỉ nếu cần
             existingKhachHang.getDiaChiList().clear();
             for (DiaChi diaChi : khachHang.getDiaChiList()) {
                 diaChi.setKhachHang(existingKhachHang);
@@ -90,12 +82,8 @@ public class KhachHangServiceImpl implements KhachHangService {
             }
         }
 
-        // Lưu khách hàng với thông tin đã được cập nhật
         return khachHangRepository.save(existingKhachHang);
     }
-
-
-
 
     @Override
     public boolean isSdtExist(String sdt) {
@@ -119,7 +107,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         KhachHang khachHang = KhachHang.builder()
                 .email(signupRequest.getEmail())
                 .hoTen(signupRequest.getUsername())
-                .password(passwordEncoder.encode(signupRequest.getPassword()))
+                .password(signupRequest.getPassword())
                 .trangThai(true)
                 .gioiTinh(true)
                 .build();
@@ -139,7 +127,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang login(String email, String password) {
         KhachHang khachHang = khachHangRepository.findKhachHangByEmailAndPassword(email, password);
-        if(khachHang != null) {
+        if (khachHang != null) {
             if (!khachHang.isTrangThai()) {
                 return null;
             }

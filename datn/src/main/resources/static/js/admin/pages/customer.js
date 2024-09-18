@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 10; i++) {
         handleToggleForm(`toggleForm${i}`, `form-section-${i}`, `shipping${i}`, `payment${i}`, `cashPayment${i}`);
     }
 
@@ -50,46 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 10; i++) {
         loadCustomerData(i);
-    }
-
-    function activateTab(tabId) {
-        const tabButtons = document.querySelectorAll('.tab-nav');
-        const tabContents = document.querySelectorAll('.tab-pane');
-
-        tabButtons.forEach(button => {
-            if (button.getAttribute('data-bs-target') === `#${tabId}`) {
-                button.classList.add('active');
-                button.setAttribute('aria-selected', 'true');
-            } else {
-                button.classList.remove('active');
-                button.setAttribute('aria-selected', 'false');
-            }
-        });
-
-        tabContents.forEach(content => {
-            if (content.id === tabId) {
-                content.classList.add('active', 'show');
-            } else {
-                content.classList.remove('active', 'show');
-            }
-        });
-    }
-
-    // Event listener to save the active tab in localStorage
-    document.querySelectorAll('.tab-nav').forEach(button => {
-        button.addEventListener('click', function () {
-            const tabId = this.getAttribute('data-bs-target').substring(1); // Remove the '#' from the ID
-            localStorage.setItem('activeTab', tabId);
-        });
-    });
-
-    const savedTab = localStorage.getItem('activeTab');
-    if (savedTab) {
-        activateTab(savedTab);
-    } else {
-        activateTab('tab1');
     }
     calculateTotal();
 });
@@ -173,25 +135,20 @@ function displayAddressList(data, tabId) {
                     // Lấy tên tỉnh/thành phố từ provinceMap
                     const provinceName = provinceMap.get(parseInt(address.thanhPho)) || 'Không xác định';
 
-                    // Lấy tên quận/huyện từ districtMap
                     const districtName = districtMap.get(parseInt(address.huyen)) || 'Không xác định';
 
-                    // Gọi API để lấy tên phường/xã từ districtId
                     fetchWards(parseInt(address.huyen))
                         .then(wardMap => {
-                            // Lấy tên phường/xã từ wardMap
                             const wardName = wardMap.get(address.xa) || 'Không xác định';
-
-                            // Tạo hàng trong bảng
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
                                 <td>${index + 1}</td>
                                 <td>${address.ten}</td>
                                 <td>${address.email}</td>
                                 <td>${address.sdt}</td>
-                                <td>${provinceName}</td> <!-- Hiển thị tên tỉnh/thành phố -->
-                                <td>${districtName}</td> <!-- Hiển thị tên quận/huyện -->
-                                <td>${wardName}</td> <!-- Hiển thị tên phường/xã -->
+                                <td>${provinceName}</td>
+                                <td>${districtName}</td>
+                                <td>${wardName}</td>
                                 <td>${address.diaChi}</td>
                                 <td>
                                     <button type="button" class="btn btn-sm bg-green-500 text-white"
@@ -230,17 +187,17 @@ function fetchProvinces() {
             'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (!data || !data.data || !Array.isArray(data.data)) {
-            throw new Error('Dữ liệu tỉnh/thành phố không hợp lệ');
-        }
-        return new Map(data.data.map(province => [province.ProvinceID, province.ProvinceName]));
-    })
-    .catch(error => {
-        console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố:', error);
-        return new Map(); // Trả về Map rỗng nếu có lỗi
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu tỉnh/thành phố không hợp lệ');
+            }
+            return new Map(data.data.map(province => [province.ProvinceID, province.ProvinceName]));
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
 }
 
 // Hàm để lấy dữ liệu quận/huyện từ API
@@ -250,18 +207,18 @@ function fetchDistricts() {
             'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (!data || !data.data || !Array.isArray(data.data)) {
-            throw new Error('Dữ liệu quận/huyện không hợp lệ');
-        }
-        const districtsMap = new Map(data.data.map(district => [district.DistrictID, district.DistrictName]));
-        return districtsMap;
-    })
-    .catch(error => {
-        console.error('Lỗi khi lấy dữ liệu quận/huyện:', error);
-        return new Map(); // Trả về Map rỗng nếu có lỗi
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu quận/huyện không hợp lệ');
+            }
+            const districtsMap = new Map(data.data.map(district => [district.DistrictID, district.DistrictName]));
+            return districtsMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu quận/huyện:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
 }
 
 // Hàm để lấy dữ liệu phường/xã từ API với district_id
@@ -271,19 +228,19 @@ function fetchWards(districtId) {
             'Token': 'c00660e2-2e4f-11ef-8f55-4ee3d82283af'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (!data || !data.data || !Array.isArray(data.data)) {
-            throw new Error('Dữ liệu phường/xã không hợp lệ');
-        }
-        const wardMap = new Map(data.data.map(ward => [ward.WardCode, ward.WardName]));
-        districtWardsMap.set(districtId, wardMap);
-        return wardMap;
-    })
-    .catch(error => {
-        console.error('Lỗi khi lấy dữ liệu phường/xã:', error);
-        return new Map(); // Trả về Map rỗng nếu có lỗi
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (!data || !data.data || !Array.isArray(data.data)) {
+                throw new Error('Dữ liệu phường/xã không hợp lệ');
+            }
+            const wardMap = new Map(data.data.map(ward => [ward.WardCode, ward.WardName]));
+            districtWardsMap.set(districtId, wardMap);
+            return wardMap;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy dữ liệu phường/xã:', error);
+            return new Map(); // Trả về Map rỗng nếu có lỗi
+        });
 }
 
 
@@ -693,5 +650,122 @@ $(document).ready(function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const addCartButton = document.getElementById('addCartButton');
+    const tabList = document.querySelector('.tab-list');
 
+    // Lấy số lượng giỏ hàng từ localStorage hoặc thiết lập mặc định là 3
+    let tabCount = parseInt(localStorage.getItem('tabCount')) || 3;
 
+    // Cập nhật trạng thái của nút thêm
+    function updateAddCartButtonVisibility() {
+        if (tabCount >= 10) {
+            addCartButton.style.display = 'none';
+        } else {
+            addCartButton.style.display = 'block';
+        }
+    }
+
+    // Hàm để tạo các giỏ hàng dựa trên số lượng lưu trữ
+    function createTabs() {
+        // Tạo các giỏ hàng từ 1 đến tabCount
+        for (let i = 4; i <= tabCount; i++) {
+            addTab(i);
+        }
+    }
+
+    // Hàm để tạo một tab mới
+    function addTab(number) {
+        // Tạo một nút mới cho giỏ hàng
+        const newButton = document.createElement('button');
+        newButton.className = 'tab-nav tab-nav-pill mt-3';
+        newButton.setAttribute('role', 'tab');
+        newButton.setAttribute('data-bs-toggle', 'tab');
+        newButton.setAttribute('data-bs-target', `#tab${number}`);
+        newButton.setAttribute('aria-selected', 'false');
+        newButton.setAttribute('tabindex', '0');
+        newButton.textContent = `Giỏ Hàng ${number}`;
+
+        tabList.insertBefore(newButton, addCartButton);
+        newButton.addEventListener('click', function () {
+            localStorage.setItem('activeTab', `tab${number}`);
+        });
+    }
+
+    // Hàm để kích hoạt tab
+    function activateTab(tabId) {
+        const tabButtons = document.querySelectorAll('.tab-nav');
+        const tabContents = document.querySelectorAll('.tab-pane');
+
+        tabButtons.forEach(button => {
+            if (button.getAttribute('data-bs-target') === `#${tabId}`) {
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+            } else {
+                button.classList.remove('active');
+                button.setAttribute('aria-selected', 'false');
+            }
+        });
+
+        tabContents.forEach(content => {
+            if (content.id === tabId) {
+                content.classList.add('active', 'show');
+            } else {
+                content.classList.remove('active', 'show');
+            }
+        });
+    }
+
+    // Xử lý sự kiện lưu tab đang hoạt động vào localStorage
+    document.querySelectorAll('.tab-nav').forEach(button => {
+        button.addEventListener('click', function () {
+            const tabId = this.getAttribute('data-bs-target').substring(1);
+            localStorage.setItem('activeTab', tabId);
+        });
+    });
+
+    function restoreActiveTab() {
+        const savedTab = localStorage.getItem('activeTab');
+        if (savedTab && document.getElementById(savedTab)) {
+            activateTab(savedTab);
+        } else {
+            activateTab('tab1');
+        }
+    }
+
+    // Xử lý khi thêm giỏ hàng mới
+    addCartButton.addEventListener('click', function () {
+        if (tabCount < 10) {
+            tabCount++;
+            localStorage.setItem('tabCount', tabCount);
+
+            addTab(tabCount);
+            activateTab(`tab${tabCount}`);
+
+            localStorage.setItem('activeTab', `tab${tabCount}`);
+
+            updateAddCartButtonVisibility();
+        }
+    });
+
+    createTabs();
+    updateAddCartButtonVisibility();
+    restoreActiveTab();
+});
+
+function confirmPayment(formId) {
+    Swal.fire({
+        title: 'Xác nhận thanh toán?',
+        text: "Bạn có chắc chắn muốn thanh toán không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Vâng',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form' + formId).submit();
+        }
+    });
+}
