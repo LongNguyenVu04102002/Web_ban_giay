@@ -4,6 +4,7 @@ import com.example.datn.dto.CartItem;
 import com.example.datn.entity.HoaDon;
 import com.example.datn.model.response.PhieuGiamGiaResponse;
 import com.example.datn.model.response.ThanhToanResponse;
+import jakarta.mail.MessagingException;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface HoaDonService {
 
     boolean saveHoaDonTaiQuay(Long gioHangId, Long khachHangId, String discountCode, ThanhToanResponse thanhToanResponse);
 
-    String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems);
+    String saveHoaDonOnline(Long khachHangId, PhieuGiamGiaResponse phieuGiamGiaResponse, ThanhToanResponse thanhToanResponse, List<CartItem> cartItems) throws MessagingException;
 
     boolean update(Long idHoaDon, Long idSanPhamChiTiet);
 

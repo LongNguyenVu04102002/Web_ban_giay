@@ -7,6 +7,32 @@
     <title>Title</title>
     <script src="/js/admin/vendors.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#data-table-cart').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": false,
+                "info": true,
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi trên mỗi trang",
+                    "zeroRecords": "Không tìm thấy bản ghi nào",
+                    "info": "Hiển thị _PAGE_ của _PAGES_",
+                    "infoEmpty": "Không có bản ghi nào",
+                    "infoFiltered": "(lọc từ _MAX_ bản ghi)",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu tiên",
+                        "last": "Cuối cùng",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                }
+            });
+        });
+    </script>
     <script>
         const notificationTypeHtml = {
             Add: `<div class="toast fade" id="notificationToastSuccess">
@@ -217,23 +243,18 @@
                                 Thêm sản phẩm
                             </button>
                             <div class="modal fade" id="dialogSize" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog dialog md:max-w-[960px]">
-                                    <div class="dialog-content">
-                                        <label>
-                                            <input type="text" id="search"
-                                                   class="w-full rounded border border-stroke bg-gray-2 py-2.5 pl-5 pr-10 text-sm outline-none focus:border-primary"
-                                                   placeholder="Search...">
-                                        </label>
+                                <div class="modal-dialog">
+                                    <div class="dialog-product">
                                         <div id="DataTableCart">
                                             <table id="data-table-cart" class="table-default table-hover data-table">
                                                 <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Tên sản phẩm</th>
-                                                    <th>Màu sắc</th>
-                                                    <th>Kích thước</th>
-                                                    <th>Giá</th>
-                                                    <th>Hành động</th>
+                                                    <th class="text-center">#</th>
+                                                    <th class="text-center">Tên sản phẩm</th>
+                                                    <th class="text-center">Màu sắc</th>
+                                                    <th class="text-center">Kích thước</th>
+                                                    <th class="text-center">Giá</th>
+                                                    <th class="text-center">Hành động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -268,7 +289,7 @@
                     </div>
                     <div class="card-body">
                         <div class="overflow-x-auto">
-                            <table id="selected-products-table" class="table-default table-hover">
+                            <table class="table-default table-hover">
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -316,17 +337,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="flex items-center">
-                                            <span class="avatar avatar-rounded avatar-lg" data-avatar-size="90">
-                                                <img class="avatar-img avatar-rounded" src="img/products/product-2.jpg"
-                                                     loading="lazy">
-                                            </span>
-                                            <div class="ml-4 text-center">
-                                                <h6 th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></h6>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <td th:text="${hdct.sanPhamChiTiet.sanPham.ten}"></td>
                                     <td th:text="${hdct.sanPhamChiTiet.mauSac.ten}"></td>
                                     <td th:text="${hdct.sanPhamChiTiet.kichThuoc.ten}"></td>
                                     <td>
