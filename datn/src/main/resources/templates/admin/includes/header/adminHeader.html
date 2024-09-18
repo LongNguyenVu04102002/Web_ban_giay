@@ -1,3 +1,4 @@
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header class="header border-b border-gray-200 dark:border-gray-700">
     <div class="header-wrapper h-16">
         <div class="header-action header-action-start">
@@ -119,7 +120,7 @@
                                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
                             </span>
-                            <span>Profile</span>
+                            <span th:text="${@securityUtils.getPrincipal().username}"></span>
                         </a>
                     </li>
                     <li class="menu-item menu-item-hoverable mb-1 h-[35px]">

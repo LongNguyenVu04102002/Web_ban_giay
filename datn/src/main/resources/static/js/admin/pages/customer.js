@@ -766,6 +766,7 @@ function confirmPayment(formId) {
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('form' + formId).submit();
+            clearSelectedCustomer(formId)
         }
     });
 }
