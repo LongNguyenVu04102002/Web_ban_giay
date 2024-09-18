@@ -12,9 +12,9 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <style>
         .swiper-slide img {
-            width: 100%; /* Chiều rộng đầy đủ */
-            height: 800px; /* Chiều cao cố định */
-            object-fit: cover; /* Đảm bảo ảnh lấp đầy không gian mà không bị méo */
+            width: 80%; /* Chiều rộng đầy đủ */
+            height: 600px; /* Chiều cao cố định */
+            object-fit: contain; /* Đảm bảo ảnh lấp đầy không gian mà không bị méo */
             border-radius: 8px; /* Tùy chọn: bo góc cho ảnh */
         }
 
@@ -51,7 +51,7 @@
                 <div class="lg:col-span-5">
                     <div class="tiny-single-item">
                         <div th:each="entry : ${productImg}">
-                            <div class="swiper-container tiny-slide" style="width: 800px; height: 800px;">
+                            <div class="swiper-container tiny-slide" style="width: 600px; height: 600px;">
                                 <div class="swiper-wrapper">
                                     <div th:each="image : ${entry.value}" class="swiper-slide">
                                         <img th:src="${image}" alt="Product Image"/>
