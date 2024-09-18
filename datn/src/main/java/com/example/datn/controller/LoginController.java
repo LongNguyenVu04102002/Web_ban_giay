@@ -133,7 +133,7 @@ public class LoginController {
         KhachHang khachHang = khachHangService.findByResetToken(token);
         if (khachHang != null) {
             khachHang.setPassword(passwordEncoder.encode(password));
-            khachHang.setResetToken(null); // Clear the token after successful password reset
+            khachHang.setResetToken(null);
             khachHangService.save(khachHang);
             model.addAttribute("message", "Mật khẩu đã được thay đổi thành công. Vui lòng đăng nhập.");
             return "redirect:/login?resetSuccess";
