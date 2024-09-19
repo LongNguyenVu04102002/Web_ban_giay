@@ -188,7 +188,7 @@ public class HoaDonServiceImpl implements HoaDonService {
             TimeLine timeLine = new TimeLine();
             timeLine.setHoaDon(hoaDon);
             timeLine.setNgayTao(LocalDate.now());
-            timeLine.setTrangThai(8);
+            timeLine.setTrangThai(1);
             timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
             timeLine.setMoTa("Thêm sản phẩm: " + sanPhamChiTiet.getSanPham().getTen()
                     + " - Màu: " + sanPhamChiTiet.getMauSac().getTen()
@@ -219,7 +219,7 @@ public class HoaDonServiceImpl implements HoaDonService {
                 TimeLine timeLine = new TimeLine();
                 timeLine.setHoaDon(hoaDon);
                 timeLine.setNgayTao(LocalDate.now());
-                timeLine.setTrangThai(8);
+                timeLine.setTrangThai(1);
                 timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
                 timeLine.setMoTa("Giảm số lượng sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
                         + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
@@ -258,7 +258,7 @@ public class HoaDonServiceImpl implements HoaDonService {
                 TimeLine timeLine = new TimeLine();
                 timeLine.setHoaDon(hoaDon);
                 timeLine.setNgayTao(LocalDate.now());
-                timeLine.setTrangThai(8);
+                timeLine.setTrangThai(1);
                 timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
                 timeLine.setMoTa("Tăng số lượng sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
                         + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
@@ -311,7 +311,7 @@ public class HoaDonServiceImpl implements HoaDonService {
                 TimeLine timeLine = new TimeLine();
                 timeLine.setHoaDon(hoaDon);
                 timeLine.setNgayTao(LocalDate.now());
-                timeLine.setTrangThai(8);
+                timeLine.setTrangThai(1);
                 timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
                 timeLine.setMoTa("Xóa sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
                         + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
