@@ -48,14 +48,14 @@ public class TimeLineServiceImpl implements TimeLineService {
             return false;
         }
 
+        if(hoaDon.getTrangThai() != 1){
+            return false;
+        }
+
         for (HoaDonChiTiet ghct : hoaDon.getHoaDonChiTietList()) {
             SanPhamChiTiet spct = sanPhamChiTietRepository
                     .findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId())
                     .orElse(null);
-
-            if (spct == null || spct.getSoLuong() < ghct.getSoLuong()) {
-                return false;
-            }
         }
 
         hoaDon.setTrangThai(2);
@@ -75,52 +75,70 @@ public class TimeLineServiceImpl implements TimeLineService {
 
 
     @Override
-    public TimeLine choGiaoDonHang(Long id, String mota) throws MessagingException {
+    public boolean choGiaoDonHang(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+
+        if(hoaDon.getTrangThai() != 2){
+            return false;
         }
 
         hoaDon.setTrangThai(3);
         hoaDonRepository.save(hoaDon);
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 3, "Chờ giao hàng");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return true;
     }
 
     @Override
-    public TimeLine dangGiaoDonHang(Long id, String mota) throws MessagingException {
+    public boolean dangGiaoDonHang(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+
+        if(hoaDon.getTrangThai() != 3){
+            return false;
         }
 
         hoaDon.setTrangThai(4);
         hoaDonRepository.save(hoaDon);
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 4, "Đang giao hàng");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return true;
     }
 
     @Override
-    public TimeLine daGiaoDonHang(Long id, String mota) throws MessagingException {
+    public boolean daGiaoDonHang(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+
+        if(hoaDon.getTrangThai() != 4){
+            return false;
         }
 
         hoaDon.setTrangThai(5);
         hoaDonRepository.save(hoaDon);
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 5, "Đã giao");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return true;
     }
 
     @Override
-    public TimeLine hoanThanhDonHang(Long id, String mota) throws MessagingException {
+    public boolean hoanThanhDonHang(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+        if(hoaDon.getTrangThai() != 5){
+            return false;
         }
 
         hoaDon.setTrangThai(6);
@@ -128,21 +146,27 @@ public class TimeLineServiceImpl implements TimeLineService {
         hoaDonRepository.save(hoaDon);
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 6, "Hoàn thành");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return false;
     }
 
     @Override
-    public TimeLine huyDonHang(Long id, String mota) throws MessagingException {
+    public boolean huyDonHang(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+
+        if(hoaDon.getTrangThai() != 7){
+            return false;
         }
 
         hoaDon.setTrangThai(7);
         hoaDonRepository.save(hoaDon);
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 7, "Đã hủy");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return true;
     }
 
 

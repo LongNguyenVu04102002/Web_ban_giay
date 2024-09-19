@@ -50,16 +50,16 @@
                         <div class="notification">
                             <div class="notification-content">
                                 <div class="mr-3">
-                                    <span class="text-2xl text-emerald-400">
+                                    <span class="text-2xl text-blue-400">
                                         <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                                         </svg>
                                     </span>
                                 </div>
                                 <div class="mr-4">
-                                    <div class="notification-title">Success</div>
+                                    <div class="notification-title">Info</div>
                                     <div class="notification-description">
-                                        Số lượng sản phẩm trong kho không đủ.
+                                        Đã xảy ra lỗi.
                                     </div>
                                 </div>
                             </div>
@@ -147,8 +147,8 @@
                                         <tr th:each="timeLine, rowStat : ${hoaDon.getTimeLineList()}">
                                             <td th:text="${rowStat.index + 1}"></td>
                                             <td>
-                                                    <span th:if="${timeLine.getTrangThai() == 1}"
-                                                          th:text="'Chờ xác nhận'"></span>
+                                                <span th:if="${timeLine.getTrangThai() == 1}"
+                                                      th:text="'Chờ xác nhận'"></span>
                                                 <span th:if="${timeLine.getTrangThai() == 2}"
                                                       th:text="'Đã xác nhận'"></span>
                                                 <span th:if="${timeLine.getTrangThai() == 3}"
@@ -161,6 +161,8 @@
                                                       th:text="'Hoàn thành'"></span>
                                                 <span th:if="${timeLine.getTrangThai() == 7}"
                                                       th:text="'Đã hủy'"></span>
+                                                <span th:if="${timeLine.getTrangThai() == 8}"
+                                                      th:text="'Cập nhập đơn hàng'"></span>
                                             </td>
                                             <td th:text="${timeLine.getNgayTao()}"></td>
                                             <td th:text="${timeLine.nguoiThucHien}"></td>
@@ -451,6 +453,7 @@
                                               th:text="'Đã giao hàng'"></span>
                                         <span th:if="${timeLine.getTrangThai() == 6}" th:text="'Hoàn thành'"></span>
                                         <span th:if="${timeLine.getTrangThai() == 7}" th:text="'Đã hủy'"></span>
+                                        <span th:if="${timeLine.getTrangThai() == 8}" th:text="'Cập nhập'"></span>
                                         <span class="step-item-title" th:text="${timeLine.getNgayTao()}"></span>
                                     </span>
                                 </div>
@@ -504,7 +507,7 @@
                     <div class="flex items-center justify-between mb-2">
                         <h6 class="mb-4">Thông Tin Giao Hàng</h6>
                         <div th:each="timeLine, stat : ${hoaDon.getTimeLineList()}"
-                             th:if="${stat.last and (timeLine.getTrangThai() == 1 || timeLine.getTrangThai() == 2 || timeLine.getTrangThai() == 3)}">
+                             th:if="${stat.last and (timeLine.getTrangThai() == 1 || timeLine.getTrangThai() == 2 || timeLine.getTrangThai() == 3 || timeLine.getTrangThai() == 8)}">
                             <button type="button" data-bs-toggle="modal" data-bs-target="#chinhSua"
                                     class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                 Chỉnh sửa
@@ -655,7 +658,7 @@
                     <div class="card-body flex items-center justify-between">
                         <h3 class="mb-4">Thông Tin Sản Phẩm</h3>
                         <div class="flex" th:each="timeLine, stat : ${hoaDon.getTimeLineList()}"
-                             th:if="${stat.last and timeLine.getTrangThai() == 1 || stat.last and timeLine.getTrangThai() == 2 || stat.last and timeLine.getTrangThai() == 3}">
+                             th:if="${stat.last and timeLine.getTrangThai() == 1 || stat.last and timeLine.getTrangThai() == 2 || stat.last and timeLine.getTrangThai() == 3 || stat.last and timeLine.getTrangThai() == 8}">
                             <a th:href="@{/admin/hoadon/cartdetail/{id}(id=${hoaDon.hoaDonId})}"
                                class="btn btn-sm bg-sky-50 hover:bg-sky-100 text-sky-800 mr-2">
                                 Chỉnh sửa

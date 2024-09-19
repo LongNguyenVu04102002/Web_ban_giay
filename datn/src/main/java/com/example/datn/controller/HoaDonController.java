@@ -117,8 +117,12 @@ public class HoaDonController {
 
     @PostMapping("/hoadon/update/stepup")
     public String stepUp(@RequestParam Long hoaDonId, @RequestParam Long hoaDonChiTietId, RedirectAttributes redirectAttributes) {
-        hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
-        redirectAttributes.addFlashAttribute("stepup", true);
+        boolean stepUp = hoaDonService.stepUp(hoaDonId, hoaDonChiTietId);
+        if (stepUp) {
+            redirectAttributes.addFlashAttribute("stepup", true);
+        } else {
+            redirectAttributes.addFlashAttribute("info", true);
+        }
         return "redirect:/admin/hoadon/cartdetail/" + hoaDonId;
     }
 

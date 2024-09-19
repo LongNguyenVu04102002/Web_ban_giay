@@ -29,36 +29,56 @@ public class TimeLineController {
 
     @PostMapping("/chogiao/{id}")
     public String choGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.choGiaoDonHang(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean choGiao = timeLineService.choGiaoDonHang(id, mota);
+        if(choGiao){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/danggiao/{id}")
     public String dangGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.dangGiaoDonHang(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean dangGiao = timeLineService.dangGiaoDonHang(id, mota);
+        if(dangGiao){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/dagiao/{id}")
     public String daGiaoDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.daGiaoDonHang(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean daGiao = timeLineService.daGiaoDonHang(id, mota);
+        if(daGiao){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/hoanthanh/{id}")
     public String hoanThanhDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.hoanThanhDonHang(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean hoanThanh = timeLineService.hoanThanhDonHang(id, mota);
+        if(hoanThanh){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 
     @PostMapping("/huydon/{id}")
     public String huyDonHang(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.huyDonHang(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean huyDon = timeLineService.huyDonHang(id, mota);
+        if(huyDon){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 

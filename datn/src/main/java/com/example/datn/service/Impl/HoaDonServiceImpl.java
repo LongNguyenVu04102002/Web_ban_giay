@@ -185,6 +185,15 @@ public class HoaDonServiceImpl implements HoaDonService {
 
             tienGiam(hoaDon, tongTien);
 
+            TimeLine timeLine = new TimeLine();
+            timeLine.setHoaDon(hoaDon);
+            timeLine.setNgayTao(LocalDate.now());
+            timeLine.setTrangThai(8);
+            timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
+            timeLine.setMoTa("Thêm sản phẩm: " + sanPhamChiTiet.getSanPham().getTen()
+                    + " - Màu: " + sanPhamChiTiet.getMauSac().getTen()
+                    + ", Size: " + sanPhamChiTiet.getKichThuoc().getTen());
+            timeLineRepository.save(timeLine);
             return true;
         }
 
@@ -207,6 +216,15 @@ public class HoaDonServiceImpl implements HoaDonService {
                 hoaDonChiTiet.setDonGia(BigDecimal.valueOf(currentQuantity - 1).multiply(hoaDonChiTiet.getSanPhamChiTiet().getGiaBan()));
 
                 updateHoaDon(hoaDon, hoaDonChiTiet);
+                TimeLine timeLine = new TimeLine();
+                timeLine.setHoaDon(hoaDon);
+                timeLine.setNgayTao(LocalDate.now());
+                timeLine.setTrangThai(8);
+                timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
+                timeLine.setMoTa("Giảm số lượng sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
+                        + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
+                        + ", Size: " + hoaDonChiTiet.getSanPhamChiTiet().getKichThuoc().getTen());
+                timeLineRepository.save(timeLine);
             }
         }
     }
@@ -229,6 +247,7 @@ public class HoaDonServiceImpl implements HoaDonService {
                 return false;
             }
 
+
             if (currentCartQuantity > 0) {
                 hoaDonChiTiet.setSoLuong(currentCartQuantity + 1);
                 hoaDonChiTiet.setDonGia(BigDecimal.valueOf(currentCartQuantity + 1)
@@ -236,10 +255,19 @@ public class HoaDonServiceImpl implements HoaDonService {
 
                 updateHoaDon(hoaDon, hoaDonChiTiet);
 
+                TimeLine timeLine = new TimeLine();
+                timeLine.setHoaDon(hoaDon);
+                timeLine.setNgayTao(LocalDate.now());
+                timeLine.setTrangThai(8);
+                timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
+                timeLine.setMoTa("Tăng số lượng sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
+                        + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
+                        + ", Size: " + hoaDonChiTiet.getSanPhamChiTiet().getKichThuoc().getTen());
+                timeLineRepository.save(timeLine);
+
                 return true;
             }
         }
-
         return false;
     }
 
@@ -280,6 +308,15 @@ public class HoaDonServiceImpl implements HoaDonService {
 
                 tienGiam(hoaDon, tongTien);
                 hoaDonChiTietRepository.delete(hoaDonChiTiet);
+                TimeLine timeLine = new TimeLine();
+                timeLine.setHoaDon(hoaDon);
+                timeLine.setNgayTao(LocalDate.now());
+                timeLine.setTrangThai(8);
+                timeLine.setNguoiThucHien(hoaDon.getNhanVien().getMaNhanVien());
+                timeLine.setMoTa("Xóa sản phẩm: " + hoaDonChiTiet.getSanPhamChiTiet().getSanPham().getTen()
+                        + " - Màu: " + hoaDonChiTiet.getSanPhamChiTiet().getMauSac().getTen()
+                        + ", Size: " + hoaDonChiTiet.getSanPhamChiTiet().getKichThuoc().getTen());
+                timeLineRepository.save(timeLine);
             }
         }
     }
@@ -372,10 +409,12 @@ public class HoaDonServiceImpl implements HoaDonService {
             HoaDonChiTiet hoaDonChiTiet = getHoaDonChiTiet(ghct, hoaDon);
             hoaDonChiTietRepository.save(hoaDonChiTiet);
 
-            sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
-                spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
-                sanPhamChiTietRepository.save(spct);
-            });
+            if(thanhToanResponse.getPaymentMethod() == 1){
+                sanPhamChiTietRepository.findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId()).ifPresent(spct -> {
+                    spct.setSoLuong(spct.getSoLuong() - ghct.getSoLuong());
+                    sanPhamChiTietRepository.save(spct);
+                });
+            }
 
             ghct.setGioHang(null);
         }
