@@ -6,6 +6,7 @@ import com.example.datn.entity.HoaDon;
 import com.example.datn.entity.HoaDonChiTiet;
 import com.example.datn.entity.NhanVien;
 import com.example.datn.entity.PhuongThucThanhToan;
+import com.example.datn.entity.SanPhamChiTiet;
 import com.example.datn.entity.TimeLine;
 import com.example.datn.repository.HinhThucThanhToanRepository;
 import com.example.datn.repository.HoaDonRepository;
@@ -41,11 +42,20 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Autowired
     private EmailService emailService;
 
-    @Override
-    public TimeLine xacNhanHoaDon(Long id, String mota) throws MessagingException {
+    public boolean xacNhanHoaDon(Long id, String mota) throws MessagingException {
         HoaDon hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
-            return null;
+            return false;
+        }
+
+        for (HoaDonChiTiet ghct : hoaDon.getHoaDonChiTietList()) {
+            SanPhamChiTiet spct = sanPhamChiTietRepository
+                    .findById(ghct.getSanPhamChiTiet().getSanPhamChiTietId())
+                    .orElse(null);
+
+            if (spct == null || spct.getSoLuong() < ghct.getSoLuong()) {
+                return false;
+            }
         }
 
         hoaDon.setTrangThai(2);
@@ -59,8 +69,10 @@ public class TimeLineServiceImpl implements TimeLineService {
         });
 
         TimeLine timeLine = createAndSendEmail(hoaDon, mota, 2, "Đã xác nhận");
-        return getTimeLine(timeLine);
+        getTimeLine(timeLine);
+        return true;
     }
+
 
     @Override
     public TimeLine choGiaoDonHang(Long id, String mota) throws MessagingException {

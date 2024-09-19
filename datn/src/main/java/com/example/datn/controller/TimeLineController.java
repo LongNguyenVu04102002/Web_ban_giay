@@ -18,8 +18,12 @@ public class TimeLineController {
 
     @PostMapping("/xacnhan/{id}")
     public String xacNhanHoaDon(@PathVariable Long id, @RequestParam String mota, RedirectAttributes redirectAttributes) throws MessagingException {
-        timeLineService.xacNhanHoaDon(id, mota);
-        redirectAttributes.addFlashAttribute("success", true);
+        boolean xacNhan = timeLineService.xacNhanHoaDon(id, mota);
+        if(xacNhan){
+            redirectAttributes.addFlashAttribute("success", true);
+        }else {
+            redirectAttributes.addFlashAttribute("error", true);
+        }
         return "redirect:/admin/hoadon/detail/" + id;
     }
 

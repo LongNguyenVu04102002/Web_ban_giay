@@ -5,7 +5,7 @@ import jakarta.mail.MessagingException;
 
 public interface TimeLineService {
 
-    TimeLine xacNhanHoaDon(Long id, String mota) throws MessagingException;
+    boolean xacNhanHoaDon(Long id, String mota) throws MessagingException;
 
     TimeLine choGiaoDonHang(Long id, String mota) throws MessagingException;
 
