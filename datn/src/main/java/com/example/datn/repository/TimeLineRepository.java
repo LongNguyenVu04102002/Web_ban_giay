@@ -23,7 +23,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     Long countHoaDonByYearMonthAndTrangThai(@Param("year") int year, @Param("month") int month, @Param("trangThai") int trangThai);
 
     @Query("select sum (t.hoaDon.tongTien - coalesce(t.hoaDon.tienGiam, 0)) from TimeLine t where year(t.ngayTao) = :year and month(t.ngayTao) = :month and t.hoaDon.trangThai = :trangThai")
-    Integer sumHoaDonByYearMonthAndTrangThai(@Param("year") int year, @Param("month") int month, @Param("trangThai") int trangThai);
+    Long sumHoaDonByYearMonthAndTrangThai(@Param("year") int year, @Param("month") int month, @Param("trangThai") int trangThai);
 
     @Query("select sum(t.hoaDon.tongTien - coalesce(t.hoaDon.tienGiam, 0)) from TimeLine t " +
             "where year(t.ngayTao) = :year and month(t.ngayTao) = :month and day(t.ngayTao) = :day " +

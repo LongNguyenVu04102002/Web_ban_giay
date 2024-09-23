@@ -36,7 +36,7 @@ public interface ThongKeService {
 
     List<Long> countsDonHangByMonth(Integer start, Integer end, Integer trangThai);
 
-    List<Integer> sumDonHangByMonth(Integer start, Integer end, Integer trangThai);
+    List<Long> sumDonHangByMonth(Integer start, Integer end, Integer trangThai);
 
     Double sumDonHangByDay(Integer trangThai);
 

@@ -195,15 +195,15 @@ public class ThongKeServiceImpl implements ThongKeService {
     }
 
     @Override
-    public List<Integer> sumDonHangByMonth(Integer start, Integer end, Integer trangThai) {
+    public List<Long> sumDonHangByMonth(Integer start, Integer end, Integer trangThai) {
         YearMonth currentMonth = YearMonth.now();
         List<Integer> numbers = getNumbersInRange(start, end);
 
-        List<Integer> soLuongDons = new ArrayList<>();
+        List<Long> soLuongDons = new ArrayList<>();
         for (Integer i : numbers) {
-            Integer sl = timeLineRepository.sumHoaDonByYearMonthAndTrangThai(currentMonth.getYear(), i, trangThai);
+            Long sl = timeLineRepository.sumHoaDonByYearMonthAndTrangThai(currentMonth.getYear(), i, trangThai);
             if (sl == null) {
-                soLuongDons.add(0);
+                soLuongDons.add(0l);
             } else {
                 soLuongDons.add(sl);
             }

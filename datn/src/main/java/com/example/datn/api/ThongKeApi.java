@@ -85,7 +85,7 @@ public class ThongKeApi {
 
     //don hang tong theo thang
     @GetMapping("/sumDonHangByMonth")
-    public List<Integer> sumDonHangByMonth(@RequestParam("start") Integer start, @RequestParam("end") Integer end, @RequestParam("trangThai") int trangThai) {
+    public List<Long> sumDonHangByMonth(@RequestParam("start") Integer start, @RequestParam("end") Integer end, @RequestParam("trangThai") int trangThai) {
         return thongKeService.sumDonHangByMonth(start, end, trangThai);
     }
 
